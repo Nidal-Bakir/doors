@@ -61,6 +61,7 @@ dependencies:
 
   # utils & tools
   get_it: ^7.2.0
+  dartz: ^0.10.1
 
   # bloc
   flutter_bloc: ^8.0.1
