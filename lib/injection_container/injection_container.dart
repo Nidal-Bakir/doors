@@ -1,5 +1,5 @@
+import 'package:doors/injection_container/parse_init.dart';
 
-
-void init() {
-
+Future<void> init() async {
+  await parseInit();
 }

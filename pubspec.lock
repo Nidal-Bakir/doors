@@ -35,7 +35,7 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.0.2"
+    version: "8.0.3"
   bloc_concurrency:
     dependency: "direct main"
     description:
@@ -49,7 +49,7 @@ packages:
       name: bloc_test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.0.2"
+    version: "9.0.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -510,7 +510,7 @@ packages:
       name: mocktail
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.3.0"
   nested:
     dependency: transitive
     description:
@@ -720,7 +720,7 @@ packages:
       name: sembast
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.2"
+    version: "3.2.0"
   sembast_web:
     dependency: transitive
     description:
@@ -879,14 +879,14 @@ packages:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.4.53"
+    version: "19.4.54"
   syncfusion_flutter_sliders:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_sliders
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.4.53"
+    version: "19.4.54"
   synchronized:
     dependency: transitive
     description:

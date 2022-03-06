@@ -36,7 +36,7 @@ dependencies:
   intl: ^0.17.0
 
   # for testing
-  mocktail: ^0.2.0
+  mocktail: ^0.3.0
   bloc_test: ^9.0.2
 
   # data quality
