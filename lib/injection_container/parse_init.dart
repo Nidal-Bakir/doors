@@ -1,8 +1,10 @@
 import 'dart:io';
 
-import 'package:doors/core/auth/model/payment.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doors/core/auth/model/user.dart';
+import 'package:doors/core/subscription/model/payment.dart';
 import 'package:doors/parse_keys.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 Future<void> parseInit() async {
@@ -11,9 +13,9 @@ Future<void> parseInit() async {
     clientKey: ParseKeys.ClientKey,
     // Required for authentication and ACL
     autoSendSessionId: true,
-    // connectivityProvider: ParseConnectivityProvider(),
+    connectivityProvider: CustomParseConnectivityProvider(),
     registeredSubClassMap: <String, ParseObjectConstructor>{
-      'UserSubscription': () => UserSubscription(),
+      UserSubscription.keyClassName: () => UserSubscription(),
     },
     //TODO: remove the debug mode
     debug: true,
@@ -43,4 +45,37 @@ Future<void> parseInit() async {
       securityContext: securityContext,
     ),
   );
+}
+
+class CustomParseConnectivityProvider extends ParseConnectivityProvider {
+  @override
+  Future<ParseConnectivityResult> checkConnectivity() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if ((connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) &&
+        (await InternetConnectionChecker().hasConnection)) {
+      if (connectivityResult == ConnectivityResult.wifi) {
+        return ParseConnectivityResult.wifi;
+      } else {
+        return ParseConnectivityResult.mobile;
+      }
+    }
+    return ParseConnectivityResult.none;
+  }
+
+  @override
+  Stream<ParseConnectivityResult> get connectivityStream async* {
+    await for (var connectivityResult in Connectivity().onConnectivityChanged) {
+      if ((connectivityResult == ConnectivityResult.wifi ||
+              connectivityResult == ConnectivityResult.mobile) &&
+          (await InternetConnectionChecker().hasConnection)) {
+        if (connectivityResult == ConnectivityResult.wifi) {
+          yield ParseConnectivityResult.wifi;
+        } else {
+          yield ParseConnectivityResult.mobile;
+        }
+      }
+      yield ParseConnectivityResult.none;
+    }
+  }
 }

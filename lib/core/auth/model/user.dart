@@ -1,5 +1,5 @@
-import 'package:doors/core/auth/model/payment.dart';
 import 'package:doors/core/enums/enums.dart';
+import 'package:doors/core/subscription/model/payment.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class User extends ParseUser implements ParseCloneable {
@@ -89,4 +89,6 @@ class User extends ParseUser implements ParseCloneable {
       getRelation<UserSubscription>(keyUserSubscription);
 
   bool? get isSubscribed => get<bool?>(keyIsSubscribed);
+
+  bool get isAnonymousUser => emailAddress == null || username != emailAddress;
 }

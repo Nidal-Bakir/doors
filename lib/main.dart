@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:doors/app/app.dart';
+import 'package:doors/app/app_bloc_observer.dart';
 import 'package:doors/injection_container/injection_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Bloc.observer = AppBlocObserver();
+
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
@@ -15,7 +17,11 @@ void main() {
   runZonedGuarded(
     () async {
       await init(); // init the app dependency.
-      runApp(const App());
+
+      BlocOverrides.runZoned(
+        () => runApp(const App()),
+        blocObserver: AppBlocObserver(),
+      );
     },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
