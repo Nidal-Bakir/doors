@@ -37,8 +37,12 @@ class _$AuthEventTearOff {
     return const AuthLogoutRequested();
   }
 
-  AuthUpdatedUserDataRequested authUpdatedUserDataRequested() {
-    return const AuthUpdatedUserDataRequested();
+  AuthGetUpdatedUserDataRequested authGetUpdatedUserDataRequested() {
+    return const AuthGetUpdatedUserDataRequested();
+  }
+
+  AuthCurrentUserLoaded authCurrentUserLoaded() {
+    return const AuthCurrentUserLoaded();
   }
 }
 
@@ -53,7 +57,8 @@ mixin _$AuthEvent {
     required TResult Function(User user) authSignUpRequested,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
-    required TResult Function() authUpdatedUserDataRequested,
+    required TResult Function() authGetUpdatedUserDataRequested,
+    required TResult Function() authCurrentUserLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -62,7 +67,8 @@ mixin _$AuthEvent {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -71,7 +77,8 @@ mixin _$AuthEvent {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -82,8 +89,10 @@ mixin _$AuthEvent {
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
-    required TResult Function(AuthUpdatedUserDataRequested value)
-        authUpdatedUserDataRequested,
+    required TResult Function(AuthGetUpdatedUserDataRequested value)
+        authGetUpdatedUserDataRequested,
+    required TResult Function(AuthCurrentUserLoaded value)
+        authCurrentUserLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -93,8 +102,9 @@ mixin _$AuthEvent {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -104,8 +114,9 @@ mixin _$AuthEvent {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -195,7 +206,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
     required TResult Function(User user) authSignUpRequested,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
-    required TResult Function() authUpdatedUserDataRequested,
+    required TResult Function() authGetUpdatedUserDataRequested,
+    required TResult Function() authCurrentUserLoaded,
   }) {
     return authLoginRequested(user);
   }
@@ -207,7 +219,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
   }) {
     return authLoginRequested?.call(user);
   }
@@ -219,7 +232,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
     if (authLoginRequested != null) {
@@ -236,8 +250,10 @@ class _$AuthLoginRequested implements AuthLoginRequested {
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
-    required TResult Function(AuthUpdatedUserDataRequested value)
-        authUpdatedUserDataRequested,
+    required TResult Function(AuthGetUpdatedUserDataRequested value)
+        authGetUpdatedUserDataRequested,
+    required TResult Function(AuthCurrentUserLoaded value)
+        authCurrentUserLoaded,
   }) {
     return authLoginRequested(this);
   }
@@ -250,8 +266,9 @@ class _$AuthLoginRequested implements AuthLoginRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
   }) {
     return authLoginRequested?.call(this);
   }
@@ -264,8 +281,9 @@ class _$AuthLoginRequested implements AuthLoginRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
     if (authLoginRequested != null) {
@@ -353,7 +371,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
     required TResult Function(User user) authSignUpRequested,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
-    required TResult Function() authUpdatedUserDataRequested,
+    required TResult Function() authGetUpdatedUserDataRequested,
+    required TResult Function() authCurrentUserLoaded,
   }) {
     return authSignUpRequested(user);
   }
@@ -365,7 +384,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
   }) {
     return authSignUpRequested?.call(user);
   }
@@ -377,7 +397,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
     if (authSignUpRequested != null) {
@@ -394,8 +415,10 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
-    required TResult Function(AuthUpdatedUserDataRequested value)
-        authUpdatedUserDataRequested,
+    required TResult Function(AuthGetUpdatedUserDataRequested value)
+        authGetUpdatedUserDataRequested,
+    required TResult Function(AuthCurrentUserLoaded value)
+        authCurrentUserLoaded,
   }) {
     return authSignUpRequested(this);
   }
@@ -408,8 +431,9 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
   }) {
     return authSignUpRequested?.call(this);
   }
@@ -422,8 +446,9 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
     if (authSignUpRequested != null) {
@@ -491,7 +516,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
     required TResult Function(User user) authSignUpRequested,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
-    required TResult Function() authUpdatedUserDataRequested,
+    required TResult Function() authGetUpdatedUserDataRequested,
+    required TResult Function() authCurrentUserLoaded,
   }) {
     return authLoginAnonymouslyRequested();
   }
@@ -503,7 +529,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
   }) {
     return authLoginAnonymouslyRequested?.call();
   }
@@ -515,7 +542,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
     if (authLoginAnonymouslyRequested != null) {
@@ -532,8 +560,10 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
-    required TResult Function(AuthUpdatedUserDataRequested value)
-        authUpdatedUserDataRequested,
+    required TResult Function(AuthGetUpdatedUserDataRequested value)
+        authGetUpdatedUserDataRequested,
+    required TResult Function(AuthCurrentUserLoaded value)
+        authCurrentUserLoaded,
   }) {
     return authLoginAnonymouslyRequested(this);
   }
@@ -546,8 +576,9 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
   }) {
     return authLoginAnonymouslyRequested?.call(this);
   }
@@ -560,8 +591,9 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
     if (authLoginAnonymouslyRequested != null) {
@@ -621,7 +653,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
     required TResult Function(User user) authSignUpRequested,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
-    required TResult Function() authUpdatedUserDataRequested,
+    required TResult Function() authGetUpdatedUserDataRequested,
+    required TResult Function() authCurrentUserLoaded,
   }) {
     return authLogoutRequested();
   }
@@ -633,7 +666,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
   }) {
     return authLogoutRequested?.call();
   }
@@ -645,7 +679,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
     if (authLogoutRequested != null) {
@@ -662,8 +697,10 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
-    required TResult Function(AuthUpdatedUserDataRequested value)
-        authUpdatedUserDataRequested,
+    required TResult Function(AuthGetUpdatedUserDataRequested value)
+        authGetUpdatedUserDataRequested,
+    required TResult Function(AuthCurrentUserLoaded value)
+        authCurrentUserLoaded,
   }) {
     return authLogoutRequested(this);
   }
@@ -676,8 +713,9 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
   }) {
     return authLogoutRequested?.call(this);
   }
@@ -690,8 +728,9 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
     if (authLogoutRequested != null) {
@@ -706,42 +745,43 @@ abstract class AuthLogoutRequested implements AuthEvent {
 }
 
 /// @nodoc
-abstract class $AuthUpdatedUserDataRequestedCopyWith<$Res> {
-  factory $AuthUpdatedUserDataRequestedCopyWith(
-          AuthUpdatedUserDataRequested value,
-          $Res Function(AuthUpdatedUserDataRequested) then) =
-      _$AuthUpdatedUserDataRequestedCopyWithImpl<$Res>;
+abstract class $AuthGetUpdatedUserDataRequestedCopyWith<$Res> {
+  factory $AuthGetUpdatedUserDataRequestedCopyWith(
+          AuthGetUpdatedUserDataRequested value,
+          $Res Function(AuthGetUpdatedUserDataRequested) then) =
+      _$AuthGetUpdatedUserDataRequestedCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$AuthUpdatedUserDataRequestedCopyWithImpl<$Res>
+class _$AuthGetUpdatedUserDataRequestedCopyWithImpl<$Res>
     extends _$AuthEventCopyWithImpl<$Res>
-    implements $AuthUpdatedUserDataRequestedCopyWith<$Res> {
-  _$AuthUpdatedUserDataRequestedCopyWithImpl(
-      AuthUpdatedUserDataRequested _value,
-      $Res Function(AuthUpdatedUserDataRequested) _then)
-      : super(_value, (v) => _then(v as AuthUpdatedUserDataRequested));
+    implements $AuthGetUpdatedUserDataRequestedCopyWith<$Res> {
+  _$AuthGetUpdatedUserDataRequestedCopyWithImpl(
+      AuthGetUpdatedUserDataRequested _value,
+      $Res Function(AuthGetUpdatedUserDataRequested) _then)
+      : super(_value, (v) => _then(v as AuthGetUpdatedUserDataRequested));
 
   @override
-  AuthUpdatedUserDataRequested get _value =>
-      super._value as AuthUpdatedUserDataRequested;
+  AuthGetUpdatedUserDataRequested get _value =>
+      super._value as AuthGetUpdatedUserDataRequested;
 }
 
 /// @nodoc
 
-class _$AuthUpdatedUserDataRequested implements AuthUpdatedUserDataRequested {
-  const _$AuthUpdatedUserDataRequested();
+class _$AuthGetUpdatedUserDataRequested
+    implements AuthGetUpdatedUserDataRequested {
+  const _$AuthGetUpdatedUserDataRequested();
 
   @override
   String toString() {
-    return 'AuthEvent.authUpdatedUserDataRequested()';
+    return 'AuthEvent.authGetUpdatedUserDataRequested()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AuthUpdatedUserDataRequested);
+            other is AuthGetUpdatedUserDataRequested);
   }
 
   @override
@@ -754,9 +794,10 @@ class _$AuthUpdatedUserDataRequested implements AuthUpdatedUserDataRequested {
     required TResult Function(User user) authSignUpRequested,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
-    required TResult Function() authUpdatedUserDataRequested,
+    required TResult Function() authGetUpdatedUserDataRequested,
+    required TResult Function() authCurrentUserLoaded,
   }) {
-    return authUpdatedUserDataRequested();
+    return authGetUpdatedUserDataRequested();
   }
 
   @override
@@ -766,9 +807,10 @@ class _$AuthUpdatedUserDataRequested implements AuthUpdatedUserDataRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
   }) {
-    return authUpdatedUserDataRequested?.call();
+    return authGetUpdatedUserDataRequested?.call();
   }
 
   @override
@@ -778,11 +820,12 @@ class _$AuthUpdatedUserDataRequested implements AuthUpdatedUserDataRequested {
     TResult Function(User user)? authSignUpRequested,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
-    TResult Function()? authUpdatedUserDataRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
-    if (authUpdatedUserDataRequested != null) {
-      return authUpdatedUserDataRequested();
+    if (authGetUpdatedUserDataRequested != null) {
+      return authGetUpdatedUserDataRequested();
     }
     return orElse();
   }
@@ -795,10 +838,12 @@ class _$AuthUpdatedUserDataRequested implements AuthUpdatedUserDataRequested {
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
-    required TResult Function(AuthUpdatedUserDataRequested value)
-        authUpdatedUserDataRequested,
+    required TResult Function(AuthGetUpdatedUserDataRequested value)
+        authGetUpdatedUserDataRequested,
+    required TResult Function(AuthCurrentUserLoaded value)
+        authCurrentUserLoaded,
   }) {
-    return authUpdatedUserDataRequested(this);
+    return authGetUpdatedUserDataRequested(this);
   }
 
   @override
@@ -809,10 +854,11 @@ class _$AuthUpdatedUserDataRequested implements AuthUpdatedUserDataRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
   }) {
-    return authUpdatedUserDataRequested?.call(this);
+    return authGetUpdatedUserDataRequested?.call(this);
   }
 
   @override
@@ -823,19 +869,157 @@ class _$AuthUpdatedUserDataRequested implements AuthUpdatedUserDataRequested {
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
-    TResult Function(AuthUpdatedUserDataRequested value)?
-        authUpdatedUserDataRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
     required TResult orElse(),
   }) {
-    if (authUpdatedUserDataRequested != null) {
-      return authUpdatedUserDataRequested(this);
+    if (authGetUpdatedUserDataRequested != null) {
+      return authGetUpdatedUserDataRequested(this);
     }
     return orElse();
   }
 }
 
-abstract class AuthUpdatedUserDataRequested implements AuthEvent {
-  const factory AuthUpdatedUserDataRequested() = _$AuthUpdatedUserDataRequested;
+abstract class AuthGetUpdatedUserDataRequested implements AuthEvent {
+  const factory AuthGetUpdatedUserDataRequested() =
+      _$AuthGetUpdatedUserDataRequested;
+}
+
+/// @nodoc
+abstract class $AuthCurrentUserLoadedCopyWith<$Res> {
+  factory $AuthCurrentUserLoadedCopyWith(AuthCurrentUserLoaded value,
+          $Res Function(AuthCurrentUserLoaded) then) =
+      _$AuthCurrentUserLoadedCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$AuthCurrentUserLoadedCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res>
+    implements $AuthCurrentUserLoadedCopyWith<$Res> {
+  _$AuthCurrentUserLoadedCopyWithImpl(
+      AuthCurrentUserLoaded _value, $Res Function(AuthCurrentUserLoaded) _then)
+      : super(_value, (v) => _then(v as AuthCurrentUserLoaded));
+
+  @override
+  AuthCurrentUserLoaded get _value => super._value as AuthCurrentUserLoaded;
+}
+
+/// @nodoc
+
+class _$AuthCurrentUserLoaded implements AuthCurrentUserLoaded {
+  const _$AuthCurrentUserLoaded();
+
+  @override
+  String toString() {
+    return 'AuthEvent.authCurrentUserLoaded()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is AuthCurrentUserLoaded);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(User user) authLoginRequested,
+    required TResult Function(User user) authSignUpRequested,
+    required TResult Function() authLoginAnonymouslyRequested,
+    required TResult Function() authLogoutRequested,
+    required TResult Function() authGetUpdatedUserDataRequested,
+    required TResult Function() authCurrentUserLoaded,
+  }) {
+    return authCurrentUserLoaded();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(User user)? authLoginRequested,
+    TResult Function(User user)? authSignUpRequested,
+    TResult Function()? authLoginAnonymouslyRequested,
+    TResult Function()? authLogoutRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
+  }) {
+    return authCurrentUserLoaded?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(User user)? authLoginRequested,
+    TResult Function(User user)? authSignUpRequested,
+    TResult Function()? authLoginAnonymouslyRequested,
+    TResult Function()? authLogoutRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
+    required TResult orElse(),
+  }) {
+    if (authCurrentUserLoaded != null) {
+      return authCurrentUserLoaded();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AuthLoginRequested value) authLoginRequested,
+    required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthLoginAnonymouslyRequested value)
+        authLoginAnonymouslyRequested,
+    required TResult Function(AuthLogoutRequested value) authLogoutRequested,
+    required TResult Function(AuthGetUpdatedUserDataRequested value)
+        authGetUpdatedUserDataRequested,
+    required TResult Function(AuthCurrentUserLoaded value)
+        authCurrentUserLoaded,
+  }) {
+    return authCurrentUserLoaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AuthLoginRequested value)? authLoginRequested,
+    TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthLoginAnonymouslyRequested value)?
+        authLoginAnonymouslyRequested,
+    TResult Function(AuthLogoutRequested value)? authLogoutRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
+  }) {
+    return authCurrentUserLoaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AuthLoginRequested value)? authLoginRequested,
+    TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthLoginAnonymouslyRequested value)?
+        authLoginAnonymouslyRequested,
+    TResult Function(AuthLogoutRequested value)? authLogoutRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
+    required TResult orElse(),
+  }) {
+    if (authCurrentUserLoaded != null) {
+      return authCurrentUserLoaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthCurrentUserLoaded implements AuthEvent {
+  const factory AuthCurrentUserLoaded() = _$AuthCurrentUserLoaded;
 }
 
 /// @nodoc
@@ -850,13 +1034,23 @@ class _$AuthStateTearOff {
     return const AuthInProgress();
   }
 
-  AuthLoadSuccess authLoadSuccess(User user) {
-    return AuthLoadSuccess(
+  AuthCurrentLoadSuccess authCurrentLoadSuccess(User user) {
+    return AuthCurrentLoadSuccess(
       user,
     );
   }
 
-  AuthLoadFailure authLoadFailure(ParseException exception) {
+  AuthLoggedInSuccess authLoggedInSuccess(User user) {
+    return AuthLoggedInSuccess(
+      user,
+    );
+  }
+
+  AuthLogoutSuccess authLogoutSuccess() {
+    return const AuthLogoutSuccess();
+  }
+
+  AuthLoadFailure authLoadFailure(Exception exception) {
     return AuthLoadFailure(
       exception,
     );
@@ -872,24 +1066,30 @@ mixin _$AuthState {
   TResult when<TResult extends Object?>({
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
-    required TResult Function(User user) authLoadSuccess,
-    required TResult Function(ParseException exception) authLoadFailure,
+    required TResult Function(User user) authCurrentLoadSuccess,
+    required TResult Function(User user) authLoggedInSuccess,
+    required TResult Function() authLogoutSuccess,
+    required TResult Function(Exception exception) authLoadFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -897,7 +1097,10 @@ mixin _$AuthState {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthInitial value) authInitial,
     required TResult Function(AuthInProgress value) authInProgress,
-    required TResult Function(AuthLoadSuccess value) authLoadSuccess,
+    required TResult Function(AuthCurrentLoadSuccess value)
+        authCurrentLoadSuccess,
+    required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
+    required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
     required TResult Function(AuthLoadFailure value) authLoadFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -905,7 +1108,9 @@ mixin _$AuthState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -913,7 +1118,9 @@ mixin _$AuthState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
     required TResult orElse(),
   }) =>
@@ -977,8 +1184,10 @@ class _$AuthInitial implements AuthInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
-    required TResult Function(User user) authLoadSuccess,
-    required TResult Function(ParseException exception) authLoadFailure,
+    required TResult Function(User user) authCurrentLoadSuccess,
+    required TResult Function(User user) authLoggedInSuccess,
+    required TResult Function() authLogoutSuccess,
+    required TResult Function(Exception exception) authLoadFailure,
   }) {
     return authInitial();
   }
@@ -988,8 +1197,10 @@ class _$AuthInitial implements AuthInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
   }) {
     return authInitial?.call();
   }
@@ -999,8 +1210,10 @@ class _$AuthInitial implements AuthInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
     required TResult orElse(),
   }) {
     if (authInitial != null) {
@@ -1014,7 +1227,10 @@ class _$AuthInitial implements AuthInitial {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthInitial value) authInitial,
     required TResult Function(AuthInProgress value) authInProgress,
-    required TResult Function(AuthLoadSuccess value) authLoadSuccess,
+    required TResult Function(AuthCurrentLoadSuccess value)
+        authCurrentLoadSuccess,
+    required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
+    required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
     required TResult Function(AuthLoadFailure value) authLoadFailure,
   }) {
     return authInitial(this);
@@ -1025,7 +1241,9 @@ class _$AuthInitial implements AuthInitial {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
   }) {
     return authInitial?.call(this);
@@ -1036,7 +1254,9 @@ class _$AuthInitial implements AuthInitial {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
     required TResult orElse(),
   }) {
@@ -1093,8 +1313,10 @@ class _$AuthInProgress implements AuthInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
-    required TResult Function(User user) authLoadSuccess,
-    required TResult Function(ParseException exception) authLoadFailure,
+    required TResult Function(User user) authCurrentLoadSuccess,
+    required TResult Function(User user) authLoggedInSuccess,
+    required TResult Function() authLogoutSuccess,
+    required TResult Function(Exception exception) authLoadFailure,
   }) {
     return authInProgress();
   }
@@ -1104,8 +1326,10 @@ class _$AuthInProgress implements AuthInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
   }) {
     return authInProgress?.call();
   }
@@ -1115,8 +1339,10 @@ class _$AuthInProgress implements AuthInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
     required TResult orElse(),
   }) {
     if (authInProgress != null) {
@@ -1130,7 +1356,10 @@ class _$AuthInProgress implements AuthInProgress {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthInitial value) authInitial,
     required TResult Function(AuthInProgress value) authInProgress,
-    required TResult Function(AuthLoadSuccess value) authLoadSuccess,
+    required TResult Function(AuthCurrentLoadSuccess value)
+        authCurrentLoadSuccess,
+    required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
+    required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
     required TResult Function(AuthLoadFailure value) authLoadFailure,
   }) {
     return authInProgress(this);
@@ -1141,7 +1370,9 @@ class _$AuthInProgress implements AuthInProgress {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
   }) {
     return authInProgress?.call(this);
@@ -1152,7 +1383,9 @@ class _$AuthInProgress implements AuthInProgress {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
     required TResult orElse(),
   }) {
@@ -1168,28 +1401,29 @@ abstract class AuthInProgress implements AuthState {
 }
 
 /// @nodoc
-abstract class $AuthLoadSuccessCopyWith<$Res> {
-  factory $AuthLoadSuccessCopyWith(
-          AuthLoadSuccess value, $Res Function(AuthLoadSuccess) then) =
-      _$AuthLoadSuccessCopyWithImpl<$Res>;
+abstract class $AuthCurrentLoadSuccessCopyWith<$Res> {
+  factory $AuthCurrentLoadSuccessCopyWith(AuthCurrentLoadSuccess value,
+          $Res Function(AuthCurrentLoadSuccess) then) =
+      _$AuthCurrentLoadSuccessCopyWithImpl<$Res>;
   $Res call({User user});
 }
 
 /// @nodoc
-class _$AuthLoadSuccessCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
-    implements $AuthLoadSuccessCopyWith<$Res> {
-  _$AuthLoadSuccessCopyWithImpl(
-      AuthLoadSuccess _value, $Res Function(AuthLoadSuccess) _then)
-      : super(_value, (v) => _then(v as AuthLoadSuccess));
+class _$AuthCurrentLoadSuccessCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res>
+    implements $AuthCurrentLoadSuccessCopyWith<$Res> {
+  _$AuthCurrentLoadSuccessCopyWithImpl(AuthCurrentLoadSuccess _value,
+      $Res Function(AuthCurrentLoadSuccess) _then)
+      : super(_value, (v) => _then(v as AuthCurrentLoadSuccess));
 
   @override
-  AuthLoadSuccess get _value => super._value as AuthLoadSuccess;
+  AuthCurrentLoadSuccess get _value => super._value as AuthCurrentLoadSuccess;
 
   @override
   $Res call({
     Object? user = freezed,
   }) {
-    return _then(AuthLoadSuccess(
+    return _then(AuthCurrentLoadSuccess(
       user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -1200,22 +1434,22 @@ class _$AuthLoadSuccessCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AuthLoadSuccess implements AuthLoadSuccess {
-  const _$AuthLoadSuccess(this.user);
+class _$AuthCurrentLoadSuccess implements AuthCurrentLoadSuccess {
+  const _$AuthCurrentLoadSuccess(this.user);
 
   @override
   final User user;
 
   @override
   String toString() {
-    return 'AuthState.authLoadSuccess(user: $user)';
+    return 'AuthState.authCurrentLoadSuccess(user: $user)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AuthLoadSuccess &&
+            other is AuthCurrentLoadSuccess &&
             const DeepCollectionEquality().equals(other.user, user));
   }
 
@@ -1225,18 +1459,21 @@ class _$AuthLoadSuccess implements AuthLoadSuccess {
 
   @JsonKey(ignore: true)
   @override
-  $AuthLoadSuccessCopyWith<AuthLoadSuccess> get copyWith =>
-      _$AuthLoadSuccessCopyWithImpl<AuthLoadSuccess>(this, _$identity);
+  $AuthCurrentLoadSuccessCopyWith<AuthCurrentLoadSuccess> get copyWith =>
+      _$AuthCurrentLoadSuccessCopyWithImpl<AuthCurrentLoadSuccess>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
-    required TResult Function(User user) authLoadSuccess,
-    required TResult Function(ParseException exception) authLoadFailure,
+    required TResult Function(User user) authCurrentLoadSuccess,
+    required TResult Function(User user) authLoggedInSuccess,
+    required TResult Function() authLogoutSuccess,
+    required TResult Function(Exception exception) authLoadFailure,
   }) {
-    return authLoadSuccess(user);
+    return authCurrentLoadSuccess(user);
   }
 
   @override
@@ -1244,10 +1481,12 @@ class _$AuthLoadSuccess implements AuthLoadSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
   }) {
-    return authLoadSuccess?.call(user);
+    return authCurrentLoadSuccess?.call(user);
   }
 
   @override
@@ -1255,12 +1494,14 @@ class _$AuthLoadSuccess implements AuthLoadSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
     required TResult orElse(),
   }) {
-    if (authLoadSuccess != null) {
-      return authLoadSuccess(user);
+    if (authCurrentLoadSuccess != null) {
+      return authCurrentLoadSuccess(user);
     }
     return orElse();
   }
@@ -1270,10 +1511,13 @@ class _$AuthLoadSuccess implements AuthLoadSuccess {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthInitial value) authInitial,
     required TResult Function(AuthInProgress value) authInProgress,
-    required TResult Function(AuthLoadSuccess value) authLoadSuccess,
+    required TResult Function(AuthCurrentLoadSuccess value)
+        authCurrentLoadSuccess,
+    required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
+    required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
     required TResult Function(AuthLoadFailure value) authLoadFailure,
   }) {
-    return authLoadSuccess(this);
+    return authCurrentLoadSuccess(this);
   }
 
   @override
@@ -1281,10 +1525,12 @@ class _$AuthLoadSuccess implements AuthLoadSuccess {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
   }) {
-    return authLoadSuccess?.call(this);
+    return authCurrentLoadSuccess?.call(this);
   }
 
   @override
@@ -1292,24 +1538,315 @@ class _$AuthLoadSuccess implements AuthLoadSuccess {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
     required TResult orElse(),
   }) {
-    if (authLoadSuccess != null) {
-      return authLoadSuccess(this);
+    if (authCurrentLoadSuccess != null) {
+      return authCurrentLoadSuccess(this);
     }
     return orElse();
   }
 }
 
-abstract class AuthLoadSuccess implements AuthState {
-  const factory AuthLoadSuccess(User user) = _$AuthLoadSuccess;
+abstract class AuthCurrentLoadSuccess implements AuthState {
+  const factory AuthCurrentLoadSuccess(User user) = _$AuthCurrentLoadSuccess;
 
   User get user;
   @JsonKey(ignore: true)
-  $AuthLoadSuccessCopyWith<AuthLoadSuccess> get copyWith =>
+  $AuthCurrentLoadSuccessCopyWith<AuthCurrentLoadSuccess> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AuthLoggedInSuccessCopyWith<$Res> {
+  factory $AuthLoggedInSuccessCopyWith(
+          AuthLoggedInSuccess value, $Res Function(AuthLoggedInSuccess) then) =
+      _$AuthLoggedInSuccessCopyWithImpl<$Res>;
+  $Res call({User user});
+}
+
+/// @nodoc
+class _$AuthLoggedInSuccessCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res>
+    implements $AuthLoggedInSuccessCopyWith<$Res> {
+  _$AuthLoggedInSuccessCopyWithImpl(
+      AuthLoggedInSuccess _value, $Res Function(AuthLoggedInSuccess) _then)
+      : super(_value, (v) => _then(v as AuthLoggedInSuccess));
+
+  @override
+  AuthLoggedInSuccess get _value => super._value as AuthLoggedInSuccess;
+
+  @override
+  $Res call({
+    Object? user = freezed,
+  }) {
+    return _then(AuthLoggedInSuccess(
+      user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AuthLoggedInSuccess implements AuthLoggedInSuccess {
+  const _$AuthLoggedInSuccess(this.user);
+
+  @override
+  final User user;
+
+  @override
+  String toString() {
+    return 'AuthState.authLoggedInSuccess(user: $user)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AuthLoggedInSuccess &&
+            const DeepCollectionEquality().equals(other.user, user));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(user));
+
+  @JsonKey(ignore: true)
+  @override
+  $AuthLoggedInSuccessCopyWith<AuthLoggedInSuccess> get copyWith =>
+      _$AuthLoggedInSuccessCopyWithImpl<AuthLoggedInSuccess>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() authInitial,
+    required TResult Function() authInProgress,
+    required TResult Function(User user) authCurrentLoadSuccess,
+    required TResult Function(User user) authLoggedInSuccess,
+    required TResult Function() authLogoutSuccess,
+    required TResult Function(Exception exception) authLoadFailure,
+  }) {
+    return authLoggedInSuccess(user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? authInitial,
+    TResult Function()? authInProgress,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
+  }) {
+    return authLoggedInSuccess?.call(user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? authInitial,
+    TResult Function()? authInProgress,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
+    required TResult orElse(),
+  }) {
+    if (authLoggedInSuccess != null) {
+      return authLoggedInSuccess(user);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AuthInitial value) authInitial,
+    required TResult Function(AuthInProgress value) authInProgress,
+    required TResult Function(AuthCurrentLoadSuccess value)
+        authCurrentLoadSuccess,
+    required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
+    required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
+    required TResult Function(AuthLoadFailure value) authLoadFailure,
+  }) {
+    return authLoggedInSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AuthInitial value)? authInitial,
+    TResult Function(AuthInProgress value)? authInProgress,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
+    TResult Function(AuthLoadFailure value)? authLoadFailure,
+  }) {
+    return authLoggedInSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AuthInitial value)? authInitial,
+    TResult Function(AuthInProgress value)? authInProgress,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
+    TResult Function(AuthLoadFailure value)? authLoadFailure,
+    required TResult orElse(),
+  }) {
+    if (authLoggedInSuccess != null) {
+      return authLoggedInSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthLoggedInSuccess implements AuthState {
+  const factory AuthLoggedInSuccess(User user) = _$AuthLoggedInSuccess;
+
+  User get user;
+  @JsonKey(ignore: true)
+  $AuthLoggedInSuccessCopyWith<AuthLoggedInSuccess> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AuthLogoutSuccessCopyWith<$Res> {
+  factory $AuthLogoutSuccessCopyWith(
+          AuthLogoutSuccess value, $Res Function(AuthLogoutSuccess) then) =
+      _$AuthLogoutSuccessCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$AuthLogoutSuccessCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res>
+    implements $AuthLogoutSuccessCopyWith<$Res> {
+  _$AuthLogoutSuccessCopyWithImpl(
+      AuthLogoutSuccess _value, $Res Function(AuthLogoutSuccess) _then)
+      : super(_value, (v) => _then(v as AuthLogoutSuccess));
+
+  @override
+  AuthLogoutSuccess get _value => super._value as AuthLogoutSuccess;
+}
+
+/// @nodoc
+
+class _$AuthLogoutSuccess implements AuthLogoutSuccess {
+  const _$AuthLogoutSuccess();
+
+  @override
+  String toString() {
+    return 'AuthState.authLogoutSuccess()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is AuthLogoutSuccess);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() authInitial,
+    required TResult Function() authInProgress,
+    required TResult Function(User user) authCurrentLoadSuccess,
+    required TResult Function(User user) authLoggedInSuccess,
+    required TResult Function() authLogoutSuccess,
+    required TResult Function(Exception exception) authLoadFailure,
+  }) {
+    return authLogoutSuccess();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? authInitial,
+    TResult Function()? authInProgress,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
+  }) {
+    return authLogoutSuccess?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? authInitial,
+    TResult Function()? authInProgress,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
+    required TResult orElse(),
+  }) {
+    if (authLogoutSuccess != null) {
+      return authLogoutSuccess();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AuthInitial value) authInitial,
+    required TResult Function(AuthInProgress value) authInProgress,
+    required TResult Function(AuthCurrentLoadSuccess value)
+        authCurrentLoadSuccess,
+    required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
+    required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
+    required TResult Function(AuthLoadFailure value) authLoadFailure,
+  }) {
+    return authLogoutSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AuthInitial value)? authInitial,
+    TResult Function(AuthInProgress value)? authInProgress,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
+    TResult Function(AuthLoadFailure value)? authLoadFailure,
+  }) {
+    return authLogoutSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AuthInitial value)? authInitial,
+    TResult Function(AuthInProgress value)? authInProgress,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
+    TResult Function(AuthLoadFailure value)? authLoadFailure,
+    required TResult orElse(),
+  }) {
+    if (authLogoutSuccess != null) {
+      return authLogoutSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthLogoutSuccess implements AuthState {
+  const factory AuthLogoutSuccess() = _$AuthLogoutSuccess;
 }
 
 /// @nodoc
@@ -1317,7 +1854,7 @@ abstract class $AuthLoadFailureCopyWith<$Res> {
   factory $AuthLoadFailureCopyWith(
           AuthLoadFailure value, $Res Function(AuthLoadFailure) then) =
       _$AuthLoadFailureCopyWithImpl<$Res>;
-  $Res call({ParseException exception});
+  $Res call({Exception exception});
 }
 
 /// @nodoc
@@ -1338,7 +1875,7 @@ class _$AuthLoadFailureCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
       exception == freezed
           ? _value.exception
           : exception // ignore: cast_nullable_to_non_nullable
-              as ParseException,
+              as Exception,
     ));
   }
 }
@@ -1349,7 +1886,7 @@ class _$AuthLoadFailure implements AuthLoadFailure {
   const _$AuthLoadFailure(this.exception);
 
   @override
-  final ParseException exception;
+  final Exception exception;
 
   @override
   String toString() {
@@ -1378,8 +1915,10 @@ class _$AuthLoadFailure implements AuthLoadFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
-    required TResult Function(User user) authLoadSuccess,
-    required TResult Function(ParseException exception) authLoadFailure,
+    required TResult Function(User user) authCurrentLoadSuccess,
+    required TResult Function(User user) authLoggedInSuccess,
+    required TResult Function() authLogoutSuccess,
+    required TResult Function(Exception exception) authLoadFailure,
   }) {
     return authLoadFailure(exception);
   }
@@ -1389,8 +1928,10 @@ class _$AuthLoadFailure implements AuthLoadFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
   }) {
     return authLoadFailure?.call(exception);
   }
@@ -1400,8 +1941,10 @@ class _$AuthLoadFailure implements AuthLoadFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
-    TResult Function(User user)? authLoadSuccess,
-    TResult Function(ParseException exception)? authLoadFailure,
+    TResult Function(User user)? authCurrentLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function(Exception exception)? authLoadFailure,
     required TResult orElse(),
   }) {
     if (authLoadFailure != null) {
@@ -1415,7 +1958,10 @@ class _$AuthLoadFailure implements AuthLoadFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthInitial value) authInitial,
     required TResult Function(AuthInProgress value) authInProgress,
-    required TResult Function(AuthLoadSuccess value) authLoadSuccess,
+    required TResult Function(AuthCurrentLoadSuccess value)
+        authCurrentLoadSuccess,
+    required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
+    required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
     required TResult Function(AuthLoadFailure value) authLoadFailure,
   }) {
     return authLoadFailure(this);
@@ -1426,7 +1972,9 @@ class _$AuthLoadFailure implements AuthLoadFailure {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
   }) {
     return authLoadFailure?.call(this);
@@ -1437,7 +1985,9 @@ class _$AuthLoadFailure implements AuthLoadFailure {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthInitial value)? authInitial,
     TResult Function(AuthInProgress value)? authInProgress,
-    TResult Function(AuthLoadSuccess value)? authLoadSuccess,
+    TResult Function(AuthCurrentLoadSuccess value)? authCurrentLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
     TResult Function(AuthLoadFailure value)? authLoadFailure,
     required TResult orElse(),
   }) {
@@ -1449,9 +1999,9 @@ class _$AuthLoadFailure implements AuthLoadFailure {
 }
 
 abstract class AuthLoadFailure implements AuthState {
-  const factory AuthLoadFailure(ParseException exception) = _$AuthLoadFailure;
+  const factory AuthLoadFailure(Exception exception) = _$AuthLoadFailure;
 
-  ParseException get exception;
+  Exception get exception;
   @JsonKey(ignore: true)
   $AuthLoadFailureCopyWith<AuthLoadFailure> get copyWith =>
       throw _privateConstructorUsedError;

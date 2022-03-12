@@ -7,6 +7,12 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.authLoginAnonymouslyRequested() =
       AuthLoginAnonymouslyRequested;
   const factory AuthEvent.authLogoutRequested() = AuthLogoutRequested;
-  const factory AuthEvent.authUpdatedUserDataRequested() = AuthUpdatedUserDataRequested;
 
+  /// Get update user profile date from server
+  const factory AuthEvent.authGetUpdatedUserDataRequested() =
+      AuthGetUpdatedUserDataRequested;
+
+  /// Load the current user form local cache. If no user found this event will
+  /// add new event to auth bloc to create anonymous user [AuthLoginAnonymouslyRequested]
+  const factory AuthEvent.authCurrentUserLoaded() = AuthCurrentUserLoaded;
 }

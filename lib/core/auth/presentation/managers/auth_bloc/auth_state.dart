@@ -6,8 +6,11 @@ class AuthState with _$AuthState {
 
   const factory AuthState.authInProgress() = AuthInProgress;
 
-  const factory AuthState.authLoadSuccess(User user) = AuthLoadSuccess;
+  const factory AuthState.authCurrentLoadSuccess(User user) = AuthCurrentLoadSuccess;
 
-  const factory AuthState.authLoadFailure(ParseException exception) =
+  const factory AuthState.authLoggedInSuccess(User user) = AuthLoggedInSuccess;
+  const factory AuthState.authLogoutSuccess() = AuthLogoutSuccess;
+
+  const factory AuthState.authLoadFailure(Exception exception) =
       AuthLoadFailure;
 }

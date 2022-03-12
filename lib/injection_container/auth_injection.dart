@@ -10,8 +10,8 @@ void authInit() {
   di.registerFactory<AuthBloc>(() => AuthBloc(di.get()));
 
   // repositories
-  di.registerLazySingleton<AuthRepository>(
-      () => AuthRepository(di.get(), di.get()));
+  di.registerLazySingleton<AuthRepositoryFactory>(
+      () => AuthRepositoryFactory(di.get(), di.get()));
 
   // data sources
   di.registerLazySingleton<AuthRemoteDataSource>(

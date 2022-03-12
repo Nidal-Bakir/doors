@@ -85,8 +85,16 @@ class User extends ParseUser implements ParseCloneable {
   set userLocation(ParseGeoPoint? userLocation) =>
       set<ParseGeoPoint?>(keyUserLocation, userLocation);
 
-  ParseRelation<UserSubscription> get userSubscription =>
+  ParseRelation<UserSubscription> get userSubscriptions =>
       getRelation<UserSubscription>(keyUserSubscription);
+
+  /// used to set payment info for companies when creating company account.
+  /// 
+  /// So the account creation and first payment processed at the same time.
+  /// In case the payment fail the creation of the account will be canceled.
+  set addCompanySubscription(UserSubscription userSubscription) {
+    addRelation(keyUserSubscription, [userSubscription]);
+  }
 
   bool? get isSubscribed => get<bool?>(keyIsSubscribed);
 
