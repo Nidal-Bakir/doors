@@ -1,6 +1,6 @@
 import 'package:doors/core/auth/presentation/managers/auth_bloc/auth_bloc.dart';
+import 'package:doors/core/config/routes/app_routes.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
