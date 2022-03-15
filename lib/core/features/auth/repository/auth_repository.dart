@@ -83,7 +83,7 @@ abstract class AuthRepository {
   /// Login as anonymous user. Its like a normal user excepts that the [User] object
   /// returns from this call will not have email nor password.
   ///
-  /// To Check if a [User] objet is a anonymous or not use [User.isAnonymousUser].
+  /// To Check if a [User] objet is a anonymous or not use [User.isAnonymousAccount].
   ///
   /// Returns Either [ParseException] or [User] object.
   Future<Either<ParseException, User>> loginAnonymously() async {
@@ -194,7 +194,7 @@ class AuthRepositoryFactory {
   AuthRepositoryFactory(this._authRemoteDataSource, this._authLocalDataSource);
   Future<AuthRepository> getAuthRepository() async {
     final currentUser = await _authLocalDataSource.getCurrentLoggedUser();
-    if (currentUser == null || currentUser.isAnonymousUser) {
+    if (currentUser == null || currentUser.isAnonymousAccount) {
       return _AnonymousAuthRepository(
           _authRemoteDataSource, _authLocalDataSource);
     } else {

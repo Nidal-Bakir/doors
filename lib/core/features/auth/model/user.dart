@@ -98,5 +98,5 @@ class User extends ParseUser implements ParseCloneable {
 
   bool? get isSubscribed => get<bool?>(keyIsSubscribed);
 
-  bool get isAnonymousUser => emailAddress == null || username != emailAddress;
+  bool get isAnonymousAccount => emailAddress == null || username != emailAddress;
 }

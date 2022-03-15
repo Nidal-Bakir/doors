@@ -54,7 +54,7 @@ abstract class AuthRemoteDataSource {
   /// Login as anonymous user. Its like a normal user excepts that the [User] object
   /// returns from this call will not have email nor password.
   ///
-  /// To Check if a [User] objet is a anonymous or not use [User.isAnonymousUser].
+  /// To Check if a [User] objet is a anonymous or not use [User.isAnonymousAccount].
   ///
   /// Throws [ParseException].
   Future<User> loginAnonymously();
