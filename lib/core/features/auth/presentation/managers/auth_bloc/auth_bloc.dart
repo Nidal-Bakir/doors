@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:doors/core/auth/model/user.dart';
-import 'package:doors/core/auth/repository/auth_repository.dart';
+import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/features/auth/repository/auth_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'auth_bloc.freezed.dart';
@@ -14,7 +14,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   late final AuthRepository _authRepository;
 
   AuthBloc(this._authRepositoryFactory) : super(const AuthInitial()) {
-
     // to make sure that this will run before any async operation from bloc
     scheduleMicrotask(() async {
       _authRepository = await _authRepositoryFactory.getAuthRepository();

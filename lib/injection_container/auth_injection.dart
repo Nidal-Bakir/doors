@@ -1,7 +1,7 @@
-import 'package:doors/core/auth/data/auth_local_data_source.dart';
-import 'package:doors/core/auth/data/auth_remote_data_source.dart';
-import 'package:doors/core/auth/presentation/managers/auth_bloc/auth_bloc.dart';
-import 'package:doors/core/auth/repository/auth_repository.dart';
+import 'package:doors/core/features/auth/data/auth_local_data_source.dart';
+import 'package:doors/core/features/auth/data/auth_remote_data_source.dart';
+import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
+import 'package:doors/core/features/auth/repository/auth_repository.dart';
 import 'package:get_it/get_it.dart';
 
 final di = GetIt.I;

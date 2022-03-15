@@ -1,5 +1,5 @@
 import 'package:doors/core/enums/enums.dart';
-import 'package:doors/core/subscription/model/payment.dart';
+import 'package:doors/core/features/subscription/model/payment.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class User extends ParseUser implements ParseCloneable {

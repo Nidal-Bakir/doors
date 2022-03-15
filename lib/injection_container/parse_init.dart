@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:doors/core/auth/model/user.dart';
-import 'package:doors/core/subscription/model/payment.dart';
+import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/features/subscription/model/payment.dart';
 import 'package:doors/parse_keys.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';

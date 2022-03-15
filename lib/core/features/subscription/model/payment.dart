@@ -1,5 +1,5 @@
-import 'package:doors/core/auth/model/user.dart';
 import 'package:doors/core/enums/enums.dart';
+import 'package:doors/core/features/auth/model/user.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class UserSubscription extends ParseObject implements ParseCloneable {

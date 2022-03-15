@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:doors/core/auth/data/auth_local_data_source.dart';
-import 'package:doors/core/auth/data/auth_remote_data_source.dart';
-import 'package:doors/core/auth/model/user.dart';
 import 'package:doors/core/errors/errors.dart';
+import 'package:doors/core/features/auth/data/auth_local_data_source.dart';
+import 'package:doors/core/features/auth/data/auth_remote_data_source.dart';
+import 'package:doors/core/features/auth/model/user.dart';
 
 abstract class AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
