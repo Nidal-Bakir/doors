@@ -1,4 +1,4 @@
-import 'package:doors/core/errors/errors.dart';
+import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
