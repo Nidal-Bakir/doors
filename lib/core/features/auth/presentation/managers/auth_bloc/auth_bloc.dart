@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/repository/auth_repository.dart';
@@ -14,10 +12,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   late final AuthRepository _authRepository;
 
   AuthBloc(this._authRepositoryFactory) : super(const AuthInitial()) {
-    // to make sure that this will run before any async operation from bloc
-    scheduleMicrotask(() async {
-      _authRepository = await _authRepositoryFactory.getAuthRepository();
-    });
+    _authRepositoryFactory
+        .getAuthRepository()
+        .then((value) => _authRepository = value);
 
     on<AuthEvent>(
       (event, emit) {
@@ -35,6 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
     );
   }
+
   void _onAuthLoginRequested(
       AuthLoginRequested authLoginRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
@@ -77,8 +75,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthLogoutRequested authLogoutRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
-    final updatedUser = await _authRepository.logout();
-    updatedUser.fold((error) => emit(AuthLoadFailure(error)),
+    final logoutState = await _authRepository.logout();
+    logoutState.fold((error) => emit(AuthLoadFailure(error)),
         (_) => emit(const AuthLogoutSuccess()));
   }
 

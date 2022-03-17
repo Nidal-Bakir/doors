@@ -1,8 +1,9 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/subscription/model/payment.dart';
+import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-class User extends ParseUser implements ParseCloneable {
+class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyName = 'name';
   static const keyAccountType = 'accountType';
   static const keyAccountStatues = 'accountStatue';
@@ -89,7 +90,7 @@ class User extends ParseUser implements ParseCloneable {
       getRelation<UserSubscription>(keyUserSubscription);
 
   /// used to set payment info for companies when creating company account.
-  /// 
+  ///
   /// So the account creation and first payment processed at the same time.
   /// In case the payment fail the creation of the account will be canceled.
   set addCompanySubscription(UserSubscription userSubscription) {
@@ -98,5 +99,10 @@ class User extends ParseUser implements ParseCloneable {
 
   bool? get isSubscribed => get<bool?>(keyIsSubscribed);
 
-  bool get isAnonymousAccount => emailAddress == null || username != emailAddress;
+  bool get isAnonymousAccount =>
+      emailAddress == null || username != emailAddress;
+
+  @override
+  // the user object will equal other user object if the user name is the same
+  List<Object?> get props => [username];
 }
