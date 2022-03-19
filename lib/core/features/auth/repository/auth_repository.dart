@@ -26,12 +26,26 @@ abstract class AuthRepository {
   /// The email will not be sent if the user already verified his email address
   ///
   /// Returns Either [Exception] ([ParseException] || [UserException]) OR  void as a mark of success.
-  Future<Either<Exception, void>> sendVerificationEmail();
+  Future<Either<Exception, void>> sendVerificationEmail() async {
+    try {
+      return Right(await _authRemoteDataSource
+          .sendVerificationEmail((await getCurrentLoggedUser())!));
+    } on ParseException catch (e) {
+      return Left(e);
+    }
+  }
 
   /// Send password reset request email to [currentUser].
   ///
   /// Returns Either [Exception] ([ParseException] || [UserException]) OR  void as a mark of success.
-  Future<Either<Exception, void>> sendPasswordReset();
+  Future<Either<Exception, void>> sendPasswordReset() async {
+    try {
+      return Right(await _authRemoteDataSource
+          .sendPasswordReset((await getCurrentLoggedUser())!));
+    } on ParseException catch (e) {
+      return Left(e);
+    }
+  }
 
   /// Logout the current logged-in user.
   ///
@@ -120,21 +134,6 @@ class _AnonymousAuthRepository extends AuthRepository {
   }
 
   @override
-  Future<Either<UserException, void>> sendVerificationEmail() async {
-    return Left(
-      AnonymousException(
-          'Anonymous user can not do sendVerificationEmail operation.'),
-    );
-  }
-
-  @override
-  Future<Either<UserException, void>> sendPasswordReset() async {
-    return Left(
-      AnonymousException('Anonymous user can not do PasswordReset operation.'),
-    );
-  }
-
-  @override
   Future<Either<Exception, void>> logout() async {
     return Left(
       AnonymousException('Anonymous user can not do logout operation.'),
@@ -152,26 +151,6 @@ class _LoggedInAuthRepository extends AuthRepository {
     try {
       return Right(await _authRemoteDataSource
           .getCurrentUpdatedUserFromServer((await getCurrentLoggedUser())!));
-    } on ParseException catch (e) {
-      return Left(e);
-    }
-  }
-
-  @override
-  Future<Either<ParseException, void>> sendVerificationEmail() async {
-    try {
-      return Right(await _authRemoteDataSource
-          .sendVerificationEmail((await getCurrentLoggedUser())!));
-    } on ParseException catch (e) {
-      return Left(e);
-    }
-  }
-
-  @override
-  Future<Either<Exception, void>> sendPasswordReset() async {
-    try {
-      return Right(await _authRemoteDataSource
-          .sendPasswordReset((await getCurrentLoggedUser())!));
     } on ParseException catch (e) {
       return Left(e);
     }
