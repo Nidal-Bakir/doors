@@ -15,4 +15,10 @@ class AuthEvent with _$AuthEvent {
   /// Load the current user form local cache. If no user found this event will
   /// add new event to auth bloc to create anonymous user [AuthLoginAnonymouslyRequested]
   const factory AuthEvent.authCurrentUserLoaded() = AuthCurrentUserLoaded;
+
+  /// Send email to reset account password
+  ///
+  /// Set the [userEmail] in case the user not logged in (anonymous user).
+  const factory AuthEvent.authResetPasswordRequested({String? userEmail}) =
+      AuthResetPasswordRequested;
 }

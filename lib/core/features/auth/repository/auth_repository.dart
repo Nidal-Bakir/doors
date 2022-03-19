@@ -35,17 +35,12 @@ abstract class AuthRepository {
     }
   }
 
-  /// Send password reset request email to [currentUser].
+  /// Send email to reset account password
+  ///
+  /// Set the [userEmail] in case the user not logged in (anonymous user).
   ///
   /// Returns Either [Exception] ([ParseException] || [UserException]) OR  void as a mark of success.
-  Future<Either<Exception, void>> sendPasswordReset() async {
-    try {
-      return Right(await _authRemoteDataSource
-          .sendPasswordReset((await getCurrentLoggedUser())!));
-    } on ParseException catch (e) {
-      return Left(e);
-    }
-  }
+  Future<Either<Exception, void>> sendPasswordReset({String? userEmail});
 
   /// Logout the current logged-in user.
   ///
@@ -139,6 +134,17 @@ class _AnonymousAuthRepository extends AuthRepository {
       AnonymousException('Anonymous user can not do logout operation.'),
     );
   }
+
+  @override
+  Future<Either<Exception, void>> sendPasswordReset({String? userEmail}) async {
+    assert(userEmail != null);
+    try {
+      return Right(await _authRemoteDataSource
+          .sendPasswordReset(User(userEmail, null, userEmail)));
+    } on ParseException catch (e) {
+      return Left(e);
+    }
+  }
 }
 
 class _LoggedInAuthRepository extends AuthRepository {
@@ -164,6 +170,17 @@ class _LoggedInAuthRepository extends AuthRepository {
     }
     try {
       return Right(await _authRemoteDataSource.logout(currentUser));
+    } on ParseException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<Exception, void>> sendPasswordReset({String? userEmail}) async {
+    assert(userEmail == null);
+    try {
+      return Right(await _authRemoteDataSource.sendPasswordReset(
+          (await _authLocalDataSource.getCurrentLoggedUser())!));
     } on ParseException catch (e) {
       return Left(e);
     }

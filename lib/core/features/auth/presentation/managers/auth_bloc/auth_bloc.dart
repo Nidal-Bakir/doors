@@ -28,7 +28,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             authGetUpdatedUserDataRequested: (event) =>
                 _onAuthGetUpdatedUserDataRequested(event, emit),
             authCurrentUserLoaded: (event) =>
-                _onAuthCurrentUserLoaded(event, emit));
+                _onAuthCurrentUserLoaded(event, emit),
+            authResetPasswordRequested: (event) =>
+                _onAuthResetPasswordRequested(event, emit));
       },
     );
   }
@@ -91,5 +93,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       emit(AuthCurrentLoadSuccess(currentUser));
     }
+  }
+
+  void _onAuthResetPasswordRequested(
+      AuthResetPasswordRequested event, Emitter<AuthState> emit) async {
+    emit(const AuthInProgress());
+
+    final sendResetState =
+        await _authRepository.sendPasswordReset(userEmail: event.userEmail);
+    sendResetState.fold((error) => emit(AuthLoadFailure(error)),
+        (_) => emit(const AuthPasswordResetSendSuccess()));
   }
 }

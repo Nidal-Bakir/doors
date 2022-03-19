@@ -233,5 +233,37 @@ void main() {
         verify: (_) {
           verify(() => mockAuthRepository.login(mockUser)).called(1);
         });
+
+    blocTest<AuthBloc, AuthState>(
+        'emits [AuthInProgress, AuthPasswordResetSendSuccess] when AuthResetPasswordRequested is added.',
+        build: () => AuthBloc(mockAuthRepositoryFactory),
+        setUp: () {
+          when(() => mockAuthRepository.sendPasswordReset())
+              .thenAnswer((_) async => const Right(null));
+        },
+        act: (bloc) => bloc.add(const AuthResetPasswordRequested()),
+        expect: () => <AuthState>[
+              const AuthInProgress(),
+              const AuthPasswordResetSendSuccess()
+            ],
+        verify: (_) {
+          verify(() => mockAuthRepository.sendPasswordReset()).called(1);
+        });
+    blocTest<AuthBloc, AuthState>(
+        'emits [AuthInProgress,AuthLoadFailure] when AuthResetPasswordRequested added and sendPasswordReset() returns error.',
+        build: () => AuthBloc(mockAuthRepositoryFactory),
+        setUp: () {
+          when(() => mockAuthRepository.sendPasswordReset()).thenAnswer(
+              (_) async => Left(ParseException(
+                  message: 'error sending password reset request')));
+        },
+        act: (bloc) => bloc.add(const AuthResetPasswordRequested()),
+        expect: () => [
+              const AuthInProgress(),
+              isA<AuthLoadFailure>(),
+            ],
+        verify: (_) {
+          verify(() => mockAuthRepository.sendPasswordReset()).called(1);
+        });
   });
 }
