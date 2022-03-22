@@ -17,25 +17,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         .then((value) => _authRepository = value);
 
     on<AuthEvent>(
-      (event, emit) {
-        event.map(
-            authLoginRequested: (event) => _onAuthLoginRequested(event, emit),
-            authSignUpRequested: (event) => _onAuthSignUpRequested(event, emit),
-            authLoginAnonymouslyRequested: (event) =>
-                _onAuthLoginAnonymouslyRequested(event, emit),
-            authLogoutRequested: (event) =>
-                _onAuthLogoutRequestedRequested(event, emit),
-            authGetUpdatedUserDataRequested: (event) =>
-                _onAuthGetUpdatedUserDataRequested(event, emit),
-            authCurrentUserLoaded: (event) =>
-                _onAuthCurrentUserLoaded(event, emit),
-            authResetPasswordRequested: (event) =>
-                _onAuthResetPasswordRequested(event, emit));
+      (event, emit) async {
+        await event.map<Future<void>>(
+            authLoginRequested: (event) async =>
+                await _onAuthLoginRequested(event, emit),
+            authSignUpRequested: (event) async =>
+                await _onAuthSignUpRequested(event, emit),
+            authLoginAnonymouslyRequested: (event) async =>
+                await _onAuthLoginAnonymouslyRequested(event, emit),
+            authLogoutRequested: (event) async =>
+                await _onAuthLogoutRequestedRequested(event, emit),
+            authGetUpdatedUserDataRequested: (event) async =>
+                await _onAuthGetUpdatedUserDataRequested(event, emit),
+            authCurrentUserLoaded: (event) async =>
+                await _onAuthCurrentUserLoaded(event, emit),
+            authResetPasswordRequested: (event) async =>
+                await _onAuthResetPasswordRequested(event, emit));
       },
     );
   }
 
-  void _onAuthLoginRequested(
+  Future<void> _onAuthLoginRequested(
       AuthLoginRequested authLoginRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
     final loggedUser = await _authRepository.login(authLoginRequested.user);
@@ -44,7 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (user) => emit(AuthLoggedInSuccess(user)));
   }
 
-  void _onAuthSignUpRequested(
+  Future<void> _onAuthSignUpRequested(
       AuthSignUpRequested authSignUpRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
     final signUpUser = await _authRepository.signUp(authSignUpRequested.user);
@@ -53,27 +55,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (user) => emit(AuthLoggedInSuccess(user)));
   }
 
-  void _onAuthLoginAnonymouslyRequested(
+  Future<void> _onAuthLoginAnonymouslyRequested(
       AuthLoginAnonymouslyRequested anonymouslyRequested,
       Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
     final anonymousUser = await _authRepository.loginAnonymously();
     anonymousUser.fold((error) => emit(AuthLoadFailure(error)),
-        (user) => emit(AuthCurrentLoadSuccess(user)));
+        (user) => emit(AuthCurrentUserLoadSuccess(user)));
   }
 
-  void _onAuthGetUpdatedUserDataRequested(
+  Future<void> _onAuthGetUpdatedUserDataRequested(
       AuthGetUpdatedUserDataRequested authUpdatedUserDataRequested,
       Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
     final updatedUser = await _authRepository.getCurrentUpdatedUserFromServer();
     updatedUser.fold((error) => emit(AuthLoadFailure(error)),
-        (user) => emit(AuthCurrentLoadSuccess(user)));
+        (user) => emit(AuthCurrentUserLoadSuccess(user)));
   }
 
-  void _onAuthLogoutRequestedRequested(
+  Future<void> _onAuthLogoutRequestedRequested(
       AuthLogoutRequested authLogoutRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
@@ -82,20 +84,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (_) => emit(const AuthLogoutSuccess()));
   }
 
-  void _onAuthCurrentUserLoaded(
+  Future<void> _onAuthCurrentUserLoaded(
       AuthCurrentUserLoaded event, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
     final currentUser = await _authRepository.getCurrentLoggedUser();
-    if (currentUser == null) {
-      add(const AuthLoginAnonymouslyRequested());
-      return;
+    if (currentUser != null) {
+      emit(AuthCurrentUserLoadSuccess(currentUser));
     } else {
-      emit(AuthCurrentLoadSuccess(currentUser));
+      add(const AuthLoginAnonymouslyRequested());
     }
   }
 
-  void _onAuthResetPasswordRequested(
+  Future<void> _onAuthResetPasswordRequested(
       AuthResetPasswordRequested event, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 

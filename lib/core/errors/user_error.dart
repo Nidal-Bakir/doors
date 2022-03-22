@@ -2,6 +2,9 @@ abstract class UserException implements Exception {
   final String message;
 
   UserException(this.message);
+  
+  @override
+  String toString() => message;
 }
 
 /// Throws when an operation required logged-in users and not anonymous one.

@@ -6,8 +6,8 @@ class AuthState with _$AuthState {
 
   const factory AuthState.authInProgress() = AuthInProgress;
 
-  const factory AuthState.authCurrentLoadSuccess(User user) =
-      AuthCurrentLoadSuccess;
+  const factory AuthState.authCurrentUserLoadSuccess(User user) =
+      AuthCurrentUserLoadSuccess;
 
   const factory AuthState.authLoggedInSuccess(User user) = AuthLoggedInSuccess;
   const factory AuthState.authLogoutSuccess() = AuthLogoutSuccess;

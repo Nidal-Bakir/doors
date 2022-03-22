@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -40,7 +42,6 @@ abstract class AuthRemoteDataSource {
   ///
   /// Throws [ParseException].
   Future<void> sendPasswordReset(User currentUser);
-
 
 /*  TODO: should be in user profile feature!!
 
@@ -119,6 +120,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
       throw ParseException.fromParseError(verificationResponse.error!);
     }
   }
+
 /* TODO: should be in user profile feature!!
   @override
   Future<User> updateCurrentUserData(User currentUserWithUpdatedDate) async {

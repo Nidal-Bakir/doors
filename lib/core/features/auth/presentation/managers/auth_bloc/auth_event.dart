@@ -17,8 +17,6 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.authCurrentUserLoaded() = AuthCurrentUserLoaded;
 
   /// Send email to reset account password
-  ///
-  /// Set the [userEmail] in case the user not logged in (anonymous user).
-  const factory AuthEvent.authResetPasswordRequested({String? userEmail}) =
+  const factory AuthEvent.authResetPasswordRequested({required String  userEmail}) =
       AuthResetPasswordRequested;
 }

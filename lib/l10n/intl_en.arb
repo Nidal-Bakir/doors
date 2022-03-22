@@ -1,3 +1,24 @@
 {
-      "device_app_description":"Doors"
+  "device_app_description": "Doors",
+  "new_to_the_world_of_Doors": "New to the world of Doors?",
+  "create_an_account": " Create an account!",
+  "login": "Login",
+  "forgat_password": "Forgat password?",
+  "password": "Password",
+  "email": "Email",
+  "invalid_username_or_password": "Invalid username or password",
+  "operation_forbidden": "Operation forbidden",
+  "@operation_forbidden": {
+    "description": "The operation isn’t allowed for clients due to class-level permissions. Check error message for more details."
+  },
+  "invalid_email_address": "Invalid email address",
+  "invalid_image_data": "Invalid image data",
+  "user_email_taken": "Email address already in use!",
+  "session_missing": "Session missing",
+  "invalid_session_token": "Invalid session token",
+  "anonymous_user_forbidden_operation": "Your are a guest user you can't preform this operation ",
+  "user_already_logged_out": "Your already logged out!",
+  "reset": "Rest",
+  "we_have_sent_password_rest_email":"We have sent password rest email to you, please check your email inbox.",
+  "enter_your_address_to_rest":"Enter Your account Email address we will send to you an email with link to reset your account password."
 }

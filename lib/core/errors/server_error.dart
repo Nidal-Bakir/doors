@@ -4,6 +4,9 @@ abstract class ServerException implements Exception {
   final String message;
 
   ServerException(this.message);
+
+  @override
+  String toString() => message;
 }
 
 class ParseException extends ServerException {
@@ -20,5 +23,3 @@ class ParseException extends ServerException {
           type: parseError.type,
         );
 }
-
-

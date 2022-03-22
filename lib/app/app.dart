@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:doors/core/config/routes/app_routes.dart';
+import 'package:doors/core/config/theme/app_theme.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
@@ -14,19 +18,29 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (_) =>
-              GetIt.I.get<AuthBloc>()..add(const AuthCurrentUserLoaded()),
+          lazy: false,
+          create: (_) {
+            final authBloc = GetIt.I.get<AuthBloc>();
+            Timer.run(() {
+              authBloc.add(const AuthCurrentUserLoaded());
+            });
+            return authBloc;
+            // return )..);
+          },
         )
       ],
       child: MaterialApp(
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         onGenerateTitle: (context) => context.loc.device_app_description,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: defaultLightTheme(_extractLangCode()),
         onGenerateRoute: onGenerateRoute,
       ),
     );
   }
+}
+
+String _extractLangCode() {
+  // localeName could be (en) or (en_US) or (en_US.UTF-8)
+  return Platform.localeName.split('_')[0];
 }

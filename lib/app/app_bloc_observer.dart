@@ -15,11 +15,11 @@ class AppBlocObserver extends BlocObserver {
     log('bloc: ' +
         bloc.toString() +
         '  \n Event: ' +
-        transition.event +
+        transition.event.toString() +
         '  \n current state: ' +
-        transition.currentState +
+        transition.currentState.toString() +
         '  \n nextState: ' +
-        transition.nextState);
+        transition.nextState.toString());
   }
 
   @override

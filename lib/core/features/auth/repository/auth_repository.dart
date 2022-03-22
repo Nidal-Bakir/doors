@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
@@ -37,10 +39,24 @@ abstract class AuthRepository {
 
   /// Send email to reset account password
   ///
-  /// Set the [userEmail] in case the user not logged in (anonymous user).
-  ///
-  /// Returns Either [Exception] ([ParseException] || [UserException]) OR  void as a mark of success.
-  Future<Either<Exception, void>> sendPasswordReset({String? userEmail});
+  /// Returns Either [ParseException] OR  void as a mark of success.
+  Future<Either<ParseException, void>> sendPasswordReset(
+      {required String userEmail}) async {
+    final _currentSessionToken =
+        (await getCurrentLoggedUser())?.sessionToken ?? '';
+    try {
+      return Right(
+        await _authRemoteDataSource.sendPasswordReset(User(
+          userEmail,
+          null,
+          userEmail,
+          sessionToken: _currentSessionToken,
+        )),
+      );
+    } on ParseException catch (e) {
+      return Left(e);
+    }
+  }
 
   /// Logout the current logged-in user.
   ///
@@ -109,7 +125,7 @@ abstract class AuthRepository {
 
   /// Get the current local user info and data
   ///
-  /// Returns null in case no (login | signUp | login As Anonymous) preformed.
+  /// Returns null in case no (login | signUp) preformed.
   Future<User?> getCurrentLoggedUser() async {
     return await _authLocalDataSource.getCurrentLoggedUser();
   }
@@ -133,17 +149,6 @@ class _AnonymousAuthRepository extends AuthRepository {
     return Left(
       AnonymousException('Anonymous user can not do logout operation.'),
     );
-  }
-
-  @override
-  Future<Either<Exception, void>> sendPasswordReset({String? userEmail}) async {
-    assert(userEmail != null);
-    try {
-      return Right(await _authRemoteDataSource
-          .sendPasswordReset(User(userEmail, null, userEmail)));
-    } on ParseException catch (e) {
-      return Left(e);
-    }
   }
 }
 
@@ -170,17 +175,6 @@ class _LoggedInAuthRepository extends AuthRepository {
     }
     try {
       return Right(await _authRemoteDataSource.logout(currentUser));
-    } on ParseException catch (e) {
-      return Left(e);
-    }
-  }
-
-  @override
-  Future<Either<Exception, void>> sendPasswordReset({String? userEmail}) async {
-    assert(userEmail == null);
-    try {
-      return Right(await _authRemoteDataSource.sendPasswordReset(
-          (await _authLocalDataSource.getCurrentLoggedUser())!));
     } on ParseException catch (e) {
       return Left(e);
     }

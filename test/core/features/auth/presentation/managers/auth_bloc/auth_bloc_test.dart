@@ -44,7 +44,7 @@ void main() {
         act: (bloc) => bloc.add(const AuthCurrentUserLoaded()),
         expect: () => <AuthState>[
               const AuthInProgress(),
-              AuthCurrentLoadSuccess(mockUser)
+              AuthCurrentUserLoadSuccess(mockUser)
             ],
         verify: (_) {
           verify(() => mockAuthRepository.getCurrentLoggedUser()).called(1);
@@ -64,7 +64,7 @@ void main() {
         act: (bloc) => bloc.add(const AuthCurrentUserLoaded()),
         expect: () => <AuthState>[
               const AuthInProgress(),
-              AuthCurrentLoadSuccess(mockUser)
+              AuthCurrentUserLoadSuccess(mockUser)
             ],
         verify: (_) {
           verify(() => mockAuthRepository.getCurrentLoggedUser()).called(1);
@@ -85,7 +85,7 @@ void main() {
         act: (bloc) => bloc.add(const AuthLoginAnonymouslyRequested()),
         expect: () => <AuthState>[
               const AuthInProgress(),
-              AuthCurrentLoadSuccess(mockUser)
+              AuthCurrentUserLoadSuccess(mockUser)
             ],
         verify: (_) {
           verify(() => mockAuthRepository.loginAnonymously()).called(1);
@@ -151,7 +151,7 @@ void main() {
         act: (bloc) => bloc.add(const AuthGetUpdatedUserDataRequested()),
         expect: () => <AuthState>[
               const AuthInProgress(),
-              AuthCurrentLoadSuccess(mockUser)
+              AuthCurrentUserLoadSuccess(mockUser)
             ],
         verify: (_) {
           verify(() => mockAuthRepository.getCurrentUpdatedUserFromServer())
@@ -238,32 +238,38 @@ void main() {
         'emits [AuthInProgress, AuthPasswordResetSendSuccess] when AuthResetPasswordRequested is added.',
         build: () => AuthBloc(mockAuthRepositoryFactory),
         setUp: () {
-          when(() => mockAuthRepository.sendPasswordReset())
+          when(() => mockAuthRepository.sendPasswordReset(
+                  userEmail: 'test@email.com'))
               .thenAnswer((_) async => const Right(null));
         },
-        act: (bloc) => bloc.add(const AuthResetPasswordRequested()),
+        act: (bloc) => bloc
+            .add(const AuthResetPasswordRequested(userEmail: 'test@email.com')),
         expect: () => <AuthState>[
               const AuthInProgress(),
               const AuthPasswordResetSendSuccess()
             ],
         verify: (_) {
-          verify(() => mockAuthRepository.sendPasswordReset()).called(1);
+          verify(() => mockAuthRepository.sendPasswordReset(
+              userEmail: 'test@email.com')).called(1);
         });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure] when AuthResetPasswordRequested added and sendPasswordReset() returns error.',
         build: () => AuthBloc(mockAuthRepositoryFactory),
         setUp: () {
-          when(() => mockAuthRepository.sendPasswordReset()).thenAnswer(
-              (_) async => Left(ParseException(
-                  message: 'error sending password reset request')));
+          when(() => mockAuthRepository.sendPasswordReset(
+              userEmail:
+                 'test@email.com')).thenAnswer((_) async => Left(
+              ParseException(message: 'error sending password reset request')));
         },
-        act: (bloc) => bloc.add(const AuthResetPasswordRequested()),
+        act: (bloc) => bloc
+            .add(const AuthResetPasswordRequested(userEmail:'test@email.com')),
         expect: () => [
               const AuthInProgress(),
               isA<AuthLoadFailure>(),
             ],
         verify: (_) {
-          verify(() => mockAuthRepository.sendPasswordReset()).called(1);
+          verify(() => mockAuthRepository.sendPasswordReset(
+              userEmail: 'test@email.com')).called(1);
         });
   });
 }
