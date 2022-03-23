@@ -1,7 +1,7 @@
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/widgets/auth_error_text.dart';
-import 'package:doors/core/widgets/email_text_field.dart';
+import 'package:doors/core/features/auth/presentation/widgets/email_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,65 +27,62 @@ class _ForgatPasswordScreenState extends State<ForgatPasswordScreen> {
           child: SizedBox(
             height: _screenHeight,
             child: Column(
-              // direction: Axis.vertical,
               children: [
-                const Spacer(flex: 1),
-                const Hero(tag: 'logo', child: FlutterLogo(size: 200)),
+                const Spacer(),
+                const Hero(tag: 'logo', child: FlutterLogo(size: 150)),
                 const SizedBox(
                   height: 32.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 16.0,
-                        top: 16.0,
-                        left: 60.0,
-                        right: 60.0,
-                      ),
-                      child: Form(
-                        key: _keyFrom,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 32.0),
-                              child: Text(
-                                context.loc.enter_your_address_to_rest,
-                                style: Theme.of(context).textTheme.bodyText2,
+                Hero(
+                  tag: 'card',
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 40.0,horizontal: 40.0),
+                        child: Form(
+                          key: _keyFrom,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 32.0),
+                                child: Text(
+                                  context.loc.enter_your_address_to_rest,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
                               ),
-                            ),
-                            EmailTextField(onSave: (email) {
-                              _email = email!.trim();
-                            }),
-                            const SizedBox(height: 32.0),
-                            BlocBuilder<AuthBloc, AuthState>(
-                              builder: (context, state) {
-                                return state.maybeWhen(
-                                    authPasswordResetSendSuccess: () {
-                                  return Text(
-                                    context
-                                        .loc.we_have_sent_password_rest_email,
-                                  );
-                                }, authInProgress: () {
-                                  return const CircularProgressIndicator
-                                      .adaptive();
-                                }, orElse: () {
-                                  return ElevatedButton(
-                                    child: Text(context.loc.reset),
-                                    onPressed: () => _onPressed(context),
-                                  );
-                                });
-                              },
-                            ),
-                            const AuthErrorText(),
-                          ],
+                              EmailTextField(onSave: (email) {
+                                _email = email!.trim();
+                              }),
+                              const SizedBox(height: 32.0),
+                              BlocBuilder<AuthBloc, AuthState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(
+                                      authPasswordResetSendSuccess: () {
+                                    return Text(
+                                      context
+                                          .loc.we_have_sent_password_rest_email,
+                                    );
+                                  }, authInProgress: () {
+                                    return const CircularProgressIndicator
+                                        .adaptive();
+                                  }, orElse: () {
+                                    return ElevatedButton(
+                                      child: Text(context.loc.reset),
+                                      onPressed: () => _onPressed(context),
+                                    );
+                                  });
+                                },
+                              ),
+                              const AuthErrorText(),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                const Spacer(flex: 1),
+                const Spacer(),
               ],
             ),
           ),

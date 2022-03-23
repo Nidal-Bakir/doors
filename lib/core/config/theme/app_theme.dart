@@ -39,6 +39,7 @@ ThemeData defaultLightTheme(String langCode) {
         ),
       ),
       inputDecorationTheme: const InputDecorationTheme(
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         hintStyle: TextStyle(fontFamily: _fontTitilliumWeb),
         isDense: true,
         fillColor: _grayWhite,
