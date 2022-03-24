@@ -5,6 +5,7 @@ import 'package:doors/core/config/routes/app_routes.dart';
 import 'package:doors/core/config/theme/app_theme.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
+import 'package:doors/core/utils/global_fanctions/global_fanctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,14 +34,11 @@ class App extends StatelessWidget {
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         onGenerateTitle: (context) => context.loc.device_app_description,
-        theme: defaultLightTheme(_extractLangCode()),
+        theme: defaultLightTheme(extractLangCodeFromPlatformService()),
         onGenerateRoute: onGenerateRoute,
       ),
     );
   }
 }
 
-String _extractLangCode() {
-  // localeName could be (en) or (en_US) or (en_US.UTF-8)
-  return Platform.localeName.split('_')[0];
-}
+

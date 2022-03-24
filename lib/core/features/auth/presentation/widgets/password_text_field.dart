@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 
 class PasswordTextField extends StatefulWidget {
   final Function(String? password) onSave;
-  const PasswordTextField({Key? key, required this.onSave}) : super(key: key);
+
+  const PasswordTextField({
+    Key? key,
+    required this.onSave,
+  }) : super(key: key);
 
   @override
   State<PasswordTextField> createState() => _PasswordTextFieldState();
@@ -16,7 +20,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     return TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (password) {
-        return isPasswordCompliant(password);
+        return isPasswordCompliant(password, context);
       },
       onSaved: widget.onSave,
       keyboardType: TextInputType.visiblePassword,
@@ -40,34 +44,36 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   }
 }
 
-String? isPasswordCompliant(String? password, [int minLength = 7]) {
-  if (password == null || password == '') {
-    return 'Enter a password';
-  }
-  if (password.length < minLength) {
-    return 'At least 7 characters long';
+String? isPasswordCompliant(String? password1, BuildContext context,
+    [int minLength = 7]) {
+  if (password1 == null || password1 == '') {
+    return context.loc.enter_password;
   }
 
-  bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
-  if (hasUppercase) {
-    bool hasDigits = password.contains(RegExp(r'[0-9]'));
-    if (hasDigits) {
-      bool hasLowercase = password.contains(RegExp(r'[a-z]'));
-      if (hasLowercase) {
-        bool hasSpecialCharacters =
-            password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
-        if (hasSpecialCharacters) {
-          return null;
-        } else {
-          return 'At least one SpecialCharacter (\$ @ %)';
-        }
-      } else {
-        return 'At least one lower case character';
-      }
-    } else {
-      return 'At least one digit character';
-    }
-  } else {
-    return 'At least one upper case character';
+  if (password1.length < minLength) {
+    return context.loc.at_least_7_chars;
   }
+
+  bool hasUppercase = password1.contains(RegExp(r'[A-Z]'));
+  if (!hasUppercase) {
+    return context.loc.at_least_one_upper;
+  }
+
+  bool hasDigits = password1.contains(RegExp(r'[0-9]'));
+  if (!hasDigits) {
+    return context.loc.at_least_one_digit;
+  }
+  
+  bool hasLowercase = password1.contains(RegExp(r'[a-z]'));
+  if (!hasLowercase) {
+    return context.loc.at_least_one_lower;
+  }
+
+  bool hasSpecialCharacters =
+      password1.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+  if (!hasSpecialCharacters) {
+    return context.loc.at_least_one_special;
+  }
+
+  return null;
 }

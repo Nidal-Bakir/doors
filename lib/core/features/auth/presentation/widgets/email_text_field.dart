@@ -12,7 +12,7 @@ class EmailTextField extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       enableSuggestions: true,
       keyboardType: TextInputType.emailAddress,
-      validator: (email) => isValidEmail(email),
+      validator: (email) => isValidEmail(email,context),
       onSaved: onSave,
       decoration: InputDecoration(
         hintText: context.loc.email,
@@ -21,7 +21,7 @@ class EmailTextField extends StatelessWidget {
   }
 }
 
-String? isValidEmail(String? email) {
+String? isValidEmail(String? email,BuildContext context) {
   if (email == null || email == '') {
     return 'Enter a email';
   }

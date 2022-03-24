@@ -1,4 +1,5 @@
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/features/auth/presentation/screens/select_account_type_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,8 +23,8 @@ class _CreateAccountTextButtonState extends State<CreateAccountTextButton> {
   }
 
   void _onTap() {
-    // Navigator.of(context).pushNamed(routeName);
-    HapticFeedback.vibrate();
+    Navigator.of(context).pushNamed(SelectAccountTypeScreen.routeName);
+    HapticFeedback.selectionClick();
   }
 
   @override

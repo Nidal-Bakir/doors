@@ -20,73 +20,78 @@ class _ForgatPasswordScreenState extends State<ForgatPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var _screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        body: SingleChildScrollView(
-          child: SizedBox(
-            height: _screenHeight,
-            child: Column(
-              children: [
-                const Spacer(),
-                const Hero(tag: 'logo', child: FlutterLogo(size: 150)),
-                const SizedBox(
-                  height: 32.0,
-                ),
-                Hero(
-                  tag: 'card',
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 40.0,horizontal: 40.0),
-                        child: Form(
-                          key: _keyFrom,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 32.0),
-                                child: Text(
-                                  context.loc.enter_your_address_to_rest,
-                                  style: Theme.of(context).textTheme.bodyText2,
+      final _mediaQuery = MediaQuery.of(context);
+    final _screenHeight = _mediaQuery.size.height - _mediaQuery.viewPadding.top;
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          body: SingleChildScrollView(
+            child: SizedBox(
+              height: _screenHeight,
+              child: Column(
+                children: [
+                  const Spacer(),
+                  const Hero(tag: 'logo', child: FlutterLogo(size: 150)),
+                  const SizedBox(
+                    height: 32.0,
+                  ),
+                  Hero(
+                    tag: 'card',
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 40.0, horizontal: 40.0),
+                          child: Form(
+                            key: _keyFrom,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 32.0),
+                                  child: Text(
+                                    context.loc.enter_your_address_to_rest,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
                                 ),
-                              ),
-                              EmailTextField(onSave: (email) {
-                                _email = email!.trim();
-                              }),
-                              const SizedBox(height: 32.0),
-                              BlocBuilder<AuthBloc, AuthState>(
-                                builder: (context, state) {
-                                  return state.maybeWhen(
-                                      authPasswordResetSendSuccess: () {
-                                    return Text(
-                                      context
-                                          .loc.we_have_sent_password_rest_email,
-                                    );
-                                  }, authInProgress: () {
-                                    return const CircularProgressIndicator
-                                        .adaptive();
-                                  }, orElse: () {
-                                    return ElevatedButton(
-                                      child: Text(context.loc.reset),
-                                      onPressed: () => _onPressed(context),
-                                    );
-                                  });
-                                },
-                              ),
-                              const AuthErrorText(),
-                            ],
+                                EmailTextField(onSave: (email) {
+                                  _email = email!.trim();
+                                }),
+                                const SizedBox(height: 32.0),
+                                BlocBuilder<AuthBloc, AuthState>(
+                                  builder: (context, state) {
+                                    return state.maybeWhen(
+                                        authPasswordResetSendSuccess: () {
+                                      return Text(
+                                        context.loc
+                                            .we_have_sent_password_rest_email,
+                                      );
+                                    }, authInProgress: () {
+                                      return const CircularProgressIndicator
+                                          .adaptive();
+                                    }, orElse: () {
+                                      return ElevatedButton(
+                                        child: Text(context.loc.reset),
+                                        onPressed: () => _onPressed(context),
+                                      );
+                                    });
+                                  },
+                                ),
+                                const AuthErrorText(),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const Spacer(),
-              ],
+                  const Spacer(),
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   void _onPressed(BuildContext context) {

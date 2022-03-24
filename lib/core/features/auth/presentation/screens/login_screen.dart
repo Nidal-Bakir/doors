@@ -26,76 +26,79 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var _screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        body: SingleChildScrollView(
-          child: SizedBox(
-            height: _screenHeight,
-            child: Column(
-              children: [
-                const Spacer(flex: 2),
-                const Hero(tag: 'logo', child: FlutterLogo(size: 150)),
-                const Spacer(),
-                Hero(
-                  tag: 'card',
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 40.0,
-                          horizontal: 40.0,
-                        ),
-                        child: Form(
-                          key: _keyFrom,
-                          child: Column(
-                            children: [
-                              const AuthErrorText(),
-                              EmailTextField(onSave: (email) {
-                                _email = email!;
-                              }),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                              PasswordTextField(onSave: (password) {
-                                _password = password!;
-                              }),
-                              const ForgatPassword(),
-                              BlocConsumer<AuthBloc, AuthState>(
-                                listener: (context, state) {
-                                  if (state is AuthLoggedInSuccess) {
-                                    RestartApp.restart(context);
-                                  }
-                                },
-                                builder: (context, state) {
-                                  if (state is AuthInProgress) {
-                                    return const CircularProgressIndicator
-                                        .adaptive();
-                                  }
-
-                                  return ElevatedButton(
-                                    child: Text(context.loc.login),
-                                    onPressed: () => _onPressed(context),
-                                  );
-                                },
-                              ),
-                              const SizedBox(
-                                height: 32.0,
-                              ),
-                              const CreateAccountTextButton(),
-                            ],
+      final _mediaQuery = MediaQuery.of(context);
+    final _screenHeight = _mediaQuery.size.height - _mediaQuery.viewPadding.top;
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          body: SingleChildScrollView(
+            child: SizedBox(
+              height: _screenHeight,
+              child: Column(
+                children: [
+                  const Spacer(flex: 1),
+                  const Hero(tag: 'logo', child: FlutterLogo(size: 150)),
+                  const Spacer(),
+                  Hero(
+                    tag: 'card',
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 40.0,
+                            horizontal: 40.0,
+                          ),
+                          child: Form(
+                            key: _keyFrom,
+                            child: Column(
+                              children: [
+                                const AuthErrorText(),
+                                EmailTextField(onSave: (email) {
+                                  _email = email!;
+                                }),
+                                const SizedBox(
+                                  height: 16.0,
+                                ),
+                                PasswordTextField(onSave: (password) {
+                                  _password = password!;
+                                }),
+                                const ForgatPassword(),
+                                BlocConsumer<AuthBloc, AuthState>(
+                                  listener: (context, state) {
+                                    if (state is AuthLoggedInSuccess) {
+                                      RestartApp.restart(context);
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    if (state is AuthInProgress) {
+                                      return const CircularProgressIndicator
+                                          .adaptive();
+                                    }
+    
+                                    return ElevatedButton(
+                                      child: Text(context.loc.login),
+                                      onPressed: () => _onPressed(context),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 32.0,
+                                ),
+                                const CreateAccountTextButton(),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const Spacer()
-              ],
+                  const Spacer()
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   void _onPressed(BuildContext context) {

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 const _fontTitilliumWeb = 'TitilliumWeb';
 const _fontSukar = 'Sukar';
+String _fontFamilyName = _fontTitilliumWeb;
 
 ThemeData defaultLightTheme(String langCode) {
+  _fontFamilyName = langCode == 'ar' ? _fontSukar : _fontTitilliumWeb;
+
   const _yalow = const Color(0xFFFECE2E);
   const _black = Colors.black;
   const _white = Colors.white;
@@ -11,6 +14,11 @@ ThemeData defaultLightTheme(String langCode) {
   const _redError = Colors.red;
 
   return ThemeData(
+      colorScheme: const ColorScheme.light(
+        primary: _yalow,
+        secondary: _black,
+        surface: _white,
+      ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: _yalow,
       ),
@@ -21,7 +29,6 @@ ThemeData defaultLightTheme(String langCode) {
           color: _redError,
         ),
       ),
-      colorScheme: const ColorScheme.light(primary: _yalow, secondary: _black),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
@@ -38,14 +45,17 @@ ThemeData defaultLightTheme(String langCode) {
           ),
         ),
       ),
-      inputDecorationTheme: const InputDecorationTheme(
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        hintStyle: TextStyle(fontFamily: _fontTitilliumWeb),
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        hintStyle: TextStyle(
+          fontFamily: _fontFamilyName,
+        ),
         isDense: true,
         fillColor: _grayWhite,
         filled: true,
         suffixIconColor: _black,
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
           gapPadding: 0.0,
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(
@@ -63,18 +73,28 @@ ThemeData defaultLightTheme(String langCode) {
           ),
         ),
       ),
-      textTheme: textTheme(langCode));
+      textTheme: textTheme());
 }
 
-TextTheme textTheme(String longCode) {
-  String fontFamilyName = longCode == 'ar' ? _fontSukar : _fontTitilliumWeb;
+TextTheme textTheme() {
   return TextTheme(
-    headline5: TextStyle(fontSize: 28, fontFamily: fontFamilyName),
-    bodyText1: TextStyle(fontSize: 14, fontFamily: fontFamilyName),
+    headline5: TextStyle(
+      fontSize: 28,
+      fontFamily: _fontFamilyName,
+      fontWeight: FontWeight.bold,
+    ),
+    headline6: TextStyle(
+      fontSize: 24,
+      fontFamily: _fontFamilyName,
+      fontWeight: FontWeight.bold,
+    ),
+    subtitle1: TextStyle(fontSize: 16, fontFamily: _fontFamilyName),
+    bodyText1: TextStyle(fontSize: 14, fontFamily: _fontFamilyName),
     bodyText2: TextStyle(
-        fontSize: 14,
-        fontFamily: fontFamilyName,
-        fontWeight: FontWeight.w700,
-        wordSpacing: 0.9),
+      fontSize: 14,
+      fontFamily: _fontFamilyName,
+      fontWeight: FontWeight.w700,
+      wordSpacing: 0.9,
+    ),
   );
 }
