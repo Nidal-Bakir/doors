@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:doors/core/config/routes/app_routes.dart';
 import 'package:doors/core/config/theme/app_theme.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
-import 'package:doors/core/utils/global_fanctions/global_fanctions.dart';
+import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,14 +19,8 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           lazy: false,
-          create: (_) {
-            final authBloc = GetIt.I.get<AuthBloc>();
-            Timer.run(() {
-              authBloc.add(const AuthCurrentUserLoaded());
-            });
-            return authBloc;
-            // return )..);
-          },
+          create: (_) =>
+              GetIt.I.get<AuthBloc>()..add(const AuthCurrentUserLoaded()),
         )
       ],
       child: MaterialApp(
@@ -40,5 +33,3 @@ class App extends StatelessWidget {
     );
   }
 }
-
-

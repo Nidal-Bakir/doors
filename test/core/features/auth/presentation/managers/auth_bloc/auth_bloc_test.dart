@@ -29,12 +29,6 @@ void main() {
           .thenAnswer((_) async => mockUser);
     });
 
-    blocTest<AuthBloc, AuthState>('auth bloc should emit nothing when created.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
-        expect: () => [],
-        verify: (_) {
-          verify(() => mockAuthRepositoryFactory.getAuthRepository()).called(1);
-        });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthCurrentLoadSuccess] when AuthCurrentUserLoaded is added if the user logged-in.',
         build: () => AuthBloc(mockAuthRepositoryFactory),

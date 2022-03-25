@@ -1,8 +1,5 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/utils/global_fanctions/global_fanctions.dart';
+import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
