@@ -4,7 +4,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 abstract class AuthLocalDataSource {
   /// Get the current local user info and data.
   /// 
-  ///  Returns null in case no (login | signUp | login As Anonymous) preformed or
+  ///  Returns null in case no (login | signUp) preformed or
   /// the user logout.
   Future<User?> getCurrentLoggedUser();
 }

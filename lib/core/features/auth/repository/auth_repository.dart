@@ -1,6 +1,6 @@
-import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/data/auth_local_data_source.dart';
@@ -20,15 +20,15 @@ abstract class AuthRepository {
   ///
   /// parseSDK will automatically update the local user date.
   ///
-  /// Returns Either [Exception] ([ParseException] || [UserException]) OR [User] object.
-  Future<Either<Exception, User>> getCurrentUpdatedUserFromServer();
+  /// Returns Either [ExceptionBase] ([ParseException] || [UserException]) OR [User] object.
+  Future<Either<ExceptionBase, User>> getCurrentUpdatedUserFromServer();
 
   /// Send verification email to the current user.
   ///
   /// The email will not be sent if the user already verified his email address
   ///
-  /// Returns Either [Exception] ([ParseException] || [UserException]) OR  void as a mark of success.
-  Future<Either<Exception, void>> sendVerificationEmail() async {
+  /// Returns Either [ExceptionBase] ([ParseException] || [UserException]) OR  void as a mark of success.
+  Future<Either<ExceptionBase, void>> sendVerificationEmail() async {
     try {
       return Right(await _authRemoteDataSource
           .sendVerificationEmail((await getCurrentLoggedUser())!));
@@ -60,9 +60,9 @@ abstract class AuthRepository {
 
   /// Logout the current logged-in user.
   ///
-  /// Returns Either [Exception] ([ParseException] || [UserAlreadyLoggedOutException]
+  /// Returns Either [ExceptionBase] ([ParseException] || [UserAlreadyLoggedOutException]
   /// || [AnonymousException]) OR void as a mark of success.
-  Future<Either<Exception, void>> logout();
+  Future<Either<ExceptionBase, void>> logout();
 
   /// SignUp a new user to parse.
   ///
@@ -138,15 +138,15 @@ class _AnonymousAuthRepository extends AuthRepository {
 
   @override
   Future<Either<UserException, User>> getCurrentUpdatedUserFromServer() async {
-    return Left(
+    return const Left(
       AnonymousException(
           'Anonymous user can not do getCurrentUpdatedUserFromServer operation.'),
     );
   }
 
   @override
-  Future<Either<Exception, void>> logout() async {
-    return Left(
+  Future<Either<ExceptionBase, void>> logout() async {
+    return const Left(
       AnonymousException('Anonymous user can not do logout operation.'),
     );
   }
@@ -168,10 +168,10 @@ class _LoggedInAuthRepository extends AuthRepository {
   }
 
   @override
-  Future<Either<Exception, void>> logout() async {
+  Future<Either<ExceptionBase, void>> logout() async {
     final currentUser = await getCurrentLoggedUser();
     if (currentUser == null) {
-      return Left(UserAlreadyLoggedOutException());
+      return const Left( UserAlreadyLoggedOutException());
     }
     try {
       return Right(await _authRemoteDataSource.logout(currentUser));

@@ -5,6 +5,7 @@ import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bl
 import 'package:doors/core/features/auth/repository/auth_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 import '../../../../../../test_util/test_util.dart';
 
@@ -100,8 +101,8 @@ void main() {
               .thenAnswer((_) async => mockUser);
 
           when(() => mockAuthRepository.loginAnonymously()).thenAnswer(
-              (_) async =>
-                  Left(ParseException(message: 'error login Anonymously')));
+              (_) async => Left(ParseException.fromParseError(
+                  ParseError(message: 'error login Anonymously'))));
         },
         act: (bloc) => bloc.add(const AuthLoginAnonymouslyRequested()),
         expect: () => [
@@ -129,8 +130,9 @@ void main() {
         'emits [AuthInProgress,AuthLoadFailure] when AuthLogoutRequested added and logout() returns error.',
         build: () => AuthBloc(mockAuthRepositoryFactory),
         setUp: () {
-          when(() => mockAuthRepository.logout()).thenAnswer(
-              (_) async => Left(ParseException(message: 'error logging out')));
+          when(() => mockAuthRepository.logout()).thenAnswer((_) async => Left(
+              ParseException.fromParseError(
+                  ParseError(message: 'error logging out'))));
         },
         act: (bloc) => bloc.add(const AuthLogoutRequested()),
         expect: () => [
@@ -162,8 +164,9 @@ void main() {
         build: () => AuthBloc(mockAuthRepositoryFactory),
         setUp: () {
           when(() => mockAuthRepository.getCurrentUpdatedUserFromServer())
-              .thenAnswer((_) async => Left(ParseException(
-                  message: 'error getting updated data from server')));
+              .thenAnswer((_) async => Left(ParseException.fromParseError(
+                  ParseError(
+                      message: 'error getting updated data from server'))));
         },
         act: (bloc) => bloc.add(const AuthGetUpdatedUserDataRequested()),
         expect: () => [
@@ -173,6 +176,35 @@ void main() {
         verify: (_) {
           verify(() => mockAuthRepository.getCurrentUpdatedUserFromServer())
               .called(1);
+        });
+
+    blocTest<AuthBloc, AuthState>(
+        'emits [AuthInProgress,AuthLoadFailure,AuthInProgress,AuthLogoutSuccess] when AuthGetUpdatedUserDataRequested added and getCurrentUpdatedUserFromServer() returns [ParseInvalidSessionToke] Error.',
+        build: () => AuthBloc(mockAuthRepositoryFactory),
+        setUp: () {
+          when(() => mockAuthRepository.getCurrentUpdatedUserFromServer())
+              .thenAnswer((_) async => Left(
+                  ParseInvalidSessionToke.fromParseError(ParseError(
+                      code: 209, message: 'invalid session token'))));
+
+          when(() => mockAuthRepository.logout())
+              .thenAnswer((_) async => const Right(null));
+        },
+        act: (bloc) => bloc.add(const AuthGetUpdatedUserDataRequested()),
+        expect: () => [
+              const AuthInProgress(),
+              AuthLoadFailure(
+                ParseInvalidSessionToke.fromParseError(
+                  ParseError(code: 209, message: 'invalid session token'),
+                ),
+              ),
+              const AuthInProgress(),
+              const AuthLogoutSuccess()
+            ],
+        verify: (_) {
+          verify(() => mockAuthRepository.getCurrentUpdatedUserFromServer())
+              .called(1);
+          verify(() => mockAuthRepository.logout()).called(1);
         });
 
     blocTest<AuthBloc, AuthState>(
@@ -193,8 +225,8 @@ void main() {
         build: () => AuthBloc(mockAuthRepositoryFactory),
         setUp: () {
           when(() => mockAuthRepository.signUp(mockUser)).thenAnswer(
-              (_) async =>
-                  Left(ParseException(message: 'error can not SignUp')));
+              (_) async => Left(ParseException.fromParseError(
+                  ParseError(message: 'error can not SignUp'))));
         },
         act: (bloc) => bloc.add(AuthSignUpRequested(mockUser)),
         expect: () => [
@@ -222,8 +254,9 @@ void main() {
         'emits [AuthInProgress,AuthLoadFailure] when AuthLoginRequested added and login() returns error.',
         build: () => AuthBloc(mockAuthRepositoryFactory),
         setUp: () {
-          when(() => mockAuthRepository.login(mockUser)).thenAnswer(
-              (_) async => Left(ParseException(message: 'error log-in')));
+          when(() => mockAuthRepository.login(mockUser)).thenAnswer((_) async =>
+              Left(ParseException.fromParseError(
+                  ParseError(message: 'error logging in'))));
         },
         act: (bloc) => bloc.add(AuthLoginRequested(mockUser)),
         expect: () => [
@@ -256,13 +289,13 @@ void main() {
         'emits [AuthInProgress,AuthLoadFailure] when AuthResetPasswordRequested added and sendPasswordReset() returns error.',
         build: () => AuthBloc(mockAuthRepositoryFactory),
         setUp: () {
-          when(() => mockAuthRepository.sendPasswordReset(
-              userEmail:
-                 'test@email.com')).thenAnswer((_) async => Left(
-              ParseException(message: 'error sending password reset request')));
+          when(() =>
+              mockAuthRepository.sendPasswordReset(
+                  userEmail: 'test@email.com')).thenAnswer(
+              (_) async => Left(ParseException.fromParseError(ParseError())));
         },
         act: (bloc) => bloc
-            .add(const AuthResetPasswordRequested(userEmail:'test@email.com')),
+            .add(const AuthResetPasswordRequested(userEmail: 'test@email.com')),
         expect: () => [
               const AuthInProgress(),
               isA<AuthLoadFailure>(),
@@ -270,6 +303,36 @@ void main() {
         verify: (_) {
           verify(() => mockAuthRepository.sendPasswordReset(
               userEmail: 'test@email.com')).called(1);
+        });
+    blocTest<AuthBloc, AuthState>(
+        'emits [AuthInProgress,AuthLoadFailure,AuthInProgress,AuthLogoutSuccess] when AuthResetPasswordRequested added and sendPasswordReset() returns [ParseInvalidSessionToke] Error.',
+        build: () => AuthBloc(mockAuthRepositoryFactory),
+        setUp: () {
+          when(() =>
+              mockAuthRepository.sendPasswordReset(
+                  userEmail: 'test@email.com')).thenAnswer((_) async => Left(
+              ParseInvalidSessionToke.fromParseError(
+                  ParseError(code: 209, message: 'invalid session token'))));
+
+          when(() => mockAuthRepository.logout())
+              .thenAnswer((_) async => const Right(null));
+        },
+        act: (bloc) => bloc
+            .add(const AuthResetPasswordRequested(userEmail: 'test@email.com')),
+        expect: () => [
+              const AuthInProgress(),
+              AuthLoadFailure(
+                ParseInvalidSessionToke.fromParseError(
+                  ParseError(code: 209, message: 'invalid session token'),
+                ),
+              ),
+              const AuthInProgress(),
+              const AuthLogoutSuccess()
+            ],
+        verify: (_) {
+          verify(() => mockAuthRepository.sendPasswordReset(
+              userEmail: 'test@email.com')).called(1);
+          verify(() => mockAuthRepository.logout()).called(1);
         });
   });
 }

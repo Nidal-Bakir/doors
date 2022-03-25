@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -76,7 +74,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
     if (userRes.success && userRes.error == null && userRes.count != 0) {
       return userRes.results!.first as User;
     } else {
-      throw ParseException.fromParseError(userRes.error!);
+      throw ParseException.extractParseException(userRes.error!);
     }
   }
 
@@ -89,7 +87,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
         newUserRes.count != 0) {
       return newUserRes.results!.first as User;
     } else {
-      throw ParseException.fromParseError(newUserRes.error!);
+      throw ParseException.extractParseException(newUserRes.error!);
     }
   }
 
@@ -101,7 +99,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
         updatedUser.count != 0) {
       return updatedUser.results!.first as User;
     } else {
-      throw ParseException.fromParseError(updatedUser.error!);
+      throw ParseException.extractParseException(updatedUser.error!);
     }
   }
 
@@ -109,7 +107,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
   Future<void> sendVerificationEmail(User currentUser) async {
     final verificationResponse = await currentUser.verificationEmailRequest();
     if (!verificationResponse.success && verificationResponse.error != null) {
-      throw ParseException.fromParseError(verificationResponse.error!);
+      throw ParseException.extractParseException(verificationResponse.error!);
     }
   }
 
@@ -117,7 +115,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
   Future<void> sendPasswordReset(User currentUser) async {
     final verificationResponse = await currentUser.requestPasswordReset();
     if (!verificationResponse.success && verificationResponse.error != null) {
-      throw ParseException.fromParseError(verificationResponse.error!);
+      throw ParseException.extractParseException(verificationResponse.error!);
     }
   }
 
@@ -130,7 +128,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
         updatedUser.count != 0) {
       return updatedUser.results!.first as User;
     } else {
-      throw ParseException.fromParseError(updatedUser.error!);
+      throw ParseException.extractParseException(updatedUser.error!);
     }
   }
 */
@@ -144,7 +142,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
       return User(anonymousUser.username, null, null,
           sessionToken: anonymousUser.sessionToken);
     } else {
-      throw ParseException.fromParseError(anonymousUserRes.error!);
+      throw ParseException.extractParseException(anonymousUserRes.error!);
     }
   }
 
@@ -152,7 +150,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
   Future<void> logout(User currentUser) async {
     final logoutRes = await currentUser.logout();
     if (!logoutRes.success || logoutRes.error != null) {
-      throw ParseException.fromParseError(logoutRes.error!);
+      throw ParseException.extractParseException(logoutRes.error!);
     }
   }
 }

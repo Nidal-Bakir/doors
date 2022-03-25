@@ -14,6 +14,6 @@ class AuthState with _$AuthState {
   const factory AuthState.authPasswordResetSendSuccess() =
       AuthPasswordResetSendSuccess;
 
-  const factory AuthState.authLoadFailure(Exception exception) =
+  const factory AuthState.authLoadFailure(ExceptionBase exception) =
       AuthLoadFailure;
 }
