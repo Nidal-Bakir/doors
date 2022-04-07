@@ -67,7 +67,6 @@ class ParseException extends ServerException {
 class ParseInvalidSessionToken extends ParseException with SecurityException {
   ParseInvalidSessionToken.fromParseError(ParseError parseError)
       : super.fromParseError(parseError) {
-        
     riseSecurityException();
   }
 
@@ -148,11 +147,11 @@ class ParseInvalidUsernameOrPassword extends ParseException {
 /// ---------------------------------------------------------------------------
 /// |   1004  | Unable generate client token to start the Braintree client    |
 /// ---------------------------------------------------------------------------
-/// |         | Error while Processing the payment could be a null nonce      |
-/// |   1005  | sent by the braintrees client or the something go wrong wile  |
-/// |         | processing the payment for the client                         |
+/// |         | Error while Processing the payment, as a result of null nonce |
+/// |   1005  | sent by the Braintrees client or something went wrong wile    |
+/// |         | processing the payment for the user                           |
 /// ---------------------------------------------------------------------------
-/// |  1010  | Unable to login because the user account has bees suspended   |
+/// |  1010  | Unable to login because the user account has been suspended    |
 /// ---------------------------------------------------------------------------
 class ParseCloudCodeCustomException extends ParseException {
   ParseCloudCodeCustomException.fromParseError(ParseError parseError)
@@ -181,8 +180,7 @@ class UserNotFound extends ParseCloudCodeCustomException {
       : super.fromParseError(parseError);
   @override
   String getLocalMessageError(BuildContext context) {
-    // TODO: implement getLocalMessageError
-    return super.getLocalMessageError(context);
+    return context.loc.user_not_found_error_while_processing_payment;
   }
 }
 
@@ -191,8 +189,7 @@ class SelectedPlanNotFound extends ParseCloudCodeCustomException {
       : super.fromParseError(parseError);
   @override
   String getLocalMessageError(BuildContext context) {
-    // TODO: implement getLocalMessageError
-    return super.getLocalMessageError(context);
+    return context.loc.selected_plan_not_found_error_while_processing_payment;
   }
 }
 
@@ -201,8 +198,7 @@ class SuspendedAccount extends ParseCloudCodeCustomException {
       : super.fromParseError(parseError);
   @override
   String getLocalMessageError(BuildContext context) {
-    // TODO: implement getLocalMessageError
-    return super.getLocalMessageError(context);
+    return context.loc.your_account_has_been_suspended;
   }
 }
 
@@ -213,8 +209,7 @@ class ErrorWhileGeneratingClientPaymentToken
 
   @override
   String getLocalMessageError(BuildContext context) {
-    // TODO: implement getLocalMessageError
-    return super.getLocalMessageError(context);
+    return context.loc.unexpected_error_while_processing_payment;
   }
 }
 
@@ -224,7 +219,6 @@ class ErrorWhileProcessingClientPayment extends ParseCloudCodeCustomException {
 
   @override
   String getLocalMessageError(BuildContext context) {
-    // TODO: implement getLocalMessageError
-    return super.getLocalMessageError(context);
+    return context.loc.unexpected_error_while_processing_payment;
   }
 }

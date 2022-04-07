@@ -28,6 +28,6 @@ abstract class ExceptionBase extends Equatable implements Exception {
 /// the app should immediately logout the current user.
 mixin SecurityException implements ExceptionBase {
   void riseSecurityException() {
-    GetIt.instance.get<SecurityExceptionFlow>().raiseSecurityException(this);
+    GetIt.instance.get<SecurityExceptionFlow>().riseSecurityException(this);
   }
 }

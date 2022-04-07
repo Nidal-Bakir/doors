@@ -11,7 +11,7 @@ class SecurityExceptionFlow {
     return _securityExceptionFlowStreamController.stream;
   }
 
-  void raiseSecurityException(SecurityException securityError) {
+  void riseSecurityException(SecurityException securityError) {
     _securityExceptionFlowStreamController.sink.add(securityError);
   }
 }
