@@ -10,7 +10,11 @@ class AuthState with _$AuthState {
       AuthCurrentUserLoadSuccess;
 
   const factory AuthState.authLoggedInSuccess(User user) = AuthLoggedInSuccess;
+
+  const factory AuthState.authSignUpSuccess(User user) = AuthSignUpSuccess;
+
   const factory AuthState.authLogoutSuccess() = AuthLogoutSuccess;
+  
   const factory AuthState.authPasswordResetSendSuccess() =
       AuthPasswordResetSendSuccess;
 

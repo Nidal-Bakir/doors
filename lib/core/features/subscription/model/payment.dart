@@ -1,8 +1,11 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/auth/model/user.dart';
+import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-class UserSubscription extends ParseObject implements ParseCloneable {
+class UserSubscription extends ParseObject
+    with EquatableMixin
+    implements ParseCloneable {
   UserSubscription() : super(keyClassName);
   static const keyClassName = 'UserPayment';
   static const keyPlanPeriod = 'planPeriod';
@@ -11,6 +14,7 @@ class UserSubscription extends ParseObject implements ParseCloneable {
   static const keyStartSubscriptionDate = 'startSubscriptionDate';
   static const keyEndSubscriptionDate = 'endSubscriptionDate';
   static const keyOwner = 'owner';
+  static const keyTransactionId = 'transactionID';
 
   UserSubscription.clone(Map map) : this();
 
@@ -20,17 +24,13 @@ class UserSubscription extends ParseObject implements ParseCloneable {
   /// plan period in months
   int get planPeriod => get<int>(keyPlanPeriod) as int;
 
-  /// plan period in months
-  set planPeriod(int planPeriod) => set<int>(keyPlanPeriod, planPeriod);
+  String get paymentId => get<String>(keyVarObjectId) as String;
 
-  int get amount => get(keyAmount) as int;
+  double get amount => get<double>(keyAmount) as double;
 
   PaymentMethod get paymentMethod =>
       PaymentMethod.values.firstWhere((paymentMethod) =>
-          paymentMethod.name == (get(keyPaymentMethod) as String));
-
-  set paymentMethod(PaymentMethod paymentMethod) =>
-      set(keyPaymentMethod, paymentMethod.name);
+          paymentMethod.name == (get<String>(keyPaymentMethod) as String));
 
   DateTime get startSubscriptionDate =>
       get<DateTime>(keyStartSubscriptionDate) as DateTime;
@@ -39,5 +39,10 @@ class UserSubscription extends ParseObject implements ParseCloneable {
       get<DateTime>(keyEndSubscriptionDate) as DateTime;
 
   /// get the user owner (parseReference)
-  User get owner => get(keyOwner) as User;
+  User get owner => get<User>(keyOwner) as User;
+
+  String get transactionID => get<String>(keyTransactionId) as String;
+
+  @override
+  List<Object?> get props => [paymentId];
 }

@@ -8,6 +8,10 @@
 		<string>ar</string>
 		<string>de</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need to access your photo library to allow you to set your profile image and select an image for your post.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need to access your camera to allow you to set your profile image from the camera directly and take a photo for your post from your camera on the fly.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

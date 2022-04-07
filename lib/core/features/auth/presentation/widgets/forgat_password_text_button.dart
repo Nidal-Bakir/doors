@@ -2,8 +2,8 @@ import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/screens/forgat_password_screen.dart';
 import 'package:flutter/material.dart';
 
-class ForgatPassword extends StatelessWidget {
-  const ForgatPassword({
+class ForgatPasswordTextButton extends StatelessWidget {
+  const ForgatPasswordTextButton({
     Key? key,
   }) : super(key: key);
 

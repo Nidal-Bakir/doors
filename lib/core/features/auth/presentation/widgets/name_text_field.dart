@@ -1,9 +1,13 @@
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:flutter/material.dart';
 
 class NameTextField extends StatelessWidget {
   final Function(String? name) onSave;
-  const NameTextField({Key? key, required this.onSave}) : super(key: key);
+  final AccountType accountType;
+  const NameTextField(
+      {Key? key, required this.onSave, required this.accountType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,9 @@ class NameTextField extends StatelessWidget {
       validator: (name) => isValidName(name, context),
       onSaved: onSave,
       decoration: InputDecoration(
-        hintText: context.loc.name,
+        hintText: accountType == AccountType.user
+            ? context.loc.name
+            : context.loc.company_name,
       ),
     );
   }

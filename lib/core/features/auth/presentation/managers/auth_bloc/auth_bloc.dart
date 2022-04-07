@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/errors/exception_base.dart';
+import 'package:doors/core/errors/security_exception_flow.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/repository/auth_repository.dart';
@@ -10,12 +11,12 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepositoryFactory _authRepositoryFactory;
+  final SecurityExceptionFlow _securityErrorFlow;
 
-  /// use [_getAuthRepository] to get an instance
-  AuthRepository? _authRepository;
+  final AuthRepository _authRepository;
 
-  AuthBloc(this._authRepositoryFactory) : super(const AuthInitial()) {
+  AuthBloc(this._authRepository, this._securityErrorFlow)
+      : super(const AuthInitial()) {
     on<AuthEvent>(
       (event, emit) async {
         await event.map<Future<void>>(
@@ -35,29 +36,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 await _onAuthResetPasswordRequested(event, emit));
       },
     );
+    _securityErrorFlow.securityErrorFlowStream().listen((error) {
+      if (error is ParseInvalidSessionToken || error is ParseSessionMissing) {
+        add(const AuthLogoutRequested());
+      }
+    });
   }
-
-  Future<AuthRepository> _getAuthRepository() async =>
-      (_authRepository ??= await _authRepositoryFactory.getAuthRepository());
 
   Future<void> _onAuthLoginRequested(
       AuthLoginRequested authLoginRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
-    final loggedUser =
-        await (await _getAuthRepository()).login(authLoginRequested.user);
+    final loggedUser = await _authRepository.login(authLoginRequested.user);
 
-    loggedUser.fold((error) => _errorHandler(emit, error),
+    loggedUser.fold((error) =>  emit(AuthLoadFailure(error)),
         (user) => emit(AuthLoggedInSuccess(user)));
   }
 
   Future<void> _onAuthSignUpRequested(
       AuthSignUpRequested authSignUpRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
-    final signUpUser =
-        await (await _getAuthRepository()).signUp(authSignUpRequested.user);
+    final signUpUser = await _authRepository.signUp(authSignUpRequested.user);
 
-    signUpUser.fold((error) => _errorHandler(emit, error),
-        (user) => emit(AuthLoggedInSuccess(user)));
+    signUpUser.fold((error) =>  emit(AuthLoadFailure(error)),
+        (user) => emit(AuthSignUpSuccess(user)));
   }
 
   Future<void> _onAuthLoginAnonymouslyRequested(
@@ -65,8 +66,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
-    final anonymousUser = await (await _getAuthRepository()).loginAnonymously();
-    anonymousUser.fold((error) => _errorHandler(emit, error),
+    final anonymousUser = await _authRepository.loginAnonymously();
+    anonymousUser.fold((error) =>  emit(AuthLoadFailure(error)),
         (user) => emit(AuthCurrentUserLoadSuccess(user)));
   }
 
@@ -75,9 +76,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
-    final updatedUser =
-        await (await _getAuthRepository()).getCurrentUpdatedUserFromServer();
-    updatedUser.fold((error) => _errorHandler(emit, error),
+    final updatedUser = await _authRepository.getCurrentUpdatedUserFromServer();
+    updatedUser.fold((error) =>  emit(AuthLoadFailure(error)),
         (user) => emit(AuthCurrentUserLoadSuccess(user)));
   }
 
@@ -85,8 +85,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthLogoutRequested authLogoutRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
-    final logoutState = await (await _getAuthRepository()).logout();
-    logoutState.fold((error) => _errorHandler(emit, error),
+    final logoutState = await _authRepository.logout();
+    logoutState.fold((error) =>  emit(AuthLoadFailure(error)),
         (_) => emit(const AuthLogoutSuccess()));
   }
 
@@ -94,8 +94,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthCurrentUserLoaded event, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
-    final currentUser =
-        await (await _getAuthRepository()).getCurrentLoggedUser();
+    final currentUser = await _authRepository.getCurrentLoggedUser();
     if (currentUser != null) {
       emit(AuthCurrentUserLoadSuccess(currentUser));
     } else {
@@ -107,17 +106,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthResetPasswordRequested event, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
 
-    final sendResetState = await (await _getAuthRepository())
-        .sendPasswordReset(userEmail: event.userEmail);
-    sendResetState.fold((error) => _errorHandler(emit, error),
+    final sendResetState =
+        await _authRepository.sendPasswordReset(userEmail: event.userEmail);
+    sendResetState.fold((error) =>  emit(AuthLoadFailure(error)),
         (_) => emit(const AuthPasswordResetSendSuccess()));
   }
 
-  void _errorHandler(Emitter<AuthState> emit, ExceptionBase error) {
-    emit(AuthLoadFailure(error));
-
-    if (error is ParseInvalidSessionToke) {
-      add(const AuthLogoutRequested());
-    }
-  }
+ 
 }

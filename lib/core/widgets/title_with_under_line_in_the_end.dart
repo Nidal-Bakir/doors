@@ -16,7 +16,7 @@ class TitleWithUnderLineInTheEnd extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context).textTheme.headline4,
         ),
         Positioned.directional(
           textDirection: Directionality.of(context),

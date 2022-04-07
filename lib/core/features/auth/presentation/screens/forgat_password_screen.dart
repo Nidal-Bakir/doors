@@ -2,6 +2,7 @@ import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/widgets/auth_error_text.dart';
 import 'package:doors/core/features/auth/presentation/widgets/email_text_field.dart';
+import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,12 +21,12 @@ class _ForgatPasswordScreenState extends State<ForgatPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-      final _mediaQuery = MediaQuery.of(context);
+    final _mediaQuery = MediaQuery.of(context);
     final _screenHeight = _mediaQuery.size.height - _mediaQuery.viewPadding.top;
-    return SafeArea(
-      child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          body: SingleChildScrollView(
+    return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        body: SafeArea(
+          child: SingleChildScrollView(
             child: SizedBox(
               height: _screenHeight,
               child: Column(
@@ -68,8 +69,7 @@ class _ForgatPasswordScreenState extends State<ForgatPasswordScreen> {
                                             .we_have_sent_password_rest_email,
                                       );
                                     }, authInProgress: () {
-                                      return const CircularProgressIndicator
-                                          .adaptive();
+                                      return const LoadingIndicator();
                                     }, orElse: () {
                                       return ElevatedButton(
                                         child: Text(context.loc.reset),
@@ -90,8 +90,8 @@ class _ForgatPasswordScreenState extends State<ForgatPasswordScreen> {
                 ],
               ),
             ),
-          )),
-    );
+          ),
+        ));
   }
 
   void _onPressed(BuildContext context) {

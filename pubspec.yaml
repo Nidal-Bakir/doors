@@ -47,7 +47,8 @@ dependencies:
   shared_preferences: ^2.0.13
 
   # payments
-  flutter_braintree: ^2.3.1
+  flutter_braintree: ^3.0.0-dev.1
+  flutter_credit_card: ^3.0.1
 
   # backend server
   parse_server_sdk_flutter: ^3.1.0
@@ -66,6 +67,7 @@ dependencies:
   json_serializable: ^6.1.4
   json_annotation: ^4.4.0
   intl_phone_number_input: ^0.7.0+2
+  image_picker: ^0.8.4+11
 
   # bloc
   flutter_bloc: ^8.0.1
@@ -107,9 +109,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

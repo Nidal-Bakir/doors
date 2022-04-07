@@ -43,7 +43,9 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   @override
   clone(Map<String, dynamic> map) => User.clone(map)..fromJson(map);
 
-  String get name => get(keyName);
+  String get name => get<String>(keyName) as String;
+  
+  String get userId => get<String>(keyVarObjectId) as String;
 
   set name(String name) => set<String>(keyName, name);
 
@@ -56,7 +58,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
       set(keyAccountType, accountType.name);
 
   AccountStatues get accountStatues =>
-      (get(keyAccountStatues) as String) == AccountStatues.active.name
+      (get<String>(keyAccountStatues) as String) == AccountStatues.active.name
           ? AccountStatues.active
           : AccountStatues.suspended;
 
@@ -89,20 +91,12 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   ParseRelation<UserSubscription> get userSubscriptions =>
       getRelation<UserSubscription>(keyUserSubscription);
 
-  /// used to set payment info for companies when creating company account.
-  ///
-  /// So the account creation and first payment processed at the same time.
-  /// In case the payment fail the creation of the account will be canceled.
-  set addCompanySubscription(UserSubscription userSubscription) {
-    addRelation(keyUserSubscription, [userSubscription]);
-  }
-
   bool? get isSubscribed => get<bool?>(keyIsSubscribed);
 
   bool get isAnonymousAccount =>
       emailAddress == null || username != emailAddress;
 
   @override
-  // the user object will equal other user object if the user name is the same
+  // the user object will equal other user object if the username is the same
   List<Object?> get props => [username];
 }

@@ -23,3 +23,21 @@ class UserAlreadyLoggedOutException extends UserException {
     return context.loc.user_already_logged_out;
   }
 }
+
+class PayPalFlowWasCanceledByTheUser extends UserException {
+  const PayPalFlowWasCanceledByTheUser(String message) : super(message);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.payPal_flow_was_canceled;
+  }
+}
+
+class UnexpectedErrorWhileProcessingThePaymentNullNonce extends UserException {
+  const UnexpectedErrorWhileProcessingThePaymentNullNonce(String message)
+      : super(message);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context
+        .loc.unexpected_error_while_processing_the_payment_no_nonce_returns;
+  }
+}

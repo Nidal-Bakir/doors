@@ -54,7 +54,7 @@ class AccountTypeButtonShape extends StatelessWidget {
                 child: Center(
                   child: Text(
                     label,
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
               ),

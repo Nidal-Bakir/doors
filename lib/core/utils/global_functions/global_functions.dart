@@ -1,5 +1,9 @@
 import 'dart:io' show Platform;
 
+import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
 String extractLangCodeFromPlatformService() {
   // localeName could be (en) or (en_US) or (en_US.UTF-8)
   return Platform.localeName.split('_')[0];
@@ -12,4 +16,84 @@ String extractISOCountryCodeFromPlatformService() {
   } on RangeError {
     return 'US';
   }
+}
+
+void showSnackBar(BuildContext context, String content) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      duration: const Duration(seconds: 3),
+      content: Text(content),
+    ),
+  );
+}
+
+Future<XFile?> showModalBottomSheetToSelectPhoto(BuildContext context) async {
+  final _picker = ImagePicker();
+  return showModalBottomSheet(
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+      ),
+    ),
+    context: context,
+    builder: (context) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
+        ),
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              splashColor: Colors.black,
+              onTap: () async {
+                Navigator.of(context).pop(
+                  await _picker.pickImage(
+                    source: ImageSource.camera,
+                    imageQuality: 30,
+                    preferredCameraDevice: CameraDevice.front,
+                  ),
+                );
+              },
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.camera),
+                    Text(context.loc.camera),
+                  ],
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                Navigator.of(context).pop(
+                  await _picker.pickImage(
+                    source: ImageSource.gallery,
+                    imageQuality: 30,
+                  ),
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.image),
+                  Text(context.loc.gallery),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

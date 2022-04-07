@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:doors/core/config/routes/app_routes.dart';
 import 'package:doors/core/config/theme/app_theme.dart';
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
+import 'package:doors/core/features/subscription/presentation/managers/offered_subscription_plan_bloc/offered_subscription_plans_bloc.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +23,8 @@ class App extends StatelessWidget {
           lazy: false,
           create: (_) =>
               GetIt.I.get<AuthBloc>()..add(const AuthCurrentUserLoaded()),
-        )
+        ),
+
       ],
       child: MaterialApp(
         supportedLocales: AppLocalizations.supportedLocales,

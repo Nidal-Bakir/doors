@@ -3,22 +3,22 @@ import 'package:flutter/material.dart';
 const _fontTitilliumWeb = 'TitilliumWeb';
 const _fontSukar = 'Sukar';
 String _fontFamilyName = _fontTitilliumWeb;
+const _yalow = const Color(0xFFFECE2E);
+const _black = Colors.black;
+const _white = Colors.white;
+const _grayWhite = const Color(0xFFF0F0F0);
+const _redError = Colors.red;
 
 ThemeData defaultLightTheme(String langCode) {
   _fontFamilyName = langCode == 'ar' ? _fontSukar : _fontTitilliumWeb;
 
-  const _yalow = const Color(0xFFFECE2E);
-  const _black = Colors.black;
-  const _white = Colors.white;
-  const _grayWhite = const Color(0xFFF0F0F0);
-  const _redError = Colors.red;
-
   return ThemeData(
       colorScheme: const ColorScheme.light(
-        primary: _yalow,
-        secondary: _black,
-        surface: _white,
-      ),
+          primary: _yalow,
+          secondary: _black,
+          surface: _white,
+          onSurface: _grayWhite,
+          error: _redError),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: _yalow,
       ),
@@ -78,18 +78,33 @@ ThemeData defaultLightTheme(String langCode) {
 
 TextTheme textTheme() {
   return TextTheme(
-    headline5: TextStyle(
+    headline4: TextStyle(
       fontSize: 28,
+      color: _black,
+      fontFamily: _fontFamilyName,
+      fontWeight: FontWeight.bold,
+    ),
+    headline5: TextStyle(
+      fontSize: 24,
+      color: _black,
       fontFamily: _fontFamilyName,
       fontWeight: FontWeight.bold,
     ),
     headline6: TextStyle(
-      fontSize: 24,
+      fontSize: 18,
       fontFamily: _fontFamilyName,
       fontWeight: FontWeight.bold,
     ),
     subtitle1: TextStyle(fontSize: 16, fontFamily: _fontFamilyName),
-    bodyText1: TextStyle(fontSize: 14, fontFamily: _fontFamilyName),
+    subtitle2: TextStyle(
+      fontSize: 16,
+      fontFamily: _fontFamilyName,
+      fontWeight: FontWeight.w700,
+    ),
+    bodyText1: TextStyle(
+      fontSize: 14,
+      fontFamily: _fontFamilyName,
+    ),
     bodyText2: TextStyle(
       fontSize: 14,
       fontFamily: _fontFamilyName,

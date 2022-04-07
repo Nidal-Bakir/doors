@@ -2,7 +2,7 @@ import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/screens/sign_up_part_one_screen.dart';
 import 'package:doors/core/features/auth/presentation/widgets/account_type_button_shape.dart';
-import 'package:doors/core/features/auth/presentation/widgets/title_with_under_line_in_the_end.dart';
+import 'package:doors/core/widgets/title_with_under_line_in_the_end.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,10 +12,10 @@ class SelectAccountTypeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        body: Padding(
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Hero(
             tag: 'card',

@@ -1,5 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
+import 'package:doors/core/errors/exception_base.dart';
+import 'package:doors/core/errors/security_exception_flow.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/repository/auth_repository.dart';
@@ -9,29 +11,30 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 import '../../../../../../test_util/test_util.dart';
 
-class MockAuthRepositoryFactory extends Mock implements AuthRepositoryFactory {}
-
 class MockAuthRepository extends Mock implements AuthRepository {}
 
+class MockSecurityExceptionFlow extends Mock implements SecurityExceptionFlow {}
+
+class MockParseInvalidSessionToken extends Mock
+    implements ParseInvalidSessionToken {}
+
 void main() {
-  final mockAuthRepositoryFactory = MockAuthRepositoryFactory();
   final mockAuthRepository = MockAuthRepository();
   final mockUser = MockUser();
+  final mockSecurityExceptionFlow = MockSecurityExceptionFlow();
   group('authBloc: with LoggedInAuthRepository test group', () {
     setUp(() {
       setUpBasicLoggedUserForTest(mockUser);
       reset(mockAuthRepository);
-      reset(mockAuthRepositoryFactory);
-
-      when(() => mockAuthRepositoryFactory.getAuthRepository())
-          .thenAnswer((_) async => mockAuthRepository);
+      when(() => mockSecurityExceptionFlow.securityErrorFlowStream())
+          .thenAnswer((_) => const Stream.empty());
       when(() => mockAuthRepository.getCurrentLoggedUser())
           .thenAnswer((_) async => mockUser);
     });
 
     blocTest<AuthBloc, AuthState>(
         'emits [AuthCurrentLoadSuccess] when AuthCurrentUserLoaded is added if the user logged-in.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.getCurrentLoggedUser())
               .thenAnswer((_) async => mockUser);
@@ -47,7 +50,7 @@ void main() {
 
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthCurrentLoadSuccess] when AuthCurrentUserLoaded is added then the bloc should add [AuthLoginAnonymouslyRequested] because the getCurrentLoggedUser returns null.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           setUpAnonymousUserForTest(mockUser);
 
@@ -68,7 +71,7 @@ void main() {
 
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthCurrentLoadSuccess] when AuthLoginAnonymouslyRequested is added.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           setUpAnonymousUserForTest(mockUser);
 
@@ -87,7 +90,7 @@ void main() {
         });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure] when AuthLoginAnonymouslyRequested and added and loginAnonymously returns error.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           setUpAnonymousUserForTest(mockUser);
 
@@ -109,7 +112,7 @@ void main() {
 
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLogoutSuccess] when AuthLogoutRequested is added.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.logout())
               .thenAnswer((_) async => const Right(null));
@@ -122,7 +125,7 @@ void main() {
         });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure] when AuthLogoutRequested added and logout() returns error.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.logout()).thenAnswer((_) async => Left(
               ParseException.fromParseError(
@@ -139,7 +142,7 @@ void main() {
 
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthCurrentLoadSuccess] when AuthGetUpdatedUserDataRequested is added.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.getCurrentUpdatedUserFromServer())
               .thenAnswer((_) async => Right(mockUser));
@@ -155,7 +158,7 @@ void main() {
         });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure] when AuthGetUpdatedUserDataRequested added and getCurrentUpdatedUserFromServer() returns error.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.getCurrentUpdatedUserFromServer())
               .thenAnswer((_) async => Left(ParseException.fromParseError(
@@ -174,12 +177,14 @@ void main() {
 
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure,AuthInProgress,AuthLogoutSuccess] when AuthGetUpdatedUserDataRequested added and getCurrentUpdatedUserFromServer() returns [ParseInvalidSessionToke] Error.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
+          final error = MockParseInvalidSessionToken();
           when(() => mockAuthRepository.getCurrentUpdatedUserFromServer())
-              .thenAnswer((_) async => Left(
-                  ParseInvalidSessionToke.fromParseError(ParseError(
-                      code: 209, message: 'invalid session token'))));
+              .thenAnswer((_) async => Left(error));
+
+          when(() => mockSecurityExceptionFlow.securityErrorFlowStream())
+              .thenAnswer((invocation) => Stream.value(error));
 
           when(() => mockAuthRepository.logout())
               .thenAnswer((_) async => const Right(null));
@@ -187,11 +192,7 @@ void main() {
         act: (bloc) => bloc.add(const AuthGetUpdatedUserDataRequested()),
         expect: () => [
               const AuthInProgress(),
-              AuthLoadFailure(
-                ParseInvalidSessionToke.fromParseError(
-                  ParseError(code: 209, message: 'invalid session token'),
-                ),
-              ),
+              isA<AuthLoadFailure>(),
               const AuthInProgress(),
               const AuthLogoutSuccess()
             ],
@@ -202,21 +203,21 @@ void main() {
         });
 
     blocTest<AuthBloc, AuthState>(
-        'emits [AuthInProgress, AuthLoggedInSuccess] when AuthSignUpRequested is added.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        'emits [AuthInProgress, AuthSignUpSuccess] when AuthSignUpRequested is added.',
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.signUp(mockUser))
               .thenAnswer((_) async => Right(mockUser));
         },
         act: (bloc) => bloc.add(AuthSignUpRequested(mockUser)),
         expect: () =>
-            <AuthState>[const AuthInProgress(), AuthLoggedInSuccess(mockUser)],
+            <AuthState>[const AuthInProgress(), AuthSignUpSuccess(mockUser)],
         verify: (_) {
           verify(() => mockAuthRepository.signUp(mockUser)).called(1);
         });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure] when AuthSignUpRequested added and signUp() returns error.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.signUp(mockUser)).thenAnswer(
               (_) async => Left(ParseException.fromParseError(
@@ -233,7 +234,7 @@ void main() {
 
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress, AuthLoggedInSuccess] when AuthLoginRequested is added.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.login(mockUser))
               .thenAnswer((_) async => Right(mockUser));
@@ -246,7 +247,7 @@ void main() {
         });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure] when AuthLoginRequested added and login() returns error.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.login(mockUser)).thenAnswer((_) async =>
               Left(ParseException.fromParseError(
@@ -263,7 +264,7 @@ void main() {
 
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress, AuthPasswordResetSendSuccess] when AuthResetPasswordRequested is added.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() => mockAuthRepository.sendPasswordReset(
                   userEmail: 'test@email.com'))
@@ -281,7 +282,7 @@ void main() {
         });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure] when AuthResetPasswordRequested added and sendPasswordReset() returns error.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
           when(() =>
               mockAuthRepository.sendPasswordReset(
@@ -300,13 +301,16 @@ void main() {
         });
     blocTest<AuthBloc, AuthState>(
         'emits [AuthInProgress,AuthLoadFailure,AuthInProgress,AuthLogoutSuccess] when AuthResetPasswordRequested added and sendPasswordReset() returns [ParseInvalidSessionToke] Error.',
-        build: () => AuthBloc(mockAuthRepositoryFactory),
+        build: () => AuthBloc(mockAuthRepository, mockSecurityExceptionFlow),
         setUp: () {
-          when(() =>
-              mockAuthRepository.sendPasswordReset(
-                  userEmail: 'test@email.com')).thenAnswer((_) async => Left(
-              ParseInvalidSessionToke.fromParseError(
-                  ParseError(code: 209, message: 'invalid session token'))));
+          final error = MockParseInvalidSessionToken();
+
+          when(() => mockSecurityExceptionFlow.securityErrorFlowStream())
+              .thenAnswer((invocation) => Stream.value(error));
+
+          when(() => mockAuthRepository.sendPasswordReset(
+                  userEmail: 'test@email.com'))
+              .thenAnswer((_) async => Left(error));
 
           when(() => mockAuthRepository.logout())
               .thenAnswer((_) async => const Right(null));
@@ -315,11 +319,7 @@ void main() {
             .add(const AuthResetPasswordRequested(userEmail: 'test@email.com')),
         expect: () => [
               const AuthInProgress(),
-              AuthLoadFailure(
-                ParseInvalidSessionToke.fromParseError(
-                  ParseError(code: 209, message: 'invalid session token'),
-                ),
-              ),
+              isA<AuthLoadFailure>(),
               const AuthInProgress(),
               const AuthLogoutSuccess()
             ],

@@ -3,14 +3,11 @@ import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
-import 'package:doors/core/features/auth/data/auth_local_data_source.dart';
-import 'package:doors/core/features/auth/data/auth_remote_data_source.dart';
+import 'package:doors/core/features/auth/data/auth_data_source/auth_local_data_source.dart';
+import 'package:doors/core/features/auth/data/auth_data_source/auth_remote_data_source.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 
-typedef LoggedInAuthRepositoryForTest = _LoggedInAuthRepository;
-typedef AnonymousAuthRepositoryForTest = _AnonymousAuthRepository;
-
-abstract class AuthRepository {
+ class AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
   final AuthLocalDataSource _authLocalDataSource;
 
@@ -20,14 +17,22 @@ abstract class AuthRepository {
   ///
   /// parseSDK will automatically update the local user date.
   ///
-  /// Returns Either [ExceptionBase] ([ParseException] || [UserException]) OR [User] object.
-  Future<Either<ExceptionBase, User>> getCurrentUpdatedUserFromServer();
+  /// Returns Either [ServerException] OR [User] object.
+  Future<Either<ServerException, User>>
+      getCurrentUpdatedUserFromServer() async {
+    try {
+      return Right(await _authRemoteDataSource
+          .getCurrentUpdatedUserFromServer((await getCurrentLoggedUser())!));
+    } on ServerException catch (e) {
+      return Left(e);
+    }
+  }
 
   /// Send verification email to the current user.
   ///
   /// The email will not be sent if the user already verified his email address
   ///
-  /// Returns Either [ExceptionBase] ([ParseException] || [UserException]) OR  void as a mark of success.
+  /// Returns Either [ExceptionBase] ([ServerException] || [UserException]) OR  void as a mark of success.
   Future<Either<ExceptionBase, void>> sendVerificationEmail() async {
     try {
       return Right(await _authRemoteDataSource
@@ -39,8 +44,8 @@ abstract class AuthRepository {
 
   /// Send email to reset account password
   ///
-  /// Returns Either [ParseException] OR  void as a mark of success.
-  Future<Either<ParseException, void>> sendPasswordReset(
+  /// Returns Either [ServerException] OR  void as a mark of success.
+  Future<Either<ServerException, void>> sendPasswordReset(
       {required String userEmail}) async {
     final _currentSessionToken =
         (await getCurrentLoggedUser())?.sessionToken ?? '';
@@ -53,27 +58,37 @@ abstract class AuthRepository {
           sessionToken: _currentSessionToken,
         )),
       );
-    } on ParseException catch (e) {
+    } on ServerException catch (e) {
       return Left(e);
     }
   }
 
   /// Logout the current logged-in user.
   ///
-  /// Returns Either [ExceptionBase] ([ParseException] || [UserAlreadyLoggedOutException]
-  /// || [AnonymousException]) OR void as a mark of success.
-  Future<Either<ExceptionBase, void>> logout();
+  /// Returns Either [ExceptionBase] ([ServerException] || [UserAlreadyLoggedOutException])
+  /// OR void as a mark of success.
+  Future<Either<ExceptionBase, void>> logout() async {
+    final currentUser = await getCurrentLoggedUser();
+    if (currentUser == null) {
+      return const Left(UserAlreadyLoggedOutException());
+    }
+    try {
+      return Right(await _authRemoteDataSource.logout(currentUser));
+    } on ParseException catch (e) {
+      return Left(e);
+    }
+  }
 
   /// SignUp a new user to parse.
   ///
   /// NOTE: [user] contains all the user info and all the Parse User
   /// Managements capabilities.
   ///
-  /// Returns Either [ParseException] or [User] object.
-  Future<Either<ParseException, User>> signUp(User user) async {
+  /// Returns Either [ServerException] or [User] object.
+  Future<Either<ServerException, User>> signUp(User user) async {
     try {
       return Right(await _authRemoteDataSource.signUp(user));
-    } on ParseException catch (e) {
+    } on ServerException catch (e) {
       return Left(e);
     }
   }
@@ -83,11 +98,11 @@ abstract class AuthRepository {
   ///NOTE: [user] contains all the user info and all the Parse User
   /// Managements capabilities.
   ///
-  /// Returns Either [ParseException] or [User] object.
-  Future<Either<ParseException, User>> login(User user) async {
+  /// Returns Either [ServerException] or [User] object.
+  Future<Either<ServerException, User>> login(User user) async {
     try {
       return Right(await _authRemoteDataSource.login(user));
-    } on ParseException catch (e) {
+    } on ServerException catch (e) {
       return Left(e);
     }
   }
@@ -97,13 +112,13 @@ abstract class AuthRepository {
   ///
   /// parseSDK will automatically update the local user data.
   ///
-  /// Returns Either [ParseException] or [User] object.
+  /// Returns Either [ServerException] or [User] object.
   Future<Either<ParseException, User>> updateCurrentUserData(
       User currentUserWithUpdatedDate) async {
     try {
       return Right(await _authRemoteDataSource
           .updateCurrentUserData(currentUserWithUpdatedDate));
-    } on ParseException catch (e) {
+    } on ServerException catch (e) {
       return Left(e);
     }
   }
@@ -114,11 +129,11 @@ abstract class AuthRepository {
   ///
   /// To Check if a [User] objet is a anonymous or not use [User.isAnonymousAccount].
   ///
-  /// Returns Either [ParseException] or [User] object.
-  Future<Either<ParseException, User>> loginAnonymously() async {
+  /// Returns Either [ServerException] or [User] object.
+  Future<Either<ServerException, User>> loginAnonymously() async {
     try {
       return Right(await _authRemoteDataSource.loginAnonymously());
-    } on ParseException catch (e) {
+    } on ServerException catch (e) {
       return Left(e);
     }
   }
@@ -128,73 +143,5 @@ abstract class AuthRepository {
   /// Returns null in case no (login | signUp) preformed.
   Future<User?> getCurrentLoggedUser() async {
     return await _authLocalDataSource.getCurrentLoggedUser();
-  }
-}
-
-class _AnonymousAuthRepository extends AuthRepository {
-  _AnonymousAuthRepository(AuthRemoteDataSource _authRemoteDataSource,
-      AuthLocalDataSource _authLocalDataSource)
-      : super(_authRemoteDataSource, _authLocalDataSource);
-
-  @override
-  Future<Either<UserException, User>> getCurrentUpdatedUserFromServer() async {
-    return const Left(
-      AnonymousException(
-          'Anonymous user can not do getCurrentUpdatedUserFromServer operation.'),
-    );
-  }
-
-  @override
-  Future<Either<ExceptionBase, void>> logout() async {
-    return const Left(
-      AnonymousException('Anonymous user can not do logout operation.'),
-    );
-  }
-}
-
-class _LoggedInAuthRepository extends AuthRepository {
-  _LoggedInAuthRepository(AuthRemoteDataSource _authRemoteDataSource,
-      AuthLocalDataSource _authLocalDataSource)
-      : super(_authRemoteDataSource, _authLocalDataSource);
-
-  @override
-  Future<Either<ParseException, User>> getCurrentUpdatedUserFromServer() async {
-    try {
-      return Right(await _authRemoteDataSource
-          .getCurrentUpdatedUserFromServer((await getCurrentLoggedUser())!));
-    } on ParseException catch (e) {
-      return Left(e);
-    }
-  }
-
-  @override
-  Future<Either<ExceptionBase, void>> logout() async {
-    final currentUser = await getCurrentLoggedUser();
-    if (currentUser == null) {
-      return const Left( UserAlreadyLoggedOutException());
-    }
-    try {
-      return Right(await _authRemoteDataSource.logout(currentUser));
-    } on ParseException catch (e) {
-      return Left(e);
-    }
-  }
-}
-
-class AuthRepositoryFactory {
-  final AuthRemoteDataSource _authRemoteDataSource;
-  final AuthLocalDataSource _authLocalDataSource;
-
-  AuthRepositoryFactory(this._authRemoteDataSource, this._authLocalDataSource);
-
-  Future<AuthRepository> getAuthRepository() async {
-    final currentUser = await _authLocalDataSource.getCurrentLoggedUser();
-    if (currentUser == null || currentUser.isAnonymousAccount) {
-      return _AnonymousAuthRepository(
-          _authRemoteDataSource, _authLocalDataSource);
-    } else {
-      return _LoggedInAuthRepository(
-          _authRemoteDataSource, _authLocalDataSource);
-    }
   }
 }

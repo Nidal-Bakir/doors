@@ -8,6 +8,15 @@ abstract class ServerException extends ExceptionBase {
   const ServerException(String message) : super(message);
 }
 
+class NoConnectionException extends ServerException {
+  const NoConnectionException(String message) : super(message);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.please_check_your_internet_connection;
+  }
+}
+
 class ParseException extends ServerException {
   final int code;
   final String? type;
@@ -17,9 +26,16 @@ class ParseException extends ServerException {
       : super(message);
 
   factory ParseException.extractParseException(ParseError parseError) {
+    // custom cloud code errors starts from 1000
+    // see [ParseCloudCodeCustomException] docs form more info about the error codes
+    if (parseError.code >= 1000) {
+      return ParseCloudCodeCustomException.extractCloudCodeException(
+        parseError,
+      );
+    }
     switch (parseError.code) {
       case 209:
-        return ParseInvalidSessionToke.fromParseError(parseError);
+        return ParseInvalidSessionToken.fromParseError(parseError);
       case 206:
         return ParseSessionMissing.fromParseError(parseError);
       case 202:
@@ -48,9 +64,12 @@ class ParseException extends ServerException {
   List<Object?> get props => [...super.props, code, type];
 }
 
-class ParseInvalidSessionToke extends ParseException {
-  ParseInvalidSessionToke.fromParseError(ParseError parseError)
-      : super.fromParseError(parseError);
+class ParseInvalidSessionToken extends ParseException with SecurityException {
+  ParseInvalidSessionToken.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError) {
+        
+    riseSecurityException();
+  }
 
   @override
   String getLocalMessageError(BuildContext context) {
@@ -58,9 +77,11 @@ class ParseInvalidSessionToke extends ParseException {
   }
 }
 
-class ParseSessionMissing extends ParseException {
+class ParseSessionMissing extends ParseException with SecurityException {
   ParseSessionMissing.fromParseError(ParseError parseError)
-      : super.fromParseError(parseError);
+      : super.fromParseError(parseError) {
+    riseSecurityException();
+  }
 
   @override
   String getLocalMessageError(BuildContext context) {
@@ -115,5 +136,95 @@ class ParseInvalidUsernameOrPassword extends ParseException {
   @override
   String getLocalMessageError(BuildContext context) {
     return context.loc.invalid_username_or_password;
+  }
+}
+
+/// ---------------------------------------------------------------------------
+/// |   Code   |      Description                                             |
+/// ---------------------------------------------------------------------------
+/// |   1000  | User not found with the specified userId                      |
+/// ---------------------------------------------------------------------------
+/// |   1001  | Plan not found with the specified planId                      |
+/// ---------------------------------------------------------------------------
+/// |   1004  | Unable generate client token to start the Braintree client    |
+/// ---------------------------------------------------------------------------
+/// |         | Error while Processing the payment could be a null nonce      |
+/// |   1005  | sent by the braintrees client or the something go wrong wile  |
+/// |         | processing the payment for the client                         |
+/// ---------------------------------------------------------------------------
+/// |  1010  | Unable to login because the user account has bees suspended   |
+/// ---------------------------------------------------------------------------
+class ParseCloudCodeCustomException extends ParseException {
+  ParseCloudCodeCustomException.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+  factory ParseCloudCodeCustomException.extractCloudCodeException(
+      ParseError parseError) {
+    switch (parseError.code) {
+      case 1000:
+        return UserNotFound.fromParseError(parseError);
+      case 1001:
+        return SelectedPlanNotFound.fromParseError(parseError);
+      case 1004:
+        return ErrorWhileGeneratingClientPaymentToken.fromParseError(
+            parseError);
+      case 1005:
+        return ErrorWhileProcessingClientPayment.fromParseError(parseError);
+      case 1010:
+        return SuspendedAccount.fromParseError(parseError);
+    }
+    return ParseCloudCodeCustomException.fromParseError(parseError);
+  }
+}
+
+class UserNotFound extends ParseCloudCodeCustomException {
+  UserNotFound.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    // TODO: implement getLocalMessageError
+    return super.getLocalMessageError(context);
+  }
+}
+
+class SelectedPlanNotFound extends ParseCloudCodeCustomException {
+  SelectedPlanNotFound.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    // TODO: implement getLocalMessageError
+    return super.getLocalMessageError(context);
+  }
+}
+
+class SuspendedAccount extends ParseCloudCodeCustomException {
+  SuspendedAccount.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    // TODO: implement getLocalMessageError
+    return super.getLocalMessageError(context);
+  }
+}
+
+class ErrorWhileGeneratingClientPaymentToken
+    extends ParseCloudCodeCustomException {
+  ErrorWhileGeneratingClientPaymentToken.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    // TODO: implement getLocalMessageError
+    return super.getLocalMessageError(context);
+  }
+}
+
+class ErrorWhileProcessingClientPayment extends ParseCloudCodeCustomException {
+  ErrorWhileProcessingClientPayment.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    // TODO: implement getLocalMessageError
+    return super.getLocalMessageError(context);
   }
 }
