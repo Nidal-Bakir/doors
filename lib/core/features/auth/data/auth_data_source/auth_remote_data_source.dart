@@ -1,3 +1,4 @@
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -120,7 +121,11 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
     if (updatedUserResponse.success &&
         updatedUserResponse.error == null &&
         updatedUserResponse.count != 0) {
-      return updatedUserResponse.results!.first as User;
+      final updateUser = updatedUserResponse.results!.first as User;
+      if (updateUser.accountStatues == AccountStatues.suspended) {
+        throw SuspendedAccount();
+      }
+      return updateUser;
     } else {
       throw ParseException.extractParseException(updatedUserResponse.error!);
     }
@@ -191,7 +196,7 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
       final anonymousUser = anonymousUserResponse.results!.first as ParseUser;
       return User(anonymousUser.emailAddress, null, anonymousUser.emailAddress,
           sessionToken: anonymousUser.sessionToken)
-        ..objectId = anonymousUser.objectId; 
+        ..objectId = anonymousUser.objectId;
     } else {
       throw ParseException.extractParseException(anonymousUserResponse.error!);
     }

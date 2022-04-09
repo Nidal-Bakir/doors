@@ -195,6 +195,10 @@ class SelectedPlanNotFound extends ParseCloudCodeCustomException {
 
 class SuspendedAccount extends ParseCloudCodeCustomException
     with SecurityException {
+  SuspendedAccount()
+      : super.fromParseError(
+            ParseError(code: 1010, message: 'Your account has been suspended'));
+
   SuspendedAccount.fromParseError(ParseError parseError)
       : super.fromParseError(parseError) {
     riseSecurityException();

@@ -1,3 +1,4 @@
+import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,8 +13,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Future.delayed(Duration(seconds: 2))
-        // .then((value) => Navigator.of(context).pushNamed('routeName'));
+    Future.delayed(const Duration(seconds: 2)).then(
+        (_) => Navigator.of(context).pushNamed(LogInScreen.routeName));
   }
 
   @override
