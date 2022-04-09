@@ -1,6 +1,8 @@
+import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
+import 'package:doors/core/features/auth/presentation/screens/suspended_screen.dart';
 import 'package:doors/core/features/auth/presentation/widgets/auth_error_text.dart';
 import 'package:doors/core/features/auth/presentation/widgets/create_account_text_button.dart';
 import 'package:doors/core/features/auth/presentation/widgets/forgat_password_text_button.dart';
@@ -69,6 +71,10 @@ class _LogInScreenState extends State<LogInScreen> {
                                 listener: (context, state) {
                                   if (state is AuthLoggedInSuccess) {
                                     RestartApp.restart(context);
+                                  } else if (state is AuthLoadFailure &&
+                                      state.exception is SuspendedAccount) {
+                                    Navigator.of(context)
+                                        .pushNamed(SuspendedScreen.routeName);
                                   }
                                 },
                                 builder: (context, state) {

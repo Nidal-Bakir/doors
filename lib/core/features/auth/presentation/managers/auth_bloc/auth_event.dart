@@ -4,6 +4,9 @@ part of 'auth_bloc.dart';
 class AuthEvent with _$AuthEvent {
   const factory AuthEvent.authLoginRequested(User user) = AuthLoginRequested;
   const factory AuthEvent.authSignUpRequested(User user) = AuthSignUpRequested;
+
+  const factory AuthEvent.authCurrentAccountSuspended(SuspendedAccount suspendedAccountException) = AuthCurrentAccountSuspended;
+
   const factory AuthEvent.authLoginAnonymouslyRequested() =
       AuthLoginAnonymouslyRequested;
   const factory AuthEvent.authLogoutRequested() = AuthLogoutRequested;

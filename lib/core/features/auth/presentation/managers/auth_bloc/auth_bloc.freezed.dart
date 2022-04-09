@@ -29,6 +29,13 @@ class _$AuthEventTearOff {
     );
   }
 
+  AuthCurrentAccountSuspended authCurrentAccountSuspended(
+      SuspendedAccount suspendedAccountException) {
+    return AuthCurrentAccountSuspended(
+      suspendedAccountException,
+    );
+  }
+
   AuthLoginAnonymouslyRequested authLoginAnonymouslyRequested() {
     return const AuthLoginAnonymouslyRequested();
   }
@@ -62,6 +69,8 @@ mixin _$AuthEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(User user) authLoginRequested,
     required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
     required TResult Function() authGetUpdatedUserDataRequested,
@@ -73,6 +82,8 @@ mixin _$AuthEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -84,6 +95,8 @@ mixin _$AuthEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -96,6 +109,8 @@ mixin _$AuthEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthLoginRequested value) authLoginRequested,
     required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
@@ -111,6 +126,8 @@ mixin _$AuthEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -125,6 +142,8 @@ mixin _$AuthEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -220,6 +239,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
   TResult when<TResult extends Object?>({
     required TResult Function(User user) authLoginRequested,
     required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
     required TResult Function() authGetUpdatedUserDataRequested,
@@ -234,6 +255,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -248,6 +271,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -266,6 +291,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthLoginRequested value) authLoginRequested,
     required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
@@ -284,6 +311,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -301,6 +330,8 @@ class _$AuthLoginRequested implements AuthLoginRequested {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -394,6 +425,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
   TResult when<TResult extends Object?>({
     required TResult Function(User user) authLoginRequested,
     required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
     required TResult Function() authGetUpdatedUserDataRequested,
@@ -408,6 +441,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -422,6 +457,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -440,6 +477,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthLoginRequested value) authLoginRequested,
     required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
@@ -458,6 +497,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -475,6 +516,8 @@ class _$AuthSignUpRequested implements AuthSignUpRequested {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -499,6 +542,198 @@ abstract class AuthSignUpRequested implements AuthEvent {
   @JsonKey(ignore: true)
   $AuthSignUpRequestedCopyWith<AuthSignUpRequested> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AuthCurrentAccountSuspendedCopyWith<$Res> {
+  factory $AuthCurrentAccountSuspendedCopyWith(
+          AuthCurrentAccountSuspended value,
+          $Res Function(AuthCurrentAccountSuspended) then) =
+      _$AuthCurrentAccountSuspendedCopyWithImpl<$Res>;
+  $Res call({SuspendedAccount suspendedAccountException});
+}
+
+/// @nodoc
+class _$AuthCurrentAccountSuspendedCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res>
+    implements $AuthCurrentAccountSuspendedCopyWith<$Res> {
+  _$AuthCurrentAccountSuspendedCopyWithImpl(AuthCurrentAccountSuspended _value,
+      $Res Function(AuthCurrentAccountSuspended) _then)
+      : super(_value, (v) => _then(v as AuthCurrentAccountSuspended));
+
+  @override
+  AuthCurrentAccountSuspended get _value =>
+      super._value as AuthCurrentAccountSuspended;
+
+  @override
+  $Res call({
+    Object? suspendedAccountException = freezed,
+  }) {
+    return _then(AuthCurrentAccountSuspended(
+      suspendedAccountException == freezed
+          ? _value.suspendedAccountException
+          : suspendedAccountException // ignore: cast_nullable_to_non_nullable
+              as SuspendedAccount,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AuthCurrentAccountSuspended implements AuthCurrentAccountSuspended {
+  const _$AuthCurrentAccountSuspended(this.suspendedAccountException);
+
+  @override
+  final SuspendedAccount suspendedAccountException;
+
+  @override
+  String toString() {
+    return 'AuthEvent.authCurrentAccountSuspended(suspendedAccountException: $suspendedAccountException)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AuthCurrentAccountSuspended &&
+            const DeepCollectionEquality().equals(
+                other.suspendedAccountException, suspendedAccountException));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(suspendedAccountException));
+
+  @JsonKey(ignore: true)
+  @override
+  $AuthCurrentAccountSuspendedCopyWith<AuthCurrentAccountSuspended>
+      get copyWith => _$AuthCurrentAccountSuspendedCopyWithImpl<
+          AuthCurrentAccountSuspended>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(User user) authLoginRequested,
+    required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
+    required TResult Function() authLoginAnonymouslyRequested,
+    required TResult Function() authLogoutRequested,
+    required TResult Function() authGetUpdatedUserDataRequested,
+    required TResult Function() authCurrentUserLoaded,
+    required TResult Function(String userEmail) authResetPasswordRequested,
+  }) {
+    return authCurrentAccountSuspended(suspendedAccountException);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(User user)? authLoginRequested,
+    TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
+    TResult Function()? authLoginAnonymouslyRequested,
+    TResult Function()? authLogoutRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
+    TResult Function(String userEmail)? authResetPasswordRequested,
+  }) {
+    return authCurrentAccountSuspended?.call(suspendedAccountException);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(User user)? authLoginRequested,
+    TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
+    TResult Function()? authLoginAnonymouslyRequested,
+    TResult Function()? authLogoutRequested,
+    TResult Function()? authGetUpdatedUserDataRequested,
+    TResult Function()? authCurrentUserLoaded,
+    TResult Function(String userEmail)? authResetPasswordRequested,
+    required TResult orElse(),
+  }) {
+    if (authCurrentAccountSuspended != null) {
+      return authCurrentAccountSuspended(suspendedAccountException);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AuthLoginRequested value) authLoginRequested,
+    required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
+    required TResult Function(AuthLoginAnonymouslyRequested value)
+        authLoginAnonymouslyRequested,
+    required TResult Function(AuthLogoutRequested value) authLogoutRequested,
+    required TResult Function(AuthGetUpdatedUserDataRequested value)
+        authGetUpdatedUserDataRequested,
+    required TResult Function(AuthCurrentUserLoaded value)
+        authCurrentUserLoaded,
+    required TResult Function(AuthResetPasswordRequested value)
+        authResetPasswordRequested,
+  }) {
+    return authCurrentAccountSuspended(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AuthLoginRequested value)? authLoginRequested,
+    TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
+    TResult Function(AuthLoginAnonymouslyRequested value)?
+        authLoginAnonymouslyRequested,
+    TResult Function(AuthLogoutRequested value)? authLogoutRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
+    TResult Function(AuthResetPasswordRequested value)?
+        authResetPasswordRequested,
+  }) {
+    return authCurrentAccountSuspended?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AuthLoginRequested value)? authLoginRequested,
+    TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
+    TResult Function(AuthLoginAnonymouslyRequested value)?
+        authLoginAnonymouslyRequested,
+    TResult Function(AuthLogoutRequested value)? authLogoutRequested,
+    TResult Function(AuthGetUpdatedUserDataRequested value)?
+        authGetUpdatedUserDataRequested,
+    TResult Function(AuthCurrentUserLoaded value)? authCurrentUserLoaded,
+    TResult Function(AuthResetPasswordRequested value)?
+        authResetPasswordRequested,
+    required TResult orElse(),
+  }) {
+    if (authCurrentAccountSuspended != null) {
+      return authCurrentAccountSuspended(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthCurrentAccountSuspended implements AuthEvent {
+  const factory AuthCurrentAccountSuspended(
+          SuspendedAccount suspendedAccountException) =
+      _$AuthCurrentAccountSuspended;
+
+  SuspendedAccount get suspendedAccountException;
+  @JsonKey(ignore: true)
+  $AuthCurrentAccountSuspendedCopyWith<AuthCurrentAccountSuspended>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -548,6 +783,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
   TResult when<TResult extends Object?>({
     required TResult Function(User user) authLoginRequested,
     required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
     required TResult Function() authGetUpdatedUserDataRequested,
@@ -562,6 +799,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -576,6 +815,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -594,6 +835,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthLoginRequested value) authLoginRequested,
     required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
@@ -612,6 +855,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -629,6 +874,8 @@ class _$AuthLoginAnonymouslyRequested implements AuthLoginAnonymouslyRequested {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -694,6 +941,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
   TResult when<TResult extends Object?>({
     required TResult Function(User user) authLoginRequested,
     required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
     required TResult Function() authGetUpdatedUserDataRequested,
@@ -708,6 +957,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -722,6 +973,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -740,6 +993,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthLoginRequested value) authLoginRequested,
     required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
@@ -758,6 +1013,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -775,6 +1032,8 @@ class _$AuthLogoutRequested implements AuthLogoutRequested {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -844,6 +1103,8 @@ class _$AuthGetUpdatedUserDataRequested
   TResult when<TResult extends Object?>({
     required TResult Function(User user) authLoginRequested,
     required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
     required TResult Function() authGetUpdatedUserDataRequested,
@@ -858,6 +1119,8 @@ class _$AuthGetUpdatedUserDataRequested
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -872,6 +1135,8 @@ class _$AuthGetUpdatedUserDataRequested
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -890,6 +1155,8 @@ class _$AuthGetUpdatedUserDataRequested
   TResult map<TResult extends Object?>({
     required TResult Function(AuthLoginRequested value) authLoginRequested,
     required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
@@ -908,6 +1175,8 @@ class _$AuthGetUpdatedUserDataRequested
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -925,6 +1194,8 @@ class _$AuthGetUpdatedUserDataRequested
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -990,6 +1261,8 @@ class _$AuthCurrentUserLoaded implements AuthCurrentUserLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function(User user) authLoginRequested,
     required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
     required TResult Function() authGetUpdatedUserDataRequested,
@@ -1004,6 +1277,8 @@ class _$AuthCurrentUserLoaded implements AuthCurrentUserLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -1018,6 +1293,8 @@ class _$AuthCurrentUserLoaded implements AuthCurrentUserLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -1036,6 +1313,8 @@ class _$AuthCurrentUserLoaded implements AuthCurrentUserLoaded {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthLoginRequested value) authLoginRequested,
     required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
@@ -1054,6 +1333,8 @@ class _$AuthCurrentUserLoaded implements AuthCurrentUserLoaded {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -1071,6 +1352,8 @@ class _$AuthCurrentUserLoaded implements AuthCurrentUserLoaded {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -1162,6 +1445,8 @@ class _$AuthResetPasswordRequested implements AuthResetPasswordRequested {
   TResult when<TResult extends Object?>({
     required TResult Function(User user) authLoginRequested,
     required TResult Function(User user) authSignUpRequested,
+    required TResult Function(SuspendedAccount suspendedAccountException)
+        authCurrentAccountSuspended,
     required TResult Function() authLoginAnonymouslyRequested,
     required TResult Function() authLogoutRequested,
     required TResult Function() authGetUpdatedUserDataRequested,
@@ -1176,6 +1461,8 @@ class _$AuthResetPasswordRequested implements AuthResetPasswordRequested {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -1190,6 +1477,8 @@ class _$AuthResetPasswordRequested implements AuthResetPasswordRequested {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(User user)? authLoginRequested,
     TResult Function(User user)? authSignUpRequested,
+    TResult Function(SuspendedAccount suspendedAccountException)?
+        authCurrentAccountSuspended,
     TResult Function()? authLoginAnonymouslyRequested,
     TResult Function()? authLogoutRequested,
     TResult Function()? authGetUpdatedUserDataRequested,
@@ -1208,6 +1497,8 @@ class _$AuthResetPasswordRequested implements AuthResetPasswordRequested {
   TResult map<TResult extends Object?>({
     required TResult Function(AuthLoginRequested value) authLoginRequested,
     required TResult Function(AuthSignUpRequested value) authSignUpRequested,
+    required TResult Function(AuthCurrentAccountSuspended value)
+        authCurrentAccountSuspended,
     required TResult Function(AuthLoginAnonymouslyRequested value)
         authLoginAnonymouslyRequested,
     required TResult Function(AuthLogoutRequested value) authLogoutRequested,
@@ -1226,6 +1517,8 @@ class _$AuthResetPasswordRequested implements AuthResetPasswordRequested {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,
@@ -1243,6 +1536,8 @@ class _$AuthResetPasswordRequested implements AuthResetPasswordRequested {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AuthLoginRequested value)? authLoginRequested,
     TResult Function(AuthSignUpRequested value)? authSignUpRequested,
+    TResult Function(AuthCurrentAccountSuspended value)?
+        authCurrentAccountSuspended,
     TResult Function(AuthLoginAnonymouslyRequested value)?
         authLoginAnonymouslyRequested,
     TResult Function(AuthLogoutRequested value)? authLogoutRequested,

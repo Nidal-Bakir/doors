@@ -68,6 +68,7 @@ dependencies:
   json_annotation: ^4.4.0
   intl_phone_number_input: ^0.7.0+2
   image_picker: ^0.8.4+11
+  url_launcher: ^6.0.20
 
   # bloc
   flutter_bloc: ^8.0.1

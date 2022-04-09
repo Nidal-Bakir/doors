@@ -5,14 +5,18 @@ import 'package:doors/core/features/auth/presentation/screens/login_screen.dart'
 import 'package:doors/core/features/auth/presentation/screens/select_account_type_screen.dart';
 import 'package:doors/core/features/auth/presentation/screens/sign_up_part_one_screen.dart';
 import 'package:doors/core/features/auth/presentation/screens/sign_up_part_two_screen.dart';
+import 'package:doors/core/features/auth/presentation/screens/suspended_screen.dart';
+import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
+
   switch (settings.name) {
-    // case SplashScreen.routeName:
-    // return MaterialPageRoute(builder: (_) => const SplashScreen());
-    // case LogInScreen.routeName:
-    case '/':
+    case SuspendedScreen.routeName:
+      return MaterialPageRoute(builder: (_) => const SuspendedScreen());
+    case SplashScreen.routeName:
+      return MaterialPageRoute(builder: (_) => const SplashScreen());
+    case LogInScreen.routeName:
       return MaterialPageRoute(builder: (_) => const LogInScreen());
     case ForgatPasswordScreen.routeName:
       return MaterialPageRoute(builder: (_) => const ForgatPasswordScreen());

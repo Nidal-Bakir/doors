@@ -193,9 +193,12 @@ class SelectedPlanNotFound extends ParseCloudCodeCustomException {
   }
 }
 
-class SuspendedAccount extends ParseCloudCodeCustomException {
+class SuspendedAccount extends ParseCloudCodeCustomException
+    with SecurityException {
   SuspendedAccount.fromParseError(ParseError parseError)
-      : super.fromParseError(parseError);
+      : super.fromParseError(parseError) {
+    riseSecurityException();
+  }
   @override
   String getLocalMessageError(BuildContext context) {
     return context.loc.your_account_has_been_suspended;

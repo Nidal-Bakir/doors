@@ -23,10 +23,11 @@ ThemeData defaultLightTheme(String langCode) {
         color: _yalow,
       ),
       snackBarTheme: const SnackBarThemeData(
-        backgroundColor: _black,
-        actionTextColor: _yalow,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: _redError,
+        actionTextColor: _white,
         contentTextStyle: TextStyle(
-          color: _redError,
+          color: _white,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

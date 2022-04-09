@@ -18,13 +18,43 @@ String extractISOCountryCodeFromPlatformService() {
   }
 }
 
-void showSnackBar(BuildContext context, String content) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      duration: const Duration(seconds: 3),
-      content: Text(content),
-    ),
-  );
+void showErrorSnackBar(BuildContext context, String content) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+        duration: const Duration(seconds: 3),
+        content: Row(
+          children: [
+            Icon(
+              Icons.error_rounded,
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            Flexible(
+              child: Text(
+                content,
+                softWrap: true,
+              ),
+            ),
+            IconButton(
+              padding: EdgeInsets.zero,
+              color: Theme.of(context).colorScheme.surface,
+              visualDensity: VisualDensity.compact,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+              icon: const Icon(
+                Icons.close_rounded,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
 }
 
 Future<XFile?> showModalBottomSheetToSelectPhoto(BuildContext context) async {

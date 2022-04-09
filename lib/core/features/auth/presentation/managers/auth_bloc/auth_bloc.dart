@@ -33,12 +33,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             authCurrentUserLoaded: (event) async =>
                 await _onAuthCurrentUserLoaded(event, emit),
             authResetPasswordRequested: (event) async =>
-                await _onAuthResetPasswordRequested(event, emit));
+                await _onAuthResetPasswordRequested(event, emit),
+            authCurrentAccountSuspended: (event) async =>
+                await _onAuthCurrentAccountSuspended(event, emit));
       },
     );
-    _securityErrorFlow.securityErrorFlowStream().listen((error) {
+    _securityErrorFlow.securityErrorFlowStream().listen((error) async {
       if (error is ParseInvalidSessionToken || error is ParseSessionMissing) {
         add(const AuthLogoutRequested());
+      } else if (error is SuspendedAccount) {
+        add(AuthCurrentAccountSuspended(error));
       }
     });
   }
@@ -48,7 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
     final loggedUser = await _authRepository.login(authLoginRequested.user);
 
-    loggedUser.fold((error) =>  emit(AuthLoadFailure(error)),
+    loggedUser.fold((error) => emit(AuthLoadFailure(error)),
         (user) => emit(AuthLoggedInSuccess(user)));
   }
 
@@ -57,7 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
     final signUpUser = await _authRepository.signUp(authSignUpRequested.user);
 
-    signUpUser.fold((error) =>  emit(AuthLoadFailure(error)),
+    signUpUser.fold((error) => emit(AuthLoadFailure(error)),
         (user) => emit(AuthSignUpSuccess(user)));
   }
 
@@ -67,7 +71,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
 
     final anonymousUser = await _authRepository.loginAnonymously();
-    anonymousUser.fold((error) =>  emit(AuthLoadFailure(error)),
+    anonymousUser.fold((error) => emit(AuthLoadFailure(error)),
         (user) => emit(AuthCurrentUserLoadSuccess(user)));
   }
 
@@ -77,7 +81,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
 
     final updatedUser = await _authRepository.getCurrentUpdatedUserFromServer();
-    updatedUser.fold((error) =>  emit(AuthLoadFailure(error)),
+    updatedUser.fold((error) => emit(AuthLoadFailure(error)),
         (user) => emit(AuthCurrentUserLoadSuccess(user)));
   }
 
@@ -86,7 +90,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
 
     final logoutState = await _authRepository.logout();
-    logoutState.fold((error) =>  emit(AuthLoadFailure(error)),
+    logoutState.fold((error) => emit(AuthLoadFailure(error)),
         (_) => emit(const AuthLogoutSuccess()));
   }
 
@@ -108,9 +112,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final sendResetState =
         await _authRepository.sendPasswordReset(userEmail: event.userEmail);
-    sendResetState.fold((error) =>  emit(AuthLoadFailure(error)),
+    sendResetState.fold((error) => emit(AuthLoadFailure(error)),
         (_) => emit(const AuthPasswordResetSendSuccess()));
   }
 
- 
+  Future<void> _onAuthCurrentAccountSuspended(
+      AuthCurrentAccountSuspended event, Emitter<AuthState> emit) async {
+    // if it is a logged user then we need to log him out
+    if (await _isItALoggedUserInTheApp()) {
+      add(const AuthLogoutRequested());
+    } else {
+      // it is not logged user, so the user is trying to login, show suspended screen
+      emit(AuthLoadFailure(event.suspendedAccountException));
+    }
+  }
+
+  Future<bool> _isItALoggedUserInTheApp() async {
+    final _currentUser = await _authRepository.getCurrentLoggedUser();
+    return _currentUser != null && !_currentUser.isAnonymousAccount;
+  }
 }

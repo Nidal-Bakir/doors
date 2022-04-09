@@ -48,7 +48,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
               listener: (context, state) {
                 state.whenOrNull(
                   processSuccess: (_) => RestartApp.restart(context),
-                  processFailure: (error) => showSnackBar(
+                  processFailure: (error) => showErrorSnackBar(
                     context,
                     error.getLocalMessageError(context),
                   ),
@@ -113,7 +113,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
                                             );
                                           },
                                           authLoadFailure: (error) =>
-                                              showSnackBar(
+                                              showErrorSnackBar(
                                             context,
                                             error.getLocalMessageError(context),
                                           ),
@@ -165,7 +165,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
     if (_selectedPlan != null) {
       context.read<AuthBloc>().add(AuthSignUpRequested(widget.user));
     } else {
-      showSnackBar(context, context.loc.please_select_subscription_plan);
+      showErrorSnackBar(context, context.loc.please_select_subscription_plan);
     }
   }
 
@@ -205,7 +205,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
               user.userId, context.read<SubscriptionBloc>());
         }
       } else {
-        showSnackBar(context, context.loc.please_select_subscription_plan);
+        showErrorSnackBar(context, context.loc.please_select_subscription_plan);
       }
     }
   }

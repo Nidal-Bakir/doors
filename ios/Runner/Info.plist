@@ -8,6 +8,14 @@
 		<string>ar</string>
 		<string>de</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  		<string>tel</string>
+		<string>telprompt</string>
+  		<string>mailto</string>
+  		<string>https</string>
+  		<string>http</string>
+	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need to access your photo library to allow you to set your profile image and select an image for your post.</string>
 	<key>NSCameraUsageDescription</key>

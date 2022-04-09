@@ -166,7 +166,7 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
                               Navigator.of(context).pop();
                             },
                             processFailure: (error) {
-                              showSnackBar(
+                              showErrorSnackBar(
                                   context, error.getLocalMessageError(context));
                             },
                           );
@@ -201,7 +201,7 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
                                       ),
                                     );
                               } else {
-                                showSnackBar(
+                                showErrorSnackBar(
                                     context, context.loc.invalid_card_info);
                               }
                             },
