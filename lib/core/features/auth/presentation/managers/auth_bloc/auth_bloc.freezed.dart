@@ -1583,6 +1583,13 @@ class _$AuthStateTearOff {
     );
   }
 
+  AuthCurrentUpdatedUserLoadSuccess authCurrentUpdatedUserLoadSuccess(
+      User user) {
+    return AuthCurrentUpdatedUserLoadSuccess(
+      user,
+    );
+  }
+
   AuthLoggedInSuccess authLoggedInSuccess(User user) {
     return AuthLoggedInSuccess(
       user,
@@ -1620,6 +1627,7 @@ mixin _$AuthState {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -1632,6 +1640,7 @@ mixin _$AuthState {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -1644,6 +1653,7 @@ mixin _$AuthState {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -1658,6 +1668,8 @@ mixin _$AuthState {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -1672,6 +1684,8 @@ mixin _$AuthState {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -1686,6 +1700,8 @@ mixin _$AuthState {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -1755,6 +1771,7 @@ class _$AuthInitial implements AuthInitial {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -1770,6 +1787,7 @@ class _$AuthInitial implements AuthInitial {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -1785,6 +1803,7 @@ class _$AuthInitial implements AuthInitial {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -1805,6 +1824,8 @@ class _$AuthInitial implements AuthInitial {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -1822,6 +1843,8 @@ class _$AuthInitial implements AuthInitial {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -1839,6 +1862,8 @@ class _$AuthInitial implements AuthInitial {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -1901,6 +1926,7 @@ class _$AuthInProgress implements AuthInProgress {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -1916,6 +1942,7 @@ class _$AuthInProgress implements AuthInProgress {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -1931,6 +1958,7 @@ class _$AuthInProgress implements AuthInProgress {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -1951,6 +1979,8 @@ class _$AuthInProgress implements AuthInProgress {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -1968,6 +1998,8 @@ class _$AuthInProgress implements AuthInProgress {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -1985,6 +2017,8 @@ class _$AuthInProgress implements AuthInProgress {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2075,6 +2109,7 @@ class _$AuthCurrentUserLoadSuccess implements AuthCurrentUserLoadSuccess {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -2090,6 +2125,7 @@ class _$AuthCurrentUserLoadSuccess implements AuthCurrentUserLoadSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2105,6 +2141,7 @@ class _$AuthCurrentUserLoadSuccess implements AuthCurrentUserLoadSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2125,6 +2162,8 @@ class _$AuthCurrentUserLoadSuccess implements AuthCurrentUserLoadSuccess {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -2142,6 +2181,8 @@ class _$AuthCurrentUserLoadSuccess implements AuthCurrentUserLoadSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2159,6 +2200,8 @@ class _$AuthCurrentUserLoadSuccess implements AuthCurrentUserLoadSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2181,6 +2224,197 @@ abstract class AuthCurrentUserLoadSuccess implements AuthState {
   User get user;
   @JsonKey(ignore: true)
   $AuthCurrentUserLoadSuccessCopyWith<AuthCurrentUserLoadSuccess>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AuthCurrentUpdatedUserLoadSuccessCopyWith<$Res> {
+  factory $AuthCurrentUpdatedUserLoadSuccessCopyWith(
+          AuthCurrentUpdatedUserLoadSuccess value,
+          $Res Function(AuthCurrentUpdatedUserLoadSuccess) then) =
+      _$AuthCurrentUpdatedUserLoadSuccessCopyWithImpl<$Res>;
+  $Res call({User user});
+}
+
+/// @nodoc
+class _$AuthCurrentUpdatedUserLoadSuccessCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res>
+    implements $AuthCurrentUpdatedUserLoadSuccessCopyWith<$Res> {
+  _$AuthCurrentUpdatedUserLoadSuccessCopyWithImpl(
+      AuthCurrentUpdatedUserLoadSuccess _value,
+      $Res Function(AuthCurrentUpdatedUserLoadSuccess) _then)
+      : super(_value, (v) => _then(v as AuthCurrentUpdatedUserLoadSuccess));
+
+  @override
+  AuthCurrentUpdatedUserLoadSuccess get _value =>
+      super._value as AuthCurrentUpdatedUserLoadSuccess;
+
+  @override
+  $Res call({
+    Object? user = freezed,
+  }) {
+    return _then(AuthCurrentUpdatedUserLoadSuccess(
+      user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AuthCurrentUpdatedUserLoadSuccess
+    implements AuthCurrentUpdatedUserLoadSuccess {
+  const _$AuthCurrentUpdatedUserLoadSuccess(this.user);
+
+  @override
+  final User user;
+
+  @override
+  String toString() {
+    return 'AuthState.authCurrentUpdatedUserLoadSuccess(user: $user)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AuthCurrentUpdatedUserLoadSuccess &&
+            const DeepCollectionEquality().equals(other.user, user));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(user));
+
+  @JsonKey(ignore: true)
+  @override
+  $AuthCurrentUpdatedUserLoadSuccessCopyWith<AuthCurrentUpdatedUserLoadSuccess>
+      get copyWith => _$AuthCurrentUpdatedUserLoadSuccessCopyWithImpl<
+          AuthCurrentUpdatedUserLoadSuccess>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() authInitial,
+    required TResult Function() authInProgress,
+    required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
+    required TResult Function(User user) authLoggedInSuccess,
+    required TResult Function(User user) authSignUpSuccess,
+    required TResult Function() authLogoutSuccess,
+    required TResult Function() authPasswordResetSendSuccess,
+    required TResult Function(ExceptionBase exception) authLoadFailure,
+  }) {
+    return authCurrentUpdatedUserLoadSuccess(user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? authInitial,
+    TResult Function()? authInProgress,
+    TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function(User user)? authSignUpSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function()? authPasswordResetSendSuccess,
+    TResult Function(ExceptionBase exception)? authLoadFailure,
+  }) {
+    return authCurrentUpdatedUserLoadSuccess?.call(user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? authInitial,
+    TResult Function()? authInProgress,
+    TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
+    TResult Function(User user)? authLoggedInSuccess,
+    TResult Function(User user)? authSignUpSuccess,
+    TResult Function()? authLogoutSuccess,
+    TResult Function()? authPasswordResetSendSuccess,
+    TResult Function(ExceptionBase exception)? authLoadFailure,
+    required TResult orElse(),
+  }) {
+    if (authCurrentUpdatedUserLoadSuccess != null) {
+      return authCurrentUpdatedUserLoadSuccess(user);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AuthInitial value) authInitial,
+    required TResult Function(AuthInProgress value) authInProgress,
+    required TResult Function(AuthCurrentUserLoadSuccess value)
+        authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
+    required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
+    required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
+    required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
+    required TResult Function(AuthPasswordResetSendSuccess value)
+        authPasswordResetSendSuccess,
+    required TResult Function(AuthLoadFailure value) authLoadFailure,
+  }) {
+    return authCurrentUpdatedUserLoadSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AuthInitial value)? authInitial,
+    TResult Function(AuthInProgress value)? authInProgress,
+    TResult Function(AuthCurrentUserLoadSuccess value)?
+        authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
+    TResult Function(AuthPasswordResetSendSuccess value)?
+        authPasswordResetSendSuccess,
+    TResult Function(AuthLoadFailure value)? authLoadFailure,
+  }) {
+    return authCurrentUpdatedUserLoadSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AuthInitial value)? authInitial,
+    TResult Function(AuthInProgress value)? authInProgress,
+    TResult Function(AuthCurrentUserLoadSuccess value)?
+        authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
+    TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
+    TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
+    TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
+    TResult Function(AuthPasswordResetSendSuccess value)?
+        authPasswordResetSendSuccess,
+    TResult Function(AuthLoadFailure value)? authLoadFailure,
+    required TResult orElse(),
+  }) {
+    if (authCurrentUpdatedUserLoadSuccess != null) {
+      return authCurrentUpdatedUserLoadSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthCurrentUpdatedUserLoadSuccess implements AuthState {
+  const factory AuthCurrentUpdatedUserLoadSuccess(User user) =
+      _$AuthCurrentUpdatedUserLoadSuccess;
+
+  User get user;
+  @JsonKey(ignore: true)
+  $AuthCurrentUpdatedUserLoadSuccessCopyWith<AuthCurrentUpdatedUserLoadSuccess>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -2252,6 +2486,7 @@ class _$AuthLoggedInSuccess implements AuthLoggedInSuccess {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -2267,6 +2502,7 @@ class _$AuthLoggedInSuccess implements AuthLoggedInSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2282,6 +2518,7 @@ class _$AuthLoggedInSuccess implements AuthLoggedInSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2302,6 +2539,8 @@ class _$AuthLoggedInSuccess implements AuthLoggedInSuccess {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -2319,6 +2558,8 @@ class _$AuthLoggedInSuccess implements AuthLoggedInSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2336,6 +2577,8 @@ class _$AuthLoggedInSuccess implements AuthLoggedInSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2428,6 +2671,7 @@ class _$AuthSignUpSuccess implements AuthSignUpSuccess {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -2443,6 +2687,7 @@ class _$AuthSignUpSuccess implements AuthSignUpSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2458,6 +2703,7 @@ class _$AuthSignUpSuccess implements AuthSignUpSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2478,6 +2724,8 @@ class _$AuthSignUpSuccess implements AuthSignUpSuccess {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -2495,6 +2743,8 @@ class _$AuthSignUpSuccess implements AuthSignUpSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2512,6 +2762,8 @@ class _$AuthSignUpSuccess implements AuthSignUpSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2580,6 +2832,7 @@ class _$AuthLogoutSuccess implements AuthLogoutSuccess {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -2595,6 +2848,7 @@ class _$AuthLogoutSuccess implements AuthLogoutSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2610,6 +2864,7 @@ class _$AuthLogoutSuccess implements AuthLogoutSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2630,6 +2885,8 @@ class _$AuthLogoutSuccess implements AuthLogoutSuccess {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -2647,6 +2904,8 @@ class _$AuthLogoutSuccess implements AuthLogoutSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2664,6 +2923,8 @@ class _$AuthLogoutSuccess implements AuthLogoutSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2731,6 +2992,7 @@ class _$AuthPasswordResetSendSuccess implements AuthPasswordResetSendSuccess {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -2746,6 +3008,7 @@ class _$AuthPasswordResetSendSuccess implements AuthPasswordResetSendSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2761,6 +3024,7 @@ class _$AuthPasswordResetSendSuccess implements AuthPasswordResetSendSuccess {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2781,6 +3045,8 @@ class _$AuthPasswordResetSendSuccess implements AuthPasswordResetSendSuccess {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -2798,6 +3064,8 @@ class _$AuthPasswordResetSendSuccess implements AuthPasswordResetSendSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2815,6 +3083,8 @@ class _$AuthPasswordResetSendSuccess implements AuthPasswordResetSendSuccess {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2901,6 +3171,7 @@ class _$AuthLoadFailure implements AuthLoadFailure {
     required TResult Function() authInitial,
     required TResult Function() authInProgress,
     required TResult Function(User user) authCurrentUserLoadSuccess,
+    required TResult Function(User user) authCurrentUpdatedUserLoadSuccess,
     required TResult Function(User user) authLoggedInSuccess,
     required TResult Function(User user) authSignUpSuccess,
     required TResult Function() authLogoutSuccess,
@@ -2916,6 +3187,7 @@ class _$AuthLoadFailure implements AuthLoadFailure {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2931,6 +3203,7 @@ class _$AuthLoadFailure implements AuthLoadFailure {
     TResult Function()? authInitial,
     TResult Function()? authInProgress,
     TResult Function(User user)? authCurrentUserLoadSuccess,
+    TResult Function(User user)? authCurrentUpdatedUserLoadSuccess,
     TResult Function(User user)? authLoggedInSuccess,
     TResult Function(User user)? authSignUpSuccess,
     TResult Function()? authLogoutSuccess,
@@ -2951,6 +3224,8 @@ class _$AuthLoadFailure implements AuthLoadFailure {
     required TResult Function(AuthInProgress value) authInProgress,
     required TResult Function(AuthCurrentUserLoadSuccess value)
         authCurrentUserLoadSuccess,
+    required TResult Function(AuthCurrentUpdatedUserLoadSuccess value)
+        authCurrentUpdatedUserLoadSuccess,
     required TResult Function(AuthLoggedInSuccess value) authLoggedInSuccess,
     required TResult Function(AuthSignUpSuccess value) authSignUpSuccess,
     required TResult Function(AuthLogoutSuccess value) authLogoutSuccess,
@@ -2968,6 +3243,8 @@ class _$AuthLoadFailure implements AuthLoadFailure {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,
@@ -2985,6 +3262,8 @@ class _$AuthLoadFailure implements AuthLoadFailure {
     TResult Function(AuthInProgress value)? authInProgress,
     TResult Function(AuthCurrentUserLoadSuccess value)?
         authCurrentUserLoadSuccess,
+    TResult Function(AuthCurrentUpdatedUserLoadSuccess value)?
+        authCurrentUpdatedUserLoadSuccess,
     TResult Function(AuthLoggedInSuccess value)? authLoggedInSuccess,
     TResult Function(AuthSignUpSuccess value)? authSignUpSuccess,
     TResult Function(AuthLogoutSuccess value)? authLogoutSuccess,

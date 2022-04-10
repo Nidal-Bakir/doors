@@ -140,7 +140,7 @@ import 'package:doors/core/features/auth/model/user.dart';
 
   /// Get the current local user info and data
   ///
-  /// Returns null in case no (login | signUp) preformed.
+  /// Returns null in case no (login | signUp| loginAnonymously) preformed.
   Future<User?> getCurrentLoggedUser() async {
     return await _authLocalDataSource.getCurrentLoggedUser();
   }

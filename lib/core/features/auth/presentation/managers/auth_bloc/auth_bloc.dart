@@ -82,7 +82,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final updatedUser = await _authRepository.getCurrentUpdatedUserFromServer();
     updatedUser.fold((error) => emit(AuthLoadFailure(error)),
-        (user) => emit(AuthCurrentUserLoadSuccess(user)));
+        (user) => emit(AuthCurrentUpdatedUserLoadSuccess(user)));
   }
 
   Future<void> _onAuthLogoutRequestedRequested(
@@ -101,6 +101,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final currentUser = await _authRepository.getCurrentLoggedUser();
     if (currentUser != null) {
       emit(AuthCurrentUserLoadSuccess(currentUser));
+
+      // get the updated user date form the server
+      add(const AuthGetUpdatedUserDataRequested());
     } else {
       add(const AuthLoginAnonymouslyRequested());
     }

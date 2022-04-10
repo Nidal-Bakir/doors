@@ -26,19 +26,24 @@ void showErrorSnackBar(BuildContext context, String content) {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
         duration: const Duration(seconds: 3),
         content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-              Icons.error_rounded,
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            Flexible(
-              child: Text(
-                content,
-                softWrap: true,
-              ),
+            Row(mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.error_rounded,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Flexible(
+                  child: Text(
+                    content,
+                    softWrap: true,
+                  ),
+                ),
+              ],
             ),
             IconButton(
               padding: EdgeInsets.zero,
