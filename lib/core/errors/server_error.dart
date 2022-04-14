@@ -50,6 +50,8 @@ class ParseException extends ServerException {
         return ParseInvalidUsernameOrPassword.fromParseError(parseError);
       case -1:
         return ParseInvalidUsernameOrPassword.fromParseError(parseError);
+      case 1:
+        return ParseSuccessResponseWithNoResults.fromParseError(parseError);
     }
     return ParseException.fromParseError(parseError);
   }
@@ -135,6 +137,16 @@ class ParseInvalidUsernameOrPassword extends ParseException {
   @override
   String getLocalMessageError(BuildContext context) {
     return context.loc.invalid_username_or_password;
+  }
+}
+
+class ParseSuccessResponseWithNoResults extends ParseException {
+  ParseSuccessResponseWithNoResults.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.no_result_found;
   }
 }
 

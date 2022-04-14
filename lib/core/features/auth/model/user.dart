@@ -5,6 +5,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyName = 'name';
+  static const keyUserClassName = keyClassUser;
   static const keyAccountType = 'accountType';
   static const keyAccountStatues = 'accountStatue';
   static const keyPaypalEmail = 'paypalEmail';
@@ -44,7 +45,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   clone(Map<String, dynamic> map) => User.clone(map)..fromJson(map);
 
   String get name => get<String>(keyName) as String;
-  
+
   String get userId => get<String>(keyVarObjectId) as String;
 
   set name(String name) => set<String>(keyName, name);
@@ -97,6 +98,6 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
       emailAddress == null || username != emailAddress;
 
   @override
-  // the user object will equal other user object if the username is the same
-  List<Object?> get props => [username];
+  // the user object will equal other user object if the username & userId are the same
+  List<Object?> get props => [ get<String?>(keyVarObjectId),username];
 }

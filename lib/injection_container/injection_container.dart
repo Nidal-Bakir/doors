@@ -1,4 +1,5 @@
 import 'package:doors/injection_container/auth_injection.dart';
+import 'package:doors/injection_container/recent_posts_injection.dart';
 import 'package:doors/injection_container/subscription_injection.dart';
 import 'package:doors/injection_container/parse_init.dart';
 import 'package:doors/injection_container/security_error_flow_injection.dart';
@@ -17,4 +18,7 @@ Future<void> init({bool forRestart = false}) async {
 
   // offered subscription plans
   subscriptionInit();
+
+  // recent posts init
+  recentPostsInit();
 }
