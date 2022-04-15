@@ -4,7 +4,7 @@ import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/features/recent_posts/repository/recent_posts_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 part 'recent_posts_event.dart';
 part 'recent_posts_state.dart';
 part 'recent_posts_bloc.freezed.dart';
@@ -14,20 +14,18 @@ class RecentPostsBloc extends Bloc<RecentPostsEvent, RecentPostsState> {
   final PostType _postType;
   RecentPostsBloc(this._recentPostsRepository, this._postType)
       : super(const RecentPostsInProgress()) {
-    on<RecentPostsEvent>(
-      (event, emit) async {
-        await event.map(
-            loaded: (event) async => await _onRecentPostsLoaded(event, emit),
-            refreshed: (event) async =>
-                await _onRecentPostsRefreshed(event, emit));
-      },
-    );
+    on<RecentPostsEvent>((event, emit) async {
+      await event.map(
+        loaded: (event) async => await _onRecentPostsLoaded(event, emit),
+        refreshed: (event) async => await _onRecentPostsRefreshed(event, emit),
+      );
+    }, transformer: bloc_concurrency.droppable());
   }
 
   Future<void> _onRecentPostsLoaded(
       RecentPostsLoaded value, Emitter<RecentPostsState> emit) async {
     emit(const RecentPostsInProgress());
-    
+
     (await _getRecentPosts()).fold(
         (errorAndCachedPosts) => emit(
               RecentPostsLoadFailure(

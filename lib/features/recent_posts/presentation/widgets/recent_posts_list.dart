@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:doors/core/enums/enums.dart';
-import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
+import 'package:doors/core/widgets/no_internet_connection.dart';
 import 'package:doors/features/recent_posts/presentation/managers/recent_posts_bloc/recent_posts_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,122 +47,88 @@ class _RecentPostsListState extends State<RecentPostsList> {
                     .add(const RecentPostsRefreshed());
                 return _refreshIndicatorCompleter.future;
               },
-              child: CustomScrollView(
-                slivers: [
-                  // do not remove the empty SliverToBoxAdapter will case view port error
-                  // its looks like a bug in the frameWork
-                  const SliverToBoxAdapter(),
-                  BlocBuilder<RecentPostsBloc, RecentPostsState>(
-                    buildWhen: (previous, current) =>
-                        current is RecentPostsLoadSuccess,
-                    builder: (context, state) {
-                      if (state is RecentPostsInProgress) {
-                        return const SliverToBoxAdapter();
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (notification) => notificationListener(
+                    notification: notification,
+                    onNotify: () {
+                      final _recentPostsBloc = context.read<RecentPostsBloc>();
+                      if (_recentPostsBloc.state is RecentPostsLoadSuccess) {
+                        _recentPostsBloc.add(const RecentPostsLoaded());
                       }
-                      final _recentPostsLoadSuccessState =
-                          (state as RecentPostsLoadSuccess);
+                    }),
+                child: CustomScrollView(
+                  slivers: [
+                    // do not remove the empty SliverToBoxAdapter will case view port error
+                    // its looks like a bug in the frameWork
+                    const SliverToBoxAdapter(),
+                    BlocBuilder<RecentPostsBloc, RecentPostsState>(
+                      buildWhen: (previous, current) =>
+                          current is RecentPostsLoadSuccess,
+                      builder: (context, state) {
+                        if (state is RecentPostsInProgress) {
+                          return const SliverToBoxAdapter();
+                        }
+                        final _recentPostsLoadSuccessState =
+                            (state as RecentPostsLoadSuccess);
 
-                      if (!_refreshIndicatorCompleter.isCompleted) {
-                        _refreshIndicatorCompleter.complete();
-                      }
+                        if (!_refreshIndicatorCompleter.isCompleted) {
+                          _refreshIndicatorCompleter.complete();
+                        }
 
-                      return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            return PostCardItem(
-                              post: _recentPostsLoadSuccessState
-                                  .recentPosts[index],
-                            );
-                          },
-                          childCount:
-                              _recentPostsLoadSuccessState.recentPosts.length,
-                        ),
-                        // itemExtent: 270,
-                      );
-                    },
-                  ),
-                  BlocBuilder<RecentPostsBloc, RecentPostsState>(
-                    builder: (context, state) {
-                      return SliverFillRemaining(
-                        fillOverscroll: false,
-                        hasScrollBody: false,
-                        child: state.when(
-                          inProgress: () => const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16.0),
-                            child: Center(
-                              child: LoadingIndicator(),
-                            ),
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return PostCardItem(
+                                post: _recentPostsLoadSuccessState
+                                    .recentPosts[index],
+                              );
+                            },
+                            childCount:
+                                _recentPostsLoadSuccessState.recentPosts.length,
                           ),
-                          loadSuccess: (_) => const SizedBox.shrink(),
-                          loadFailure: (error, cachedPosts) {
-                            if (cachedPosts.isEmpty) {
-                              return Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/no-internet.png',
-                                      width: 300,
-                                    ),
-                                    Text(
-                                      context.loc
-                                          .please_check_your_internet_connection,
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
-                                    ),
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        context
-                                            .read<RecentPostsBloc>()
-                                            .add(const RecentPostsLoaded());
-                                      },
-                                      icon: const Icon(Icons.replay_rounded),
-                                      label: Text(
-                                        context.loc.retry,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      context.loc
-                                          .please_check_your_internet_connection,
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
-                                    ),
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        context
-                                            .read<RecentPostsBloc>()
-                                            .add(const RecentPostsLoaded());
-                                      },
-                                      icon: const Icon(Icons.replay_rounded),
-                                      label: Text(
-                                        context.loc.retry,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      );
-                    },
-                  )
-                ],
+                          // itemExtent: 270,
+                        );
+                      },
+                    ),
+                    BlocBuilder<RecentPostsBloc, RecentPostsState>(
+                      builder: (context, state) {
+                        return SliverFillRemaining(
+                          fillOverscroll: false,
+                          hasScrollBody: false,
+                          child: state.when(
+                            inProgress: () => const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.0),
+                              child: Center(
+                                child: LoadingIndicator(),
+                              ),
+                            ),
+                            loadSuccess: (_) => const SizedBox.shrink(),
+                            loadFailure: (error, cachedPosts) {
+                              if (cachedPosts.isEmpty) {
+                                return NoInternetConnection(
+                                  onRetry: () {
+                                    context
+                                        .read<RecentPostsBloc>()
+                                        .add(const RecentPostsLoaded());
+                                  },
+                                  fullScreen: true,
+                                );
+                              } else {
+                                return NoInternetConnection(
+                                  onRetry: () {
+                                    context
+                                        .read<RecentPostsBloc>()
+                                        .add(const RecentPostsLoaded());
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        );
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
           );

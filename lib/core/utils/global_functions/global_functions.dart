@@ -18,6 +18,16 @@ String extractISOCountryCodeFromPlatformService() {
   }
 }
 
+bool notificationListener(
+    {required ScrollNotification notification,
+    required void Function() onNotify}) {
+  if (notification.metrics.pixels >=
+      notification.metrics.maxScrollExtent * 0.8) {
+    onNotify();
+  }
+  return true;
+}
+
 void showErrorSnackBar(BuildContext context, String content) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
@@ -28,7 +38,8 @@ void showErrorSnackBar(BuildContext context, String content) {
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(mainAxisSize: MainAxisSize.min,
+            Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
                   Icons.error_rounded,
