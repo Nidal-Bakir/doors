@@ -99,5 +99,6 @@
   "report_this_post": "Report this post",
   "your_report_sent_successfully": "Your report sent successfully",
   "error_while_sending_the_report": "Error while sending the report",
-  "please_tell_us_whats_wrong": "Please tell us whats wrong"
+  "please_tell_us_whats_wrong": "Please tell us whats wrong",
+  "thank_you_for_reporting_this_post_we_will_look_on_it": "Thank you for reporting this post, We will look on it"
 }

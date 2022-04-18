@@ -1,9 +1,12 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/features/post/model/post_report.dart';
 import 'package:doors/core/features/post/presentation/managers/favorite_post_bloc/favorite_post_bloc.dart';
+import 'package:doors/core/features/post/presentation/managers/post_report_bloc/bloc/report_bloc.dart';
 import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
@@ -29,15 +32,15 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
+    final _currentUser = context.read<AuthBloc>().getCurrentUser();
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
-              child: _PostImageWithBackButtonAndRate(
-                postImage: widget.post.postImage,
-                postRate: widget.post.postRate,
-                postType: widget.post.postType,
+              child: _PostImageWithBackButtonAndRateWithMenu(
+                currentPost: widget.post,
+                currentUser: _currentUser,
               ),
             ),
             SliverToBoxAdapter(
@@ -86,10 +89,12 @@ class _PostScreenState extends State<PostScreen> {
                 child: Column(
                   children: [
                     const Spacer(),
-                    if (widget.post.postType == PostType.offer)
-                      _PostUserRate(post: widget.post),
+                    if (widget.post.postType == PostType.offer &&
+                        _currentUser?.userId != widget.post.author.userId)
+                      _PostUserRate(currentPost: widget.post),
                     const SizedBox(height: 16),
-                    _FavoriteAndChatButtons(post: widget.post),
+                    _FavoriteAndChatButtons(
+                        currentPost: widget.post, currentUser: _currentUser),
                   ],
                 ),
               ),
@@ -101,15 +106,14 @@ class _PostScreenState extends State<PostScreen> {
   }
 }
 
-class _PostImageWithBackButtonAndRate extends StatelessWidget {
-  final PostType postType;
-  final ParseFile? postImage;
-  final String postRate;
-  const _PostImageWithBackButtonAndRate({
+class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
+  final Post currentPost;
+  final User? currentUser;
+
+  const _PostImageWithBackButtonAndRateWithMenu({
     Key? key,
-    required this.postType,
-    required this.postImage,
-    required this.postRate,
+    required this.currentPost,
+    required this.currentUser,
   }) : super(key: key);
 
   @override
@@ -121,13 +125,19 @@ class _PostImageWithBackButtonAndRate extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(25)),
         child: Stack(
           children: [
-            _PostImage(postImage: postImage),
+            _PostImage(postImage: currentPost.postImage),
             const _BackButton(),
-            if (postType == PostType.offer)
+            if (currentPost.postType == PostType.offer)
               _OfferedPostRate(
-                postRate: postRate,
+                postRate: currentPost.postRate,
               ),
-            const _PopupMenuButton()
+            //hide the menu button if the current user is the author of this post
+            if (currentUser != null &&
+                currentUser!.userId != currentPost.author.userId)
+              _PopupMenuButton(
+                currentPost: currentPost,
+                currentUser: currentUser,
+              )
           ],
         ),
       ),
@@ -228,7 +238,13 @@ class _OfferedPostRate extends StatelessWidget {
 }
 
 class _PopupMenuButton extends StatelessWidget {
-  const _PopupMenuButton({Key? key}) : super(key: key);
+  final Post currentPost;
+  final User? currentUser;
+  const _PopupMenuButton({
+    Key? key,
+    required this.currentPost,
+    required this.currentUser,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -241,7 +257,7 @@ class _PopupMenuButton extends StatelessWidget {
           }
           switch (value) {
             case 0:
-              _openReportDialog(context);
+              _openReportDialog(context, currentPost, currentUser);
               return;
           }
         },
@@ -257,160 +273,206 @@ class _PopupMenuButton extends StatelessWidget {
     );
   }
 
-  Future<void> _openReportDialog(BuildContext context) => showDialog<void>(
-        context: context,
+  Future<void> _openReportDialog(
+          BuildContext parentContext, Post currentPost, User? currentUser) =>
+      showDialog<void>(
+        context: parentContext,
         builder: (context) {
           var _postReportType = PostReportType.spam;
           var _reportInfo = '';
           final _formKey = GlobalKey<FormState>();
-          return StatefulBuilder(
-            builder: (BuildContext context,
-                void Function(void Function()) setState) {
-              return Dialog(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: LineWithTextOnRow(
-                            text: context.loc.report_this_post,
+          return BlocProvider<ReportBloc>(
+            create: (context) => GetIt.I.get<ReportBloc>(),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Dialog(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: LineWithTextOnRow(
+                              text: context.loc.report_this_post,
+                            ),
                           ),
-                        ),
-                        RadioListTile<PostReportType>(
-                          title: Text(
-                            context.loc.spam,
-                            style: Theme.of(context).textTheme.subtitle2,
+                          RadioListTile<PostReportType>(
+                            title: Text(
+                              context.loc.spam,
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            groupValue: _postReportType,
+                            value: PostReportType.spam,
+                            onChanged: (reportType) {
+                              setState(
+                                () {
+                                  _postReportType = reportType!;
+                                },
+                              );
+                            },
                           ),
-                          groupValue: _postReportType,
-                          value: PostReportType.spam,
-                          onChanged: (reportType) {
-                            setState(
-                              () {
-                                _postReportType = reportType!;
-                              },
-                            );
-                          },
-                        ),
-                        RadioListTile<PostReportType>(
-                          title: Text(
-                            context.loc.violence,
-                            style: Theme.of(context).textTheme.subtitle2,
+                          RadioListTile<PostReportType>(
+                            title: Text(
+                              context.loc.violence,
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            groupValue: _postReportType,
+                            value: PostReportType.violence,
+                            onChanged: (reportType) {
+                              setState(
+                                () {
+                                  _postReportType = reportType!;
+                                },
+                              );
+                            },
                           ),
-                          groupValue: _postReportType,
-                          value: PostReportType.violence,
-                          onChanged: (reportType) {
-                            setState(
-                              () {
-                                _postReportType = reportType!;
-                              },
-                            );
-                          },
-                        ),
-                        RadioListTile<PostReportType>(
-                          title: Text(
-                            context.loc.suspicious_service,
-                            style: Theme.of(context).textTheme.subtitle2,
+                          RadioListTile<PostReportType>(
+                            title: Text(
+                              context.loc.suspicious_service,
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            groupValue: _postReportType,
+                            value: PostReportType.suspiciousService,
+                            onChanged: (reportType) {
+                              setState(
+                                () {
+                                  _postReportType = reportType!;
+                                },
+                              );
+                            },
                           ),
-                          groupValue: _postReportType,
-                          value: PostReportType.suspiciousService,
-                          onChanged: (reportType) {
-                            setState(
-                              () {
-                                _postReportType = reportType!;
-                              },
-                            );
-                          },
-                        ),
-                        RadioListTile<PostReportType>(
-                          title: Text(
-                            context.loc.other,
-                            style: Theme.of(context).textTheme.subtitle2,
+                          RadioListTile<PostReportType>(
+                            title: Text(
+                              context.loc.other,
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            groupValue: _postReportType,
+                            value: PostReportType.other,
+                            onChanged: (reportType) {
+                              setState(
+                                () {
+                                  _postReportType = reportType!;
+                                },
+                              );
+                            },
                           ),
-                          groupValue: _postReportType,
-                          value: PostReportType.other,
-                          onChanged: (reportType) {
-                            setState(
-                              () {
-                                _postReportType = reportType!;
-                              },
-                            );
-                          },
-                        ),
-                        if (_postReportType == PostReportType.other)
-                          Form(
-                            key: _formKey,
-                            child: TextFormField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 2,
-                              enabled: _postReportType == PostReportType.other,
-                              decoration: InputDecoration(
-                                hintText:
-                                    context.loc.please_tell_us_whats_wrong,
+                          if (_postReportType == PostReportType.other)
+                            Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                keyboardType: TextInputType.multiline,
+                                maxLines: 2,
+                                enabled:
+                                    _postReportType == PostReportType.other,
+                                decoration: InputDecoration(
+                                  hintText:
+                                      context.loc.please_tell_us_whats_wrong,
+                                ),
+                                onSaved: (reportInfo) {
+                                  _reportInfo = reportInfo!;
+                                },
+                                validator: (reportInfo) {
+                                  if (reportInfo?.isEmpty ?? false) {
+                                    return context
+                                        .loc.please_tell_us_whats_wrong;
+                                  }
+                                  return null;
+                                },
                               ),
-                              onSaved: (reportInfo) {
-                                _reportInfo = reportInfo!;
-                              },
-                              validator: (reportInfo) {
-                                if (reportInfo?.isEmpty ?? false) {
-                                  return context.loc.please_tell_us_whats_wrong;
-                                }
-                                return null;
-                              },
                             ),
+                          const SizedBox(
+                            height: 16,
                           ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(context.loc.cancel),
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Theme(
-                              data: Theme.of(context).copyWith(
-                                elevatedButtonTheme: ElevatedButtonThemeData(
-                                  style: Theme.of(context)
-                                      .elevatedButtonTheme
-                                      .style
-                                      ?.copyWith(
-                                        minimumSize: MaterialStateProperty.all(
-                                          const Size(60, 35),
+                          const Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(context.loc.cancel),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Theme(
+                                data: Theme.of(context).copyWith(
+                                  elevatedButtonTheme: ElevatedButtonThemeData(
+                                    style: Theme.of(context)
+                                        .elevatedButtonTheme
+                                        .style
+                                        ?.copyWith(
+                                          minimumSize:
+                                              MaterialStateProperty.all(
+                                            const Size(60, 35),
+                                          ),
                                         ),
-                                      ),
+                                  ),
+                                ),
+                                child: BlocConsumer<ReportBloc, ReportState>(
+                                  listener: (context, state) {
+                                    if (state is ReportInProgress) {
+                                      return;
+                                    }
+                                    if (state is ReportFailure) {
+                                      showErrorSnackBar(
+                                          parentContext,
+                                          state.error
+                                              .getLocalMessageError(context));
+                                    } else if (state is ReportSuccuss) {
+                                      showSuccussSnackBar(
+                                        parentContext,
+                                        context.loc
+                                            .thank_you_for_reporting_this_post_we_will_look_on_it,
+                                      );
+                                    }
+                                    Navigator.of(context).pop();
+                                  },
+                                  builder: (context, state) {
+                                    return ElevatedButton(
+                                      onPressed: state is ReportInProgress
+                                          ? null
+                                          : () {
+                                              if (_formKey.currentState
+                                                      ?.validate() ??
+                                                  false ||
+                                                      _postReportType !=
+                                                          PostReportType
+                                                              .other) {
+                                                _formKey.currentState?.save();
+                                                if (currentUser == null) {
+                                                  return;
+                                                }
+                                                final _postReport = PostReport()
+                                                  ..reportType = _postReportType
+                                                  ..reportMoreInfo = _reportInfo
+                                                  ..reportAuthor = currentUser
+                                                  ..reportedPost = currentPost;
+
+                                                context.read<ReportBloc>().add(
+                                                      ReportPostReported(
+                                                        _postReport,
+                                                      ),
+                                                    );
+                                              }
+                                            },
+                                      child: Text(context.loc.report),
+                                    );
+                                  },
                                 ),
                               ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState?.validate() ??
-                                      false) {
-                                    _formKey.currentState?.save();
-                                    // TODO:  call a bloc
-                                    Navigator.of(context).pop();
-                                  }
-                                },
-                                child: Text(context.loc.report),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         },
       );
@@ -570,8 +632,8 @@ class _Description extends StatelessWidget {
 }
 
 class _PostUserRate extends StatefulWidget {
-  final Post post;
-  const _PostUserRate({Key? key, required this.post}) : super(key: key);
+  final Post currentPost;
+  const _PostUserRate({Key? key, required this.currentPost}) : super(key: key);
 
   @override
   State<_PostUserRate> createState() => _PostUserRateState();
@@ -632,9 +694,13 @@ class _PostUserRateState extends State<_PostUserRate> {
 }
 
 class _FavoriteAndChatButtons extends StatefulWidget {
-  final Post post;
-  const _FavoriteAndChatButtons({Key? key, required this.post})
-      : super(key: key);
+  final Post currentPost;
+  final User? currentUser;
+  const _FavoriteAndChatButtons({
+    Key? key,
+    required this.currentPost,
+    required this.currentUser,
+  }) : super(key: key);
 
   @override
   State<_FavoriteAndChatButtons> createState() =>
@@ -649,7 +715,7 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
       children: [
         BlocProvider<FavoritePostBloc>(
           create: (context) => GetIt.I.get<FavoritePostBloc>()
-            ..add(FavoritePostIsFavoritePost(widget.post)),
+            ..add(FavoritePostIsFavoritePost(widget.currentPost)),
           child: Builder(
             builder: (context) =>
                 BlocConsumer<FavoritePostBloc, FavoritePostState>(
@@ -687,13 +753,13 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
                             if (_isFavorite) {
                               context.read<FavoritePostBloc>().add(
                                     FavoritePostRemovePostFromFavoriteList(
-                                      widget.post,
+                                      widget.currentPost,
                                     ),
                                   );
                             } else {
                               context.read<FavoritePostBloc>().add(
                                     FavoritePostAddPostToFavoriteList(
-                                      widget.post,
+                                      widget.currentPost,
                                     ),
                                   );
                             }
@@ -713,11 +779,13 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
         Expanded(
           child: ElevatedButton.icon(
             icon: const Icon(Icons.textsms_rounded),
-            onPressed: () {
-              if (openLogInScreenToNotLoggedInUser(context)) {
-                return;
-              }
-            },
+            onPressed: widget.currentUser?.userId == widget.currentPost.author.userId
+                ? null
+                : () {
+                    if (openLogInScreenToNotLoggedInUser(context)) {
+                      return;
+                    }
+                  },
             label: Text(
               context.loc.chat,
             ),

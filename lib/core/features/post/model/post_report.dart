@@ -37,6 +37,6 @@ class PostReport extends ParseObject
   List<Object?> get props => [
         get<String?>(keyVarObjectId),
         get<User>(keyReportAuthor),
-        get<Post>(keyReportAuthor)
+        get<Post>(keyReportedPost)
       ];
 }

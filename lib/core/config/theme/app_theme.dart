@@ -24,7 +24,6 @@ ThemeData defaultLightTheme(String langCode) {
       ),
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: _redError,
         actionTextColor: _white,
         contentTextStyle: TextStyle(
           color: _white,
@@ -40,9 +39,19 @@ ThemeData defaultLightTheme(String langCode) {
             ),
           ),
           foregroundColor: MaterialStateProperty.all(_yalow),
-          backgroundColor: MaterialStateProperty.all(_black),
-          minimumSize: MaterialStateProperty.all(
-            const Size(150, 35),
+          backgroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) {
+                return _black.withOpacity(0.6);
+              }
+            return _black;
+          }),
+          minimumSize: MaterialStateProperty.resolveWith(
+            (states) {
+              if (states.contains(MaterialState.pressed)) {
+                return const Size(145, 33);
+              }
+              return const Size(150, 35);
+            },
           ),
         ),
       ),
