@@ -12,6 +12,7 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
   clone(Map<String, dynamic> map) => Post.clone(map)..fromJson(map);
 
   static const keyClassName = 'posts';
+  static const keyPostId = keyVarObjectId;
   static const keyPostTitle = 'title';
   static const keyPostDescription = 'description';
   static const keyPostLocation = 'location';
@@ -28,7 +29,7 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
   static const keyPostCreation = keyVarCreatedAt;
   static const keyAuthor = 'author';
 
-  String get postId => get<String>(keyVarObjectId) as String;
+  String get postId => get<String>(keyPostId) as String;
 
   String get postTitle => get<String>(keyPostTitle) as String;
 
@@ -63,22 +64,23 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
 
   set postType(PostType postType) => set<PostType>(keyPostType, postType);
 
-  String get postCategory => get<String>(keyPostCategory) as String;
+  String get postCategory => get<String>(keyPostCategory) ?? '';
 
   set postCategory(String postCategory) =>
       set<String>(keyPostCategory, postCategory);
 
   List<String> get postKeywords =>
-      get<List<String>>(keyPostKeywords) as List<String>;
+      List<String>.from(get(keyPostKeywords) ?? []);
 
   set postKeywords(List<String> postKeywords) =>
       setAddUnique(keyPostKeywords, postKeywords);
 
-  double? get minCost => get<double?>(keyPostMinCost);
+  double? get minCost =>
+      double.tryParse(get<num>(keyPostMinCost).toString());
 
   set minCost(double? minCost) => set<double?>(keyPostMinCost, minCost);
 
-  double? get maxCost => get<double?>(keyPostMaxCost);
+  double? get maxCost => double.tryParse(get<num?>(keyPostMaxCost).toString());
 
   set maxCost(double? maxCost) => set<double?>(keyPostMaxCost, maxCost);
 
@@ -88,8 +90,10 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
       set<String?>(keyPostCostCurrency, postCostCurrency);
 
   String get postRate {
-    final _postRateCount = get<double>(_keyPostRateCount) as double;
-    final _postRateTotal = get<double>(_keyPostRateTotal) as double;
+    final _postRateCount =
+        double.parse(get<num>(_keyPostRateCount).toString());
+    final _postRateTotal =
+        double.parse(get<num>(_keyPostRateTotal).toString());
     if (_postRateTotal == 0.0 || _postRateCount == 0.0) {
       return '0.0';
     }
@@ -99,6 +103,7 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
   // TODO add rate realation between post and rate class 1:N
 
   User get author => get<User>(keyAuthor) as User;
+  set author(User author) => set<User>(keyAuthor, author);
 
   @override
   List<Object?> get props => [get<String?>(keyVarObjectId), author];

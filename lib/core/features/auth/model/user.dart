@@ -1,4 +1,5 @@
 import 'package:doors/core/enums/enums.dart';
+import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/subscription/model/payment.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -15,6 +16,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyUserLocation = 'userLocation';
   static const keyUserSubscription = 'userSubscription';
   static const keyIsSubscribed = 'isSubscribed';
+  static const keyFavoritePosts = 'favoritePosts';
   static const keyEmail = ParseUser.keyEmailAddress;
 
   User(
@@ -97,7 +99,23 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   bool get isAnonymousAccount =>
       emailAddress == null || username != emailAddress;
 
+  void addToFavoriteList(Post post) => addRelation(User.keyFavoritePosts, [
+        ParseObject(Post.keyClassName)
+          ..set(
+            'objectId',
+            post.objectId,
+          )
+      ]);
+  void removeFromFavoriteList(Post favoritePost) =>
+      removeRelation(User.keyFavoritePosts, [
+        ParseObject(Post.keyClassName)
+          ..set(
+            'objectId',
+            favoritePost.objectId,
+          )
+      ]);
+
   @override
   // the user object will equal other user object if the username & userId are the same
-  List<Object?> get props => [ get<String?>(keyVarObjectId),username];
+  List<Object?> get props => [get<String?>(keyVarObjectId), username];
 }

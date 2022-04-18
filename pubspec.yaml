@@ -53,10 +53,6 @@ dependencies:
   # backend server
   parse_server_sdk_flutter: ^3.1.0
 
-  # maps
-  maps_toolkit: ^2.0.0
-  flutter_google_places: ^0.3.0
-
   # location
   geolocator: ^8.2.0
 
@@ -78,6 +74,7 @@ dependencies:
   flutter_zoom_drawer: ^3.0.0
   syncfusion_flutter_sliders: ^19.4.52
   auto_size_text: ^3.0.0
+  flutter_rating_bar: ^4.0.0
  
 
   # The following adds the Cupertino Icons font to your application.

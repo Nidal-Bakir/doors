@@ -1,19 +1,25 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class KeywordsRow extends StatelessWidget {
   final List<String> keywords;
+  final bool withColors;
   final int? limit;
+  final _random = Random();
 
-  const KeywordsRow({
+  KeywordsRow({
     Key? key,
     required this.keywords,
     this.limit,
+    this.withColors = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 8,
+      runSpacing: 8,
       children: keywords
           .map(
             (e) => Material(
@@ -32,7 +38,10 @@ class KeywordsRow extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border(
                     left: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: withColors
+                          ? Colors.primaries[
+                              _random.nextInt(Colors.primaries.length)]
+                          : Theme.of(context).colorScheme.primary,
                       width: 5,
                     ),
                   ),

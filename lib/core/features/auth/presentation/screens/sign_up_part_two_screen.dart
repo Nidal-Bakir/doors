@@ -17,7 +17,6 @@ import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/restart_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -162,7 +161,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
   void _onSignUpPressed(BuildContext context) async {
     widget.user.bio = _bio;
     widget.user.profileImage = _profileImage;
-    if (_selectedPlan != null) {
+    if (_selectedPlan != null||widget.user.accountType==AccountType.user) {
       context.read<AuthBloc>().add(AuthSignUpRequested(widget.user));
     } else {
       showErrorSnackBar(context, context.loc.please_select_subscription_plan);

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:doors/core/enums/enums.dart';
+import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
@@ -39,23 +40,23 @@ class _RecentPostsListState extends State<RecentPostsList> {
                     context, state.error.getLocalMessageError(context));
               }
             },
-            child: RefreshIndicator(
-              onRefresh: () {
-                _refreshIndicatorCompleter = Completer<void>();
-                context
-                    .read<RecentPostsBloc>()
-                    .add(const RecentPostsRefreshed());
-                return _refreshIndicatorCompleter.future;
-              },
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (notification) => notificationListener(
-                    notification: notification,
-                    onNotify: () {
-                      final _recentPostsBloc = context.read<RecentPostsBloc>();
-                      if (_recentPostsBloc.state is RecentPostsLoadSuccess) {
-                        _recentPostsBloc.add(const RecentPostsLoaded());
-                      }
-                    }),
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (notification) => notificationListener(
+                  notification: notification,
+                  onNotify: () {
+                    final _recentPostsBloc = context.read<RecentPostsBloc>();
+                    if (_recentPostsBloc.state is RecentPostsLoadSuccess) {
+                      _recentPostsBloc.add(const RecentPostsLoaded());
+                    }
+                  }),
+              child: RefreshIndicator(
+                onRefresh: () {
+                  _refreshIndicatorCompleter = Completer<void>();
+                  context
+                      .read<RecentPostsBloc>()
+                      .add(const RecentPostsRefreshed());
+                  return _refreshIndicatorCompleter.future;
+                },
                 child: CustomScrollView(
                   slivers: [
                     // do not remove the empty SliverToBoxAdapter will case view port error
@@ -78,9 +79,26 @@ class _RecentPostsListState extends State<RecentPostsList> {
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
+                              final _post = _recentPostsLoadSuccessState
+                                  .recentPosts[index];
                               return PostCardItem(
-                                post: _recentPostsLoadSuccessState
-                                    .recentPosts[index],
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                    PostScreen.routeName,
+                                    arguments: _post,
+                                  );
+                                },
+                                author: _post.author,
+                                maxCost: _post.maxCost,
+                                minCost: _post.maxCost,
+                                postCostCurrency: _post.postCostCurrency,
+                                postDescription: _post.postDescription,
+                                postHumanReadableLocation:
+                                    _post.postHumanReadableLocation,
+                                postImage: _post.postImage,
+                                postKeywords: _post.postKeywords,
+                                postLocation: _post.postLocation,
+                                postTitle: _post.postTitle,
                               );
                             },
                             childCount:

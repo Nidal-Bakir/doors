@@ -52,7 +52,7 @@ class SplashScreen extends StatelessWidget {
                 return const SizedBox.shrink();
               },
               listener: (context, state) {
-                if (state is AuthCurrentUpdatedUserLoadSuccess) {
+                if (state is AuthCurrentUpdatedUserLoadSuccess ) {
                   Navigator.of(context)
                       .pushReplacementNamed(LogInScreen.routeName);
                 }

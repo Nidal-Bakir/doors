@@ -45,11 +45,10 @@ class RecentPostsRemoteDataSourceImpl extends RecentPostsRemoteDataSource {
 
 Future<UnmodifiableListView<Post>> _loadPosts(
     int amountToSkip, PostType postType) async {
-  return UnmodifiableListView([FakePost(), FakePost(), FakePost(), FakePost()]);
   QueryBuilder queryBuilder = QueryBuilder.name(Post.keyClassName);
   queryBuilder.whereEqualTo(Post.keyPostType, postType.name);
   queryBuilder.orderByDescending(Post.keyPostCreation);
-  queryBuilder.includeObject([User.keyUserClassName]);
+  queryBuilder.includeObject([Post.keyAuthor]);
   queryBuilder.excludeKeys([
     User.keyAccountStatues,
     User.keyIsSubscribed,
@@ -87,7 +86,7 @@ Future<UnmodifiableListView<Post>> _loadPosts(
 }
 
 class FakePost extends Fake implements Post {
-  final url = 'https://dummyimage.com/16:9x1080';
+  final url = 'https://dummyimage.com/600x400/89f50e/5d62a6.jpg';
 
   @override
   String get postDescription =>
@@ -120,7 +119,7 @@ class FakePost extends Fake implements Post {
   String get postTitle => 'the title of the post';
   @override
   // TODO: implement postType
-  PostType get postType => PostType.need;
+  PostType get postType => PostType.offer;
   @override
   // TODO: implement minCost
   double? get minCost => 1.1;

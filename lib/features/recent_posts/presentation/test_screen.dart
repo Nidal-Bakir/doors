@@ -18,7 +18,7 @@ class TestScree extends StatelessWidget {
           )
         ],
       ),
-      body: SafeArea(child: const RecentPostsList(postType: PostType.need)),
+      body: SafeArea(child: const RecentPostsList(postType: PostType.offer)),
     );
   }
 }

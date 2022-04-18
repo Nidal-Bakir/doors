@@ -1,7 +1,11 @@
+import 'dart:developer';
 import 'dart:io' show Platform;
 
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
+import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 String extractLangCodeFromPlatformService() {
@@ -26,6 +30,24 @@ bool notificationListener(
     onNotify();
   }
   return true;
+}
+
+/// Opens log-in screen on top of the Caller screen, to not logged-in user.
+///
+/// Use this to force the user to log-in in case the user want to do operation
+/// only the logged-in users can do.
+///
+/// Returns true to indicate that the user should log-in and the required operation
+/// should be terminated.
+///
+/// other wise returns false, it's safe to continue with this operation.
+bool openLogInScreenToNotLoggedInUser(BuildContext context) {
+  final _currentUser = context.read<AuthBloc>().getCurrentUser();
+  if (_currentUser == null || _currentUser.isAnonymousAccount) {
+    Navigator.of(context).pushNamed(LogInScreen.routeName);
+    return true;
+  }
+  return false;
 }
 
 void showErrorSnackBar(BuildContext context, String content) {

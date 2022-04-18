@@ -12,7 +12,6 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SecurityExceptionFlow _securityErrorFlow;
-
   final AuthRepository _authRepository;
 
   AuthBloc(this._authRepository, this._securityErrorFlow)
@@ -38,6 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 await _onAuthCurrentAccountSuspended(event, emit));
       },
     );
+
     _securityErrorFlow.securityErrorFlowStream().listen((error) async {
       if (error is ParseInvalidSessionToken || error is ParseSessionMissing) {
         add(const AuthLogoutRequested());
@@ -47,13 +47,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
   }
 
+  User? _currentPopulatedUser;
+
+  /// Returns the current populated user by auth bloc
+  User? getCurrentUser() => _currentPopulatedUser;
+
   Future<void> _onAuthLoginRequested(
       AuthLoginRequested authLoginRequested, Emitter<AuthState> emit) async {
     emit(const AuthInProgress());
     final loggedUser = await _authRepository.login(authLoginRequested.user);
 
-    loggedUser.fold((error) => emit(AuthLoadFailure(error)),
-        (user) => emit(AuthLoggedInSuccess(user)));
+    loggedUser.fold((error) => emit(AuthLoadFailure(error)), (user) {
+      _currentPopulatedUser = user;
+      emit(AuthLoggedInSuccess(user));
+    });
   }
 
   Future<void> _onAuthSignUpRequested(
@@ -61,8 +68,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
     final signUpUser = await _authRepository.signUp(authSignUpRequested.user);
 
-    signUpUser.fold((error) => emit(AuthLoadFailure(error)),
-        (user) => emit(AuthSignUpSuccess(user)));
+    signUpUser.fold((error) => emit(AuthLoadFailure(error)), (user) {
+      _currentPopulatedUser = user;
+      emit(AuthSignUpSuccess(user));
+    });
   }
 
   Future<void> _onAuthLoginAnonymouslyRequested(
@@ -71,8 +80,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
 
     final anonymousUser = await _authRepository.loginAnonymously();
-    anonymousUser.fold((error) => emit(AuthLoadFailure(error)),
-        (user) => emit(AuthCurrentUserLoadSuccess(user)));
+    anonymousUser.fold((error) => emit(AuthLoadFailure(error)), (user) {
+      _currentPopulatedUser = user;
+      emit(AuthCurrentUserLoadSuccess(user));
+    });
   }
 
   Future<void> _onAuthGetUpdatedUserDataRequested(
@@ -81,8 +92,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
 
     final updatedUser = await _authRepository.getCurrentUpdatedUserFromServer();
-    updatedUser.fold((error) => emit(AuthLoadFailure(error)),
-        (user) => emit(AuthCurrentUpdatedUserLoadSuccess(user)));
+    updatedUser.fold((error) => emit(AuthLoadFailure(error)), (user) {
+      _currentPopulatedUser = user;
+      emit(AuthCurrentUpdatedUserLoadSuccess(user));
+    });
   }
 
   Future<void> _onAuthLogoutRequestedRequested(
@@ -90,8 +103,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthInProgress());
 
     final logoutState = await _authRepository.logout();
-    logoutState.fold((error) => emit(AuthLoadFailure(error)),
-        (_) => emit(const AuthLogoutSuccess()));
+    logoutState.fold((error) => emit(AuthLoadFailure(error)), (_) {
+      _currentPopulatedUser = null;
+      emit(const AuthLogoutSuccess());
+    });
   }
 
   Future<void> _onAuthCurrentUserLoaded(
@@ -100,13 +115,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final currentUser = await _authRepository.getCurrentLoggedUser();
     if (currentUser != null) {
+      _currentPopulatedUser = currentUser;
       emit(AuthCurrentUserLoadSuccess(currentUser));
-
-      // get the updated user date form the server
-      add(const AuthGetUpdatedUserDataRequested());
     } else {
       add(const AuthLoginAnonymouslyRequested());
     }
+    // get the updated user date form the server
+    add(const AuthGetUpdatedUserDataRequested());
   }
 
   Future<void> _onAuthResetPasswordRequested(
@@ -121,6 +136,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onAuthCurrentAccountSuspended(
       AuthCurrentAccountSuspended event, Emitter<AuthState> emit) async {
+    _currentPopulatedUser = null;
     // if it is a logged user then we need to log him out
     if (await _isItALoggedUserInTheApp()) {
       add(const AuthLogoutRequested());

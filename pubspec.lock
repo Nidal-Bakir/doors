@@ -342,13 +342,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  flutter_google_places:
-    dependency: "direct main"
-    description:
-      name: flutter_google_places
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -368,6 +361,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  flutter_rating_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_rating_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -462,20 +462,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
-  google_api_headers:
-    dependency: transitive
-    description:
-      name: google_api_headers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.1"
-  google_maps_webservice:
-    dependency: transitive
-    description:
-      name: google_maps_webservice
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.20-nullsafety.5"
   graphs:
     dependency: transitive
     description:
@@ -637,13 +623,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  maps_toolkit:
-    dependency: "direct main"
-    description:
-      name: maps_toolkit
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   matcher:
     dependency: transitive
     description:
@@ -882,13 +861,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.26.0"
   sembast:
     dependency: transitive
     description:

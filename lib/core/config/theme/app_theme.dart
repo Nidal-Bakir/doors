@@ -74,7 +74,25 @@ ThemeData defaultLightTheme(String langCode) {
           ),
         ),
       ),
-      textTheme: textTheme());
+      textTheme: textTheme(),
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateColor.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.selected)) {
+              return _yalow;
+            }
+            return _black;
+          },
+        ),
+      ),
+      dialogTheme: const DialogTheme(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: _black, width: 0.35),
+          borderRadius: BorderRadius.all(
+            Radius.circular(15.0),
+          ),
+        ),
+      ));
 }
 
 TextTheme textTheme() {

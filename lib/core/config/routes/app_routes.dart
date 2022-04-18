@@ -13,7 +13,14 @@ import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
-   return MaterialPageRoute(builder: (_) => const TestScree());
+  if (settings.name == PostScreen.routeName) {
+    return MaterialPageRoute(
+        builder: (_) => PostScreen(
+              post: settings.arguments as Post,
+            ));
+  }
+  return MaterialPageRoute(builder: (_) => const TestScree());
+  
   switch (settings.name) {
     case SuspendedScreen.routeName:
       return MaterialPageRoute(builder: (_) => const SuspendedScreen());
