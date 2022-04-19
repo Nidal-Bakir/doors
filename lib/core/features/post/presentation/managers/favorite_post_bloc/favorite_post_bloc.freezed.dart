@@ -584,7 +584,7 @@ class _$FavoritePostStateTearOff {
     );
   }
 
-  FavoritePostLoadFailure loadFailure(ServerException exception) {
+  FavoritePostLoadFailure loadFailure(ExceptionBase exception) {
     return FavoritePostLoadFailure(
       exception,
     );
@@ -600,21 +600,21 @@ mixin _$FavoritePostState {
   TResult when<TResult extends Object?>({
     required TResult Function() inProgress,
     required TResult Function(bool isFavorite) loadSuccess,
-    required TResult Function(ServerException exception) loadFailure,
+    required TResult Function(ExceptionBase exception) loadFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
     TResult Function(bool isFavorite)? loadSuccess,
-    TResult Function(ServerException exception)? loadFailure,
+    TResult Function(ExceptionBase exception)? loadFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
     TResult Function(bool isFavorite)? loadSuccess,
-    TResult Function(ServerException exception)? loadFailure,
+    TResult Function(ExceptionBase exception)? loadFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -702,7 +702,7 @@ class _$FavoritePostInProgress implements FavoritePostInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function() inProgress,
     required TResult Function(bool isFavorite) loadSuccess,
-    required TResult Function(ServerException exception) loadFailure,
+    required TResult Function(ExceptionBase exception) loadFailure,
   }) {
     return inProgress();
   }
@@ -712,7 +712,7 @@ class _$FavoritePostInProgress implements FavoritePostInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
     TResult Function(bool isFavorite)? loadSuccess,
-    TResult Function(ServerException exception)? loadFailure,
+    TResult Function(ExceptionBase exception)? loadFailure,
   }) {
     return inProgress?.call();
   }
@@ -722,7 +722,7 @@ class _$FavoritePostInProgress implements FavoritePostInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
     TResult Function(bool isFavorite)? loadSuccess,
-    TResult Function(ServerException exception)? loadFailure,
+    TResult Function(ExceptionBase exception)? loadFailure,
     required TResult orElse(),
   }) {
     if (inProgress != null) {
@@ -839,7 +839,7 @@ class _$FavoritePostLoadSuccess implements FavoritePostLoadSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() inProgress,
     required TResult Function(bool isFavorite) loadSuccess,
-    required TResult Function(ServerException exception) loadFailure,
+    required TResult Function(ExceptionBase exception) loadFailure,
   }) {
     return loadSuccess(isFavorite);
   }
@@ -849,7 +849,7 @@ class _$FavoritePostLoadSuccess implements FavoritePostLoadSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
     TResult Function(bool isFavorite)? loadSuccess,
-    TResult Function(ServerException exception)? loadFailure,
+    TResult Function(ExceptionBase exception)? loadFailure,
   }) {
     return loadSuccess?.call(isFavorite);
   }
@@ -859,7 +859,7 @@ class _$FavoritePostLoadSuccess implements FavoritePostLoadSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
     TResult Function(bool isFavorite)? loadSuccess,
-    TResult Function(ServerException exception)? loadFailure,
+    TResult Function(ExceptionBase exception)? loadFailure,
     required TResult orElse(),
   }) {
     if (loadSuccess != null) {
@@ -918,7 +918,7 @@ abstract class $FavoritePostLoadFailureCopyWith<$Res> {
   factory $FavoritePostLoadFailureCopyWith(FavoritePostLoadFailure value,
           $Res Function(FavoritePostLoadFailure) then) =
       _$FavoritePostLoadFailureCopyWithImpl<$Res>;
-  $Res call({ServerException exception});
+  $Res call({ExceptionBase exception});
 }
 
 /// @nodoc
@@ -940,7 +940,7 @@ class _$FavoritePostLoadFailureCopyWithImpl<$Res>
       exception == freezed
           ? _value.exception
           : exception // ignore: cast_nullable_to_non_nullable
-              as ServerException,
+              as ExceptionBase,
     ));
   }
 }
@@ -951,7 +951,7 @@ class _$FavoritePostLoadFailure implements FavoritePostLoadFailure {
   const _$FavoritePostLoadFailure(this.exception);
 
   @override
-  final ServerException exception;
+  final ExceptionBase exception;
 
   @override
   String toString() {
@@ -981,7 +981,7 @@ class _$FavoritePostLoadFailure implements FavoritePostLoadFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() inProgress,
     required TResult Function(bool isFavorite) loadSuccess,
-    required TResult Function(ServerException exception) loadFailure,
+    required TResult Function(ExceptionBase exception) loadFailure,
   }) {
     return loadFailure(exception);
   }
@@ -991,7 +991,7 @@ class _$FavoritePostLoadFailure implements FavoritePostLoadFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
     TResult Function(bool isFavorite)? loadSuccess,
-    TResult Function(ServerException exception)? loadFailure,
+    TResult Function(ExceptionBase exception)? loadFailure,
   }) {
     return loadFailure?.call(exception);
   }
@@ -1001,7 +1001,7 @@ class _$FavoritePostLoadFailure implements FavoritePostLoadFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
     TResult Function(bool isFavorite)? loadSuccess,
-    TResult Function(ServerException exception)? loadFailure,
+    TResult Function(ExceptionBase exception)? loadFailure,
     required TResult orElse(),
   }) {
     if (loadFailure != null) {
@@ -1046,10 +1046,10 @@ class _$FavoritePostLoadFailure implements FavoritePostLoadFailure {
 }
 
 abstract class FavoritePostLoadFailure implements FavoritePostState {
-  const factory FavoritePostLoadFailure(ServerException exception) =
+  const factory FavoritePostLoadFailure(ExceptionBase exception) =
       _$FavoritePostLoadFailure;
 
-  ServerException get exception;
+  ExceptionBase get exception;
   @JsonKey(ignore: true)
   $FavoritePostLoadFailureCopyWith<FavoritePostLoadFailure> get copyWith =>
       throw _privateConstructorUsedError;

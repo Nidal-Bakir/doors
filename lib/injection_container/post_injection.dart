@@ -2,7 +2,8 @@ import 'package:doors/core/features/post/data/favorite_post_remote_data_source.d
 import 'package:doors/core/features/post/data/post_report_remote_data_source.dart';
 import 'package:doors/core/features/post/data/user_rate_remote_data_source.dart';
 import 'package:doors/core/features/post/presentation/managers/favorite_post_bloc/favorite_post_bloc.dart';
-import 'package:doors/core/features/post/presentation/managers/post_report_bloc/bloc/report_bloc.dart';
+import 'package:doors/core/features/post/presentation/managers/post_report_bloc/report_bloc.dart';
+import 'package:doors/core/features/post/presentation/managers/user_rate_bloc/user_rate_bloc.dart';
 import 'package:doors/core/features/post/repository/favorite_repository.dart';
 import 'package:doors/core/features/post/repository/post_report_repository.dart';
 import 'package:doors/core/features/post/repository/user_rate_repository.dart';
@@ -12,7 +13,10 @@ final di = GetIt.I;
 void postInit() {
   // blocs
   di.registerFactory<FavoritePostBloc>(() => FavoritePostBloc(di.get()));
+  
   di.registerFactory<ReportBloc>(() => ReportBloc(di.get()));
+
+  di.registerFactory<UserRateBloc>(() => UserRateBloc(di.get()));
 
   // repositories
   di.registerLazySingleton<FavoriteRepository>(

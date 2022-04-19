@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/features/post/model/post_rate.dart';
+import 'package:doors/core/features/post/model/post_report.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';
 import 'package:doors/core/features/subscription/model/payment.dart';
 import 'package:doors/core/features/post/model/post.dart';
@@ -20,6 +22,8 @@ Future<void> parseInit() async {
       UserSubscription.keyClassName: () => UserSubscription(),
       OfferedSubscriptionPlan.keyClassName: () => OfferedSubscriptionPlan(),
       Post.keyClassName: () => Post(),
+      PostReport.keyClassName: () => PostReport(),
+      PostRate.keyClassName: () => PostRate(),
     },
     //TODO: remove the debug mode
     debug: true,

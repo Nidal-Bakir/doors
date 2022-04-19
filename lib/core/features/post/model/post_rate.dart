@@ -7,7 +7,9 @@ class PostRate extends ParseObject
     with EquatableMixin
     implements ParseCloneable {
   PostRate() : super.clone(keyClassName);
+
   PostRate.clone(Map map) : this();
+
   @override
   clone(Map<String, dynamic> map) => PostRate.clone(map)..fromJson(map);
 
@@ -19,20 +21,33 @@ class PostRate extends ParseObject
   static const keyEditedDate = keyVarUpdatedAt;
   static const keyRateId = keyVarObjectId;
 
-  double get rate => get<double>(keyRate) as double;
+  double get rate => double.parse(get<num>(keyRate).toString());
+
   set rate(double rate) => set<double>(keyRate, rate);
 
   Post get post => get<Post>(keyPost) as Post;
+
   set post(Post post) => set<Post>(keyPost, post);
 
   User get rateAuthor => get<User>(keyRateAuthor) as User;
+
   set rateAuthor(User post) => set<User>(keyRateAuthor, post);
 
   DateTime get rateCreationDate => get<DateTime>(keyCreationDate) as DateTime;
 
   DateTime get rateUpdatedDate => get<DateTime>(keyEditedDate) as DateTime;
 
+  PostRate getShallowCopy() {
+    return PostRate()
+      ..objectId = objectId
+      ..rate = rate
+      ..post = post
+      ..rateAuthor = rateAuthor
+      ..set(keyCreationDate, get<DateTime>(keyCreationDate))
+      ..set(keyEditedDate, get<DateTime>(keyEditedDate));
+  }
+
   @override
   List<Object?> get props =>
-      [get<String?>(keyVarObjectId), rateAuthor, post];
+      [get<String?>(keyVarObjectId), rate, rateAuthor, post];
 }

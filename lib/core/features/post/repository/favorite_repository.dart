@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/post/data/favorite_post_remote_data_source.dart';
 import 'package:doors/core/features/post/model/post.dart';
@@ -10,26 +11,33 @@ class FavoriteRepository {
 
   /// Add a [post] to the favorite posts list for the current user.
   ///
-  /// Returns either [ServerException] or void to indicate that the adding operation was successful.
-  Future<Either<ServerException, void>> addPostToUserFavoriteList(
-      Post post) async {
+  /// Returns either [void] to indicate that the adding operation was successful
+  /// OR [ExceptionBase] :
+  /// * [ServerException] in case of connection error or parse error.
+  /// * [AnonymousException] if the user is Anonymous user
+  Future<Either<ExceptionBase, void>> addPostToUserFavoriteList(
+    Post post,
+  ) async {
     try {
       return Right(
           await _favoritePostRemoteDataSource.addPostToUserFavoriteList(post));
-    } on ServerException catch (e) {
+    } on ExceptionBase catch (e) {
       return Left(e);
     }
   }
 
   /// Remove a [favoritePost] from the favorite posts list for the current user.
-  ///
-  /// Returns either [ServerException] or void to indicate that the remove operation was successful.
-  Future<Either<ServerException, void>> removePostFromUserFavoriteList(
+  /// 
+  /// Returns either [void] to indicate that the remove operation was successful
+  /// OR [ExceptionBase] :
+  /// * [ServerException] in case of connection error or parse error.
+  /// * [AnonymousException] if the user is Anonymous user
+  Future<Either<ExceptionBase, void>> removePostFromUserFavoriteList(
       Post favoritePost) async {
     try {
       return Right(await _favoritePostRemoteDataSource
           .removePostFromUserFavoriteList(favoritePost));
-    } on ServerException catch (e) {
+    } on ExceptionBase catch (e) {
       return Left(e);
     }
   }
@@ -38,10 +46,10 @@ class FavoriteRepository {
   ///
   /// Returns either [ServerException] or true if the post was added to user favorite list,
   /// false otherwise.
-  Future<Either<ServerException, bool>> isFavoritePost(Post post) async {
+  Future<Either<ExceptionBase, bool>> isFavoritePost(Post post) async {
     try {
       return Right(await _favoritePostRemoteDataSource.isFavoritePost(post));
-    } on ServerException catch (e) {
+    } on ExceptionBase catch (e) {
       return Left(e);
     }
   }

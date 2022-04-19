@@ -106,5 +106,5 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
   set author(User author) => set<User>(keyAuthor, author);
 
   @override
-  List<Object?> get props => [get<String?>(keyVarObjectId), author];
+  List<Object?> get props => [get<String?>(keyVarObjectId), get<User>(keyAuthor)];
 }

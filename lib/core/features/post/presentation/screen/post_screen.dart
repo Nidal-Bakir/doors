@@ -1,18 +1,23 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/features/post/model/post_rate.dart';
 import 'package:doors/core/features/post/model/post_report.dart';
 import 'package:doors/core/features/post/presentation/managers/favorite_post_bloc/favorite_post_bloc.dart';
-import 'package:doors/core/features/post/presentation/managers/post_report_bloc/bloc/report_bloc.dart';
+import 'package:doors/core/features/post/presentation/managers/post_report_bloc/report_bloc.dart';
+import 'package:doors/core/features/post/presentation/managers/user_rate_bloc/user_rate_bloc.dart';
 import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:doors/core/features/post/presentation/widgets/no_image_provided.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_location.dart';
+import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -89,12 +94,18 @@ class _PostScreenState extends State<PostScreen> {
                 child: Column(
                   children: [
                     const Spacer(),
+                    //hide the rate bar if the current user is the author of this post
                     if (widget.post.postType == PostType.offer &&
                         _currentUser?.userId != widget.post.author.userId)
-                      _PostUserRate(currentPost: widget.post),
+                    _PostUserRate(
+                      currentPost: widget.post,
+                      currentUser: _currentUser!,
+                    ),
                     const SizedBox(height: 16),
                     _FavoriteAndChatButtons(
-                        currentPost: widget.post, currentUser: _currentUser),
+                      currentPost: widget.post,
+                      currentUser: _currentUser,
+                    ),
                   ],
                 ),
               ),
@@ -631,64 +642,132 @@ class _Description extends StatelessWidget {
   }
 }
 
-class _PostUserRate extends StatefulWidget {
+class _PostUserRate extends StatelessWidget {
   final Post currentPost;
-  const _PostUserRate({Key? key, required this.currentPost}) : super(key: key);
+  final User currentUser;
+  const _PostUserRate({
+    Key? key,
+    required this.currentPost,
+    required this.currentUser,
+  }) : super(key: key);
 
-  @override
-  State<_PostUserRate> createState() => _PostUserRateState();
-}
-
-class _PostUserRateState extends State<_PostUserRate> {
-  var _rate = 0.0;
   @override
   Widget build(BuildContext context) {
     final _colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        RatingBar(
-          glowColor: _colorScheme.primary,
-          glowRadius: 1,
-          maxRating: 5,
-          initialRating: _rate,
-          minRating: 0,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          itemPadding: EdgeInsets.zero,
-          onRatingUpdate: (rating) {
-            if (openLogInScreenToNotLoggedInUser(context)) {
-              return;
-            }
-            setState(() {
-              _rate = rating;
-            });
-            print(rating);
-          },
-          ratingWidget: RatingWidget(
-            empty: Icon(
-              Icons.star_border_rounded,
-              color: _colorScheme.secondary,
-            ),
-            half: Icon(
-              Icons.star_half_rounded,
-              color: _colorScheme.primary,
-            ),
-            full: Icon(
-              Icons.star_rounded,
-              color: _colorScheme.primary,
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 4,
-        ),
-        Text(
-          _rate.toString(),
-          style: Theme.of(context).textTheme.headline6,
-        )
-      ],
+    PostRate _rate = PostRate()
+      ..rate = 0.0
+      ..post = currentPost
+      ..rateAuthor = currentUser;
+    PostRate _oldRate = PostRate()
+      ..rate = 0.0
+      ..post = currentPost
+      ..rateAuthor = currentUser;
+    return BlocProvider<UserRateBloc>(
+      create: (context) =>
+          GetIt.I.get<UserRateBloc>()..add(UserRateLoaded(currentPost)),
+      child: Builder(
+        builder: (context) {
+          return BlocConsumer<UserRateBloc, UserRateState>(
+            listener: (context, state) {
+              if (state is UserRateLoadFailure) {
+                showErrorSnackBar(
+                    context, state.error.getLocalMessageError(context));
+              }
+            },
+            builder: (context, state) {
+              if (state is UserRateLoadSuccess) {
+                _rate = state.postRate?.getShallowCopy() ??
+                    (PostRate()
+                      ..rate = 0.0
+                      ..post = currentPost
+                      ..rateAuthor = currentUser);
+
+                _oldRate = state.postRate?.getShallowCopy() ??
+                    (PostRate()
+                      ..rate = 0.0
+                      ..post = currentPost
+                      ..rateAuthor = currentUser);
+              } else if (state is UserRateLoadFailure) {
+                _rate.rate = _oldRate.rate;
+              } else {}
+
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      IgnorePointer(
+                        ignoring: state is UserRateInProgress,
+                        child: RatingBar(
+                          glowColor: _colorScheme.primary,
+                          glowRadius: 1,
+                          maxRating: 5,
+                          initialRating: _rate.rate,
+                          minRating: 0,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.zero,
+                          onRatingUpdate: (rating) {
+                            if (openLogInScreenToNotLoggedInUser(context)) {
+                              return;
+                            }
+                            setState(() {
+                              _rate.rate = rating;
+                            });
+
+                            if (_rate.rate != _oldRate.rate) {
+                              context
+                                  .read<UserRateBloc>()
+                                  .add(UserRatePosted(_rate));
+                            }
+                          },
+                          ratingWidget: RatingWidget(
+                            empty: Icon(
+                              Icons.star_border_rounded,
+                              color: _colorScheme.secondary,
+                            ),
+                            half: Icon(
+                              Icons.star_half_rounded,
+                              color: _colorScheme.primary,
+                            ),
+                            full: Icon(
+                              Icons.star_rounded,
+                              color: _colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      AnimatedCrossFade(
+                        firstChild: const SizedBox.square(
+                          dimension: 25,
+                          child: Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: LoadingIndicator(),
+                          ),
+                        ),
+                        secondChild: Text(
+                          _rate.rate.toString(),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        crossFadeState: state is UserRateInProgress
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
+                        duration: const Duration(
+                          milliseconds: 300,
+                        ),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -779,13 +858,14 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
         Expanded(
           child: ElevatedButton.icon(
             icon: const Icon(Icons.textsms_rounded),
-            onPressed: widget.currentUser?.userId == widget.currentPost.author.userId
-                ? null
-                : () {
-                    if (openLogInScreenToNotLoggedInUser(context)) {
-                      return;
-                    }
-                  },
+            onPressed:
+                widget.currentUser?.userId == widget.currentPost.author.userId
+                    ? null
+                    : () {
+                        if (openLogInScreenToNotLoggedInUser(context)) {
+                          return;
+                        }
+                      },
             label: Text(
               context.loc.chat,
             ),
