@@ -94,7 +94,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   ParseRelation<UserSubscription> get userSubscriptions =>
       getRelation<UserSubscription>(keyUserSubscription);
 
-  bool? get isSubscribed => get<bool?>(keyIsSubscribed);
+  bool get isSubscribed => get<bool>(keyIsSubscribed) as bool;
 
   bool get isAnonymousAccount =>
       emailAddress == null || username != emailAddress;

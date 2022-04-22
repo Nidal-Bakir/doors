@@ -113,34 +113,37 @@ class _RecentPostsListState extends State<RecentPostsList> {
                         return SliverFillRemaining(
                           fillOverscroll: false,
                           hasScrollBody: false,
-                          child: state.when(
-                            inProgress: () => const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16.0),
-                              child: Center(
-                                child: LoadingIndicator(),
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: state.when(
+                              inProgress: () => const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.0),
+                                child: Center(
+                                  child: LoadingIndicator(),
+                                ),
                               ),
+                              loadSuccess: (_) => const SizedBox.shrink(),
+                              loadFailure: (error, cachedPosts) {
+                                if (cachedPosts.isEmpty) {
+                                  return NoInternetConnection(
+                                    onRetry: () {
+                                      context
+                                          .read<RecentPostsBloc>()
+                                          .add(const RecentPostsLoaded());
+                                    },
+                                    fullScreen: true,
+                                  );
+                                } else {
+                                  return NoInternetConnection(
+                                    onRetry: () {
+                                      context
+                                          .read<RecentPostsBloc>()
+                                          .add(const RecentPostsLoaded());
+                                    },
+                                  );
+                                }
+                              },
                             ),
-                            loadSuccess: (_) => const SizedBox.shrink(),
-                            loadFailure: (error, cachedPosts) {
-                              if (cachedPosts.isEmpty) {
-                                return NoInternetConnection(
-                                  onRetry: () {
-                                    context
-                                        .read<RecentPostsBloc>()
-                                        .add(const RecentPostsLoaded());
-                                  },
-                                  fullScreen: true,
-                                );
-                              } else {
-                                return NoInternetConnection(
-                                  onRetry: () {
-                                    context
-                                        .read<RecentPostsBloc>()
-                                        .add(const RecentPostsLoaded());
-                                  },
-                                );
-                              }
-                            },
                           ),
                         );
                       },

@@ -29,6 +29,11 @@ ThemeData defaultLightTheme(String langCode) {
           color: _white,
         ),
       ),
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        elevation: 0.0,
+        actionsIconTheme: IconThemeData(color: _black, size: 30),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
@@ -41,8 +46,8 @@ ThemeData defaultLightTheme(String langCode) {
           foregroundColor: MaterialStateProperty.all(_yalow),
           backgroundColor: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.disabled)) {
-                return _black.withOpacity(0.6);
-              }
+              return _black.withOpacity(0.6);
+            }
             return _black;
           }),
           minimumSize: MaterialStateProperty.resolveWith(

@@ -2,6 +2,7 @@ import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
+import 'package:doors/features/home/presentation/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,9 +53,9 @@ class SplashScreen extends StatelessWidget {
                 return const SizedBox.shrink();
               },
               listener: (context, state) {
-                if (state is AuthCurrentUpdatedUserLoadSuccess ) {
+                if (state is AuthCurrentUpdatedUserLoadSuccess) {
                   Navigator.of(context)
-                      .pushReplacementNamed(LogInScreen.routeName);
+                      .pushReplacementNamed(HomeScreen.routeName);
                 }
                 if (state is AuthLoadFailure) {
                   showErrorSnackBar(

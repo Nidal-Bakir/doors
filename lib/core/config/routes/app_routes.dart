@@ -8,22 +8,16 @@ import 'package:doors/core/features/auth/presentation/screens/sign_up_part_two_s
 import 'package:doors/core/features/auth/presentation/screens/suspended_screen.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/model/post.dart';
-import 'package:doors/features/recent_posts/presentation/test_screen.dart';
+import 'package:doors/features/home/presentation/screen/home_screen.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
-  if (settings.name == PostScreen.routeName) {
-    return MaterialPageRoute(
-        builder: (_) => PostScreen(
-              post: settings.arguments as Post,
-            ));
-  }
-  return MaterialPageRoute(builder: (_) => const TestScree());
-  
   switch (settings.name) {
     case SuspendedScreen.routeName:
       return MaterialPageRoute(builder: (_) => const SuspendedScreen());
+    case HomeScreen.routeName:
+      return MaterialPageRoute(builder: (_) =>  HomeScreen());
     case SplashScreen.routeName:
       return MaterialPageRoute(builder: (_) => const SplashScreen());
     case LogInScreen.routeName:
