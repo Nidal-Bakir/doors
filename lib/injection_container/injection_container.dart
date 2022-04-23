@@ -1,4 +1,5 @@
 import 'package:doors/injection_container/auth_injection.dart';
+import 'package:doors/injection_container/favorite_posts_injection.dart';
 import 'package:doors/injection_container/post_injection.dart';
 import 'package:doors/injection_container/recent_posts_injection.dart';
 import 'package:doors/injection_container/subscription_injection.dart';
@@ -25,4 +26,7 @@ Future<void> init({bool forRestart = false}) async {
 
   // post init
   postInit();
+
+  // favorite posts init
+  favoritePostsInit();
 }

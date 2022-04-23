@@ -115,6 +115,14 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
           )
       ]);
 
+  static List<String> keysToExcludeFromQueriesRelatedToUser() => const [
+        User.keyAccountStatues,
+        User.keyIsSubscribed,
+        User.keyUserSubscription,
+        User.keyFavoritePosts,
+        User.keyPaypalEmail,
+      ];
+
   @override
   // the user object will equal other user object if the username & userId are the same
   List<Object?> get props => [get<String?>(keyVarObjectId), username];

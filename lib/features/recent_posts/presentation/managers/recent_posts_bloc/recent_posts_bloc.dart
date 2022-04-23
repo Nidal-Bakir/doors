@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/utils/typedef/new_types.dart';
 import 'package:doors/features/recent_posts/repository/recent_posts_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;

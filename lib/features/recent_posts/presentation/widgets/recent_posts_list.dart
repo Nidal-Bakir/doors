@@ -6,6 +6,7 @@ import 'package:doors/core/features/post/presentation/widgets/post_card_item.dar
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/no_internet_connection.dart';
+import 'package:doors/core/widgets/no_result_found.dart';
 import 'package:doors/features/recent_posts/presentation/managers/recent_posts_bloc/recent_posts_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -122,7 +123,9 @@ class _RecentPostsListState extends State<RecentPostsList> {
                                   child: LoadingIndicator(),
                                 ),
                               ),
-                              loadSuccess: (_) => const SizedBox.shrink(),
+                              loadSuccess: (posts) => posts.isEmpty
+                                  ? const NoResultFound()
+                                  : const SizedBox.shrink(),
                               loadFailure: (error, cachedPosts) {
                                 if (cachedPosts.isEmpty) {
                                   return NoInternetConnection(

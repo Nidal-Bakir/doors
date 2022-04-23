@@ -8,6 +8,7 @@ import 'package:doors/core/features/auth/presentation/screens/sign_up_part_two_s
 import 'package:doors/core/features/auth/presentation/screens/suspended_screen.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case SuspendedScreen.routeName:
       return MaterialPageRoute(builder: (_) => const SuspendedScreen());
     case HomeScreen.routeName:
-      return MaterialPageRoute(builder: (_) =>  HomeScreen());
+      return MaterialPageRoute(builder: (_) => HomeScreen());
     case SplashScreen.routeName:
       return MaterialPageRoute(builder: (_) => const SplashScreen());
     case LogInScreen.routeName:
@@ -44,6 +45,8 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           post: settings.arguments as Post,
         ),
       );
+    case FavoritePostsScreen.routeName:
+      return MaterialPageRoute(builder: (_) => const FavoritePostsScreen());
   }
   assert(false, 'Need to implement ${settings.name}');
   return null;

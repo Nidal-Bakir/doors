@@ -72,6 +72,8 @@ class _MainScreenState extends State<MainScreen>
   }
 
   void _onPageChanged() {
+      // move the navigation bar if the user is scrolling using the page view 
+      // and notify the navigation bar with the new page index. 
     if (!_usingNavigationBar) {
       _navigationBarController.moveToIndex(_pageController.page?.round() ?? 0);
     }

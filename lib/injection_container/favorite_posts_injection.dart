@@ -1,0 +1,24 @@
+import 'package:doors/features/favorite_posts/data/favorite_posts_local_data_source/favorite_posts_local_data_source.dart';
+import 'package:doors/features/favorite_posts/data/favorite_posts_remote_data_source/favorite_posts_remote_data_source.dart';
+import 'package:doors/features/favorite_posts/presentation/managers/favorite_posts_bloc.dart';
+import 'package:doors/features/favorite_posts/repository/favorite_posts_repository.dart';
+import 'package:get_it/get_it.dart';
+
+final di = GetIt.I;
+void favoritePostsInit() {
+  // blocs
+  di.registerFactory<FavoritePostsBloc>(() => FavoritePostsBloc(di.get()));
+
+  // repositories
+  di.registerLazySingleton<FavoritePostsRepository>(
+      () => FavoritePostsRepository(di.get(), di.get()));
+
+  // data sources
+  di.registerLazySingleton<FavoritePostsRemoteDataSource>(
+      () => FavoritePostsRemoteDataSourceImpl());
+
+  di.registerLazySingleton<FavoritePostsLocalDataSource>(
+    () => FavoritePostsLocalDataSourceImpl(),
+    dispose: (localDataSource) => localDataSource.clearCache(),
+  );
+}
