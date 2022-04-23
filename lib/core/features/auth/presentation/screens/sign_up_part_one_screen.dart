@@ -33,74 +33,76 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SafeArea(
-        child: CustomScrollView(slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Hero(
-              tag: 'card',
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 32.0,
-                ),
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20.0,
-                      horizontal: 40.0,
-                    ),
-                    child: Form(
-                      key: _keyFrom,
-                      child: Column(
-                        children: [
-                          SignUpHeadLineTextWithIcon(
-                            accountType: widget.accountType,
-                          ),
-                          const SizedBox(
-                            height: 60,
-                          ),
-                          NameTextField(
-                            accountType: widget.accountType,
-                            onSave: (name) {
-                              _name = name!;
-                            },
-                          ),
-                          const _SizedBox16H(),
-                          EmailTextField(onSave: (email) {
-                            _email = email!;
-                          }),
-                          const _SizedBox16H(),
-                          PasswordWithConfirmation(
-                            onSave: (String? password) {
-                              _password = password!;
-                            },
-                          ),
-                          const _SizedBox16H(),
-                          PhoneNumberTextField(
-                            onSave: (phoneNumber) {
-                              _phoneNamer = phoneNumber;
-                            },
-                            onUpdate: (phoneNumber) {
-                              _phoneNamer = phoneNumber;
-                            },
-                          ),
-                          const Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16),
-                            child: ElevatedButton(
-                              child: Text(context.loc.next),
-                              onPressed: () => _onPressed(context),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Hero(
+                tag: 'card',
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 32.0,
+                  ),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20.0,
+                        horizontal: 40.0,
+                      ),
+                      child: Form(
+                        key: _keyFrom,
+                        child: Column(
+                          children: [
+                            SignUpHeadLineTextWithIcon(
+                              accountType: widget.accountType,
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 60,
+                            ),
+                            NameTextField(
+                              accountType: widget.accountType,
+                              onSave: (name) {
+                                _name = name!;
+                              },
+                            ),
+                            const _SizedBox16H(),
+                            EmailTextField(onSave: (email) {
+                              _email = email!;
+                            }),
+                            const _SizedBox16H(),
+                            PasswordWithConfirmation(
+                              onSave: (String? password) {
+                                _password = password!;
+                              },
+                            ),
+                            const _SizedBox16H(),
+                            PhoneNumberTextField(
+                              onSave: (phoneNumber) {
+                                _phoneNamer = phoneNumber;
+                              },
+                              onUpdate: (phoneNumber) {
+                                _phoneNamer = phoneNumber;
+                              },
+                            ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: ElevatedButton(
+                                child: Text(context.loc.next),
+                                onPressed: () => _onPressed(context),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          )
-        ]),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -109,8 +111,8 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
     if (_keyFrom.currentState?.validate() ?? false) {
       _keyFrom.currentState?.save();
 
-      final _user = User(_email, _password, _email);
-      _user.name = _name;
+      final _user = User(_email.trim(), _password.trim(), _email.trim());
+      _user.name = _name.trim();
       _user.accountType = widget.accountType;
       _setUserPhoneNumber(_user);
 

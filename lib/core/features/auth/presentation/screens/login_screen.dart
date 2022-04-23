@@ -113,9 +113,9 @@ class _LogInScreenState extends State<LogInScreen> {
       context.read<AuthBloc>().add(
             AuthLoginRequested(
               User(
-                _email,
-                _password,
-                _email,
+                _email.trim(),
+                _password.trim(),
+                _email.trim(),
               ),
             ),
           );

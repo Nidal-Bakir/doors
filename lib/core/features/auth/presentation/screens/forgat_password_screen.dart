@@ -98,7 +98,7 @@ class _ForgatPasswordScreenState extends State<ForgatPasswordScreen> {
     if (_keyFrom.currentState?.validate() ?? false) {
       _keyFrom.currentState?.save();
       context.read<AuthBloc>().add(
-            AuthResetPasswordRequested(userEmail: _email),
+            AuthResetPasswordRequested(userEmail: _email.trim()),
           );
     }
   }

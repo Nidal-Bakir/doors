@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:doors/core/enums/enums.dart';
@@ -159,9 +158,9 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
   }
 
   void _onSignUpPressed(BuildContext context) async {
-    widget.user.bio = _bio;
+    widget.user.bio = _bio.trim();
     widget.user.profileImage = _profileImage;
-    if (_selectedPlan != null||widget.user.accountType==AccountType.user) {
+    if (_selectedPlan != null || widget.user.accountType == AccountType.user) {
       context.read<AuthBloc>().add(AuthSignUpRequested(widget.user));
     } else {
       showErrorSnackBar(context, context.loc.please_select_subscription_plan);
@@ -169,7 +168,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
   }
 
   void _onBioChanges(String bio) {
-    _bio = bio;
+    _bio = bio.trim();
   }
 
   void _onProfileImageSelected({
