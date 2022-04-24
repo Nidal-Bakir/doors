@@ -4,8 +4,10 @@ import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
+import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -130,7 +132,11 @@ class MenuScreen extends StatelessWidget {
                               overlayColor: MaterialStateProperty.all(
                                   Colors.white.withOpacity(0.3)),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(FavoritePostsScreen.routeName);
+                              ZoomDrawer.of(context)?.close();
+                            },
                             label: Text(
                               context.loc.favorite,
                               style: _textTheme.headline6,
@@ -150,23 +156,23 @@ class MenuScreen extends StatelessWidget {
                               style: _textTheme.headline6,
                             ),
                           ),
-                          if(_currentUser.accountType==AccountType.company)
-                          TextButton.icon(
-                            icon: const Icon(
-                              Icons.work_outline_rounded,
+                          if (_currentUser.accountType == AccountType.company)
+                            TextButton.icon(
+                              icon: const Icon(
+                                Icons.work_outline_rounded,
+                              ),
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.all(Colors.black),
+                                overlayColor: MaterialStateProperty.all(
+                                    Colors.white.withOpacity(0.3)),
+                              ),
+                              onPressed: () {},
+                              label: Text(
+                                context.loc.add_jop_offer,
+                                style: _textTheme.headline6,
+                              ),
                             ),
-                            style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.all(Colors.black),
-                              overlayColor: MaterialStateProperty.all(
-                                  Colors.white.withOpacity(0.3)),
-                            ),
-                            onPressed: () {},
-                            label: Text(
-                              context.loc.add_jop_offer,
-                              style: _textTheme.headline6,
-                            ),
-                          ),
                           TextButton.icon(
                             icon: const Icon(Icons.manage_accounts_outlined),
                             style: ButtonStyle(
