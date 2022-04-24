@@ -14,6 +14,16 @@ class FavoritePostsRepository {
   FavoritePostsRepository(
       this._favoritePostsRemoteDataSource, this._favoritePostsLocalDataSource);
 
+  /// Get a list of favorite post for the current user.
+  ///
+  /// Returns either [UnmodifiableListView] holding the favorite posts
+  ///
+  /// OR [Tuple2<ExceptionBase, UnmodifiableListView] :
+  /// * head: (the error)
+  ///   * [ServerException] in case of connection error or parse error.
+  ///   * [AnonymousException] if the user is Anonymous user
+  /// * tail: (cached data)
+  ///   * holding the local cached favorite posts
   Future<EitherDataOrDataWithError<ExceptionBase, Post>> getFavoritePosts({
     bool fullRefresh = false,
   }) async {
@@ -35,7 +45,7 @@ class FavoritePostsRepository {
         ),
       );
     }
-    
+
     await _favoritePostsLocalDataSource
         .appendLocalFavoritePosts(newFavoritePosts);
 

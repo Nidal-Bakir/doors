@@ -1,4 +1,5 @@
 import 'package:doors/core/config/global_config.dart';
+import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
@@ -7,6 +8,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class FavoritePostsRemoteDataSource {
+  /// Get a list of user favorite posts.
+  /// 
+  /// [amountToSkip]: For pagination, where it's the count of the current
+  /// loaded favorite posts
+  ///
+  /// Returns a UnmodifiableList of favorite posts
+  ///
+  /// Throws [ExceptionBase] :
+  /// * [ServerException] in case of connection error or parse error.
+  /// * [AnonymousException] if the user is Anonymous user
   Future<UnmodifiableListView<Post>> getFavoritePosts(int amountToSkip);
 }
 
