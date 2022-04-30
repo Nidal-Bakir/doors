@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/utils/typedef/new_types.dart';
-import 'package:doors/features/recent_posts/data/recent_post_remote_data_source/recent_posts_remote_data_source.dart';
+import 'package:doors/features/recent_posts/data/recent_posts_remote_data_source/recent_posts_remote_data_source.dart';
 import 'package:doors/features/recent_posts/data/recent_posts_local_data_source/recent_posts_local_data_source.dart';
 import 'package:doors/core/features/post/model/post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
