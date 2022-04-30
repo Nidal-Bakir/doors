@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:equatable/equatable.dart';
@@ -26,22 +28,23 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
   static const keyPostCostCurrency = 'currency';
   static const _keyPostRateCount = 'rateCount';
   static const _keyPostRateTotal = 'rateTotal';
-  static const keyPostCreation = keyVarCreatedAt;
+  static const keyPostCreationDate = keyVarCreatedAt;
+  static const keyPostLastUpdatedDate = keyVarUpdatedAt;
   static const keyAuthor = 'author';
 
   String get postId => get<String>(keyPostId) as String;
 
-  String get postTitle => get<String>(keyPostTitle) as String;
+  String get postTitle => get<String>(keyPostTitle) ?? 'Unknown';
 
   set postTitle(String postTitle) => set<String>(keyPostTitle, postTitle);
 
-  String get postDescription => get<String>(keyPostDescription) as String;
+  String get postDescription => get<String>(keyPostDescription) ?? 'Unknown';
 
   set postDescription(String postDescription) =>
       set<String>(keyPostDescription, postDescription);
 
   ParseGeoPoint get postLocation =>
-      get<ParseGeoPoint>(keyPostLocation) as ParseGeoPoint;
+      get<ParseGeoPoint>(keyPostLocation) ?? ParseGeoPoint();
 
   set postLocation(ParseGeoPoint postLocation) =>
       set<ParseGeoPoint>(keyPostLocation, postLocation);
@@ -62,21 +65,25 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
           ? PostType.need
           : PostType.offer;
 
-  set postType(PostType postType) => set<PostType>(keyPostType, postType);
+  set postType(PostType postType) => set<String>(
+        keyPostType,
+        postType.name == PostType.need.name
+            ? PostType.need.name
+            : PostType.offer.name,
+      );
 
   String get postCategory => get<String>(keyPostCategory) ?? '';
 
   set postCategory(String postCategory) =>
       set<String>(keyPostCategory, postCategory);
 
-  List<String> get postKeywords =>
-      List<String>.from(get(keyPostKeywords) ?? []);
+  Set<String> get postKeywords =>
+      Set<String>.from(get(keyPostKeywords) ?? <String>[]);
 
-  set postKeywords(List<String> postKeywords) =>
-      setAddUnique(keyPostKeywords, postKeywords);
+  set postKeywords(Set<String> postKeywords) =>
+      set<List<String>>(keyPostKeywords, postKeywords.toList());
 
-  double? get minCost =>
-      double.tryParse(get<num>(keyPostMinCost).toString());
+  double? get minCost => double.tryParse(get<num>(keyPostMinCost).toString());
 
   set minCost(double? minCost) => set<double?>(keyPostMinCost, minCost);
 
@@ -90,21 +97,45 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
       set<String?>(keyPostCostCurrency, postCostCurrency);
 
   String get postRate {
-    final _postRateCount =
-        double.parse(get<num>(_keyPostRateCount).toString());
-    final _postRateTotal =
-        double.parse(get<num>(_keyPostRateTotal).toString());
+    final _postRateCount = double.parse(get<num>(_keyPostRateCount).toString());
+    final _postRateTotal = double.parse(get<num>(_keyPostRateTotal).toString());
     if (_postRateTotal == 0.0 || _postRateCount == 0.0) {
       return '0.0';
     }
     return (_postRateTotal / _postRateCount).toStringAsFixed(1);
   }
 
-  // TODO add rate realation between post and rate class 1:N
+  DateTime get postCreationDate =>
+      get<DateTime>(keyPostCreationDate) as DateTime;
+
+  DateTime get postLastUpdateDate =>
+      get<DateTime>(keyPostLastUpdatedDate) as DateTime;
 
   User get author => get<User>(keyAuthor) as User;
   set author(User author) => set<User>(keyAuthor, author);
 
+  Post getShallowCopy() {
+    return Post()
+      ..objectId = objectId
+      ..postTitle = postTitle
+      ..postDescription = postDescription
+      ..postLocation = postLocation
+      ..postHumanReadableLocation = postHumanReadableLocation
+      ..postImage = postImage
+      ..postType = postType
+      ..postCategory = postCategory
+      ..postKeywords = postKeywords
+      ..minCost = minCost
+      ..maxCost = maxCost
+      ..postCostCurrency = postCostCurrency
+      ..author = author
+      ..set(_keyPostRateCount, get<num>(_keyPostRateCount))
+      ..set(_keyPostRateTotal, get<num>(_keyPostRateTotal))
+      ..set(keyPostCreationDate, get<DateTime>(keyPostCreationDate))
+      ..set(keyPostLastUpdatedDate, get<DateTime>(keyPostLastUpdatedDate));
+  }
+
   @override
-  List<Object?> get props => [get<String?>(keyVarObjectId), get<User>(keyAuthor)];
+  List<Object?> get props =>
+      [get<String?>(keyVarObjectId), get<User>(keyAuthor)];
 }

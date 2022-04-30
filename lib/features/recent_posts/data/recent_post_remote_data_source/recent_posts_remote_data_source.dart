@@ -47,7 +47,7 @@ Future<UnmodifiableListView<Post>> _loadPosts(
     int amountToSkip, PostType postType) async {
   QueryBuilder queryBuilder = QueryBuilder.name(Post.keyClassName)
     ..whereEqualTo(Post.keyPostType, postType.name)
-    ..orderByDescending(Post.keyPostCreation)
+    ..orderByDescending(Post.keyPostCreationDate)
     ..includeObject([Post.keyAuthor])
     ..excludeKeys(User.keysToExcludeFromQueriesRelatedToUser())
     ..setAmountToSkip(amountToSkip)

@@ -25,7 +25,10 @@ class ParseException extends ServerException {
       {required String message, required this.code, this.type})
       : super(message);
 
-  factory ParseException.extractParseException(ParseError parseError) {
+  factory ParseException.extractParseException(ParseError? parseError) {
+    if (parseError == null) {
+      return ParseUnknownError();
+    }
     // custom cloud code errors starts from 1000
     // see [ParseCloudCodeCustomException] docs form more info about the error codes
     if (parseError.code >= 1000) {
@@ -49,7 +52,7 @@ class ParseException extends ServerException {
       case 101:
         return ParseInvalidUsernameOrPassword.fromParseError(parseError);
       case -1:
-        return ParseInvalidUsernameOrPassword.fromParseError(parseError);
+        return ParseUnknownError.fromParseError(parseError);
       case 1:
         return ParseSuccessResponseWithNoResults.fromParseError(parseError);
     }
@@ -140,6 +143,19 @@ class ParseInvalidUsernameOrPassword extends ParseException {
   }
 }
 
+class ParseUnknownError extends ParseException {
+  ParseUnknownError()
+      : super.fromParseError(
+            ParseError(code: 0, message: 'UnknownError, null'));
+
+  ParseUnknownError.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.an_unexpected_error_occurred;
+  }
+}
+
 class ParseSuccessResponseWithNoResults extends ParseException {
   ParseSuccessResponseWithNoResults.fromParseError(ParseError parseError)
       : super.fromParseError(parseError);
@@ -163,6 +179,8 @@ class ParseSuccessResponseWithNoResults extends ParseException {
 /// |   1005  | sent by the Braintrees client or something went wrong wile    |
 /// |         | processing the payment for the user                           |
 /// ---------------------------------------------------------------------------
+/// |   1006  | Unable to delete post image from the server                   |
+/// ---------------------------------------------------------------------------
 /// |  1010  | Unable to login because the user account has been suspended    |
 /// ---------------------------------------------------------------------------
 class ParseCloudCodeCustomException extends ParseException {
@@ -180,6 +198,9 @@ class ParseCloudCodeCustomException extends ParseException {
             parseError);
       case 1005:
         return ErrorWhileProcessingClientPayment.fromParseError(parseError);
+      case 1006:
+        return ErrorWhileDeletingPostImageFromTheServer.fromParseError(
+            parseError);
       case 1010:
         return SuspendedAccount.fromParseError(parseError);
     }
@@ -239,5 +260,16 @@ class ErrorWhileProcessingClientPayment extends ParseCloudCodeCustomException {
   @override
   String getLocalMessageError(BuildContext context) {
     return context.loc.unexpected_error_while_processing_payment;
+  }
+}
+
+class ErrorWhileDeletingPostImageFromTheServer
+    extends ParseCloudCodeCustomException {
+  ErrorWhileDeletingPostImageFromTheServer.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.an_unexpected_error_occurred;
   }
 }

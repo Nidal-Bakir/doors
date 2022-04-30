@@ -16,6 +16,8 @@
   		<string>https</string>
   		<string>http</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need to access to your location to set your posts location and calculate the distance between you and any other posted service .</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need to access your photo library to allow you to set your profile image and select an image for your post.</string>
 	<key>NSCameraUsageDescription</key>

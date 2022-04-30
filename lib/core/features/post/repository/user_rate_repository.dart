@@ -33,12 +33,23 @@ class UserRateRepository {
   /// * [AnonymousException] if the user is Anonymous user
   Future<Either<ExceptionBase, PostRate>> setUserRateOnPost(
       PostRate postRate) async {
+    // check if the user has rated this post before or not.
+    try {
+      final oldUserRateIfExist =
+          await _userRateRemoteDataSource.getUserRateOnPost(postRate.post);
+      if (oldUserRateIfExist != null) {
+        postRate.objectId = oldUserRateIfExist.objectId;
+      }
+    } on ExceptionBase catch (error) {
+      return Left(error);
+    }
+
     try {
       return Right(await _userRateRemoteDataSource.setUserRateOnPost(postRate));
     } on ExceptionBase catch (error) {
       return Left(error);
     }
-  } 
+  }
 
   /// Remove user rate on a post.
   ///

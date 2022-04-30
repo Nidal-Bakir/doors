@@ -1,10 +1,12 @@
 import 'package:doors/injection_container/auth_injection.dart';
 import 'package:doors/injection_container/favorite_posts_injection.dart';
+import 'package:doors/injection_container/manage_post_injection.dart';
 import 'package:doors/injection_container/post_injection.dart';
 import 'package:doors/injection_container/recent_posts_injection.dart';
 import 'package:doors/injection_container/subscription_injection.dart';
 import 'package:doors/injection_container/parse_init.dart';
 import 'package:doors/injection_container/security_error_flow_injection.dart';
+import 'package:doors/injection_container/user_location_injection.dart';
 
 Future<void> init({bool forRestart = false}) async {
   // no need to reInit the parse server when rebuild the widget tree.
@@ -29,4 +31,10 @@ Future<void> init({bool forRestart = false}) async {
 
   // favorite posts init
   favoritePostsInit();
+
+  // manage post init
+  managePostInit();
+
+  // user location init
+  userLocationInit();
 }

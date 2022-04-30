@@ -16,6 +16,16 @@ class AnonymousException extends UserException {
   }
 }
 
+/// Throws when an operation should not be preformed by this user.
+class ForbiddenOperation extends UserException {
+  const ForbiddenOperation(String message) : super(message);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.forbidden_operation;
+  }
+}
+
 class UserAlreadyLoggedOutException extends UserException {
   const UserAlreadyLoggedOutException() : super('User already loggedOut');
   @override
@@ -40,4 +50,24 @@ class UnexpectedErrorWhileProcessingThePaymentNullNonce extends UserException {
     return context
         .loc.unexpected_error_while_processing_the_payment_no_nonce_returns;
   }
+}
+
+abstract class LocationException extends UserException {
+  const LocationException(String message) : super(message);
+}
+
+class DisabledLocationServicesException extends LocationException {
+  const DisabledLocationServicesException()
+      : super('Location services are disabled.');
+}
+
+class DeniedLocationPermissionsException extends LocationException {
+  const DeniedLocationPermissionsException()
+      : super('Location permissions are denied');
+}
+
+class PermanentlyDeniedLocationPermissionsException extends LocationException {
+  const PermanentlyDeniedLocationPermissionsException()
+      : super(
+            'Location permissions are permanently denied, we cannot request permissions.');
 }

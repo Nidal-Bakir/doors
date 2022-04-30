@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';

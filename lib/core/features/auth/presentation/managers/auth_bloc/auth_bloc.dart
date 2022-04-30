@@ -84,6 +84,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _currentPopulatedUser = user;
       emit(AuthCurrentUserLoadSuccess(user));
     });
+    add(const AuthGetUpdatedUserDataRequested());
   }
 
   Future<void> _onAuthGetUpdatedUserDataRequested(
@@ -117,11 +118,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (currentUser != null) {
       _currentPopulatedUser = currentUser;
       emit(AuthCurrentUserLoadSuccess(currentUser));
+      // get the updated user date form the server
+      add(const AuthGetUpdatedUserDataRequested());
     } else {
       add(const AuthLoginAnonymouslyRequested());
     }
-    // get the updated user date form the server
-    add(const AuthGetUpdatedUserDataRequested());
   }
 
   Future<void> _onAuthResetPasswordRequested(

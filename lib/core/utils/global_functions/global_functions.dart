@@ -1,11 +1,56 @@
 import 'dart:io' show Platform;
 
+import 'package:doors/core/config/global_config.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:intl/intl.dart';
+
+final GlobalKey _homeScaffoldGlobalKey = GlobalKey();
+GlobalKey getHomeScaffoldGlobalKey() => _homeScaffoldGlobalKey;
+
+String currencyCode(BuildContext context) {
+  Locale locale = Localizations.localeOf(context);
+  var format = NumberFormat.simpleCurrency(locale: locale.toString());
+  return format.currencyName ?? 'USD';
+}
+
+/// there is more posts to load if the remainder of loaded posts with
+/// amountOfResultPeerRequest equal zero.
+///
+/// (in the most of the cases, not allows true).
+bool canGetMorePosts(int postsCount) {
+  if (postsCount == 0) {
+    return false;
+  }
+  return postsCount.remainder(GlobalConfig.amountOfResultPeerRequest) == 0;
+}
+
+Future<void> openSimpleAlertDialog({
+  required BuildContext context,
+  required String title,
+  required String content,
+  required List<Widget> actions,
+}) {
+  return showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      titleTextStyle: Theme.of(context).textTheme.headline5,
+      title: Center(
+        child: Text(title),
+      ),
+      contentTextStyle: Theme.of(context).textTheme.headline6,
+      content: Text(
+        content,
+      ),
+      actions: actions,
+    ),
+  );
+}
 
 String extractLangCodeFromPlatformService() {
   // localeName could be (en) or (en_US) or (en_US.UTF-8)
@@ -95,7 +140,9 @@ void _showSnackBar(BuildContext context, String content, bool forError) {
               color: Theme.of(context).colorScheme.surface,
               visualDensity: VisualDensity.compact,
               onPressed: () {
-                ScaffoldMessenger.maybeOf(context)?.hideCurrentSnackBar();
+                ScaffoldMessenger.maybeOf(
+                        getHomeScaffoldGlobalKey().currentContext ?? context)
+                    ?.hideCurrentSnackBar();
               },
               icon: const Icon(
                 Icons.close_rounded,

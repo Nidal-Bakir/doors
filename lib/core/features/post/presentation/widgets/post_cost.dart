@@ -18,16 +18,47 @@ class PostCost extends StatelessWidget {
   Widget build(BuildContext context) {
     if (maxCost != null && minCost != null) {
       return FittedBox(
-        child: LineWithTextOnRow(
-          text:
-              '${context.loc.from} $minCost${currency ?? '\$'} ${context.loc.to} $maxCost${currency ?? '\$'}',
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            LineWithTextOnRow(
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  ?.copyWith(fontFamily: 'Roboto'),
+              text:
+                  '${context.loc.from} $minCost ${currency ?? '\$'}',
+            ),
+            LineWithTextOnRow(
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  ?.copyWith(fontFamily: 'Roboto'),
+              text:
+                  '${context.loc.to} $maxCost ${currency ?? '\$'}',
+            ),
+          ],
         ),
       );
     }
     if (maxCost != null) {
       return FittedBox(
         child: LineWithTextOnRow(
-          text: '${context.loc.up_to} $maxCost$currency',
+          textStyle: Theme.of(context)
+              .textTheme
+              .headline6
+              ?.copyWith(fontFamily: 'Roboto'),
+          text: '${context.loc.up_to} $maxCost $currency',
+        ),
+      );
+    }
+    if (minCost != null) {
+      return FittedBox(
+        child: LineWithTextOnRow(
+          textStyle: Theme.of(context)
+              .textTheme
+              .headline6
+              ?.copyWith(fontFamily: 'Roboto'),
+          text: '${context.loc.from} $minCost $currency',
         ),
       );
     }

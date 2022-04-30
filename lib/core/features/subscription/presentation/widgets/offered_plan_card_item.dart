@@ -44,7 +44,7 @@ class OfferedPlanCardItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: _PlanFeature(
-                label: context.loc.add_internal_ships,
+                label: context.loc.add_jop_offer,
               ),
             ),
             _PlanFeature(

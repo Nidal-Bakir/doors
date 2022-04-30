@@ -11,7 +11,8 @@ class FavoriteRepository {
 
   /// Add a [post] to the favorite posts list for the current user.
   ///
-  /// Returns either [void] to indicate that the adding operation was successful
+  /// Returns either [void] to indicate that the adding operation was successful.
+  /// 
   /// OR [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
@@ -28,7 +29,8 @@ class FavoriteRepository {
 
   /// Remove a [favoritePost] from the favorite posts list for the current user.
   /// 
-  /// Returns either [void] to indicate that the remove operation was successful
+  /// Returns either [void] to indicate that the remove operation was successful.
+  /// 
   /// OR [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class KeywordsRow extends StatelessWidget {
-  final List<String> keywords;
+  final Set<String> keywords;
   final bool withColors;
   final int? limit;
   final _random = Random();

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
@@ -15,9 +13,11 @@ import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart'
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
-import 'package:doors/core/features/post/presentation/widgets/no_image_provided.dart';
+import 'package:doors/core/widgets/network_image_from_parse_file.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_location.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
+import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
+import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -97,15 +97,16 @@ class _PostScreenState extends State<PostScreen> {
                     //hide the rate bar if the current user is the author of this post
                     if (widget.post.postType == PostType.offer &&
                         _currentUser?.userId != widget.post.author.userId)
-                    _PostUserRate(
-                      currentPost: widget.post,
-                      currentUser: _currentUser!,
-                    ),
+                      _PostUserRate(
+                        currentPost: widget.post,
+                        currentUser: _currentUser!,
+                      ),
                     const SizedBox(height: 16),
-                    _FavoriteAndChatButtons(
-                      currentPost: widget.post,
-                      currentUser: _currentUser,
-                    ),
+                    if (_currentUser != null)
+                      _FavoriteAndChatButtons(
+                        currentPost: widget.post,
+                        currentUser: _currentUser,
+                      ),
                   ],
                 ),
               ),
@@ -129,51 +130,31 @@ class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _screenSize = MediaQuery.of(context).size;
+    final _height = MediaQuery.of(context).size.height * 0.4;
     return SizedBox(
-      height: _screenSize.height * 0.4,
+      height: _height,
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(25)),
         child: Stack(
           children: [
-            _PostImage(postImage: currentPost.postImage),
+            NetworkImageFromParseFile(
+              image: currentPost.postImage,
+              width: double.infinity,
+              cacheHeight: _height.toInt(),
+            ),
             const _BackButton(),
             if (currentPost.postType == PostType.offer)
               _OfferedPostRate(
                 postRate: currentPost.postRate,
               ),
-            //hide the menu button if the current user is the author of this post
-            if (currentUser != null &&
-                currentUser!.userId != currentPost.author.userId)
-              _PopupMenuButton(
-                currentPost: currentPost,
-                currentUser: currentUser,
-              )
+            _PopupMenuButton(
+              currentPost: currentPost,
+              currentUser: currentUser,
+            )
           ],
         ),
       ),
     );
-  }
-}
-
-class _PostImage extends StatelessWidget {
-  final ParseFile? postImage;
-
-  const _PostImage({Key? key, required this.postImage}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return postImage != null && postImage?.url != null
-        ? Hero(
-            tag: postImage!.url!,
-            child: Image.network(
-              postImage!.url!,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              errorBuilder: (_, __, ___) => const NoImageProvided(),
-            ),
-          )
-        : const NoImageProvided();
   }
 }
 
@@ -262,6 +243,11 @@ class _PopupMenuButton extends StatelessWidget {
     return Align(
       alignment: Alignment.topRight,
       child: PopupMenuButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            15,
+          ),
+        ),
         onSelected: (value) {
           if (openLogInScreenToNotLoggedInUser(context)) {
             return;
@@ -270,19 +256,136 @@ class _PopupMenuButton extends StatelessWidget {
             case 0:
               _openReportDialog(context, currentPost, currentUser);
               return;
+            case 1:
+              Navigator.of(context).pushNamed(
+                CreateOrEditPostScreenPartOne.routeName,
+                arguments: currentPost,
+              );
+              return;
+            case 2:
+              _openConfirmationDialog(context, currentPost, currentUser);
+              return;
           }
         },
         itemBuilder: (BuildContext context) => [
-          const PopupMenuItem(
-            value: 0,
-            child: Text(
-              'Report this post',
+          // hide the report button if the current user is the author of this post
+          if (currentUser != null &&
+              currentUser!.userId != currentPost.author.userId)
+            PopupMenuItem(
+              value: 0,
+              child: Row(
+                children: [
+                  const Icon(Icons.report_gmailerrorred_rounded),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    context.loc.report_this_post,
+                  ),
+                ],
+              ),
             ),
-          ),
+          // show the edit button if the current user is the author of this post
+          if (currentUser != null &&
+              currentUser!.userId == currentPost.author.userId)
+            PopupMenuItem(
+              value: 1,
+              child: Row(
+                children: [
+                  const Icon(Icons.edit_rounded),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    context.loc.edit_this_post,
+                  ),
+                ],
+              ),
+            ),
+          // show the delete button if the current user is the author of this post
+          if (currentUser != null &&
+              currentUser!.userId == currentPost.author.userId)
+            PopupMenuItem(
+              value: 2,
+              child: Row(
+                children: [
+                  const Icon(Icons.delete_outline_rounded),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    context.loc.delete_this_post,
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
   }
+
+  Future<void> _openConfirmationDialog(
+          BuildContext parentContext, Post currentPost, User? currentUser) =>
+      showDialog(
+        context: parentContext,
+        builder: (context) {
+          return BlocConsumer<ManagePostBloc, ManagePostState>(
+            listener: (context, state) {
+              if (state is ManagePostOperationFailure) {
+                showErrorSnackBar(
+                  parentContext,
+                  context.loc.unable_to_delete_this_post +
+                      '. ' +
+                      state.error.getLocalMessageError(context),
+                );
+                Navigator.of(context).pop();
+              } else if (state is ManagePostDeleteSuccuss) {
+                showSuccussSnackBar(
+                  context,
+                  context.loc.the_post_was_deleted_successfully,
+                );
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
+            builder: (context, state) {
+              return AlertDialog(
+                titleTextStyle: Theme.of(context).textTheme.headline5,
+                title: Center(
+                  child: Text(context.loc.cautious),
+                ),
+                contentTextStyle: Theme.of(context).textTheme.headline6,
+                content: Text(
+                  context.loc.are_you_sure_that_you_want_to_delete_this_post,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(context.loc.cancel),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    style: Theme.of(context).textButtonTheme.style?.copyWith(
+                          foregroundColor: MaterialStateProperty.all(
+                            Colors.grey,
+                          ),
+                        ),
+                    onPressed: () {
+                      context
+                          .read<ManagePostBloc>()
+                          .add(ManagePostDeleted(currentPost));
+                    },
+                    child: Text(
+                      context.loc.delete,
+                    ),
+                  )
+                ],
+              );
+            },
+          );
+        },
+      );
 
   Future<void> _openReportDialog(
           BuildContext parentContext, Post currentPost, User? currentUser) =>
@@ -514,7 +617,7 @@ class _PostTitle extends StatelessWidget {
 
 class _CategoryAndKeywordsAndPostType extends StatelessWidget {
   final String category;
-  final List<String> keywords;
+  final Set<String> keywords;
   final PostType postType;
 
   const _CategoryAndKeywordsAndPostType({
@@ -663,8 +766,13 @@ class _PostUserRate extends StatelessWidget {
       ..post = currentPost
       ..rateAuthor = currentUser;
     return BlocProvider<UserRateBloc>(
-      create: (context) =>
-          GetIt.I.get<UserRateBloc>()..add(UserRateLoaded(currentPost)),
+      create: (context) {
+        final _bloc = GetIt.I.get<UserRateBloc>();
+        if (!currentUser.isAnonymousAccount) {
+          _bloc.add(UserRateLoaded(currentPost));
+        }
+        return _bloc;
+      },
       child: Builder(
         builder: (context) {
           return BlocConsumer<UserRateBloc, UserRateState>(
@@ -689,52 +797,51 @@ class _PostUserRate extends StatelessWidget {
                       ..rateAuthor = currentUser);
               } else if (state is UserRateLoadFailure) {
                 _rate.rate = _oldRate.rate;
-              } else {}
+              }
 
               return StatefulBuilder(
                 builder: (context, setState) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      IgnorePointer(
-                        ignoring: state is UserRateInProgress,
-                        child: RatingBar(
-                          glowColor: _colorScheme.primary,
-                          glowRadius: 1,
-                          maxRating: 5,
-                          initialRating: _rate.rate,
-                          minRating: 0,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemPadding: EdgeInsets.zero,
-                          onRatingUpdate: (rating) {
-                            if (openLogInScreenToNotLoggedInUser(context)) {
-                              return;
-                            }
-                            setState(() {
-                              _rate.rate = rating;
-                            });
+                      RatingBar(
+                        glowColor: _colorScheme.primary,
+                        glowRadius: 1,
+                        maxRating: 5,
+                        initialRating: _rate.rate,
+                        minRating: 0,
+                        ignoreGestures: state is UserRateInProgress &&
+                            !currentUser.isAnonymousAccount,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding: EdgeInsets.zero,
+                        onRatingUpdate: (rating) {
+                          if (openLogInScreenToNotLoggedInUser(context)) {
+                            return;
+                          }
+                          setState(() {
+                            _rate.rate = rating;
+                          });
 
-                            if (_rate.rate != _oldRate.rate) {
-                              context
-                                  .read<UserRateBloc>()
-                                  .add(UserRatePosted(_rate));
-                            }
-                          },
-                          ratingWidget: RatingWidget(
-                            empty: Icon(
-                              Icons.star_border_rounded,
-                              color: _colorScheme.secondary,
-                            ),
-                            half: Icon(
-                              Icons.star_half_rounded,
-                              color: _colorScheme.primary,
-                            ),
-                            full: Icon(
-                              Icons.star_rounded,
-                              color: _colorScheme.primary,
-                            ),
+                          if (_rate.rate != _oldRate.rate) {
+                            context
+                                .read<UserRateBloc>()
+                                .add(UserRatePosted(_rate));
+                          }
+                        },
+                        ratingWidget: RatingWidget(
+                          empty: Icon(
+                            Icons.star_border_rounded,
+                            color: _colorScheme.secondary,
+                          ),
+                          half: Icon(
+                            Icons.star_half_rounded,
+                            color: _colorScheme.primary,
+                          ),
+                          full: Icon(
+                            Icons.star_rounded,
+                            color: _colorScheme.primary,
                           ),
                         ),
                       ),
@@ -753,7 +860,8 @@ class _PostUserRate extends StatelessWidget {
                           _rate.rate.toString(),
                           style: Theme.of(context).textTheme.headline6,
                         ),
-                        crossFadeState: state is UserRateInProgress
+                        crossFadeState: !currentUser.isAnonymousAccount &&
+                                state is UserRateInProgress
                             ? CrossFadeState.showFirst
                             : CrossFadeState.showSecond,
                         duration: const Duration(
@@ -774,7 +882,7 @@ class _PostUserRate extends StatelessWidget {
 
 class _FavoriteAndChatButtons extends StatefulWidget {
   final Post currentPost;
-  final User? currentUser;
+  final User currentUser;
   const _FavoriteAndChatButtons({
     Key? key,
     required this.currentPost,
@@ -793,8 +901,13 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
     return Row(
       children: [
         BlocProvider<FavoritePostBloc>(
-          create: (context) => GetIt.I.get<FavoritePostBloc>()
-            ..add(FavoritePostIsFavoritePost(widget.currentPost)),
+          create: (context) {
+            final _bloc = GetIt.I.get<FavoritePostBloc>();
+            if (!widget.currentUser.isAnonymousAccount) {
+              _bloc.add(FavoritePostIsFavoritePost(widget.currentPost));
+            }
+            return _bloc;
+          },
           child: Builder(
             builder: (context) =>
                 BlocConsumer<FavoritePostBloc, FavoritePostState>(
@@ -824,7 +937,11 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
                       color: _isFavorite ? Colors.red : null,
                     ),
                     onPressed: state is FavoritePostInProgress
-                        ? null
+                        ? (widget.currentUser.isAnonymousAccount
+                            ? () {
+                                openLogInScreenToNotLoggedInUser(context);
+                              }
+                            : null)
                         : () {
                             if (openLogInScreenToNotLoggedInUser(context)) {
                               return;
@@ -859,7 +976,7 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
           child: ElevatedButton.icon(
             icon: const Icon(Icons.textsms_rounded),
             onPressed:
-                widget.currentUser?.userId == widget.currentPost.author.userId
+                widget.currentUser.userId == widget.currentPost.author.userId
                     ? null
                     : () {
                         if (openLogInScreenToNotLoggedInUser(context)) {

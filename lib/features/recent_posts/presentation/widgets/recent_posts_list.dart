@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:doors/core/config/global_config.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
@@ -7,6 +8,7 @@ import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/no_internet_connection.dart';
 import 'package:doors/core/widgets/no_result_found.dart';
+import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/recent_posts/presentation/managers/recent_posts_bloc/recent_posts_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,12 +25,15 @@ class RecentPostsList extends StatefulWidget {
 
 class _RecentPostsListState extends State<RecentPostsList> {
   var _refreshIndicatorCompleter = Completer<void>();
+  var _postsCount = 0;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<RecentPostsBloc>(
-      create: (context) =>
-          GetIt.I.get(param1: widget.postType)..add(const RecentPostsLoaded()),
+      create: (context) => GetIt.I.get(
+        param1: widget.postType,
+        param2: context.read<ManagePostBloc>(),
+      )..add(const RecentPostsLoaded()),
       child: Builder(
         builder: (context) {
           return BlocListener<RecentPostsBloc, RecentPostsState>(
@@ -46,7 +51,8 @@ class _RecentPostsListState extends State<RecentPostsList> {
                   notification: notification,
                   onNotify: () {
                     final _recentPostsBloc = context.read<RecentPostsBloc>();
-                    if (_recentPostsBloc.state is RecentPostsLoadSuccess) {
+                    if (_recentPostsBloc.state is RecentPostsLoadSuccess &&
+                        canGetMorePosts(_postsCount)) {
                       _recentPostsBloc.add(const RecentPostsLoaded());
                     }
                   }),
@@ -80,6 +86,8 @@ class _RecentPostsListState extends State<RecentPostsList> {
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
+                              _postsCount = _recentPostsLoadSuccessState
+                                  .recentPosts.length;
                               final _post = _recentPostsLoadSuccessState
                                   .recentPosts[index];
                               return PostCardItem(
@@ -160,4 +168,6 @@ class _RecentPostsListState extends State<RecentPostsList> {
       ),
     );
   }
+
+
 }

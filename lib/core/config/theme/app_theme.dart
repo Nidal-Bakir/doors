@@ -30,10 +30,23 @@ ThemeData defaultLightTheme(String langCode) {
         ),
       ),
       appBarTheme: const AppBarTheme(
+        iconTheme: IconThemeData(
+          color: _black,
+        ),
         centerTitle: true,
         elevation: 0.0,
         actionsIconTheme: IconThemeData(color: _black, size: 30),
       ),
+      checkboxTheme: CheckboxThemeData(
+        checkColor: MaterialStateProperty.all(_black),
+        fillColor: MaterialStateProperty.all(_yalow),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            5,
+          ),
+        ),
+      ),
+      textButtonTheme: const TextButtonThemeData(style: ButtonStyle()),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           shape: MaterialStateProperty.all(

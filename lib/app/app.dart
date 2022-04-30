@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:doors/core/config/routes/app_routes.dart';
 import 'package:doors/core/config/theme/app_theme.dart';
-import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
-import 'package:doors/core/features/subscription/presentation/managers/offered_subscription_plan_bloc/offered_subscription_plans_bloc.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
+import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,7 +21,9 @@ class App extends StatelessWidget {
           create: (_) =>
               GetIt.I.get<AuthBloc>()..add(const AuthCurrentUserLoaded()),
         ),
-
+        BlocProvider<ManagePostBloc>(
+          create: (_) => GetIt.I.get<ManagePostBloc>(),
+        ),
       ],
       child: MaterialApp(
         supportedLocales: AppLocalizations.supportedLocales,

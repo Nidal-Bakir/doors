@@ -7,6 +7,7 @@ import 'package:doors/core/features/post/model/post_report.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';
 import 'package:doors/core/features/subscription/model/payment.dart';
 import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/features/user_location/models/city.dart';
 import 'package:doors/parse_keys.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -24,6 +25,7 @@ Future<void> parseInit() async {
       Post.keyClassName: () => Post(),
       PostReport.keyClassName: () => PostReport(),
       PostRate.keyClassName: () => PostRate(),
+      City.keyClassName: () => City(),
     },
     //TODO: remove the debug mode
     debug: true,

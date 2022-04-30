@@ -10,6 +10,8 @@ import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
+import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
+import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -47,6 +49,20 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       );
     case FavoritePostsScreen.routeName:
       return MaterialPageRoute(builder: (_) => const FavoritePostsScreen());
+
+    case CreateOrEditPostScreenPartOne.routeName:
+      return MaterialPageRoute(
+        builder: (_) => CreateOrEditPostScreenPartOne(
+          post: settings.arguments as Post?,
+        ),
+      );
+      
+    case CreateOrEditPostScreenPartTwo.routeName:
+      return MaterialPageRoute(
+        builder: (_) => CreateOrEditPostScreenPartTwo(
+          post: settings.arguments as Post,
+        ),
+      );
   }
   assert(false, 'Need to implement ${settings.name}');
   return null;

@@ -7,6 +7,7 @@ import 'package:doors/core/features/auth/presentation/widgets/name_text_field.da
 import 'package:doors/core/features/auth/presentation/widgets/password_with_confirmation.dart';
 import 'package:doors/core/features/auth/presentation/widgets/phone_number_text_field.dart';
 import 'package:doors/core/features/auth/presentation/widgets/sign_up_headline_text_with_icon.dart';
+import 'package:doors/core/widgets/sized_box_16_h.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -66,17 +67,17 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
                                 _name = name!;
                               },
                             ),
-                            const _SizedBox16H(),
+                            const SizedBox16H(),
                             EmailTextField(onSave: (email) {
                               _email = email!;
                             }),
-                            const _SizedBox16H(),
+                            const SizedBox16H(),
                             PasswordWithConfirmation(
                               onSave: (String? password) {
                                 _password = password!;
                               },
                             ),
-                            const _SizedBox16H(),
+                            const SizedBox16H(),
                             PhoneNumberTextField(
                               onSave: (phoneNumber) {
                                 _phoneNamer = phoneNumber;
@@ -132,15 +133,4 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
   }
 }
 
-class _SizedBox16H extends StatelessWidget {
-  const _SizedBox16H({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 16.0,
-    );
-  }
-}
+ 

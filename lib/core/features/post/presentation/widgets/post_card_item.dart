@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:doors/core/features/auth/model/user.dart';
-import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
-import 'package:doors/core/features/post/presentation/widgets/no_image_provided.dart';
+import 'package:doors/core/widgets/network_image_from_parse_file.dart';
+import 'package:doors/core/widgets/no_image_provided.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_location.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -16,7 +16,7 @@ class PostCardItem extends StatelessWidget {
   final String? postHumanReadableLocation;
   final ParseGeoPoint postLocation;
   final ParseFile? postImage;
-  final List<String>? postKeywords;
+  final Set<String>? postKeywords;
   final String postDescription;
   final String? postCostCurrency;
   final double? minCost;
@@ -138,7 +138,7 @@ class PostCardItem extends StatelessWidget {
                             Container(
                               foregroundDecoration: BoxDecoration(
                                 // add fade only if its long description around 45 chars
-                                gradient: postDescription.length < 45
+                                gradient: postDescription.length <= 30
                                     ? null
                                     : LinearGradient(
                                         stops: const [0.3, 0.8],
@@ -152,7 +152,7 @@ class PostCardItem extends StatelessWidget {
                               ),
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
-                                postDescription,
+                                postDescription+'dsafdffdas fdfds fsfa ',
                                 maxLines: 3,
                                 softWrap: true,
                                 overflow: TextOverflow.fade,
@@ -161,7 +161,7 @@ class PostCardItem extends StatelessWidget {
                             ),
                             if (maxCost != null || minCost != null)
                               PostCost(
-                                maxCost: maxCost,
+                                maxCost:minCost!=null?null: maxCost,
                                 minCost: minCost,
                                 currency: postCostCurrency,
                               )
@@ -188,19 +188,12 @@ class _CardPostImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
-      child: postImage != null && postImage?.url != null
-          ? Hero(
-              tag: postImage!.url!,
-              child: Image.network(
-                postImage!.url!,
-                fit: BoxFit.cover,
-                cacheHeight: 140,
-                height: 140,
-                width: double.infinity,
-                errorBuilder: (_, __, ___) => const NoImageProvided(),
-              ),
-            )
-          : const NoImageProvided(),
+      child: NetworkImageFromParseFile(
+        image: postImage,
+        width: double.infinity,
+        cacheHeight: 140,
+        height: 140,
+      ),
     );
   }
 }
