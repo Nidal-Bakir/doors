@@ -28,6 +28,9 @@ class ManagePostBloc extends Bloc<ManagePostEvent, ManagePostState> {
         await _managePostsRepository.createPost(event.newPost);
     createPostResult.fold((error) => emit(ManagePostOperationFailure(error)),
         (_) => emit(const ManagePostCreateSuccuss()));
+
+    // reset the bloc to its original state
+    emit(const ManagePostInitial());
   }
 
   Future<void> _onPostDeleted(
@@ -38,6 +41,9 @@ class ManagePostBloc extends Bloc<ManagePostEvent, ManagePostState> {
         await _managePostsRepository.deletePost(event.post);
     deletePostResult.fold((error) => emit(ManagePostOperationFailure(error)),
         (_) => emit(const ManagePostDeleteSuccuss()));
+
+    // reset the bloc to its original state
+    emit(const ManagePostInitial());
   }
 
   Future<void> _onPostEdited(
@@ -50,5 +56,8 @@ class ManagePostBloc extends Bloc<ManagePostEvent, ManagePostState> {
     );
     editPostResult.fold((error) => emit(ManagePostOperationFailure(error)),
         (_) => emit(const ManagePostEditSuccuss()));
+
+    // reset the bloc to its original state
+    emit(const ManagePostInitial());
   }
 }
