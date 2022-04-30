@@ -15,6 +15,9 @@ class UserLocationRepository {
   UserLocationRepository(
       this._userLocationLocalDataSource, this._userLocationRemoteDataSource);
 
+  /// Returns Either:
+  /// * List of cities match the [cityName] using regex pattern.
+  /// * OR [ServerException] in case of connection error or parse error.
   Future<Either<ServerException, List<City>>> getListOfCitiesMatchesString(
     String cityName,
   ) async {
@@ -26,6 +29,12 @@ class UserLocationRepository {
     }
   }
 
+  /// Returns Either:
+  /// * [UserLocation] contains userGeoLocation and userCity based on user GeoLocation
+  /// * OR [ExceptionBase]:
+  ///   * [ServerException] in case of connection error or parse error.
+  ///   * [LocationException] in case of disabled location, denied location permissions or
+  /// permanently deniedLocation permissions
   Future<Either<ExceptionBase, UserLocation>> getUserLocationUsingGPS() async {
     final ParseGeoPoint _userCurrentLocation;
     try {

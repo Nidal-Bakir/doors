@@ -4,19 +4,23 @@ import 'package:doors/core/features/user_location/models/city.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class UserLocationRemoteDataSource {
+  /// Returns the city closest to [userLocation] using GeoPoint search.
+  /// 
+  /// Throws [ServerException] in case of connection error or parse error.
   Future<City?> getUserCityUsingGeoPoint(ParseGeoPoint userLocation);
+
+  /// Returns list of cities match the [cityName] using regex pattern.
+  ///
+  /// The search will be on three columns (cityName,CityAlternateNames,CityCountryName)
+  /// using the (OR) operator so any match in one column will be counted as hit.
+  ///
+  /// Throws [ServerException] in case of connection error or parse error.
   Future<List<City>> getListOfCitiesMatchesString(String cityName);
 }
 
 class UserLocationRemoteDataSourceImpl extends UserLocationRemoteDataSource {
-  final List<City> _tempCacheFetchedCities = [];
-  String _lastSearchedCityName = '';
   @override
   Future<List<City>> getListOfCitiesMatchesString(String cityName) async {
-    if (_lastSearchedCityName != cityName) {
-      _tempCacheFetchedCities.clear();
-      _lastSearchedCityName = cityName;
-    }
     final _citiesNameQueryBuilder = QueryBuilder.name(City.keyClassName);
     _citiesNameQueryBuilder.whereContains(City.keyCityName, cityName);
 
@@ -37,8 +41,6 @@ class UserLocationRemoteDataSourceImpl extends UserLocationRemoteDataSource {
         _citiesCountryNameQueryBuilder
       ],
     );
-
-    _mainCitiesQueryBuilder.setAmountToSkip(_tempCacheFetchedCities.length);
     _mainCitiesQueryBuilder.setLimit(GlobalConfig.amountOfResultPeerRequest);
 
     final ParseResponse citiesQueryResponse;
@@ -50,9 +52,7 @@ class UserLocationRemoteDataSourceImpl extends UserLocationRemoteDataSource {
     if (citiesQueryResponse.success &&
         citiesQueryResponse.error == null &&
         citiesQueryResponse.results != null) {
-      final _citiesSearchResult = List<City>.from(citiesQueryResponse.results!);
-      _tempCacheFetchedCities.addAll(_citiesSearchResult);
-      return _tempCacheFetchedCities;
+      return List<City>.from(citiesQueryResponse.results!);
     }
     if (citiesQueryResponse.error != null) {
       final error =
@@ -69,7 +69,7 @@ class UserLocationRemoteDataSourceImpl extends UserLocationRemoteDataSource {
   Future<City?> getUserCityUsingGeoPoint(ParseGeoPoint userLocation) async {
     final _nearestCityFromUserLocationQueryBuilder =
         QueryBuilder.name(City.keyClassName);
-        
+
     _nearestCityFromUserLocationQueryBuilder.whereNear(
         City.keyCityLocation, userLocation);
     _nearestCityFromUserLocationQueryBuilder.setLimit(1);
