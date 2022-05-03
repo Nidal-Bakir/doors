@@ -5,7 +5,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class UserLocationRemoteDataSource {
   /// Returns the city closest to [userLocation] using GeoPoint search.
-  /// 
+  ///
   /// Throws [ServerException] in case of connection error or parse error.
   Future<City?> getUserCityUsingGeoPoint(ParseGeoPoint userLocation);
 
@@ -46,7 +46,7 @@ class UserLocationRemoteDataSourceImpl extends UserLocationRemoteDataSource {
     final ParseResponse citiesQueryResponse;
     try {
       citiesQueryResponse = await _mainCitiesQueryBuilder.query();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException('can not get list of cites');
     }
     if (citiesQueryResponse.success &&
@@ -79,7 +79,7 @@ class UserLocationRemoteDataSourceImpl extends UserLocationRemoteDataSource {
     try {
       _nearestCityFromUserLocationResponse =
           await _nearestCityFromUserLocationQueryBuilder.query();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException(
           'can not get nearest city from user location');
     }

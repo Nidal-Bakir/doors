@@ -7,8 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CurrentUserLocationUsingGPSIcon extends StatefulWidget {
   final UserLocationState userLocationState;
+  final Color? backgroundColor;
   const CurrentUserLocationUsingGPSIcon(
-      {Key? key, required this.userLocationState})
+      {Key? key, required this.userLocationState, this.backgroundColor})
       : super(key: key);
 
   @override
@@ -61,7 +62,8 @@ class _CurrentUserLocationUsingGPSIconState
     return Container(
       margin: const EdgeInsets.only(left: 4),
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onSurface,
+          color:
+              widget.backgroundColor ?? Theme.of(context).colorScheme.onSurface,
           borderRadius: BorderRadius.circular(15)),
       child: IconButton(
         tooltip: context.loc.my_current_location,

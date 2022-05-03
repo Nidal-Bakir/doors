@@ -31,6 +31,17 @@ class NetworkImageFromParseFile extends StatelessWidget {
           child: Image.network(
             image!.url!,
             fit: boxFit,
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              if (wasSynchronouslyLoaded) {
+                return child;
+              }
+              return AnimatedOpacity(
+                child: child,
+                opacity: frame == null ? 0 : 1,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeOut,
+              );
+            },
             height: height,
             width: width,
             cacheHeight: cacheHeight,
@@ -43,6 +54,17 @@ class NetworkImageFromParseFile extends StatelessWidget {
           image!.url!,
           fit: boxFit,
           height: height,
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) {
+              return child;
+            }
+            return AnimatedOpacity(
+              child: child,
+              opacity: frame == null ? 0 : 1,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeOut,
+            );
+          },
           width: width,
           cacheHeight: cacheHeight,
           cacheWidth: cacheWidth,

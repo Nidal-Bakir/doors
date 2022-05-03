@@ -149,6 +149,7 @@
   "your_service_edited_successfully": "Your service edit successfully",
   "your_service_deleted_successfully": "Your service deleted successfully",
   "enter_your_city_name": "Enter your city name",
+  "enter_city_name": "Enter city name",
   "please_enter_a_valid_location": "Please enter a valid location",
   "my_current_location": "My current location",
   "disabled_location_service": "Disabled location service",
@@ -159,5 +160,11 @@
   "please_go_to_setting_and_give_the_app_location_permissions": "Please go to settings and  give the app location permissions",
   "open_location_settings": "Open Location Settings",
   "open_app_settings": "Open App Settings",
-  "not_valid_keywords": "Not valid keywords"
+  "not_valid_keywords": "Not valid keywords",
+  "at_lest_one_cost_range": "At lest one cost range",
+  "search_for_service": "Search for service . . . .",
+  "set_a_location_first": "Set a location first",
+  "not_valid_cost": "Not valid cost",
+  "apply": "APPLY",
+  "all": "ALL"
 }

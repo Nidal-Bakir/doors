@@ -56,6 +56,20 @@ class CountryCurrency {
 
     return currency;
   }
+
+  static String extractCurrencyCodeFromStringFormat(
+          String stringFormatCurrency) =>
+      stringFormatCurrency.split(' ')[0];
+
+  static String toStringFormat(CountryCurrency? countryCurrency) =>
+      (countryCurrency?.code ?? 'USD') +
+      ' ' +
+      (countryCurrency?.symbolNative ?? '\$');
+
+  @override
+  String toString() {
+    return code + ' ' + symbolNative;
+  }
 }
 
 final List<CountryCurrency> currencyCodes = [

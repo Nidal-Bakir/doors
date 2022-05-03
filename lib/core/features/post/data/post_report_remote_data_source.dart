@@ -17,7 +17,7 @@ class PostReportRemoteDataSourceImpl extends PostReportRemoteDataSource {
     final ParseResponse reportResponse;
     try {
       reportResponse = await postReport.save();
-    } on Exception {
+    }catch (e) {
       throw const NoConnectionException('cannot sent the post report');
     }
     if (!reportResponse.success && reportResponse.error != null) {

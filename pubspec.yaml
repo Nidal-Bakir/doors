@@ -72,7 +72,7 @@ dependencies:
 
   # for UI
   flutter_zoom_drawer: ^3.0.0
-  syncfusion_flutter_sliders: ^19.4.52
+  syncfusion_flutter_sliders: ^20.1.51
   auto_size_text: ^3.0.0
   flutter_rating_bar: ^4.0.0
   flutter_typeahead: ^3.2.5

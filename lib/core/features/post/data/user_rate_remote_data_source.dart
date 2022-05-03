@@ -71,7 +71,7 @@ class UserRateRemoteDataSourceImpl extends UserRateRemoteDataSource {
     final ParseResponse postRateResponse;
     try {
       postRateResponse = await postRateQuery.query();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException('can not get user rate on a post');
     }
     if (postRateResponse.success &&
@@ -99,7 +99,7 @@ class UserRateRemoteDataSourceImpl extends UserRateRemoteDataSource {
     final ParseResponse postRateResponse;
     try {
       postRateResponse = await postRate.save();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException(
           'can not set the user rate on the post.');
     }
@@ -124,7 +124,7 @@ class UserRateRemoteDataSourceImpl extends UserRateRemoteDataSource {
     final ParseResponse postRateResponse;
     try {
       postRateResponse = await postRateToRemove.delete();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException(
           'can not set the user rate on the post.');
     }

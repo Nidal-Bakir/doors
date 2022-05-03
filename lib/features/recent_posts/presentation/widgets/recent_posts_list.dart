@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:doors/core/config/global_config.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
@@ -113,7 +112,6 @@ class _RecentPostsListState extends State<RecentPostsList> {
                             childCount:
                                 _recentPostsLoadSuccessState.recentPosts.length,
                           ),
-                          // itemExtent: 270,
                         );
                       },
                     ),

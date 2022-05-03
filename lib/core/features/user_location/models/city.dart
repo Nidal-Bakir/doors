@@ -26,6 +26,18 @@ class City extends ParseObject with EquatableMixin implements ParseCloneable {
   ParseGeoPoint? get cityLocation => get<ParseGeoPoint>(keyCityLocation);
 
   String getHumanReadableCityName() => countryName + ', ' + cityName;
+  
+  factory City.fromHumanReadableCityNameString(String? humanReadableCityName) {
+    return City()
+      ..set(
+        City.keyCityName,
+        humanReadableCityName?.split(',')[1].trim(),
+      )
+      ..set(
+        City.keyCityCountryName,
+        humanReadableCityName?.split(',')[0].trim(),
+      );
+  }
 
   @override
   List<Object?> get props => [

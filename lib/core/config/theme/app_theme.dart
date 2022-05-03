@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 const _fontTitilliumWeb = 'TitilliumWeb';
 const _fontSukar = 'Sukar';
 String _fontFamilyName = _fontTitilliumWeb;
-const _yalow = const Color(0xFFFECE2E);
+const _yalow = Color(0xFFFECE2E);
+const _darkerYalow = Color.fromARGB(255, 233, 185, 0);
 const _black = Colors.black;
 const _white = Colors.white;
-const _grayWhite = const Color(0xFFF0F0F0);
+const _grayWhite = Color(0xFFF0F0F0);
 const _redError = Colors.red;
 
 ThemeData defaultLightTheme(String langCode) {
@@ -16,12 +17,14 @@ ThemeData defaultLightTheme(String langCode) {
       colorScheme: const ColorScheme.light(
           primary: _yalow,
           secondary: _black,
+          onPrimary: _darkerYalow,
           surface: _white,
           onSurface: _grayWhite,
           error: _redError),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: _yalow,
       ),
+      splashColor: _yalow,
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         actionTextColor: _white,
@@ -46,7 +49,17 @@ ThemeData defaultLightTheme(String langCode) {
           ),
         ),
       ),
-      textButtonTheme: const TextButtonThemeData(style: ButtonStyle()),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+         
+          foregroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) {
+              return _black.withOpacity(0.6);
+            }
+            return _black;
+          }),
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
@@ -72,6 +85,14 @@ ThemeData defaultLightTheme(String langCode) {
             },
           ),
         ),
+      ),
+      tooltipTheme: TooltipThemeData(
+        textStyle: textTheme().subtitle1,
+        decoration: BoxDecoration(
+          color: _darkerYalow,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        enableFeedback: true,
       ),
       inputDecorationTheme: InputDecorationTheme(
         contentPadding:

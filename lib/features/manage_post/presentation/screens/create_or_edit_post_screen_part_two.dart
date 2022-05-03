@@ -14,7 +14,6 @@ import 'package:doors/features/manage_post/presentation/widgets/cost_head_line_w
 import 'package:doors/features/manage_post/presentation/widgets/post_image_head_line_with_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class CreateOrEditPostScreenPartTwo extends StatefulWidget {
@@ -88,6 +87,9 @@ class _CreateOrEditPostScreenPartTwoState
                             ),
                             LineWithTextOnRow(text: context.loc.location),
                             UserLocationWidget(
+                              inputDecoration: InputDecoration(
+                                hintText: context.loc.enter_your_city_name,
+                              ),
                               initHumanReadableLocation: _humanReadableLocation,
                               initUserLocation: _userGeoLocation,
                               onUserLocationDetermined:

@@ -7,7 +7,7 @@ import 'package:doors/core/widgets/title_with_under_line_in_the_end.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
 import 'package:doors/features/manage_post/presentation/widgets/category_head_line_with_text_field.dart';
 import 'package:doors/features/manage_post/presentation/widgets/description_head_line_with_text_field.dart';
-import 'package:doors/features/manage_post/presentation/widgets/keywords_head_line_text_field.dart';
+import 'package:doors/core/widgets/keywords_head_line_text_field.dart';
 import 'package:doors/features/manage_post/presentation/widgets/post_type_head_line_dropdown_button_form_field.dart';
 import 'package:doors/features/manage_post/presentation/widgets/title_head_line_with_text_field.dart';
 import 'package:flutter/material.dart';

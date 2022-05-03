@@ -9,7 +9,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class FavoritePostsRemoteDataSource {
   /// Get a list of user favorite posts.
-  /// 
+  ///
   /// [amountToSkip]: For pagination, where it's the count of the current
   /// loaded favorite posts
   ///
@@ -41,7 +41,7 @@ class FavoritePostsRemoteDataSourceImpl extends FavoritePostsRemoteDataSource {
     final ParseResponse listOfFavoritePostsResponse;
     try {
       listOfFavoritePostsResponse = await userFavoritePostsQuery.query();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException('can not get a list of favorite posts');
     }
     if (listOfFavoritePostsResponse.success &&

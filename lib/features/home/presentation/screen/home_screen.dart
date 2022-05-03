@@ -11,6 +11,7 @@ import 'package:doors/features/home/presentation/screen/menu_screen.dart';
 import 'package:doors/features/home/presentation/widgets/custom_bottom_navigation_bar.dart';
 import 'package:doors/features/home/presentation/widgets/keep_page_alive.dart';
 import 'package:doors/features/recent_posts/presentation/widgets/recent_posts_list.dart';
+import 'package:doors/features/search/posts_search/presentation/screens/posts_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/config.dart';
@@ -105,9 +106,13 @@ class _MainScreenState extends State<MainScreen>
             currentOpenedTapIndex: _currentOpenedPageIndex,
           ),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+            IconButton(onPressed: () {
+              Navigator.of(context).pushNamed(PostsSearchScreen.routeName);
+            }, icon: const Icon(Icons.search)),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                
+              },
               icon: const ImageIcon(
                 AssetImage(
                   'assets/icons/message.png',

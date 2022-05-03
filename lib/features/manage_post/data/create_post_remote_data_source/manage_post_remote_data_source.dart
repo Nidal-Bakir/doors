@@ -52,7 +52,6 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException('Anonymous user can not create posts');
     }
- 
 
     if (post.postImage != null) {
       await _saveNewPostImage(post.postImage!);
@@ -61,7 +60,7 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
     final ParseResponse savePostResponse;
     try {
       savePostResponse = await post.create();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException('can not create new post');
     }
     if (!savePostResponse.success) {
@@ -90,7 +89,7 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
     final ParseResponse editPostResponse;
     try {
       editPostResponse = await post.save();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException('can not edit the post');
     }
     if (!editPostResponse.success) {
@@ -116,7 +115,7 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
     final ParseResponse deletePostResponse;
     try {
       deletePostResponse = await post.delete();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException('can not delete the post');
     }
     if (!deletePostResponse.success) {
@@ -131,7 +130,7 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
     final ParseResponse saveImageResponse;
     try {
       saveImageResponse = await postImage.save();
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException('can not save the new image');
     }
     if (!saveImageResponse.success) {
@@ -169,7 +168,7 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
     try {
       deletePostImageCloudResponse = await _deletePostImageCloudFunction
           .execute(parameters: {'postId': postId});
-    } on Exception {
+    } catch (e) {
       throw const NoConnectionException('can not delete the image');
     }
     if (!deletePostImageCloudResponse.success) {

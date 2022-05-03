@@ -1,7 +1,7 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/widgets/custom_dropdown/custom_drop_down.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
-import 'package:doors/features/manage_post/presentation/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart' hide DropdownButtonFormField;
 
 class PostTypeHeadLineWithDropdownButtonFormField extends StatefulWidget {

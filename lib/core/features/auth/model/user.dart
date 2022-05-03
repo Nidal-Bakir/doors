@@ -14,6 +14,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyBio = 'bio';
   static const keyProfileImage = 'profileImage';
   static const keyUserLocation = 'userLocation';
+  static const keyUserHumanReadableLocation = 'humanReadableLocation';
   static const keyUserSubscription = 'userSubscription';
   static const keyIsSubscribed = 'isSubscribed';
   static const keyFavoritePosts = 'favoritePosts';
@@ -91,6 +92,12 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   set userLocation(ParseGeoPoint? userLocation) =>
       set<ParseGeoPoint?>(keyUserLocation, userLocation);
 
+        String? get userHumanReadableLocation =>
+      get<String?>(keyUserHumanReadableLocation);
+
+  set userHumanReadableLocation(String? humanReadableLocation) =>
+      set<String?>(keyUserHumanReadableLocation, humanReadableLocation);
+
   ParseRelation<UserSubscription> get userSubscriptions =>
       getRelation<UserSubscription>(keyUserSubscription);
 
@@ -117,7 +124,6 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
 
   static List<String> keysToExcludeFromQueriesRelatedToUser() => const [
         User.keyAccountStatues,
-        User.keyIsSubscribed,
         User.keyUserSubscription,
         User.keyFavoritePosts,
         User.keyPaypalEmail,

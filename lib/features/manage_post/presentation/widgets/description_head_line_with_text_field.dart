@@ -27,32 +27,29 @@ class _DescriptionHeadLineWithTextFieldState
         LineWithTextOnRow(
           text: context.loc.description,
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 4),
-          child: TextFormField(
-            initialValue: widget.initDescription,
-            textInputAction: TextInputAction.newline,
-            keyboardType: TextInputType.multiline,
-            enableSuggestions: true,
-            decoration: InputDecoration(
-              counterText:
-                  _description.length > 30 ? null : '${_description.length}/30',
-              counterStyle:
-                  TextStyle(color: Theme.of(context).colorScheme.error),
-              hintText: context.loc.what_do_you_need_or_offer,
-            ),
-            validator: (description) =>
-                isValidDescription(description, context),
-            maxLines: 3,
-            onChanged: (description) {
-              setState(() {
-                _description = description;
-              });
-            },
-            onSaved: (description) {
-              widget.onDescriptionSave(description ?? '');
-            },
+        TextFormField(
+          initialValue: widget.initDescription,
+          textInputAction: TextInputAction.newline,
+          keyboardType: TextInputType.multiline,
+          enableSuggestions: true,
+          decoration: InputDecoration(
+            counterText:
+                _description.length > 30 ? null : '${_description.length}/30',
+            counterStyle:
+                TextStyle(color: Theme.of(context).colorScheme.error),
+            hintText: context.loc.what_do_you_need_or_offer,
           ),
+          validator: (description) =>
+              isValidDescription(description, context),
+          maxLines: 3,
+          onChanged: (description) {
+            setState(() {
+              _description = description;
+            });
+          },
+          onSaved: (description) {
+            widget.onDescriptionSave(description ?? '');
+          },
         ),
       ],
     );

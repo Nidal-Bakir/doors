@@ -1,9 +1,8 @@
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/utils/country_currency.dart';
-import 'package:doors/core/utils/global_functions/global_functions.dart';
+import 'package:doors/core/widgets/currency_dropdown.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:doors/core/widgets/sized_box_16_h.dart';
-import 'package:doors/features/manage_post/presentation/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
 
 class CostHeadLineWithTextFields extends StatefulWidget {
@@ -131,56 +130,22 @@ class _CostHeadLineWithTextFieldsState
         ),
         const SizedBox16H(),
         IgnorePointer(
-          ignoring: _iDonNotKnow,
-          child: CustomDropdownButtonFormField<CountryCurrency>(
-            onSaved: (countryCurrency) {
-              if (_iDonNotKnow) {
-                _currency = null;
-              } else {
-                _currency = (countryCurrency?.code ?? 'USD') +
-                    ' ' +
-                    (countryCurrency?.symbolNative ?? '\$');
-              }
-              widget.onCostSave(
-                currency: _currency,
-                fromCost: _fromCost,
-                upToCost: _upToCost,
-              );
-            },
-            value: _currency != null && _currency!.isNotEmpty
-                ? CountryCurrency.findByCountryCode(
-                    _currency!.split(' ')[0],
-                  )
-                : CountryCurrency.findByCountryCode(
-                    currencyCode(
-                      context,
-                    ),
-                  ),
-            items: currencyCodes.map<DropdownMenuItem<CountryCurrency>>(
-              (countryCurrency) {
-                return DropdownMenuItem<CountryCurrency>(
-                  value: countryCurrency,
-                  child: Text(
-                    countryCurrency.code + ' ' + countryCurrency.symbolNative,
-                    softWrap: true,
-                    style: const TextStyle(
-                      fontFamily: 'Roboto',
-                    ),
-                  ),
+            ignoring: _iDonNotKnow,
+            child: CurrencyDropdown(
+              initCurrency: _currency,
+              onSaved: (countryCurrency) {
+                if (_iDonNotKnow) {
+                  _currency = null;
+                } else {
+                  _currency = CountryCurrency.toStringFormat(countryCurrency);
+                }
+                widget.onCostSave(
+                  currency: _currency,
+                  fromCost: _fromCost,
+                  upToCost: _upToCost,
                 );
               },
-            ).toList(),
-            onChanged: (countryCurrency) {
-              setState(
-                () {
-                  _currency = (countryCurrency?.code ?? 'USD') +
-                      ' ' +
-                      (countryCurrency?.symbolNative ?? '\$');
-                },
-              );
-            },
-          ),
-        ),
+            )),
         Padding(
           padding: const EdgeInsets.only(left: 8),
           child: Row(
@@ -213,14 +178,14 @@ class _CostHeadLineWithTextFieldsState
 
   String? isValidFromCost(String? fromCost, BuildContext context) {
     if (!_iDonNotKnow && _fromCost == null && _upToCost == null) {
-      return 'At lest one cost range';
+      return context.loc.at_lest_one_cost_range;
     }
     return null;
   }
 
   String? isValidUpCost(String? upToCost, BuildContext context) {
     if (!_iDonNotKnow && _fromCost == null && _upToCost == null) {
-      return 'At lest one cost range';
+      return context.loc.at_lest_one_cost_range;
     }
     return null;
   }

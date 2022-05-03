@@ -1,14 +1,14 @@
-import 'dart:async';
-
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/user_location/models/city.dart';
 import 'package:doors/core/features/user_location/models/user_location.dart';
 import 'package:doors/core/features/user_location/presentation/managers/user_location_bloc/user_location_bloc.dart';
 import 'package:doors/core/features/user_location/presentation/widgets/current_user_location_using_gps_icon.dart';
 import 'package:doors/core/features/user_location/repository/user_location_repository.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
+import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -20,12 +20,24 @@ class UserLocationWidget extends StatefulWidget {
   final String? initHumanReadableLocation;
   final ParseGeoPoint? initUserLocation;
   final void Function(UserLocation userLocation) onUserLocationDetermined;
-
+  final void Function(String enteredTextLocation)?
+      onTextFieldUserLocationChanged;
+  final InputDecoration inputDecoration;
+  final Color? gpsButtonBackgroundColor;
+  final Color? suggestionsBoxColor;
+  final Color? suggestionsLoadingIndicatorColor;
+  final Color? cursorColor;
   const UserLocationWidget({
     Key? key,
     required this.initHumanReadableLocation,
     required this.initUserLocation,
     required this.onUserLocationDetermined,
+    this.inputDecoration = const InputDecoration(),
+    this.gpsButtonBackgroundColor,
+    this.cursorColor,
+    this.suggestionsBoxColor,
+    this.suggestionsLoadingIndicatorColor,
+    this.onTextFieldUserLocationChanged,
   }) : super(key: key);
 
   @override
@@ -33,20 +45,56 @@ class UserLocationWidget extends StatefulWidget {
 }
 
 class UserLocationWidgetState extends State<UserLocationWidget> {
-  late ParseGeoPoint? _userGeoLocation = widget.initUserLocation;
-  late var _selectedCity = City()
-    ..set(
-      City.keyCityName,
-      widget.initHumanReadableLocation?.split(',')[1].trim(),
-    )
-    ..set(City.keyCityCountryName,
-        widget.initHumanReadableLocation?.split(',')[0].trim());
+  ParseGeoPoint? _userGeoLocation;
+  var _selectedCity = City();
+  late final _typeAheadTextEditingController = TextEditingController();
 
-  late final _typeAheadTextEditingController =
-      TextEditingController(text: widget.initHumanReadableLocation);
+  @override
+  void initState() {
+    _typeAheadTextEditingController
+        .addListener(_onTextFieldUserLocationChanged);
+
+    if (widget.initUserLocation == null) {
+      _initUsingCurrentUserLocation();
+    } else {
+      _initUsingProvidedLocation();
+    }
+
+    super.initState();
+  }
+
+  void _onTextFieldUserLocationChanged() {
+    widget.onTextFieldUserLocationChanged
+        ?.call(_typeAheadTextEditingController.text);
+  }
+
+  void _initUsingProvidedLocation() {
+    _userGeoLocation = widget.initUserLocation;
+
+    _selectedCity =
+        City.fromHumanReadableCityNameString(widget.initHumanReadableLocation);
+
+    _typeAheadTextEditingController.text =
+        widget.initHumanReadableLocation ?? '';
+  }
+
+  void _initUsingCurrentUserLocation() {
+    final _currentUser = context.read<AuthBloc>().getCurrentUser();
+    if (_currentUser != null && !_currentUser.isAnonymousAccount) {
+      _userGeoLocation = _currentUser.userLocation;
+
+      _selectedCity = City.fromHumanReadableCityNameString(
+          _currentUser.userHumanReadableLocation);
+
+      _typeAheadTextEditingController.text =
+          _currentUser.userHumanReadableLocation ?? '';
+    }
+  }
 
   @override
   void dispose() {
+    _typeAheadTextEditingController
+        .removeListener(_onTextFieldUserLocationChanged);
     _typeAheadTextEditingController.dispose();
     super.dispose();
   }
@@ -88,30 +136,43 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
                 Flexible(
                   child: TypeAheadFormField<City>(
                     onSaved: (citeName) {
-                      widget.onUserLocationDetermined(UserLocation(
-                        _userGeoLocation,
-                        _selectedCity,
-                      ));
+                      widget.onUserLocationDetermined(
+                        UserLocation(
+                          _userGeoLocation,
+                          _selectedCity,
+                        ),
+                      );
                     },
                     minCharsForSuggestions: 3,
                     hideOnEmpty: true,
                     hideSuggestionsOnKeyboardHide: false,
                     keepSuggestionsOnLoading: true,
                     suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                      color: widget.suggestionsBoxColor,
                       constraints: const BoxConstraints(minWidth: 295),
                       borderRadius: BorderRadius.circular(
                         15,
                       ),
                     ),
+                    loadingBuilder: (context) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: LoadingIndicator(
+                            indicatorColor:
+                                widget.suggestionsLoadingIndicatorColor,
+                          ),
+                        ),
+                      );
+                    },
                     debounceDuration: const Duration(milliseconds: 500),
                     noItemsFoundBuilder: (context) => const SizedBox.shrink(),
                     validator: _cityNameValidator,
                     textFieldConfiguration: TextFieldConfiguration(
+                      cursorColor: widget.cursorColor,
                       keyboardType: TextInputType.text,
                       controller: _typeAheadTextEditingController,
-                      decoration: InputDecoration(
-                        hintText: context.loc.enter_your_city_name,
-                      ),
+                      decoration: widget.inputDecoration,
                     ),
                     onSuggestionSelected: (selectedCity) {
                       _selectedCity = selectedCity;
@@ -170,6 +231,7 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
                 ),
                 CurrentUserLocationUsingGPSIcon(
                   userLocationState: state,
+                  backgroundColor: widget.gpsButtonBackgroundColor,
                 )
               ],
             );

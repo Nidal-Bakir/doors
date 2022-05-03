@@ -56,7 +56,7 @@ Future<UnmodifiableListView<Post>> _loadPosts(
   ParseResponse recentNeededPostsResponse;
   try {
     recentNeededPostsResponse = await queryBuilder.query();
-  } on Exception {
+  } catch (e) {
     throw NoConnectionException('con\'t load recent ${postType.name} posts');
   }
 

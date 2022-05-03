@@ -34,6 +34,17 @@ class CircularProfileImage extends StatelessWidget {
             : Image.network(
                 profileImage!.url!,
                 height: height,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded) {
+                    return child;
+                  }
+                  return AnimatedOpacity(
+                    child: child,
+                    opacity: frame == null ? 0 : 1,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeOut,
+                  );
+                },
                 width: width,
                 cacheHeight: height.toInt(),
                 cacheWidth: width.toInt(),
@@ -66,4 +77,3 @@ class _DefaultProfileImage extends StatelessWidget {
     );
   }
 }
-
