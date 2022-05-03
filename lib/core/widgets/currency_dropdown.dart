@@ -24,6 +24,7 @@ class _CurrencyDropdownState extends State<CurrencyDropdown> {
   Widget build(BuildContext context) {
     return CustomDropdownButtonFormField<CountryCurrency>(
       dropdownColor: widget.fillColor,
+      iconEnabledColor: Colors.black,
       decoration: InputDecoration(
         fillColor: widget.fillColor,
       ),

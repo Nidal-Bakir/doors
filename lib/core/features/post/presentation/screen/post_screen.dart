@@ -137,10 +137,12 @@ class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(25)),
         child: Stack(
           children: [
-            NetworkImageFromParseFile(
-              image: currentPost.postImage,
-              width: double.infinity,
-              cacheHeight: _height.toInt(),
+            Positioned.fill(
+              child: NetworkImageFromParseFile(
+                image: currentPost.postImage,
+                width: double.infinity,
+                cacheHeight: _height.toInt(),
+              ),
             ),
             const _BackButton(),
             if (currentPost.postType == PostType.offer)
@@ -693,12 +695,14 @@ class _LocationAndCost extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flex(
       direction: Axis.horizontal,
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(
           child: Align(
             alignment: Alignment.centerLeft,
             child: PostLocation(
+              maxLines: 2,
               humanReadableLocation: humanReadableLocation,
               postLocation: postLocation,
               mainAxisAlignment: MainAxisAlignment.start,

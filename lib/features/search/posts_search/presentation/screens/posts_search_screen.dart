@@ -144,13 +144,13 @@ class _PostsSearchScreenState extends State<PostsSearchScreen> {
                                     title: _searchTextFieldController.text);
                                 if (_searchFilter.title != null &&
                                     _searchFilter.title!.isNotEmpty) {
-                                  setState(() {
-                                    _showFilters = false;
-                                  });
                                   context
                                       .read<PostsSearchBloc>()
                                       .add(PostsSearchStarted(_searchFilter));
                                 }
+                                setState(() {
+                                  _showFilters = false;
+                                });
                               },
                             ),
                           ),

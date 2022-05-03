@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +9,7 @@ import 'package:doors/core/extensions/parse_geo_point/geo_point_calc.dart';
 class PostLocation extends StatelessWidget {
   final String? humanReadableLocation;
   final ParseGeoPoint postLocation;
+  final int maxLines;
   final MainAxisAlignment mainAxisAlignment;
   final TextAlign textAlign;
   final bool showDistance;
@@ -19,7 +19,7 @@ class PostLocation extends StatelessWidget {
     required this.postLocation,
     this.mainAxisAlignment = MainAxisAlignment.end,
     this.textAlign = TextAlign.end,
-    this.showDistance = false,
+    this.showDistance = false, this.maxLines=1,
   }) : super(key: key);
 
   @override
@@ -36,8 +36,8 @@ class PostLocation extends StatelessWidget {
             Expanded(
               child: AutoSizeText(
                 humanReadableLocation ?? context.loc.unknown_location,
-                style: Theme.of(context).textTheme.subtitle2,
-                maxLines: 1,
+                style: Theme.of(context).textTheme.bodyText2,
+                maxLines: maxLines,
                 overflow: TextOverflow.ellipsis,
                 textAlign: textAlign,
               ),

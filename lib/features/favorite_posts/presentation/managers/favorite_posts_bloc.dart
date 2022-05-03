@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/features/post/model/post.dart';
-import 'package:doors/core/utils/typedef/new_types.dart';
 import 'package:doors/features/favorite_posts/repository/favorite_posts_repository.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -23,10 +22,10 @@ class FavoritePostsBloc extends Bloc<FavoritePostsEvent, FavoritePostsState> {
             await _onFavoritePostsRefreshed(event, emit),
       );
     }, transformer: bloc_concurrency.droppable());
-    
+
     // so the deleted or the edit post will not appear if they loaded locally
     _managePostBloc.stream.listen((event) {
-      if (event is ManagePostDeleted || event is ManagePostEdited) {
+      if (event is ManagePostDeleteSuccuss || event is ManagePostEditSuccuss) {
         add(const FavoritePostsRefreshed());
       }
     });

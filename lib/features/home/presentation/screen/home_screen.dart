@@ -33,6 +33,7 @@ class HomeScreen extends StatelessWidget {
       },
       child: ZoomDrawer(
         androidCloseOnBackTap: true,
+        menuScreenWidth: 200,
         style: DrawerStyle.defaultStyle,
         isRtl: Directionality.of(context) == TextDirection.rtl,
         controller: _drawerController,
@@ -106,13 +107,13 @@ class _MainScreenState extends State<MainScreen>
             currentOpenedTapIndex: _currentOpenedPageIndex,
           ),
           actions: [
-            IconButton(onPressed: () {
-              Navigator.of(context).pushNamed(PostsSearchScreen.routeName);
-            }, icon: const Icon(Icons.search)),
             IconButton(
-              onPressed: () {
-                
-              },
+                onPressed: () {
+                  Navigator.of(context).pushNamed(PostsSearchScreen.routeName);
+                },
+                icon: const Icon(Icons.search)),
+            IconButton(
+              onPressed: () {},
               icon: const ImageIcon(
                 AssetImage(
                   'assets/icons/message.png',

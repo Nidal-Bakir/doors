@@ -166,6 +166,4 @@ class _RecentPostsListState extends State<RecentPostsList> {
       ),
     );
   }
-
-
 }

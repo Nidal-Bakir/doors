@@ -51,7 +51,6 @@ ThemeData defaultLightTheme(String langCode) {
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-         
           foregroundColor: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.disabled)) {
               return _black.withOpacity(0.6);

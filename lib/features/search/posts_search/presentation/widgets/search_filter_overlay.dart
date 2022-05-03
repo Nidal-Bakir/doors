@@ -117,8 +117,7 @@ class _SearchFilterOverlayState extends State<SearchFilterOverlay> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  width: 150,
+                Flexible(
                   child: TextFormField(
                     cursorColor: _theme.colorScheme.secondary,
                     textInputAction: TextInputAction.next,
@@ -157,8 +156,7 @@ class _SearchFilterOverlayState extends State<SearchFilterOverlay> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  width: 150,
+                Flexible(
                   child: TextFormField(
                     cursorColor: _theme.colorScheme.secondary,
                     textInputAction: TextInputAction.next,

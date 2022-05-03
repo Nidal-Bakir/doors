@@ -24,10 +24,10 @@ class RecentPostsBloc extends Bloc<RecentPostsEvent, RecentPostsState> {
         refreshed: (event) async => await _onRecentPostsRefreshed(event, emit),
       );
     }, transformer: bloc_concurrency.droppable());
-    
+
     // so the deleted or the edit post will not appear if they loaded locally
     _managePostBloc.stream.listen((event) {
-      if (event is ManagePostDeleted || event is ManagePostEdited) {
+      if (event is ManagePostDeleteSuccuss || event is ManagePostEditSuccuss) {
         add(const RecentPostsRefreshed());
       }
     });
