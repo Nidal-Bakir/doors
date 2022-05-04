@@ -103,8 +103,9 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
   Widget build(BuildContext context) {
     return BlocProvider<UserLocationBloc>(
       create: (context) => GetIt.I.get<UserLocationBloc>(),
-      child: Builder(
-        builder: (context) => BlocConsumer<UserLocationBloc, UserLocationState>(
+      child: LayoutBuilder(
+        builder: (context, constraints) =>
+            BlocConsumer<UserLocationBloc, UserLocationState>(
           listener: (context, state) {
             if (state is UserLocationOperationFailure) {
               if (state.error is LocationException) {
@@ -149,7 +150,8 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
                     keepSuggestionsOnLoading: true,
                     suggestionsBoxDecoration: SuggestionsBoxDecoration(
                       color: widget.suggestionsBoxColor,
-                      constraints: const BoxConstraints(minWidth: 295),
+                      constraints:
+                          BoxConstraints(minWidth: constraints.maxWidth),
                       borderRadius: BorderRadius.circular(
                         15,
                       ),

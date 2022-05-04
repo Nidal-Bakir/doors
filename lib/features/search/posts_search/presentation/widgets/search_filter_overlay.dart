@@ -213,10 +213,6 @@ class _SearchFilterOverlayState extends State<SearchFilterOverlay> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  style: ButtonStyle(
-                    textStyle:
-                        MaterialStateProperty.all(_theme.textTheme.subtitle2),
-                  ),
                   onPressed: () {
                     _currentFilter = SearchFilter();
                     widget.onReset();
@@ -230,9 +226,8 @@ class _SearchFilterOverlayState extends State<SearchFilterOverlay> {
                 ),
                 TextButton(
                   style: ButtonStyle(
-                    textStyle: MaterialStateProperty.all(
-                      _theme.textTheme.headline6,
-                    ),
+                    textStyle:
+                        MaterialStateProperty.all(_theme.textTheme.subtitle2),
                   ),
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
