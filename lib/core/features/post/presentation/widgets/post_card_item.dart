@@ -4,7 +4,6 @@ import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart'
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
 import 'package:doors/core/widgets/network_image_from_parse_file.dart';
-import 'package:doors/core/widgets/no_image_provided.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_location.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -152,7 +151,7 @@ class PostCardItem extends StatelessWidget {
                               ),
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
-                                postDescription+'dsafdffdas fdfds fsfa ',
+                                postDescription,
                                 maxLines: 3,
                                 softWrap: true,
                                 overflow: TextOverflow.fade,

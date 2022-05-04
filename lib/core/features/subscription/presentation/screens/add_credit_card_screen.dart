@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/subscription/model/card_info.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';

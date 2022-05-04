@@ -1,9 +1,7 @@
 import 'dart:collection';
 
 import 'package:dartz/dartz.dart';
-import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
-import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/utils/typedef/new_types.dart';
 import 'package:doors/features/search/models/search_filter.dart';

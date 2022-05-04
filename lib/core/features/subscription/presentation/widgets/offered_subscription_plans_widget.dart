@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';
@@ -63,7 +61,7 @@ class _OfferedSubscriptionPlansWidgetState
                                     .textTheme
                                     .bodyText2
                                     ?.copyWith(
-                                      color: Color.fromARGB(255, 12, 214, 18),
+                                      color: const Color.fromARGB(255, 12, 214, 18),
                                     ),
                                 children: [
                                   TextSpan(

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:equatable/equatable.dart';

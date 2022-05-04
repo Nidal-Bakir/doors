@@ -6,6 +6,7 @@ import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
+import 'package:doors/features/user_posts/presentation/screens/user_posts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -109,7 +110,7 @@ class MenuScreen extends StatelessWidget {
                 if (!_currentUser.isSubscribed)
                   ElevatedButton(
                     onPressed: () {
-                        ZoomDrawer.of(context)?.close();
+                      ZoomDrawer.of(context)?.close();
                       if (openLogInScreenToNotLoggedInUser(context)) {
                         return;
                       }
@@ -143,7 +144,7 @@ class MenuScreen extends StatelessWidget {
                                   Colors.white.withOpacity(0.3)),
                             ),
                             onPressed: () {
-                               ZoomDrawer.of(context)?.close();
+                              ZoomDrawer.of(context)?.close();
                               if (openLogInScreenToNotLoggedInUser(context)) {
                                 return;
                               }
@@ -166,7 +167,7 @@ class MenuScreen extends StatelessWidget {
                                   Colors.white.withOpacity(0.3)),
                             ),
                             onPressed: () {
-                               ZoomDrawer.of(context)?.close();
+                              ZoomDrawer.of(context)?.close();
                               if (openLogInScreenToNotLoggedInUser(context)) {
                                 return;
                               }
@@ -191,7 +192,7 @@ class MenuScreen extends StatelessWidget {
                                     Colors.white.withOpacity(0.3)),
                               ),
                               onPressed: () {
-                                 ZoomDrawer.of(context)?.close();
+                                ZoomDrawer.of(context)?.close();
                                 if (openLogInScreenToNotLoggedInUser(context)) {
                                   return;
                                 }
@@ -210,13 +211,15 @@ class MenuScreen extends StatelessWidget {
                                   Colors.white.withOpacity(0.3)),
                             ),
                             onPressed: () {
-                               ZoomDrawer.of(context)?.close();
+                              ZoomDrawer.of(context)?.close();
                               if (openLogInScreenToNotLoggedInUser(context)) {
                                 return;
                               }
+                              Navigator.of(context)
+                                  .pushNamed(UserPostsScreen.routeName);
                             },
                             label: Text(
-                              context.loc.your_service,
+                              context.loc.my_service,
                               style: _textTheme.headline6,
                             ),
                           ),
@@ -229,7 +232,7 @@ class MenuScreen extends StatelessWidget {
                                   Colors.white.withOpacity(0.3)),
                             ),
                             onPressed: () {
-                               ZoomDrawer.of(context)?.close();
+                              ZoomDrawer.of(context)?.close();
                             },
                             label: Text(
                               context.loc.privacy_police,
@@ -245,7 +248,7 @@ class MenuScreen extends StatelessWidget {
                                   Colors.white.withOpacity(0.3)),
                             ),
                             onPressed: () {
-                               ZoomDrawer.of(context)?.close();
+                              ZoomDrawer.of(context)?.close();
                             },
                             label: Text(
                               context.loc.settings,
@@ -261,7 +264,7 @@ class MenuScreen extends StatelessWidget {
                                   Colors.white.withOpacity(0.3)),
                             ),
                             onPressed: () {
-                               ZoomDrawer.of(context)?.close();
+                              ZoomDrawer.of(context)?.close();
                             },
                             label: Text(
                               context.loc.about,
@@ -281,7 +284,7 @@ class MenuScreen extends StatelessWidget {
                               Colors.white.withOpacity(0.3)),
                         ),
                         onPressed: () {
-                           ZoomDrawer.of(context)?.close();
+                          ZoomDrawer.of(context)?.close();
                           if (_currentUser.isAnonymousAccount) {
                             Navigator.of(context)
                                 .pushNamed(LogInScreen.routeName);

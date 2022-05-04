@@ -1,6 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
-import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/security_exception_flow.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';

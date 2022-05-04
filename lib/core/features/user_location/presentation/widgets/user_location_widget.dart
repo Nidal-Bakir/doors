@@ -103,142 +103,140 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
   Widget build(BuildContext context) {
     return BlocProvider<UserLocationBloc>(
       create: (context) => GetIt.I.get<UserLocationBloc>(),
-      child: LayoutBuilder(
-        builder: (context, constraints) =>
-            BlocConsumer<UserLocationBloc, UserLocationState>(
-          listener: (context, state) {
-            if (state is UserLocationOperationFailure) {
-              if (state.error is LocationException) {
-                _showAppropriateErrorDialog(state, context);
-              } else {
-                showErrorSnackBar(
-                    context, state.error.getLocalMessageError(context));
-              }
+      child: BlocConsumer<UserLocationBloc, UserLocationState>(
+        listener: (context, state) {
+          if (state is UserLocationOperationFailure) {
+            if (state.error is LocationException) {
+              _showAppropriateErrorDialog(state, context);
+            } else {
+              showErrorSnackBar(
+                  context, state.error.getLocalMessageError(context));
             }
-            if (state is GpsBasedLoadSuccuss) {
-              widget.onUserLocationDetermined(state.userLocation);
-              _typeAheadTextEditingController.text =
-                  state.userLocation.userCity?.getHumanReadableCityName() ?? '';
+          }
+          if (state is GpsBasedLoadSuccuss) {
+            widget.onUserLocationDetermined(state.userLocation);
+            _typeAheadTextEditingController.text =
+                state.userLocation.userCity?.getHumanReadableCityName() ?? '';
+          }
+        },
+        builder: (context, state) {
+          if (state is GpsBasedLoadSuccuss) {
+            final _userLocation = state.userLocation;
+            _userGeoLocation = state.userLocation.userGeoLocation;
+            if (_userLocation.userCity != null) {
+              _selectedCity = _userLocation.userCity!;
+            } else {
+              _typeAheadTextEditingController.text = '';
             }
-          },
-          builder: (context, state) {
-            if (state is GpsBasedLoadSuccuss) {
-              final _userLocation = state.userLocation;
-              _userGeoLocation = state.userLocation.userGeoLocation;
-              if (_userLocation.userCity != null) {
-                _selectedCity = _userLocation.userCity!;
-              } else {
-                _typeAheadTextEditingController.text = '';
-              }
-            }
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: TypeAheadFormField<City>(
-                    onSaved: (citeName) {
-                      widget.onUserLocationDetermined(
-                        UserLocation(
-                          _userGeoLocation,
-                          _selectedCity,
-                        ),
-                      );
-                    },
-                    minCharsForSuggestions: 3,
-                    hideOnEmpty: true,
-                    hideSuggestionsOnKeyboardHide: false,
-                    keepSuggestionsOnLoading: true,
-                    suggestionsBoxDecoration: SuggestionsBoxDecoration(
-                      color: widget.suggestionsBoxColor,
-                      constraints:
-                          BoxConstraints(minWidth: constraints.maxWidth),
-                      borderRadius: BorderRadius.circular(
-                        15,
+          }
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: TypeAheadFormField<City>(
+                  onSaved: (citeName) {
+                    widget.onUserLocationDetermined(
+                      UserLocation(
+                        _userGeoLocation,
+                        _selectedCity,
                       ),
+                    );
+                  },
+                  minCharsForSuggestions: 3,
+                  hideOnEmpty: true,
+                  hideSuggestionsOnKeyboardHide: false,
+                  keepSuggestionsOnLoading: true,
+                  suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                    color: widget.suggestionsBoxColor,
+                    constraints: BoxConstraints(
+                        minWidth: (context.findRenderObject()?.constraints
+                                    as BoxConstraints?)
+                                ?.maxWidth ??
+                            0.0),
+                    borderRadius: BorderRadius.circular(
+                      15,
                     ),
-                    loadingBuilder: (context) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: LoadingIndicator(
-                            indicatorColor:
-                                widget.suggestionsLoadingIndicatorColor,
-                          ),
-                        ),
-                      );
-                    },
-                    debounceDuration: const Duration(milliseconds: 500),
-                    noItemsFoundBuilder: (context) => const SizedBox.shrink(),
-                    validator: _cityNameValidator,
-                    textFieldConfiguration: TextFieldConfiguration(
-                      cursorColor: widget.cursorColor,
-                      keyboardType: TextInputType.text,
-                      controller: _typeAheadTextEditingController,
-                      decoration: widget.inputDecoration,
-                    ),
-                    onSuggestionSelected: (selectedCity) {
-                      _selectedCity = selectedCity;
-                      _userGeoLocation = selectedCity.cityLocation;
-
-                      _typeAheadTextEditingController.text =
-                          selectedCity.getHumanReadableCityName();
-
-                      widget.onUserLocationDetermined(
-                        UserLocation(
-                          _userGeoLocation,
-                          selectedCity,
-                        ),
-                      );
-                    },
-                    itemBuilder: (context, city) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child:
-                                Text(city.countryName + ', ' + city.cityName),
-                          ),
-                          const Divider(),
-                        ],
-                      );
-                    },
-                    errorBuilder: (context, serverException) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          (serverException as ServerException)
-                              .getLocalMessageError(context),
-                          style:
-                              Theme.of(context).textTheme.bodyText2?.copyWith(
-                                    letterSpacing: 0.5,
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                        ),
-                      );
-                    },
-                    suggestionsCallback: (enteredCityName) async {
-                      final _citiesResult = await GetIt.I
-                          .get<UserLocationRepository>()
-                          .getListOfCitiesMatchesString(enteredCityName);
-                      return _citiesResult.fold(
-                        (error) {
-                          throw error;
-                        },
-                        (cities) => cities,
-                      );
-                    },
                   ),
+                  loadingBuilder: (context) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: LoadingIndicator(
+                          indicatorColor:
+                              widget.suggestionsLoadingIndicatorColor,
+                        ),
+                      ),
+                    );
+                  },
+                  debounceDuration: const Duration(milliseconds: 500),
+                  noItemsFoundBuilder: (context) => const SizedBox.shrink(),
+                  validator: _cityNameValidator,
+                  textFieldConfiguration: TextFieldConfiguration(
+                    cursorColor: widget.cursorColor,
+                    keyboardType: TextInputType.text,
+                    controller: _typeAheadTextEditingController,
+                    decoration: widget.inputDecoration,
+                  ),
+                  onSuggestionSelected: (selectedCity) {
+                    _selectedCity = selectedCity;
+                    _userGeoLocation = selectedCity.cityLocation;
+
+                    _typeAheadTextEditingController.text =
+                        selectedCity.getHumanReadableCityName();
+
+                    widget.onUserLocationDetermined(
+                      UserLocation(
+                        _userGeoLocation,
+                        selectedCity,
+                      ),
+                    );
+                  },
+                  itemBuilder: (context, city) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(city.countryName + ', ' + city.cityName),
+                        ),
+                        const Divider(),
+                      ],
+                    );
+                  },
+                  errorBuilder: (context, serverException) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        (serverException as ServerException)
+                            .getLocalMessageError(context),
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              letterSpacing: 0.5,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                      ),
+                    );
+                  },
+                  suggestionsCallback: (enteredCityName) async {
+                    final _citiesResult = await GetIt.I
+                        .get<UserLocationRepository>()
+                        .getListOfCitiesMatchesString(enteredCityName);
+                    return _citiesResult.fold(
+                      (error) {
+                        throw error;
+                      },
+                      (cities) => cities,
+                    );
+                  },
                 ),
-                CurrentUserLocationUsingGPSIcon(
-                  userLocationState: state,
-                  backgroundColor: widget.gpsButtonBackgroundColor,
-                )
-              ],
-            );
-          },
-        ),
+              ),
+              CurrentUserLocationUsingGPSIcon(
+                userLocationState: state,
+                backgroundColor: widget.gpsButtonBackgroundColor,
+              )
+            ],
+          );
+        },
       ),
     );
   }

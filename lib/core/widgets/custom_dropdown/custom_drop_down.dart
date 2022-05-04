@@ -70,12 +70,9 @@ class CustomDropdownButtonFormField<T> extends FormField<T> {
           'Either zero or 2 or more [DropdownMenuItem]s were detected '
           'with the same value',
         ),
-        assert(elevation != null),
-        assert(iconSize != null),
-        assert(isDense != null),
-        assert(isExpanded != null),
+        
         assert(itemHeight == null || itemHeight >= kMinInteractiveDimension),
-        assert(autofocus != null),
+       
         decoration = decoration ?? InputDecoration(focusColor: focusColor),
         super(
           key: key,

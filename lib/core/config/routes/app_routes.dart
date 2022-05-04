@@ -14,6 +14,7 @@ import 'package:doors/features/manage_post/presentation/screens/create_or_edit_p
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
 import 'package:doors/features/search/posts_search/presentation/screens/posts_search_screen.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
+import 'package:doors/features/user_posts/presentation/screens/user_posts_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -29,6 +30,9 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
     case LogInScreen.routeName:
       return MaterialPageRoute(builder: (_) => const LogInScreen());
+
+    case UserPostsScreen.routeName:
+      return MaterialPageRoute(builder: (_) => const UserPostsScreen());
 
     case ForgatPasswordScreen.routeName:
       return MaterialPageRoute(builder: (_) => const ForgatPasswordScreen());

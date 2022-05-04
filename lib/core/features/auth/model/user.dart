@@ -18,6 +18,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyUserSubscription = 'userSubscription';
   static const keyIsSubscribed = 'isSubscribed';
   static const keyFavoritePosts = 'favoritePosts';
+  static const keyUserPosts = 'userPosts';
   static const keyEmail = ParseUser.keyEmailAddress;
 
   User(
