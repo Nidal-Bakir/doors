@@ -8,6 +8,7 @@ import 'package:doors/injection_container/subscription_injection.dart';
 import 'package:doors/injection_container/parse_init.dart';
 import 'package:doors/injection_container/security_error_flow_injection.dart';
 import 'package:doors/injection_container/user_location_injection.dart';
+import 'package:doors/injection_container/user_posts_injection.dart';
 
 Future<void> init({bool forRestart = false}) async {
   // no need to reInit the parse server when rebuild the widget tree.
@@ -41,4 +42,7 @@ Future<void> init({bool forRestart = false}) async {
 
   // search init
   searchInit();
+
+  // user posts init
+  userPostsInit();
 }
