@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
       },
       child: ZoomDrawer(
         androidCloseOnBackTap: true,
-        menuScreenWidth: 200,
+        menuScreenWidth: 220,
         style: DrawerStyle.defaultStyle,
         isRtl: Directionality.of(context) == TextDirection.rtl,
         controller: _drawerController,

@@ -42,64 +42,67 @@ class MenuScreen extends StatelessWidget {
                       width: 70,
                     ),
                     const SizedBox(
-                      width: 16,
+                      width: 8,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [
-                            if (!_currentUser.isAnonymousAccount &&
-                                _currentUser.isSubscribed)
-                              Container(
-                                padding: const EdgeInsets.all(3),
-                                decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  color: Colors.black,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            children: [
+                              if (!_currentUser.isAnonymousAccount &&
+                                  _currentUser.isSubscribed)
+                                Container(
+                                  padding: const EdgeInsets.all(3),
+                                  decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    color: Colors.black,
+                                  ),
+                                  child: Image.asset(
+                                    'assets/icons/crown-king.png',
+                                    width: 15,
+                                    height: 15,
+                                  ),
                                 ),
-                                child: Image.asset(
-                                  'assets/icons/crown-king.png',
-                                  width: 15,
-                                  height: 15,
-                                ),
+                              Text(
+                                _currentUser.isAnonymousAccount
+                                    ? context.loc.guest
+                                    : _currentUser.name,
+                                style: !_currentUser.isSubscribed
+                                    ? _textTheme.headline5
+                                    : _textTheme.headline5?.copyWith(
+                                        shadows: [
+                                          const Shadow(
+                                            color: Colors.black,
+                                            offset: Offset(0, -5),
+                                          )
+                                        ],
+                                        color: Colors.transparent,
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: Colors.black,
+                                        decorationThickness: 4,
+                                      ),
                               ),
-                            Text(
-                              _currentUser.isAnonymousAccount
-                                  ? context.loc.guest
-                                  : _currentUser.name,
-                              style: !_currentUser.isSubscribed
-                                  ? _textTheme.headline5
-                                  : _textTheme.headline5?.copyWith(
-                                      shadows: [
-                                        const Shadow(
-                                          color: Colors.black,
-                                          offset: Offset(0, -5),
-                                        )
-                                      ],
-                                      color: Colors.transparent,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: Colors.black,
-                                      decorationThickness: 4,
-                                    ),
-                            ),
-                          ],
-                        ),
-                        if (!_currentUser.isAnonymousAccount &&
-                            _currentUser.isSubscribed)
-                          Text(
-                            context.loc.you_are_a_king,
-                            style: _textTheme.bodyText2?.copyWith(
-                              shadows: [
-                                const Shadow(
-                                  color: Colors.black,
-                                  offset: Offset(0, -5),
-                                )
-                              ],
-                              color: Colors.transparent,
-                            ),
+                            ],
                           ),
-                      ],
+                          if (!_currentUser.isAnonymousAccount &&
+                              _currentUser.isSubscribed)
+                            Text(
+                              context.loc.you_are_a_king,
+                              style: _textTheme.bodyText2?.copyWith(
+                                shadows: [
+                                  const Shadow(
+                                    color: Colors.black,
+                                    offset: Offset(0, -5),
+                                  )
+                                ],
+                                color: Colors.transparent,
+                              ),
+                            ),
+                        ],
+                      ),
                     )
                   ],
                 ),
