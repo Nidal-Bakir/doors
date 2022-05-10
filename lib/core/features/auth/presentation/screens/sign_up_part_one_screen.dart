@@ -2,10 +2,10 @@ import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/screens/sign_up_part_two_screen.dart';
-import 'package:doors/core/features/auth/presentation/widgets/email_text_field.dart';
-import 'package:doors/core/features/auth/presentation/widgets/name_text_field.dart';
+import 'package:doors/core/widgets/email_text_field.dart';
+import 'package:doors/core/widgets/name_text_field.dart';
 import 'package:doors/core/features/auth/presentation/widgets/password_with_confirmation.dart';
-import 'package:doors/core/features/auth/presentation/widgets/phone_number_text_field.dart';
+import 'package:doors/core/widgets/phone_number_text_field.dart';
 import 'package:doors/core/features/auth/presentation/widgets/sign_up_headline_text_with_icon.dart';
 import 'package:doors/core/widgets/sized_box_16_h.dart';
 import 'package:flutter/material.dart';
@@ -64,12 +64,12 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
                             NameTextField(
                               accountType: widget.accountType,
                               onSave: (name) {
-                                _name = name!;
+                                _name = name;
                               },
                             ),
                             const SizedBox16H(),
                             EmailTextField(onSave: (email) {
-                              _email = email!;
+                              _email = email;
                             }),
                             const SizedBox16H(),
                             PasswordWithConfirmation(
@@ -82,9 +82,7 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
                               onSave: (phoneNumber) {
                                 _phoneNamer = phoneNumber;
                               },
-                              onUpdate: (phoneNumber) {
-                                _phoneNamer = phoneNumber;
-                              },
+                             
                             ),
                             const Spacer(),
                             Padding(

@@ -73,72 +73,60 @@ class _PostImageHeadLineWithImagePickerState
           ),
           child: InkWell(
             onTap: () async {
-              final selectedPhoto =
-                  await showModalBottomSheetToSelectPhoto(context);
-              if (selectedPhoto != null) {
-                _onPostImageSelected(selectedPhoto);
-                _initPostImage = null;
+              final selectedPhotoResult =
+                  await showModalBottomSheetToSelectPhoto(
+                context,
+                _isTherePostImageToShow,
+              );
+              if (selectedPhotoResult == null) {
+                return;
               }
+              selectedPhotoResult.fold((removeTheImage) {
+                _onPostImageSelected(null);
+              }, (selectedPhoto) {
+                if (selectedPhoto != null) {
+                  _onPostImageSelected(selectedPhoto);
+                  _initPostImage = null;
+                }
+              });
             },
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 100),
               child: _postImageFile == null && _initPostImage == null
                   ? const Icon(Icons.add_photo_alternate_outlined, size: 50)
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                        1,
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: _initPostImage == null
-                                ? Image.file(
-                                    File.fromUri(
-                                      Uri.file(
-                                        _postImageFile!.path,
-                                      ),
-                                    ),
-                                    fit: BoxFit.cover,
-                                    height: 150,
-                                    cacheHeight: 150,
-                                  )
-                                : NetworkImageFromParseFile(
-                                    withHeroAnimation: false,
-                                    image: _initPostImage,
-                                    height: 150,
-                                    cacheHeight: 150,
-                                  ),
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: InkWell(
-                              onTap: () {
-                                _onPostImageSelected(null);
-                                _initPostImage = null;
-                              },
-                              child: Container(
-                                padding: EdgeInsets.zero,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(
-                                    20,
+                  : SizedBox(width: double.infinity,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          5,
+                        ),
+                        child: _initPostImage == null
+                            ? Image.file(
+                                File.fromUri(
+                                  Uri.file(
+                                    _postImageFile!.path,
                                   ),
                                 ),
-                                child: const Icon(
-                                  Icons.highlight_remove_rounded,
-                                ),
+                                fit: BoxFit.cover,
+                                height: 150,
+                                cacheHeight: 150,
+                              )
+                            : NetworkImageFromParseFile(
+                                withHeroAnimation: false,
+                                image: _initPostImage,
+                                height: 150,
+                                cacheHeight: 150,
                               ),
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
+                  ),
             ),
           ),
         ),
       ],
     );
   }
+
+  bool get _isTherePostImageToShow =>
+      _postImageFile != null || _initPostImage != null;
 
   void _onPostImageSelected(XFile? postImageFile) {
     if (mounted) {

@@ -47,8 +47,8 @@ class FavoritePostsBloc extends Bloc<FavoritePostsEvent, FavoritePostsState> {
   ) async {
     emit(const FavoritePostsInProgress());
 
-    final favoritePostsResult =
-        await _favoritePostsRepository.getFavoritePosts();
+    final favoritePostsResult = await _favoritePostsRepository.getFavoritePosts(
+        fullRefresh: fullRefresh);
     favoritePostsResult.fold(
         (errorAndCachedFavoritePosts) => emit(
               FavoritePostsLoadFailure(

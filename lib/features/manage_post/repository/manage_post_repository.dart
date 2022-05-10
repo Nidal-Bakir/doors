@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/features/post/model/post.dart';
-import 'package:doors/features/manage_post/data/create_post_remote_data_source/manage_post_remote_data_source.dart';
+import 'package:doors/features/manage_post/data/manage_post_remote_data_source/manage_post_remote_data_source.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class ManagePostsRepository {

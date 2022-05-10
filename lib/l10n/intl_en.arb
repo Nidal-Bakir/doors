@@ -166,5 +166,16 @@
   "set_a_location_first": "Set a location first",
   "not_valid_cost": "Not valid cost",
   "apply": "APPLY",
-  "all": "ALL"
+  "all": "ALL",
+  "edit": "Edit",
+  "enter_a_emil": "Enter a email",
+  "user_services": "User services",
+  "no_one_can_see_it": "No one can see it",
+  "any_one_can_see_it": "Any one can see it",
+  "open_user_profile": "Open user profile",
+  "i_will": "I will",
+  "you_changed_your_email_address": "You changed your email address!",
+  "we_sent_you_an_email_to_verify_this_email": "We sent you an email to verify this email, Go to your email address inbox and click on the link we sent to you.",
+  "edit_your_profile_details": "Edit your profile details",
+  "your_profile_has_been_updated_successfully": "Your profile has been updated successfully."
 }

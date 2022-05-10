@@ -8,13 +8,15 @@ import 'package:doors/core/features/auth/presentation/screens/sign_up_part_two_s
 import 'package:doors/core/features/auth/presentation/screens/suspended_screen.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/features/user_posts/presentation/screens/user_posts_screen.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
 import 'package:doors/features/search/posts_search/presentation/screens/posts_search_screen.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
-import 'package:doors/features/user_posts/presentation/screens/user_posts_screen.dart';
+import 'package:doors/features/user_profile/presentation/screens/edit_profile_screen.dart';
+import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -32,7 +34,25 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const LogInScreen());
 
     case UserPostsScreen.routeName:
-      return MaterialPageRoute(builder: (_) => const UserPostsScreen());
+      return MaterialPageRoute(
+        builder: (_) => UserPostsScreen(
+          userId: settings.arguments as String,
+        ),
+      );
+
+    case UserProfileScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => UserProfileScreen(
+          visitedUser: settings.arguments as User,
+        ),
+      );
+      
+    case EditProfileScreen.routeName:
+      return MaterialPageRoute<bool>(
+        builder: (_) => EditProfileScreen(
+          currentUserProfile: settings.arguments as User,
+        ),
+      );
 
     case ForgatPasswordScreen.routeName:
       return MaterialPageRoute(builder: (_) => const ForgatPasswordScreen());

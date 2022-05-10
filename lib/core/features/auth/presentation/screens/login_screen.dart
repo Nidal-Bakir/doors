@@ -6,7 +6,7 @@ import 'package:doors/core/features/auth/presentation/screens/suspended_screen.d
 import 'package:doors/core/features/auth/presentation/widgets/auth_error_text.dart';
 import 'package:doors/core/features/auth/presentation/widgets/create_account_text_button.dart';
 import 'package:doors/core/features/auth/presentation/widgets/forgat_password_text_button.dart';
-import 'package:doors/core/features/auth/presentation/widgets/email_text_field.dart';
+import 'package:doors/core/widgets/email_text_field.dart';
 import 'package:doors/core/features/auth/presentation/widgets/password_text_field.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/restart_app.dart';
@@ -58,7 +58,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             children: [
                               const AuthErrorText(),
                               EmailTextField(onSave: (email) {
-                                _email = email!;
+                                _email = email;
                               }),
                               const SizedBox(
                                 height: 16.0,

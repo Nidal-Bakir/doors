@@ -1,9 +1,8 @@
-import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
-import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/no_internet_connection.dart';
 import 'package:doors/core/widgets/no_result_found.dart';
+import 'package:doors/core/widgets/posts_sliver_list.dart';
 import 'package:doors/features/search/posts_search/presentation/managers/posts_search_bloc/posts_search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,44 +42,18 @@ class _SearchPostsResultListState extends State<SearchPostsResultList> {
             const SliverToBoxAdapter(),
             BlocBuilder<PostsSearchBloc, PostsSearchState>(
               buildWhen: (previous, current) =>
-                  current is PostsSearchLoadSuccess,
+                  current is PostsSearchLoadSuccess ||
+                  current is PostsSearchInitial,
               builder: (context, state) {
                 if (state is PostsSearchInitial) {
                   return const SliverToBoxAdapter();
                 }
                 final _postsSearchLoadSuccessState =
                     (state as PostsSearchLoadSuccess);
-
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      _postsCount =
-                          _postsSearchLoadSuccessState.postsSearchResult.length;
-                      final _post =
-                          _postsSearchLoadSuccessState.postsSearchResult[index];
-                      return PostCardItem(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            PostScreen.routeName,
-                            arguments: _post,
-                          );
-                        },
-                        author: _post.author,
-                        maxCost: _post.maxCost,
-                        minCost: _post.maxCost,
-                        postCostCurrency: _post.postCostCurrency,
-                        postDescription: _post.postDescription,
-                        postHumanReadableLocation:
-                            _post.postHumanReadableLocation,
-                        postImage: _post.postImage,
-                        postKeywords: _post.postKeywords,
-                        postLocation: _post.postLocation,
-                        postTitle: _post.postTitle,
-                      );
-                    },
-                    childCount:
-                        _postsSearchLoadSuccessState.postsSearchResult.length,
-                  ),
+                _postsCount =
+                    _postsSearchLoadSuccessState.postsSearchResult.length;
+                return PostsSliverList(
+                  posts: _postsSearchLoadSuccessState.postsSearchResult,
                 );
               },
             ),

@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:doors/core/enums/enums.dart';
-import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
-import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/no_internet_connection.dart';
 import 'package:doors/core/widgets/no_result_found.dart';
+import 'package:doors/core/widgets/posts_sliver_list.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/recent_posts/presentation/managers/recent_posts_bloc/recent_posts_bloc.dart';
 import 'package:flutter/material.dart';
@@ -81,37 +80,10 @@ class _RecentPostsListState extends State<RecentPostsList> {
                         if (!_refreshIndicatorCompleter.isCompleted) {
                           _refreshIndicatorCompleter.complete();
                         }
-
-                        return SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              _postsCount = _recentPostsLoadSuccessState
-                                  .recentPosts.length;
-                              final _post = _recentPostsLoadSuccessState
-                                  .recentPosts[index];
-                              return PostCardItem(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    PostScreen.routeName,
-                                    arguments: _post,
-                                  );
-                                },
-                                author: _post.author,
-                                maxCost: _post.maxCost,
-                                minCost: _post.maxCost,
-                                postCostCurrency: _post.postCostCurrency,
-                                postDescription: _post.postDescription,
-                                postHumanReadableLocation:
-                                    _post.postHumanReadableLocation,
-                                postImage: _post.postImage,
-                                postKeywords: _post.postKeywords,
-                                postLocation: _post.postLocation,
-                                postTitle: _post.postTitle,
-                              );
-                            },
-                            childCount:
-                                _recentPostsLoadSuccessState.recentPosts.length,
-                          ),
+                        _postsCount =
+                            _recentPostsLoadSuccessState.recentPosts.length;
+                        return PostsSliverList(
+                          posts: _recentPostsLoadSuccessState.recentPosts,
                         );
                       },
                     ),

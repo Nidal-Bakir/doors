@@ -53,121 +53,111 @@ class _CreateOrEditPostScreenPartTwoState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Hero(
-                tag: 'card',
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 32.0,
-                  ),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 40.0,
-                      ),
-                      child: Form(
-                        key: _keyFrom,
-                        child: Column(
-                          children: [
-                            TitleWithUnderLineInTheEnd(
-                              label: widget.post.objectId == null
-                                  ? context.loc.create_new_service
-                                  : context.loc.edit_service,
-                              numberOfUnderLinedChars: 2,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Hero(
+              tag: 'card',
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 32.0,
+                ),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 40.0,
+                    ),
+                    child: Form(
+                      key: _keyFrom,
+                      child: Column(
+                        children: [
+                          TitleWithUnderLineInTheEnd(
+                            label: widget.post.objectId == null
+                                ? context.loc.create_new_service
+                                : context.loc.edit_service,
+                            numberOfUnderLinedChars: 2,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          LineWithTextOnRow(text: context.loc.location),
+                          UserLocationWidget(
+                            inputDecoration: InputDecoration(
+                              hintText: context.loc.enter_your_city_name,
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            LineWithTextOnRow(text: context.loc.location),
-                            UserLocationWidget(
-                              inputDecoration: InputDecoration(
-                                hintText: context.loc.enter_your_city_name,
-                              ),
-                              initHumanReadableLocation: _humanReadableLocation,
-                              initUserLocation: _userGeoLocation,
-                              onUserLocationDetermined:
-                                  _onUserLocationDetermined,
-                            ),
-                            const SizedBox16H(),
-                            PostImageHeadLineWithImagePicker(
-                              initImage: widget.post.postImage,
-                              onPostImageSelected: _onPostImageSelected,
-                            ),
-                            const SizedBox16H(),
-                            CostHeadLineWithTextFields(
-                              initCurrency: _currency,
-                              initFromCost: _fromCost,
-                              initUpToCost: _upToCost,
-                              onCostSave: onCostSave,
-                            ),
-                            const Spacer(),
-                            BlocConsumer<ManagePostBloc, ManagePostState>(
-                              listener: (context, state) {
-                                state.whenOrNull(
-                                  createSuccuss: () {
-                                    showSuccussSnackBar(
-                                      context,
-                                      context.loc
-                                          .your_service_created_successfully,
-                                    );
-                                    Navigator.of(context)
-                                        .popUntil((route) => route.isFirst);
-                                  },
-                                  editSuccuss: () {
-                                    showSuccussSnackBar(
-                                      context,
-                                      context
-                                          .loc.your_service_edited_successfully,
-                                    );
-                                    Navigator.of(context)
-                                        .popUntil((route) => route.isFirst);
-                                  },
-                                  operationFailure: (error) =>
-                                      showErrorSnackBar(
+                            initHumanReadableLocation: _humanReadableLocation,
+                            initUserLocation: _userGeoLocation,
+                            onUserLocationDetermined: _onUserLocationDetermined,
+                          ),
+                          const SizedBox16H(),
+                          PostImageHeadLineWithImagePicker(
+                            initImage: widget.post.postImage,
+                            onPostImageSelected: _onPostImageSelected,
+                          ),
+                          const SizedBox16H(),
+                          CostHeadLineWithTextFields(
+                            initCurrency: _currency,
+                            initFromCost: _fromCost,
+                            initUpToCost: _upToCost,
+                            onCostSave: onCostSave,
+                          ),
+                         
+                          BlocConsumer<ManagePostBloc, ManagePostState>(
+                            listener: (context, state) {
+                              state.whenOrNull(
+                                createSuccuss: () {
+                                  showSuccussSnackBar(
                                     context,
-                                    error.getLocalMessageError(context),
-                                  ),
-                                );
-                              },
-                              builder: (context, state) {
-                                if (state is ManagePostInProgress) {
-                                  return const Padding(
-                                    padding: EdgeInsets.only(top: 16),
-                                    child: LoadingIndicator(),
+                                    context.loc.your_service_created_successfully,
                                   );
-                                }
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: ElevatedButton(
-                                    child: Text(
-                                      widget.post.objectId == null
-                                          ? context.loc.post
-                                          : context.loc.save,
-                                    ),
-                                    onPressed: () => _onPressed(context),
-                                  ),
+                                  Navigator.of(context)
+                                      .popUntil((route) => route.isFirst);
+                                },
+                                editSuccuss: () {
+                                  showSuccussSnackBar(
+                                    context,
+                                    context.loc.your_service_edited_successfully,
+                                  );
+                                  Navigator.of(context)
+                                      .popUntil((route) => route.isFirst);
+                                },
+                                operationFailure: (error) => showErrorSnackBar(
+                                  context,
+                                  error.getLocalMessageError(context),
+                                ),
+                              );
+                            },
+                            builder: (context, state) {
+                              if (state is ManagePostInProgress) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(top: 16),
+                                  child: LoadingIndicator(),
                                 );
-                              },
-                            ),
-                          ],
-                        ),
+                              }
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: ElevatedButton(
+                                  child: Text(
+                                    widget.post.objectId == null
+                                        ? context.loc.post
+                                        : context.loc.save,
+                                  ),
+                                  onPressed: () => _onPressed(context),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 
   void _onPressed(BuildContext context) {

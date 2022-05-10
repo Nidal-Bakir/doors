@@ -8,6 +8,16 @@ import 'package:doors/features/search/models/search_filter.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class PostsSearchRemoteDataSource {
+  /// Search through services.
+  ///
+  /// [searchFilter]: The filter that will be applied to the search query,
+  /// the filter will applied cumulatively to narrow down the search result.
+  /// 
+  /// [amountToSkip]: For pagination, where it's the count of the current loaded posts.
+  /// 
+  /// Returns UnmodifiableListView of posts search results.
+  /// 
+  /// Throws [ServerException] in case of connection error or parse error.
   Future<UnmodifiableListView<Post>> searchPosts(
     SearchFilter searchFilter,
     int amountToSkip,
@@ -55,6 +65,7 @@ class PostsSearchRemoteDataSourceImpl extends PostsSearchRemoteDataSource {
     }
   }
 
+  /// Cumulatively apply each filter in single QueryBuilder
   void _applySearchFilterOnPosts(
     SearchFilter searchFilter,
     QueryBuilder queryBuilder,
@@ -93,6 +104,5 @@ class PostsSearchRemoteDataSourceImpl extends PostsSearchRemoteDataSource {
     if (searchFilter.postType != null) {
       queryBuilder.whereEqualTo(Post.keyPostType, searchFilter.postType!.name);
     }
-    
   }
 }

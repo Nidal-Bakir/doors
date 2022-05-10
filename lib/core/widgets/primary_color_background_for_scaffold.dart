@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class PrimaryColorBackgroundForScaffold extends StatelessWidget {
   final Widget scaffoldWidget;
+  final double colorHeight;
   const PrimaryColorBackgroundForScaffold({
     Key? key,
     required this.scaffoldWidget,
+    this.colorHeight = 200,
   }) : super(key: key);
 
   @override
@@ -18,7 +20,7 @@ class PrimaryColorBackgroundForScaffold extends StatelessWidget {
           ),
         ),
         Container(
-          height: 200,
+          height: colorHeight,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(25),

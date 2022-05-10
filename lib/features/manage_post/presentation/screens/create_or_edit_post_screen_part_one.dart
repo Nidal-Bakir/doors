@@ -40,106 +40,98 @@ class _CreateOrEditPostScreenPartOneState
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Hero(
-                tag: 'card',
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 32.0,
-                  ),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 40.0,
+          child: SingleChildScrollView(
+        child: Hero(
+          tag: 'card',
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 32.0,
+            ),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20.0,
+                  horizontal: 40.0,
+                ),
+                child: Form(
+                  key: _keyFrom,
+                  child: Column(
+                    children: [
+                      TitleWithUnderLineInTheEnd(
+                        label: widget.post == null
+                            ? context.loc.create_new_service
+                            : context.loc.edit_service,
+                        numberOfUnderLinedChars: 2,
                       ),
-                      child: Form(
-                        key: _keyFrom,
-                        child: Column(
-                          children: [
-                            TitleWithUnderLineInTheEnd(
-                              label: widget.post == null
-                                  ? context.loc.create_new_service
-                                  : context.loc.edit_service,
-                              numberOfUnderLinedChars: 2,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TitleHeadLineWithTextField(
-                              initText: _title,
-                              onSave: (title) {
-                                _title = title!;
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TitleHeadLineWithTextField(
+                        initText: _title,
+                        onSave: (title) {
+                          _title = title!;
+                        },
+                      ),
+                      const SizedBox16H(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: PostTypeHeadLineWithDropdownButtonFormField(
+                              initPostType: _postType,
+                              onSave: (postType) {
+                                _postType = postType ?? PostType.need;
                               },
                             ),
-                            const SizedBox16H(),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child:
-                                      PostTypeHeadLineWithDropdownButtonFormField(
-                                    initPostType: _postType,
-                                    onSave: (postType) {
-                                      _postType = postType ?? PostType.need;
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 32,
-                                ),
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 2.5),
-                                    child: CategoryHeadLineWithTextField(
-                                      initText: _category,
-                                      onSave: (category) {
-                                        _category = category ?? '';
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox16H(),
-                            DescriptionHeadLineWithTextField(
-                              initDescription: _description,
-                              onDescriptionSave: (description) {
-                                _description = description;
-                              },
-                            ),
-                            const SizedBox16H(),
-                            KeywordsHeadLineWithTextField(
-                              initKeywords: _keywords,
-                              onKeywordsSave: (keywords) {
-                                _keywords = keywords;
-                              },
-                            ),
-                            const SizedBox16H(),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: ElevatedButton(
-                                child: Text(context.loc.next),
-                                onPressed: () => _onPressed(context),
+                          ),
+                          const SizedBox(
+                            width: 32,
+                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 2.5),
+                              child: CategoryHeadLineWithTextField(
+                                initText: _category,
+                                onSave: (category) {
+                                  _category = category ?? '';
+                                },
                               ),
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox16H(),
+                      DescriptionHeadLineWithTextField(
+                        initDescription: _description,
+                        onDescriptionSave: (description) {
+                          _description = description;
+                        },
+                      ),
+                      const SizedBox16H(),
+                      KeywordsHeadLineWithTextField(
+                        initKeywords: _keywords,
+                        onKeywordsSave: (keywords) {
+                          _keywords = keywords;
+                        },
+                      ),
+                      const SizedBox16H(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: ElevatedButton(
+                          child: Text(context.loc.next),
+                          onPressed: () => _onPressed(context),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
-            )
-          ],
+            ),
+          ),
         ),
-      ),
+      )),
     );
   }
 

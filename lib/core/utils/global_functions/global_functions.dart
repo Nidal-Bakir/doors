@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:dartz/dartz.dart';
 import 'package:doors/core/config/global_config.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
@@ -154,9 +155,12 @@ void _showSnackBar(BuildContext context, String content, bool forError) {
     );
 }
 
-Future<XFile?> showModalBottomSheetToSelectPhoto(BuildContext context) async {
+Future<Either<String, XFile?>?> showModalBottomSheetToSelectPhoto(
+  BuildContext context,
+  bool showDeleteOption,
+) async {
   final _picker = ImagePicker();
-  return showModalBottomSheet(
+  return await showModalBottomSheet(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(10),
@@ -178,16 +182,30 @@ Future<XFile?> showModalBottomSheetToSelectPhoto(BuildContext context) async {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (showDeleteOption)
+              InkWell(
+                onTap: () async {
+                  Navigator.of(context)
+                      .pop(const Left<String, XFile>('remove'));
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.delete),
+                    Text(context.loc.delete),
+                  ],
+                ),
+              ),
             InkWell(
               splashColor: Colors.black,
               onTap: () async {
-                Navigator.of(context).pop(
+                Navigator.of(context).pop(Right<String, XFile?>(
                   await _picker.pickImage(
                     source: ImageSource.camera,
                     imageQuality: 30,
                     preferredCameraDevice: CameraDevice.front,
                   ),
-                );
+                ));
               },
               child: SizedBox(
                 height: 50,
@@ -203,12 +221,12 @@ Future<XFile?> showModalBottomSheetToSelectPhoto(BuildContext context) async {
             ),
             InkWell(
               onTap: () async {
-                Navigator.of(context).pop(
+                Navigator.of(context).pop(Right<String, XFile?>(
                   await _picker.pickImage(
                     source: ImageSource.gallery,
                     imageQuality: 30,
                   ),
-                );
+                ));
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,

@@ -4,7 +4,7 @@ import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
-import 'package:doors/core/features/auth/presentation/widgets/bio_head_line_with_text_field.dart';
+import 'package:doors/core/widgets/bio_head_line_with_text_field.dart';
 import 'package:doors/core/features/auth/presentation/widgets/profile_image.dart';
 import 'package:doors/core/features/auth/presentation/widgets/sign_up_headline_text_with_icon.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';
@@ -31,7 +31,7 @@ class SignUpPartTwoScreen extends StatefulWidget {
 
 class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
   OfferedSubscriptionPlan? _selectedPlan;
-  String _bio = '';
+  String? _bio = '';
   ParseFile? _profileImage;
 
   @override
@@ -85,7 +85,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
                                     height: 16,
                                   ),
                                   BioHeadLineWithTextField(
-                                    onBioChanges: _onBioChanges,
+                                    onBioSave: _onBioSave,
                                   ),
                                   if (widget.user.accountType ==
                                       AccountType.company)
@@ -158,7 +158,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
   }
 
   void _onSignUpPressed(BuildContext context) async {
-    widget.user.bio = _bio.trim();
+    widget.user.bio = _bio?.trim();
     widget.user.profileImage = _profileImage;
     if (_selectedPlan != null || widget.user.accountType == AccountType.user) {
       context.read<AuthBloc>().add(AuthSignUpRequested(widget.user));
@@ -167,8 +167,8 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
     }
   }
 
-  void _onBioChanges(String bio) {
-    _bio = bio.trim();
+  void _onBioSave(String? bio) {
+    _bio = bio?.trim();
   }
 
   void _onProfileImageSelected({

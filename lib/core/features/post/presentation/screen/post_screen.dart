@@ -11,13 +11,14 @@ import 'package:doors/core/features/post/presentation/managers/post_report_bloc/
 import 'package:doors/core/features/post/presentation/managers/user_rate_bloc/user_rate_bloc.dart';
 import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
+import 'package:doors/core/features/post/presentation/widgets/post_location.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
-import 'package:doors/core/widgets/network_image_from_parse_file.dart';
-import 'package:doors/core/features/post/presentation/widgets/post_location.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
+import 'package:doors/core/widgets/network_image_from_parse_file.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
+import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -251,21 +252,33 @@ class _PopupMenuButton extends StatelessWidget {
           ),
         ),
         onSelected: (value) {
-          if (openLogInScreenToNotLoggedInUser(context)) {
-            return;
-          }
           switch (value) {
             case 0:
+              if (openLogInScreenToNotLoggedInUser(context)) {
+                return;
+              }
               _openReportDialog(context, currentPost, currentUser);
               return;
             case 1:
+              if (openLogInScreenToNotLoggedInUser(context)) {
+                return;
+              }
               Navigator.of(context).pushNamed(
                 CreateOrEditPostScreenPartOne.routeName,
                 arguments: currentPost,
               );
               return;
             case 2:
+              if (openLogInScreenToNotLoggedInUser(context)) {
+                return;
+              }
               _openConfirmationDialog(context, currentPost, currentUser);
+              return;
+            case 3:
+              Navigator.of(context).pushNamed(
+                UserProfileScreen.routeName,
+                arguments: currentPost.author,
+              );
               return;
           }
         },
@@ -294,7 +307,7 @@ class _PopupMenuButton extends StatelessWidget {
               value: 1,
               child: Row(
                 children: [
-                  const Icon(Icons.edit_rounded),
+                  const Icon(Icons.mode_edit_outlined),
                   const SizedBox(
                     width: 4,
                   ),
@@ -317,6 +330,23 @@ class _PopupMenuButton extends StatelessWidget {
                   ),
                   Text(
                     context.loc.delete_this_post,
+                  ),
+                ],
+              ),
+            ),
+          // show open user profile button if the current user is not the author of the this post
+          if (currentUser != null &&
+              currentUser!.userId != currentPost.author.userId)
+            PopupMenuItem(
+              value: 3,
+              child: Row(
+                children: [
+                  const Icon(Icons.account_circle_outlined),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    context.loc.open_user_profile,
                   ),
                 ],
               ),

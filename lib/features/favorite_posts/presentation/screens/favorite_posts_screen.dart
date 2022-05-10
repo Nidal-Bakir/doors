@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
-import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/no_internet_connection.dart';
 import 'package:doors/core/widgets/no_result_found.dart';
+import 'package:doors/core/widgets/posts_sliver_list.dart';
 import 'package:doors/core/widgets/primary_color_background_for_scaffold.dart';
 import 'package:doors/features/favorite_posts/presentation/managers/favorite_posts_bloc.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
@@ -91,40 +90,11 @@ class _FavoritePostsScreenState extends State<FavoritePostsScreen> {
                             if (!_refreshIndicatorCompleter.isCompleted) {
                               _refreshIndicatorCompleter.complete();
                             }
-
-                            return SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (context, index) {
-                                  _favoritePostsCount =
-                                      _favoritePostsLoadSuccessState
-                                          .favoritePosts.length;
-
-                                  final _post = _favoritePostsLoadSuccessState
-                                      .favoritePosts[index];
-                                  return PostCardItem(
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed(
-                                        PostScreen.routeName,
-                                        arguments: _post,
-                                      );
-                                    },
-                                    author: _post.author,
-                                    maxCost: _post.maxCost,
-                                    minCost: _post.maxCost,
-                                    postCostCurrency: _post.postCostCurrency,
-                                    postDescription: _post.postDescription,
-                                    postHumanReadableLocation:
-                                        _post.postHumanReadableLocation,
-                                    postImage: _post.postImage,
-                                    postKeywords: _post.postKeywords,
-                                    postLocation: _post.postLocation,
-                                    postTitle: _post.postTitle,
-                                  );
-                                },
-                                childCount: _favoritePostsLoadSuccessState
-                                    .favoritePosts.length,
-                              ),
-                              // itemExtent: 270,
+                            _favoritePostsCount = _favoritePostsLoadSuccessState
+                                .favoritePosts.length;
+                            return PostsSliverList(
+                              posts:
+                                  _favoritePostsLoadSuccessState.favoritePosts,
                             );
                           },
                         ),

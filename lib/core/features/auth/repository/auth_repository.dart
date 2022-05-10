@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
@@ -7,7 +6,7 @@ import 'package:doors/core/features/auth/data/auth_data_source/auth_local_data_s
 import 'package:doors/core/features/auth/data/auth_data_source/auth_remote_data_source.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 
- class AuthRepository {
+class AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
   final AuthLocalDataSource _authLocalDataSource;
 
@@ -106,23 +105,6 @@ import 'package:doors/core/features/auth/model/user.dart';
       return Left(e);
     }
   }
-
-/* TODO: should be in user profile feature!!
-  /// Update the current user with new data.
-  ///
-  /// parseSDK will automatically update the local user data.
-  ///
-  /// Returns Either [ServerException] or [User] object.
-  Future<Either<ParseException, User>> updateCurrentUserData(
-      User currentUserWithUpdatedDate) async {
-    try {
-      return Right(await _authRemoteDataSource
-          .updateCurrentUserData(currentUserWithUpdatedDate));
-    } on ServerException catch (e) {
-      return Left(e);
-    }
-  }
-*/
 
   /// Login as anonymous user. Its like a normal user excepts that the [User] object
   /// returns from this call will not have email nor password.

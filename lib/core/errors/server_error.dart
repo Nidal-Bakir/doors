@@ -199,7 +199,7 @@ class ParseCloudCodeCustomException extends ParseException {
       case 1005:
         return ErrorWhileProcessingClientPayment.fromParseError(parseError);
       case 1006:
-        return ErrorWhileDeletingPostImageFromTheServer.fromParseError(
+        return ErrorWhileDeletingImageFromTheServer.fromParseError(
             parseError);
       case 1010:
         return SuspendedAccount.fromParseError(parseError);
@@ -263,9 +263,9 @@ class ErrorWhileProcessingClientPayment extends ParseCloudCodeCustomException {
   }
 }
 
-class ErrorWhileDeletingPostImageFromTheServer
+class ErrorWhileDeletingImageFromTheServer
     extends ParseCloudCodeCustomException {
-  ErrorWhileDeletingPostImageFromTheServer.fromParseError(ParseError parseError)
+  ErrorWhileDeletingImageFromTheServer.fromParseError(ParseError parseError)
       : super.fromParseError(parseError);
 
   @override

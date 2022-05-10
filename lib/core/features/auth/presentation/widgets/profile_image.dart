@@ -68,53 +68,37 @@ class _ProfileImageState extends State<ProfileImage> {
           ),
           child: InkWell(
             onTap: () async {
-              final selectedPhoto =
-                  await showModalBottomSheetToSelectPhoto(context);
-              if (selectedPhoto != null) {
-                _onProfileImageSelected(selectedPhoto);
+              final selectedPhotoResult =
+                  await showModalBottomSheetToSelectPhoto(
+                context,
+                _profileImageFile != null,
+              );
+              if (selectedPhotoResult == null) {
+                return;
               }
+              selectedPhotoResult.fold((removeTheImage) {
+                _onProfileImageSelected(null);
+              }, (selectedPhoto) {
+                if (selectedPhoto != null) {
+                  _onProfileImageSelected(selectedPhoto);
+                }
+              });
             },
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 100),
               child: _profileImageFile == null
                   ? const Icon(Icons.add_photo_alternate_outlined, size: 50)
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                        1,
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: Image.file(
-                              File.fromUri(
-                                Uri.file(
-                                  _profileImageFile!.path,
-                                ),
-                              ),
-                              fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(1),
+                      child: SizedBox(width: double.infinity,
+                        child: Image.file(
+                          File.fromUri(
+                            Uri.file(
+                              _profileImageFile!.path,
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: InkWell(
-                              onTap: () {
-                                _onProfileImageSelected(null);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.zero,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(
-                                    20,
-                                  ),
-                                ),
-                                child: const Icon(
-                                  Icons.highlight_remove_rounded,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
             ),

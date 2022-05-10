@@ -1,6 +1,5 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/post/model/post.dart';
-import 'package:doors/core/features/subscription/model/payment.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -19,6 +18,10 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyIsSubscribed = 'isSubscribed';
   static const keyFavoritePosts = 'favoritePosts';
   static const keyUserPosts = 'userPosts';
+  static const keyUniqueUserName = keyVarUsername;
+  static const keyIsPrivatePhoneNumber = 'isPrivatePhoneNumber';
+  static const keyIsPrivateEmailAddress = 'isPrivateEmailAddress';
+
   static const keyEmail = ParseUser.keyEmailAddress;
 
   User(
@@ -93,16 +96,23 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   set userLocation(ParseGeoPoint? userLocation) =>
       set<ParseGeoPoint?>(keyUserLocation, userLocation);
 
-        String? get userHumanReadableLocation =>
+  String? get userHumanReadableLocation =>
       get<String?>(keyUserHumanReadableLocation);
 
   set userHumanReadableLocation(String? humanReadableLocation) =>
       set<String?>(keyUserHumanReadableLocation, humanReadableLocation);
 
-  ParseRelation<UserSubscription> get userSubscriptions =>
-      getRelation<UserSubscription>(keyUserSubscription);
-
   bool get isSubscribed => get<bool>(keyIsSubscribed) as bool;
+
+  bool get isPrivateEmailAddress => get<bool>(keyIsPrivateEmailAddress) as bool;
+
+  set isPrivateEmailAddress(bool isPrivateEmailAddress) =>
+      set<bool>(keyIsPrivateEmailAddress, isPrivateEmailAddress);
+
+  bool get isPrivatePhoneNumber => get<bool>(keyIsPrivatePhoneNumber) as bool;
+
+  set isPrivatePhoneNumber(bool isPrivatePhoneNumber) =>
+      set<bool>(keyIsPrivatePhoneNumber, isPrivatePhoneNumber);
 
   bool get isAnonymousAccount =>
       emailAddress == null || username != emailAddress;
@@ -128,9 +138,40 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
         User.keyUserSubscription,
         User.keyFavoritePosts,
         User.keyPaypalEmail,
+        User.keyUserPosts
       ];
 
+  /// Get new user with (ALL) field set to null except objectId and profileImage is the same.
+  User getShallowCopyForEditing() {
+    // user email,password and username set to null because parse will assume that
+    // they changed and flip the email variation state to false and send new email variation
+    // to the email address even if the email not changed.
+    // If the user need to change his email we need to set the new email address manually
+    // with the new username (username is the emailAddress).
+    // The profile image is copied so we can know if the user change or delete the image
+    return User(null, null, null, sessionToken: sessionToken)
+      ..objectId = objectId
+      ..profileImage = profileImage;
+  }
+
   @override
-  // the user object will equal other user object if the username & userId are the same
-  List<Object?> get props => [get<String?>(keyVarObjectId), username];
+  List<Object?> get props => [
+        get<String>(keyVarObjectId),
+        emailAddress,
+        username,
+        super.emailVerified,
+        get<String>(keyName),
+        get(keyPaypalEmail),
+        get<String>(keyPhoneNumber),
+        get<String>(keyBio),
+        get<String>(keyAccountStatues),
+        get<bool>(keyIsPrivateEmailAddress),
+        get<bool>(keyIsPrivatePhoneNumber),
+        get<String>(keyAccountType),
+        get<ParseFile>(keyProfileImage)?.url,
+        get<ParseGeoPoint>(keyUserLocation)?.latitude,
+        get<ParseGeoPoint>(keyUserLocation)?.longitude,
+        get<String>(keyUserHumanReadableLocation),
+        get<bool>(keyIsSubscribed)
+      ];
 }

@@ -22,18 +22,36 @@ class CircularProfileImage extends StatelessWidget {
           width: 2,
         ),
         borderRadius: BorderRadius.circular(
-          50,
+          500,
         ),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(
-          50,
-        ),
+      child: ClipOval(
         child: (profileImage == null || profileImage?.url == null)
-            ? const _DefaultProfileImage()
+            ? _DefaultProfileImage(height: height, width: width)
             : Image.network(
                 profileImage!.url!,
                 height: height,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return SizedBox.square(
+                    dimension: width,
+                    child: Stack(
+                      children: [
+                        _DefaultProfileImage(height: height, width: width),
+                        Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   if (wasSynchronouslyLoaded) {
                     return child;
@@ -48,7 +66,8 @@ class CircularProfileImage extends StatelessWidget {
                 width: width,
                 cacheHeight: height.toInt(),
                 cacheWidth: width.toInt(),
-                errorBuilder: (_, __, ___) => const _DefaultProfileImage(),
+                errorBuilder: (_, __, ___) =>
+                    _DefaultProfileImage(height: height, width: width),
                 fit: BoxFit.cover,
               ),
       ),

@@ -42,15 +42,6 @@ abstract class AuthRemoteDataSource {
   /// Throws [ServerException].
   Future<void> sendPasswordReset(User currentUser);
 
-/*  TODO: should be in user profile feature!!
-
-  /// Update the current user with new data.
-  ///
-  /// parseSDK will automatically update the local user data.
-  ///
-  /// Throws [ParseException].
-  Future<User> updateCurrentUserData(User currentUserWithUpdatedDate);
-*/
   /// Login as anonymous user. Its like a normal user excepts that the [User] object
   /// returns from this call will not have email nor password.
   ///
@@ -161,25 +152,6 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
     }
   }
 
-/* TODO: should be in user profile feature!!
-  @override
-  Future<User> updateCurrentUserData(User currentUserWithUpdatedDate) async {
-     ParseResponse updatedUser;
-     try {
-      updatedUser = await currentUserWithUpdatedDate.save()
-    } catch (error) {
-      throw const NoConnectionException('error while connecting to the server');
-    }
-  
-    if (updatedUser.success &&
-        updatedUser.error == null &&
-        updatedUser.count != 0) {
-      return updatedUser.results!.first as User;
-    } else {
-      throw ParseException.extractParseException(updatedUser.error!);
-    }
-  }
-*/
   @override
   Future<User> loginAnonymously() async {
     ParseResponse anonymousUserResponse;

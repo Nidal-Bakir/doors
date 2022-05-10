@@ -134,6 +134,24 @@ class Post extends ParseObject with EquatableMixin implements ParseCloneable {
   }
 
   @override
-  List<Object?> get props =>
-      [get<String?>(keyVarObjectId), get<User>(keyAuthor)];
+  List<Object?> get props => [
+        get<String?>(keyVarObjectId),
+        get<User>(keyAuthor),
+        get<String>(keyPostTitle),
+        get<String>(keyPostDescription),
+        get<ParseGeoPoint>(keyPostLocation)?.latitude,
+        get<ParseGeoPoint>(keyPostLocation)?.longitude,
+        get<String?>(keyPostHumanReadableLocation),
+        get<ParseFile?>(keyPostImage)?.url,
+        get<String>(keyPostType),
+        get<String>(keyPostCategory),
+        get(keyPostKeywords),
+        get<num>(keyPostMinCost),
+        get<num?>(keyPostMaxCost),
+        get<String?>(keyPostCostCurrency),
+        get<num>(_keyPostRateCount),
+        get<num>(_keyPostRateTotal),
+        get<DateTime>(keyPostCreationDate),
+        get<DateTime>(keyPostLastUpdatedDate)
+      ];
 }

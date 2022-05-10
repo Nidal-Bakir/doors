@@ -1,7 +1,7 @@
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/widgets/auth_error_text.dart';
-import 'package:doors/core/features/auth/presentation/widgets/email_text_field.dart';
+import 'package:doors/core/widgets/email_text_field.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +57,7 @@ class _ForgatPasswordScreenState extends State<ForgatPasswordScreen> {
                                   ),
                                 ),
                                 EmailTextField(onSave: (email) {
-                                  _email = email!.trim();
+                                  _email = email.trim();
                                 }),
                                 const SizedBox(height: 32.0),
                                 BlocBuilder<AuthBloc, AuthState>(

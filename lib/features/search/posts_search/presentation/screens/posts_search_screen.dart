@@ -41,7 +41,7 @@ class _PostsSearchScreenState extends State<PostsSearchScreen> {
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               backgroundColor: Colors.transparent,
-              appBar: CustomAppBar(
+              appBar: _CustomAppBar(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Row(
@@ -168,9 +168,9 @@ class _PostsSearchScreenState extends State<PostsSearchScreen> {
   }
 }
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget child;
-  const CustomAppBar({Key? key, required this.child}) : super(key: key);
+  const _CustomAppBar({Key? key, required this.child}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: child);
