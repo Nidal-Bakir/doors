@@ -107,6 +107,29 @@ class MenuScreen extends StatelessWidget {
                         style: _textTheme.headline6,
                       ),
                     ),
+                  if (!_currentUser.isAnonymousAccount &&
+                      _currentUser.accountType == AccountType.company)
+                    TextButton.icon(
+                      icon: const Icon(
+                        Icons.workspace_premium_outlined
+                      ),
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.black),
+                        overlayColor: MaterialStateProperty.all(
+                            Colors.white.withOpacity(0.3)),
+                      ),
+                      onPressed: () {
+                        ZoomDrawer.of(context)?.close();
+                        if (openLogInScreenToNotLoggedInUser(context)) {
+                          return;
+                        }
+                      },
+                      label: Text(
+                        context.loc.my_jop_offers,
+                        style: _textTheme.headline6,
+                      ),
+                    ),
                   TextButton.icon(
                     icon: const Icon(Icons.manage_accounts_outlined),
                     style: ButtonStyle(

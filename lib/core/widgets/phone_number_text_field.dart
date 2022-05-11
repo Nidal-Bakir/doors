@@ -23,7 +23,8 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
   var _isValidPhoneNamer = false;
   @override
   void initState() {
-    if (widget.initPhoneNumber == null && widget.initPhoneNumber!.isNotEmpty) {
+    if (widget.initPhoneNumber == null ||
+        (widget.initPhoneNumber?.isEmpty ?? true)) {
       _initWithDefaultISOCodeFromDevice();
     } else {
       PhoneNumber.getRegionInfoFromPhoneNumber(widget.initPhoneNumber!)
@@ -51,7 +52,6 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
 
   @override
   Widget build(BuildContext context) {
-
     return InternationalPhoneNumberInput(
       ignoreBlank: true,
       initialValue: _initialPhoneNumber,
@@ -89,9 +89,7 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
           widget.onSave(phoneNumber);
         }
       },
-      onInputChanged: (_) {
-
-      },
+      onInputChanged: (_) {},
     );
   }
 }
