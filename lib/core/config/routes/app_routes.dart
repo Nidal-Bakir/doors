@@ -8,6 +8,7 @@ import 'package:doors/core/features/auth/presentation/screens/sign_up_part_two_s
 import 'package:doors/core/features/auth/presentation/screens/suspended_screen.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/features/subscription/presentation/screens/subscription_screen.dart';
 import 'package:doors/core/features/user_posts/presentation/screens/user_posts_screen.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
@@ -46,11 +47,18 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           visitedUser: settings.arguments as User,
         ),
       );
-      
+
     case EditProfileScreen.routeName:
       return MaterialPageRoute<bool>(
         builder: (_) => EditProfileScreen(
           currentUserProfile: settings.arguments as User,
+        ),
+      );
+
+    case SubscriptionScreen.routeName:
+      return MaterialPageRoute<bool>(
+        builder: (_) => SubscriptionScreen(
+          currentUser: settings.arguments as User,
         ),
       );
 

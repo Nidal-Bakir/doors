@@ -1,6 +1,7 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/features/subscription/presentation/screens/subscription_screen.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
 import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
@@ -102,6 +103,10 @@ class MenuProfileInfo extends StatelessWidget {
                       if (openLogInScreenToNotLoggedInUser(context)) {
                         return;
                       }
+                      Navigator.of(context).pushNamed(
+                        SubscriptionScreen.routeName,
+                        arguments: currentUser,
+                      );
                     },
                     child: Text(
                       currentUser.isAnonymousAccount ||

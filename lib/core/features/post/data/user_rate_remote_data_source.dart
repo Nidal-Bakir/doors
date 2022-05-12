@@ -18,17 +18,11 @@ abstract class UserRateRemoteDataSource {
   /// * [AnonymousException] if the user is Anonymous user
   Future<PostRate?> getUserRateOnPost(Post post);
 
-  /// Set user rate on a post. The sdk will check if its new rate and add it
-  /// or edit existing one based on objectId.
-  ///
-  /// #### For edited rate:
-  /// * Pass the same [postRate] object returned from the Server with edited rate
-  /// because it hold the objectId for that rate and the SDK will update the existing rate.
-  ///
-  /// #### For new rate:
-  /// * Pass a new [postRate] object, the new object will not have objectId so the SDK
-  /// will know that this is a new rate and create new rate for the post.
-  ///
+  /// Set user rate on a post.
+  /// 
+  /// Cloud code function will be invoked to set the user rate on the post, if 
+  /// the user editing or creating new rate on a post, the cloud code 
+  /// will create or edit the rate on the post.
   ///
   /// Returns future that resolve with [PostRate] which has an objectId.
   ///

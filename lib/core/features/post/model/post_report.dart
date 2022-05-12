@@ -17,7 +17,7 @@ class PostReport extends ParseObject
   static const keyReportType = 'reportType';
   static const keyReportMoreInfo = 'reportMoreInfo';
   static const keyReportAuthor = 'reportAuthor';
-  static const keyReportedPost = 'reportReportedPost';
+  static const keyReportedPost = 'reportedPost';
 
   String get reportId => get<String>(keyReportId) as String;
 

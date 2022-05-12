@@ -178,5 +178,16 @@
   "you_changed_your_email_address": "You changed your email address!",
   "we_sent_you_an_email_to_verify_this_email": "We sent you an email to verify this email, Go to your email address inbox and click on the link we sent to you.",
   "edit_your_profile_details": "Edit your profile details",
-  "your_profile_has_been_updated_successfully": "Your profile has been updated successfully."
+  "your_profile_has_been_updated_successfully": "Your profile has been updated successfully.",
+  "subscriptions": "Subscriptions",
+  "promotion": "Promotion",
+  "what_is": "What is",
+  "its_a_way_to_stand_out_between_other_users":"Its a way to stand out between other users",
+  "features_of":"Features of",
+  "your_services_will_appear_at_the_top_of_every_search":"Your services will appear at the top of every search",
+  "no_ads_anymore":"No ads anymore",
+  "search_priority":"Search priority",
+  "your_subscription_was_successfully_processed":"Your subscription was successfully processed",
+  "its_a_way_to_unlock_the_app_features":"Its a way to unlock the app features!",
+  "add_jop_offers_and_get_jop_application_from_user_for_your_jop_offer":"Add jop offers and get jop application from user for your jop offer"
 }

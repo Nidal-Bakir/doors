@@ -1,3 +1,4 @@
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';
 import 'package:flutter/material.dart';
@@ -5,10 +6,12 @@ import 'package:flutter/material.dart';
 class OfferedPlanCardItem extends StatelessWidget {
   final bool isSelected;
   final OfferedSubscriptionPlan plan;
+  final AccountType accountType;
   const OfferedPlanCardItem({
     Key? key,
     required this.plan,
     this.isSelected = false,
+    required this.accountType,
   }) : super(key: key);
 
   @override
@@ -28,7 +31,7 @@ class OfferedPlanCardItem extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(2.0),
-        child: Column(
+        child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Align(
               alignment: Alignment.topLeft,
@@ -41,11 +44,12 @@ class OfferedPlanCardItem extends StatelessWidget {
               plan.planPeriod.toString() + ' ' + context.loc.months,
               style: Theme.of(context).textTheme.subtitle2,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: _PlanFeature(
-                label: context.loc.add_jop_offer,
-              ),
+            if(accountType==AccountType.company)
+            _PlanFeature(
+              label: context.loc.add_jop_offer,
+            ),
+            _PlanFeature(
+              label: context.loc.search_priority,
             ),
             _PlanFeature(
               label: context.loc.no_ads,
@@ -62,7 +66,7 @@ class OfferedPlanCardItem extends StatelessWidget {
                             color: Theme.of(context).colorScheme.primary),
                       ),
                     TextSpan(
-                      text: plan.amount.toString() + "\$",
+                      text: plan.amount.toString() + "\$ USD",
                       style: plan.isFreeOfChargeOffer
                           ? Theme.of(context).textTheme.bodyText1?.copyWith(
                                 decoration: TextDecoration.lineThrough,

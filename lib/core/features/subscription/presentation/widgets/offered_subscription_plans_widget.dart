@@ -12,9 +12,11 @@ import 'package:get_it/get_it.dart';
 class OfferedSubscriptionPlansWidget extends StatefulWidget {
   final AccountType accountType;
   final void Function(OfferedSubscriptionPlan selectedPlan) onPlanSelected;
-  const OfferedSubscriptionPlansWidget(
-      {Key? key, required this.accountType, required this.onPlanSelected})
-      : super(key: key);
+  const OfferedSubscriptionPlansWidget({
+    Key? key,
+    required this.accountType,
+    required this.onPlanSelected,
+  }) : super(key: key);
 
   @override
   State<OfferedSubscriptionPlansWidget> createState() =>
@@ -61,7 +63,8 @@ class _OfferedSubscriptionPlansWidgetState
                                     .textTheme
                                     .bodyText2
                                     ?.copyWith(
-                                      color: const Color.fromARGB(255, 12, 214, 18),
+                                      color: const Color.fromARGB(
+                                          255, 12, 214, 18),
                                     ),
                                 children: [
                                   TextSpan(
@@ -94,6 +97,7 @@ class _OfferedSubscriptionPlansWidgetState
                                 },
                                 child: OfferedPlanCardItem(
                                   plan: plans[i],
+                                  accountType: widget.accountType,
                                   isSelected: selectedPlan == plans[i],
                                 ),
                               )

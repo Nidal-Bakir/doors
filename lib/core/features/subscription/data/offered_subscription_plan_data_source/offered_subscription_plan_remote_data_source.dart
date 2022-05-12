@@ -34,6 +34,6 @@ class OfferedSubscriptionPlanRemoteDataSourceImpl
         offeredPlansResponse.count != 0) {
       return List<OfferedSubscriptionPlan>.from(offeredPlansResponse.results!);
     }
-    throw ParseException.extractParseException(offeredPlansResponse.error!);
+    throw ParseException.extractParseException(offeredPlansResponse.error);
   }
 }
