@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
@@ -96,19 +98,26 @@ class UserRateRemoteDataSourceImpl extends UserRateRemoteDataSource {
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException('Anonymous user can not rate a post.');
     }
+    ParseCloudFunction cloudFunction = ParseCloudFunction('setPostRate');
     final ParseResponse postRateResponse;
+
     try {
-      postRateResponse = await postRate.save();
+      postRateResponse = await cloudFunction.execute(parameters: {
+        'rate': postRate.rate,
+        "postId": postRate.post.objectId,
+        "rateAuthorId": postRate.rateAuthor.objectId,
+      });
     } catch (e) {
       throw const NoConnectionException(
           'can not set the user rate on the post.');
     }
+
     if (postRateResponse.success &&
         postRateResponse.error == null &&
-        postRateResponse.results != null) {
-      return postRateResponse.results!.first;
+        postRateResponse.result != null) {
+      return PostRate().fromJson(postRateResponse.result);
     } else {
-      throw ParseException.extractParseException(postRateResponse.error!);
+      throw ParseException.extractParseException(postRateResponse.error);
     }
   }
 
