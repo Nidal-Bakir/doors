@@ -32,7 +32,6 @@ class HomeScreen extends StatelessWidget {
       },
       child: ZoomDrawer(
         menuScreenWidth: 220,
-        // androidCloseOnBackTap: true,
         style: DrawerStyle.defaultStyle,
         isRtl: Directionality.of(context) == TextDirection.rtl,
         controller: _drawerController,
@@ -96,91 +95,102 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     final _colorScheme = Theme.of(context).colorScheme;
-    return PrimaryColorBackgroundForScaffold(
-      scaffoldWidget: Scaffold(
-        key: getHomeScaffoldGlobalKey(),
-        backgroundColor: Colors.transparent,
-        extendBody: true,
-        appBar: AppBar(
-          title: _CurrentOpenedTabName(
-            currentOpenedTapIndex: _currentOpenedPageIndex,
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(PostsSearchScreen.routeName);
-                },
-                icon: const Icon(Icons.search)),
-            IconButton(
-              onPressed: () {},
-              icon: const ImageIcon(
-                AssetImage(
-                  'assets/icons/message.png',
+    return WillPopScope(
+      onWillPop: () async {
+        final zoomDrawer = ZoomDrawer.of(context)!;
+        if (Platform.isAndroid && zoomDrawer.isOpen()) {
+          zoomDrawer.close();
+          return false;
+        }
+        return true;
+      },
+      child: PrimaryColorBackgroundForScaffold(
+        scaffoldWidget: Scaffold(
+          key: getHomeScaffoldGlobalKey(),
+          backgroundColor: Colors.transparent,
+          extendBody: true,
+          appBar: AppBar(
+            title: _CurrentOpenedTabName(
+              currentOpenedTapIndex: _currentOpenedPageIndex,
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(PostsSearchScreen.routeName);
+                  },
+                  icon: const Icon(Icons.search)),
+              IconButton(
+                onPressed: () {},
+                icon: const ImageIcon(
+                  AssetImage(
+                    'assets/icons/message.png',
+                  ),
+                ),
+              ),
+            ],
+            leading: InkWell(
+              onTap: () {
+                ZoomDrawer.of(context)?.open();
+              },
+              child: const FittedBox(
+                fit: BoxFit.scaleDown,
+                child: ImageIcon(
+                  AssetImage('assets/icons/menu.png'),
+                  color: Colors.black,
+                  size: 30,
                 ),
               ),
             ),
-          ],
-          leading: InkWell(
-            onTap: () {
-              ZoomDrawer.of(context)?.open();
-            },
-            child: const FittedBox(
-              fit: BoxFit.scaleDown,
-              child: ImageIcon(
-                AssetImage('assets/icons/menu.png'),
-                color: Colors.black,
-                size: 30,
-              ),
-            ),
           ),
-        ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          controller: _navigationBarController,
-          backgroundColor: _colorScheme.secondary,
-          itemBackgroundColor: _colorScheme.secondary,
-          initTap: 1,
-          items: [
-            CustomBottomNavigationBarItem(
-              assetsIconPath: 'assets/icons/internal-ship.png',
-            ),
-            CustomBottomNavigationBarItem(
-              assetsIconPath: 'assets/icons/need.png',
-            ),
-            CustomBottomNavigationBarItem(
-              assetsIconPath: 'assets/icons/offered.png',
-            ),
-          ],
-          onTap: (index) async {
-            _usingNavigationBar = true;
-            await _pageController.animateToPage(index,
-                curve: Curves.fastLinearToSlowEaseIn,
-                duration: const Duration(milliseconds: 600));
-            _usingNavigationBar = false;
-            setState(() {
-              _currentOpenedPageIndex = index;
-            });
-          },
-        ),
-        body: Padding(
-          padding: const EdgeInsets.only(bottom: 70),
-          child: PageView.builder(
-            itemCount: 3,
-            controller: _pageController,
-            itemBuilder: (context, index) {
-              if (index == 1) {
-                return const KeepPageAlive(
-                    child: RecentPostsList(postType: PostType.need));
-              }
-              if (index == 2) {
-                return const KeepPageAlive(
-                    child: RecentPostsList(postType: PostType.offer));
-              }
-              return const KeepPageAlive(
-                child: Center(
-                  child: Text('internal ships'),
-                ),
-              );
+          bottomNavigationBar: CustomBottomNavigationBar(
+            controller: _navigationBarController,
+            backgroundColor: _colorScheme.secondary,
+            itemBackgroundColor: _colorScheme.secondary,
+            initTap: 1,
+            items: [
+              CustomBottomNavigationBarItem(
+                assetsIconPath: 'assets/icons/internal-ship.png',
+              ),
+              CustomBottomNavigationBarItem(
+                assetsIconPath: 'assets/icons/need.png',
+              ),
+              CustomBottomNavigationBarItem(
+                assetsIconPath: 'assets/icons/offered.png',
+              ),
+            ],
+            onTap: (index) async {
+              _usingNavigationBar = true;
+              await _pageController.animateToPage(index,
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  duration: const Duration(milliseconds: 600));
+              _usingNavigationBar = false;
+              setState(() {
+                _currentOpenedPageIndex = index;
+              });
             },
+          ),
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: 70),
+            child: PageView.builder(
+              itemCount: 3,
+              controller: _pageController,
+              itemBuilder: (context, index) {
+                if (index == 1) {
+                  return const KeepPageAlive(
+                      child: RecentPostsList(postType: PostType.need));
+                }
+                if (index == 2) {
+                  return const KeepPageAlive(
+                      child: RecentPostsList(postType: PostType.offer));
+                }
+                return const KeepPageAlive(
+                  child: Center(
+                    child: Text('internal ships'),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
