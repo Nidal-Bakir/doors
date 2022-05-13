@@ -25,7 +25,14 @@ class ParseException extends ServerException {
       {required String message, required this.code, this.type})
       : super(message);
 
-  factory ParseException.extractParseException(ParseError? parseError) {
+  /// [isLoginScreen]: set to true if you are in login screen, because parse
+  /// will return (101) error code for both invalid login credentials and object not
+  /// found, so we will return [ParseInvalidUsernameOrPassword] if we are in login
+  /// screen and [ParseUnknownError] otherwise.
+  factory ParseException.extractParseException(
+    ParseError? parseError, {
+    bool isLoginScreen = false,
+  }) {
     if (parseError == null) {
       return ParseUnknownError();
     }
@@ -50,7 +57,11 @@ class ParseException extends ServerException {
       case 125:
         return ParseInvalidEmailAddress.fromParseError(parseError);
       case 101:
-        return ParseInvalidUsernameOrPassword.fromParseError(parseError);
+        if (isLoginScreen) {
+          return ParseInvalidUsernameOrPassword.fromParseError(parseError);
+        } else {
+          return ParseUnknownError.fromParseError(parseError);
+        }
       case -1:
         return ParseUnknownError.fromParseError(parseError);
       case 1:
@@ -199,8 +210,7 @@ class ParseCloudCodeCustomException extends ParseException {
       case 1005:
         return ErrorWhileProcessingClientPayment.fromParseError(parseError);
       case 1006:
-        return ErrorWhileDeletingImageFromTheServer.fromParseError(
-            parseError);
+        return ErrorWhileDeletingImageFromTheServer.fromParseError(parseError);
       case 1010:
         return SuspendedAccount.fromParseError(parseError);
     }

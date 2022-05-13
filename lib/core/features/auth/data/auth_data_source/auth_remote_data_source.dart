@@ -75,7 +75,10 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
         userResponse.count != 0) {
       return userResponse.results!.first as User;
     } else {
-      throw ParseException.extractParseException(userResponse.error!);
+      throw ParseException.extractParseException(
+        userResponse.error,
+        isLoginScreen: true,
+      );
     }
   }
 
