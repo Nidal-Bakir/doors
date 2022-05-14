@@ -1,7 +1,7 @@
 import 'package:doors/core/config/global_config.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -16,7 +16,7 @@ abstract class UserPostsRemoteDataSource {
   /// Returns a UnmodifiableList of user posts
   ///
   /// Throws [ServerException]  In case of connection error or parse error.
-  Future<UnmodifiableListView<Post>> getUserPosts(
+  Future<UnmodifiableListView<ServicePost>> getUserPosts(
     int amountToSkip,
     String userId,
   );
@@ -24,14 +24,14 @@ abstract class UserPostsRemoteDataSource {
 
 class UserPostsRemoteDataSourceImpl extends UserPostsRemoteDataSource {
   @override
-  Future<UnmodifiableListView<Post>> getUserPosts(
+  Future<UnmodifiableListView<ServicePost>> getUserPosts(
     int amountToSkip,
     String userId,
   ) async {
-    final userPostsQuery = QueryBuilder.name(Post.keyClassName)
+    final userPostsQuery = QueryBuilder.name(ServicePost.keyClassName)
       ..whereRelatedTo(User.keyUserPosts, User.keyUserClassName, userId)
-      ..orderByDescending(Post.keyPostCreationDate)
-      ..includeObject([Post.keyAuthor])
+      ..orderByDescending(ServicePost.keyPostCreationDate)
+      ..includeObject([ServicePost.keyAuthor])
       ..excludeKeys(User.keysToExcludeFromQueriesRelatedToUser())
       ..setAmountToSkip(amountToSkip)
       ..setLimit(GlobalConfig.amountOfResultPeerRequest);
@@ -46,7 +46,7 @@ class UserPostsRemoteDataSourceImpl extends UserPostsRemoteDataSource {
         listOfUserPostsResponse.error == null &&
         listOfUserPostsResponse.result != null) {
       return UnmodifiableListView(
-        List<Post>.from(
+        List<ServicePost>.from(
           listOfUserPostsResponse.results!,
         ),
       );

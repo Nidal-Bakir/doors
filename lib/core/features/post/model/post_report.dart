@@ -1,6 +1,6 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/auth/model/user.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -30,13 +30,13 @@ class PostReport extends ParseObject
   set reportAuthor(User reportAuthor) =>
       set<User>(keyReportAuthor, reportAuthor);
 
-  set reportedPost(Post reportedPost) =>
-      set<Post>(keyReportedPost, reportedPost);
+  set reportedPost(ServicePost reportedPost) =>
+      set<ServicePost>(keyReportedPost, reportedPost);
 
   @override
   List<Object?> get props => [
         get<String?>(keyVarObjectId),
         get<User>(keyReportAuthor),
-        get<Post>(keyReportedPost)
+        get<ServicePost>(keyReportedPost)
       ];
 }

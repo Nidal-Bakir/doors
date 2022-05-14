@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/exception_base.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/manage_post/data/manage_post_remote_data_source/manage_post_remote_data_source.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -15,7 +15,7 @@ class ManagePostsRepository {
   /// OR [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<Either<ExceptionBase, void>> createPost(Post post) async {
+  Future<Either<ExceptionBase, void>> createPost(ServicePost post) async {
     assert(post.objectId == null);
     try {
       return Right(await _managePostRemoteDataSource.createPost(post));
@@ -34,7 +34,7 @@ class ManagePostsRepository {
   /// * [ForbiddenOperation] if the user is trying to edit other users posts,
   ///  that should not happened, but just in case!
   Future<Either<ExceptionBase, void>> editPost(
-      Post post, ParseFile? oldPostImage) async {
+      ServicePost post, ParseFile? oldPostImage) async {
     assert(post.objectId != null);
     try {
       return Right(
@@ -53,7 +53,7 @@ class ManagePostsRepository {
   /// * [AnonymousException] if the user is Anonymous user
   /// * [ForbiddenOperation] if the user is trying to delete other users posts,
   ///  that should not happened, but just in case!
-  Future<Either<ExceptionBase, void>> deletePost(Post post) async {
+  Future<Either<ExceptionBase, void>> deletePost(ServicePost post) async {
     assert(post.objectId != null);
     try {
       return Right(await _managePostRemoteDataSource.deletePost(post));

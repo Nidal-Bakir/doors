@@ -1,7 +1,7 @@
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class FavoritePostRemoteDataSource {
@@ -12,7 +12,7 @@ abstract class FavoritePostRemoteDataSource {
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<void> addPostToUserFavoriteList(Post post);
+  Future<void> addPostToUserFavoriteList(ServicePost post);
 
   /// Remove a post from the favorite posts list for the current user
   ///
@@ -21,7 +21,7 @@ abstract class FavoritePostRemoteDataSource {
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<void> removePostFromUserFavoriteList(Post favoritePost);
+  Future<void> removePostFromUserFavoriteList(ServicePost favoritePost);
 
   /// Check if the [post] was added to the current user favorite list or not.
   ///
@@ -31,12 +31,12 @@ abstract class FavoritePostRemoteDataSource {
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<bool> isFavoritePost(Post post);
+  Future<bool> isFavoritePost(ServicePost post);
 }
 
 class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
   @override
-  Future<void> addPostToUserFavoriteList(Post post) async {
+  Future<void> addPostToUserFavoriteList(ServicePost post) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException('Anonymous user can not favorite posts');
@@ -47,7 +47,7 @@ class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
     final ParseResponse savePostAsFavoriteResponse;
     try {
       savePostAsFavoriteResponse = await _currentUser.save();
-    }  catch (e) {
+    } catch (e) {
       throw const NoConnectionException('can not save post as favorite post ');
     }
     if (!savePostAsFavoriteResponse.success &&
@@ -58,7 +58,7 @@ class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
   }
 
   @override
-  Future<void> removePostFromUserFavoriteList(Post favoritePost) async {
+  Future<void> removePostFromUserFavoriteList(ServicePost favoritePost) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException(
@@ -69,7 +69,7 @@ class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
     final ParseResponse removePostFromFavoritePostsResponse;
     try {
       removePostFromFavoritePostsResponse = await _currentUser.save();
-    }  catch (e) {
+    } catch (e) {
       throw const NoConnectionException(
           'can not remove post from favorite posts ');
     }
@@ -81,22 +81,22 @@ class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
   }
 
   @override
-  Future<bool> isFavoritePost(Post post) async {
+  Future<bool> isFavoritePost(ServicePost post) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
-     if (_currentUser.isAnonymousAccount) {
+    if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException(
           'Anonymous user can not have favorite posts');
     }
 
-    final userFavoritePostsQuery = QueryBuilder.name(Post.keyClassName)
+    final userFavoritePostsQuery = QueryBuilder.name(ServicePost.keyClassName)
       ..whereRelatedTo(
-          User.keyFavoritePosts, User.keyUserClassName, _currentUser.userId)
-      ..whereEqualTo(Post.keyPostId, post.postId);
+          User.keyFavoriteServicePosts, User.keyUserClassName, _currentUser.userId)
+      ..whereEqualTo(ServicePost.keyPostId, post.postId);
 
     final ParseResponse isFavoritePostResponse;
     try {
       isFavoritePostResponse = await userFavoritePostsQuery.count();
-    }  catch (e) {
+    } catch (e) {
       throw const NoConnectionException(
           'can not determine if it\'s a favorite post or not');
     }

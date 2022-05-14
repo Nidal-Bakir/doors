@@ -5,9 +5,9 @@ class UserPostsState with _$UserPostsState {
   const factory UserPostsState.inProgress() = UserPostsInProgress;
 
   const factory UserPostsState.loadSuccess(
-      UnmodifiableListView<Post> userPosts) = UserPostsLoadSuccess;
+      UnmodifiableListView<ServicePost> userPosts) = UserPostsLoadSuccess;
 
   const factory UserPostsState.loadFailure(
-          ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts) =
+          ExceptionBase error, UnmodifiableListView<ServicePost> cachedUserPosts) =
       UserPostsLoadFailure;
 }

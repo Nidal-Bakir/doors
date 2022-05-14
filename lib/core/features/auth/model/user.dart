@@ -1,5 +1,5 @@
 import 'package:doors/core/enums/enums.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -16,7 +16,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyUserHumanReadableLocation = 'humanReadableLocation';
   static const keyUserSubscription = 'userSubscription';
   static const keyIsSubscribed = 'isSubscribed';
-  static const keyFavoritePosts = 'favoritePosts';
+  static const keyFavoriteServicePosts = 'favoriteServicePosts';
   static const keyUserPosts = 'userPosts';
   static const keyUniqueUserName = keyVarUsername;
   static const keyIsPrivatePhoneNumber = 'isPrivatePhoneNumber';
@@ -117,16 +117,16 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   bool get isAnonymousAccount =>
       emailAddress == null || username != emailAddress;
 
-  void addToFavoriteList(Post post) => addRelation(User.keyFavoritePosts, [
-        ParseObject(Post.keyClassName)
+  void addToFavoriteList(ServicePost post) => addRelation(User.keyFavoriteServicePosts, [
+        ParseObject(ServicePost.keyClassName)
           ..set(
             'objectId',
             post.objectId,
           )
       ]);
-  void removeFromFavoriteList(Post favoritePost) =>
-      removeRelation(User.keyFavoritePosts, [
-        ParseObject(Post.keyClassName)
+  void removeFromFavoriteList(ServicePost favoritePost) =>
+      removeRelation(User.keyFavoriteServicePosts, [
+        ParseObject(ServicePost.keyClassName)
           ..set(
             'objectId',
             favoritePost.objectId,
@@ -136,7 +136,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static List<String> keysToExcludeFromQueriesRelatedToUser() => const [
         User.keyAccountStatues,
         User.keyUserSubscription,
-        User.keyFavoritePosts,
+        User.keyFavoriteServicePosts,
         User.keyPaypalEmail,
         User.keyUserPosts
       ];

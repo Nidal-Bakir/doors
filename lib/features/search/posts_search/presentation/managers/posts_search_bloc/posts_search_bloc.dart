@@ -1,14 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/errors/server_error.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/search/models/search_filter.dart';
 import 'package:doors/features/search/posts_search/repository/posts_search_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+part 'posts_search_bloc.freezed.dart';
 part 'posts_search_event.dart';
 part 'posts_search_state.dart';
-part 'posts_search_bloc.freezed.dart';
 
 class PostsSearchBloc extends Bloc<PostsSearchEvent, PostsSearchState> {
   final PostsSearchRepository _postsSearchRepository;

@@ -3,8 +3,8 @@ import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/post/data/user_rate_remote_data_source.dart';
-import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/post/model/post_rate.dart';
+import 'package:doors/core/models/service_post.dart';
 
 class UserRateRepository {
   final UserRateRemoteDataSource _userRateRemoteDataSource;
@@ -17,7 +17,7 @@ class UserRateRepository {
   /// OR [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<Either<ExceptionBase, PostRate?>> getUserRateOnPost(Post post) async {
+  Future<Either<ExceptionBase, PostRate?>> getUserRateOnPost(ServicePost post) async {
     try {
       return Right(await _userRateRemoteDataSource.getUserRateOnPost(post));
     } on ExceptionBase catch (error) {

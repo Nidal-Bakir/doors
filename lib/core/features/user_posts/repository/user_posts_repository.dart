@@ -2,9 +2,9 @@ import 'dart:collection';
 
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/server_error.dart';
-import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/user_posts/data/user_posts_local_data_source/user_posts_local_data_source.dart';
 import 'package:doors/core/features/user_posts/data/user_posts_remote_data_source/user_posts_remote_data_source.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/typedef/new_types.dart';
 
 class UserPostsRepository {
@@ -23,7 +23,7 @@ class UserPostsRepository {
   ///   * [ServerException] in case of connection error or parse error.
   /// * tail: (cached data)
   ///   * holding the local cached user posts
-  Future<EitherDataOrDataWithError<ServerException, Post>> getUserPosts({
+  Future<EitherDataOrDataWithError<ServerException, ServicePost>> getUserPosts({
     bool fullRefresh = false,
     required String userId,
   }) async {
@@ -33,7 +33,7 @@ class UserPostsRepository {
     final cachedPostsCount =
         await _userPostsLocalDataSource.getCountOfCachedUserPosts();
 
-    UnmodifiableListView<Post> newFavoritePosts;
+    UnmodifiableListView<ServicePost> newFavoritePosts;
     try {
       newFavoritePosts = await _userPostsRemoteDataSource.getUserPosts(
         cachedPostsCount,

@@ -6,8 +6,10 @@ import 'package:doors/core/features/post/model/post_rate.dart';
 import 'package:doors/core/features/post/model/post_report.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';
 import 'package:doors/core/features/subscription/model/payment.dart';
-import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/user_location/models/city.dart';
+import 'package:doors/core/models/job_application.dart';
+import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/parse_keys.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -22,10 +24,12 @@ Future<void> parseInit() async {
     registeredSubClassMap: <String, ParseObjectConstructor>{
       UserSubscription.keyClassName: () => UserSubscription(),
       OfferedSubscriptionPlan.keyClassName: () => OfferedSubscriptionPlan(),
-      Post.keyClassName: () => Post(),
+      ServicePost.keyClassName: () => ServicePost(),
       PostReport.keyClassName: () => PostReport(),
       PostRate.keyClassName: () => PostRate(),
       City.keyClassName: () => City(),
+      JobPost.keyClassName: () => JobPost(),
+      JobApplication.keyClassName: () => JobApplication(),
     },
     //TODO: remove the debug mode
     debug: true,

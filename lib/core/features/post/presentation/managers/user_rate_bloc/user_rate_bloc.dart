@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/errors/exception_base.dart';
-import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/post/model/post_rate.dart';
 import 'package:doors/core/features/post/repository/user_rate_repository.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_rate_bloc.freezed.dart';

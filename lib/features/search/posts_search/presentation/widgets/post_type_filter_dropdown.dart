@@ -4,7 +4,7 @@ import 'package:doors/core/widgets/custom_dropdown/custom_drop_down.dart';
 import 'package:flutter/material.dart' hide DropdownButtonFormField;
 
 class PostTypeDropdownButtonFormField extends StatefulWidget {
-  final Function(PostType? postType) onSave;
+  final Function(ServiceType? postType) onSave;
 
   const PostTypeDropdownButtonFormField({
     Key? key,
@@ -36,11 +36,11 @@ class _PostTypeDropdownButtonFormFieldState
         ),
         DropdownMenuItem<String>(
           child: Text(context.loc.need),
-          value: PostType.need.name,
+          value: ServiceType.need.name,
         ),
         DropdownMenuItem<String>(
           child: Text(context.loc.offer),
-          value: PostType.offer.name,
+          value: ServiceType.offer.name,
         )
       ],
       onSaved: (postType) {
@@ -49,7 +49,7 @@ class _PostTypeDropdownButtonFormFieldState
           return;
         }
         widget.onSave(
-            PostType.values.firstWhere((element) => element.name == postType));
+            ServiceType.values.firstWhere((element) => element.name == postType));
       },
       onChanged: (postType) {
         setState(() {

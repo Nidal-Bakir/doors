@@ -3,7 +3,7 @@ import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -18,22 +18,22 @@ abstract class FavoritePostsRemoteDataSource {
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<UnmodifiableListView<Post>> getFavoritePosts(int amountToSkip);
+  Future<UnmodifiableListView<ServicePost>> getFavoritePosts(int amountToSkip);
 }
 
 class FavoritePostsRemoteDataSourceImpl extends FavoritePostsRemoteDataSource {
   @override
-  Future<UnmodifiableListView<Post>> getFavoritePosts(int amountToSkip) async {
+  Future<UnmodifiableListView<ServicePost>> getFavoritePosts(int amountToSkip) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException(
           'Anonymous user can not have favorite posts');
     }
 
-    final userFavoritePostsQuery = QueryBuilder.name(Post.keyClassName)
+    final userFavoritePostsQuery = QueryBuilder.name(ServicePost.keyClassName)
       ..whereRelatedTo(
-          User.keyFavoritePosts, User.keyUserClassName, _currentUser.userId)
-      ..includeObject([Post.keyAuthor])
+          User.keyFavoriteServicePosts, User.keyUserClassName, _currentUser.userId)
+      ..includeObject([ServicePost.keyAuthor])
       ..excludeKeys(User.keysToExcludeFromQueriesRelatedToUser())
       ..setAmountToSkip(amountToSkip)
       ..setLimit(GlobalConfig.amountOfResultPeerRequest);
@@ -48,7 +48,7 @@ class FavoritePostsRemoteDataSourceImpl extends FavoritePostsRemoteDataSource {
         listOfFavoritePostsResponse.error == null &&
         listOfFavoritePostsResponse.result != null) {
       return UnmodifiableListView(
-        List<Post>.from(
+        List<ServicePost>.from(
           listOfFavoritePostsResponse.results!,
         ),
       );

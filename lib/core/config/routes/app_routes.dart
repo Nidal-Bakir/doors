@@ -7,9 +7,9 @@ import 'package:doors/core/features/auth/presentation/screens/sign_up_part_one_s
 import 'package:doors/core/features/auth/presentation/screens/sign_up_part_two_screen.dart';
 import 'package:doors/core/features/auth/presentation/screens/suspended_screen.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
-import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/subscription/presentation/screens/subscription_screen.dart';
 import 'package:doors/core/features/user_posts/presentation/screens/user_posts_screen.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
@@ -88,7 +88,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case PostScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => PostScreen(
-          post: settings.arguments as Post,
+          post: settings.arguments as ServicePost,
         ),
       );
 
@@ -98,14 +98,14 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case CreateOrEditPostScreenPartOne.routeName:
       return MaterialPageRoute(
         builder: (_) => CreateOrEditPostScreenPartOne(
-          post: settings.arguments as Post?,
+          post: settings.arguments as ServicePost?,
         ),
       );
 
     case CreateOrEditPostScreenPartTwo.routeName:
       return MaterialPageRoute(
         builder: (_) => CreateOrEditPostScreenPartTwo(
-          post: settings.arguments as Post,
+          post: settings.arguments as ServicePost,
         ),
       );
   }

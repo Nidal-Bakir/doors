@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
-import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/post/model/post_rate.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class UserRateRemoteDataSource {
@@ -16,12 +14,12 @@ abstract class UserRateRemoteDataSource {
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<PostRate?> getUserRateOnPost(Post post);
+  Future<PostRate?> getUserRateOnPost(ServicePost post);
 
   /// Set user rate on a post.
-  /// 
-  /// Cloud code function will be invoked to set the user rate on the post, if 
-  /// the user editing or creating new rate on a post, the cloud code 
+  ///
+  /// Cloud code function will be invoked to set the user rate on the post, if
+  /// the user editing or creating new rate on a post, the cloud code
   /// will create or edit the rate on the post.
   ///
   /// Returns future that resolve with [PostRate] which has an objectId.
@@ -45,7 +43,7 @@ abstract class UserRateRemoteDataSource {
 
 class UserRateRemoteDataSourceImpl extends UserRateRemoteDataSource {
   @override
-  Future<PostRate?> getUserRateOnPost(Post post) async {
+  Future<PostRate?> getUserRateOnPost(ServicePost post) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException(
@@ -56,7 +54,7 @@ class UserRateRemoteDataSourceImpl extends UserRateRemoteDataSource {
     // where postRate.author=currentUser AND postRate.post=post
     postRateQuery.whereEqualTo(
       PostRate.keyPost,
-      (ParseObject(Post.keyClassName)..objectId = post.objectId).toPointer(),
+      (ParseObject(ServicePost.keyClassName)..objectId = post.objectId).toPointer(),
     );
     postRateQuery.whereEqualTo(
       PostRate.keyRateAuthor,

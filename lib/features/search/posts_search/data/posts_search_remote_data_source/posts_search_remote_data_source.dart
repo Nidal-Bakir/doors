@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:doors/core/config/global_config.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/search/models/search_filter.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -12,13 +12,13 @@ abstract class PostsSearchRemoteDataSource {
   ///
   /// [searchFilter]: The filter that will be applied to the search query,
   /// the filter will applied cumulatively to narrow down the search result.
-  /// 
+  ///
   /// [amountToSkip]: For pagination, where it's the count of the current loaded posts.
-  /// 
+  ///
   /// Returns UnmodifiableListView of posts search results.
-  /// 
+  ///
   /// Throws [ServerException] in case of connection error or parse error.
-  Future<UnmodifiableListView<Post>> searchPosts(
+  Future<UnmodifiableListView<ServicePost>> searchPosts(
     SearchFilter searchFilter,
     int amountToSkip,
   );
@@ -26,14 +26,14 @@ abstract class PostsSearchRemoteDataSource {
 
 class PostsSearchRemoteDataSourceImpl extends PostsSearchRemoteDataSource {
   @override
-  Future<UnmodifiableListView<Post>> searchPosts(
+  Future<UnmodifiableListView<ServicePost>> searchPosts(
       SearchFilter searchFilter, int amountToSkip) async {
-    QueryBuilder queryBuilder = QueryBuilder.name(Post.keyClassName);
+    QueryBuilder queryBuilder = QueryBuilder.name(ServicePost.keyClassName);
     _applySearchFilterOnPosts(searchFilter, queryBuilder);
 
     queryBuilder
-      ..orderByDescending(Post.keyPostCreationDate)
-      ..includeObject([Post.keyAuthor])
+      ..orderByDescending(ServicePost.keyPostCreationDate)
+      ..includeObject([ServicePost.keyAuthor])
       ..excludeKeys(User.keysToExcludeFromQueriesRelatedToUser())
       ..setAmountToSkip(amountToSkip)
       ..setLimit(GlobalConfig.amountOfResultPeerRequest);
@@ -49,7 +49,7 @@ class PostsSearchRemoteDataSourceImpl extends PostsSearchRemoteDataSource {
         searchPostsResponse.error == null &&
         searchPostsResponse.results != null) {
       return UnmodifiableListView(
-        List<Post>.from(
+        List<ServicePost>.from(
           searchPostsResponse.results!,
           growable: false,
         ),
@@ -71,25 +71,25 @@ class PostsSearchRemoteDataSourceImpl extends PostsSearchRemoteDataSource {
     QueryBuilder queryBuilder,
   ) {
     if (searchFilter.title != null) {
-      queryBuilder.whereContains(Post.keyPostTitle, searchFilter.title!);
+      queryBuilder.whereContains(ServicePost.keyPostTitle, searchFilter.title!);
     }
 
     if (searchFilter.category != null) {
-      queryBuilder.whereContains(Post.keyPostCategory, searchFilter.category!);
+      queryBuilder.whereContains(ServicePost.keyPostCategory, searchFilter.category!);
     }
 
     if (searchFilter.maxCost != null && searchFilter.currency != null) {
       queryBuilder.whereLessThanOrEqualTo(
-          Post.keyPostMaxCost, searchFilter.maxCost);
+          ServicePost.keyPostMaxCost, searchFilter.maxCost);
 
       queryBuilder.whereEqualTo(
-          Post.keyPostCostCurrency, searchFilter.currency);
+          ServicePost.keyPostCostCurrency, searchFilter.currency);
     }
 
     if (searchFilter.userGeoLocation != null &&
         searchFilter.maxDistanceInKiloMetres != null) {
       queryBuilder.whereWithinKilometers(
-        Post.keyPostLocation,
+        ServicePost.keyPostLocation,
         searchFilter.userGeoLocation!,
         searchFilter.maxDistanceInKiloMetres!.toDouble(),
       );
@@ -98,11 +98,11 @@ class PostsSearchRemoteDataSourceImpl extends PostsSearchRemoteDataSource {
     if (searchFilter.keywords != null &&
         (searchFilter.keywords?.isNotEmpty ?? false)) {
       queryBuilder.whereArrayContainsAll(
-          Post.keyPostKeywords, searchFilter.keywords!.toList());
+          ServicePost.keyPostKeywords, searchFilter.keywords!.toList());
     }
 
     if (searchFilter.postType != null) {
-      queryBuilder.whereEqualTo(Post.keyPostType, searchFilter.postType!.name);
+      queryBuilder.whereEqualTo(ServicePost.keyPostType, searchFilter.postType!.name);
     }
   }
 }

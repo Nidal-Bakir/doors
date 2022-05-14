@@ -17,20 +17,20 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$ManagePostEventTearOff {
   const _$ManagePostEventTearOff();
 
-  ManagePostCreated created(Post newPost) {
+  ManagePostCreated created(ServicePost newPost) {
     return ManagePostCreated(
       newPost,
     );
   }
 
-  ManagePostEdited edited(Post editPost, ParseFile? oldPostImage) {
+  ManagePostEdited edited(ServicePost editPost, ParseFile? oldPostImage) {
     return ManagePostEdited(
       editPost,
       oldPostImage,
     );
   }
 
-  ManagePostDeleted deleted(Post post) {
+  ManagePostDeleted deleted(ServicePost post) {
     return ManagePostDeleted(
       post,
     );
@@ -44,23 +44,23 @@ const $ManagePostEvent = _$ManagePostEventTearOff();
 mixin _$ManagePostEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Post newPost) created,
-    required TResult Function(Post editPost, ParseFile? oldPostImage) edited,
-    required TResult Function(Post post) deleted,
+    required TResult Function(ServicePost newPost) created,
+    required TResult Function(ServicePost editPost, ParseFile? oldPostImage) edited,
+    required TResult Function(ServicePost post) deleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Post newPost)? created,
-    TResult Function(Post editPost, ParseFile? oldPostImage)? edited,
-    TResult Function(Post post)? deleted,
+    TResult Function(ServicePost newPost)? created,
+    TResult Function(ServicePost editPost, ParseFile? oldPostImage)? edited,
+    TResult Function(ServicePost post)? deleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Post newPost)? created,
-    TResult Function(Post editPost, ParseFile? oldPostImage)? edited,
-    TResult Function(Post post)? deleted,
+    TResult Function(ServicePost newPost)? created,
+    TResult Function(ServicePost editPost, ParseFile? oldPostImage)? edited,
+    TResult Function(ServicePost post)? deleted,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -110,7 +110,7 @@ abstract class $ManagePostCreatedCopyWith<$Res> {
   factory $ManagePostCreatedCopyWith(
           ManagePostCreated value, $Res Function(ManagePostCreated) then) =
       _$ManagePostCreatedCopyWithImpl<$Res>;
-  $Res call({Post newPost});
+  $Res call({ServicePost newPost});
 }
 
 /// @nodoc
@@ -132,7 +132,7 @@ class _$ManagePostCreatedCopyWithImpl<$Res>
       newPost == freezed
           ? _value.newPost
           : newPost // ignore: cast_nullable_to_non_nullable
-              as Post,
+              as ServicePost,
     ));
   }
 }
@@ -143,7 +143,7 @@ class _$ManagePostCreated implements ManagePostCreated {
   const _$ManagePostCreated(this.newPost);
 
   @override
-  final Post newPost;
+  final ServicePost newPost;
 
   @override
   String toString() {
@@ -170,9 +170,9 @@ class _$ManagePostCreated implements ManagePostCreated {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Post newPost) created,
-    required TResult Function(Post editPost, ParseFile? oldPostImage) edited,
-    required TResult Function(Post post) deleted,
+    required TResult Function(ServicePost newPost) created,
+    required TResult Function(ServicePost editPost, ParseFile? oldPostImage) edited,
+    required TResult Function(ServicePost post) deleted,
   }) {
     return created(newPost);
   }
@@ -180,9 +180,9 @@ class _$ManagePostCreated implements ManagePostCreated {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Post newPost)? created,
-    TResult Function(Post editPost, ParseFile? oldPostImage)? edited,
-    TResult Function(Post post)? deleted,
+    TResult Function(ServicePost newPost)? created,
+    TResult Function(ServicePost editPost, ParseFile? oldPostImage)? edited,
+    TResult Function(ServicePost post)? deleted,
   }) {
     return created?.call(newPost);
   }
@@ -190,9 +190,9 @@ class _$ManagePostCreated implements ManagePostCreated {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Post newPost)? created,
-    TResult Function(Post editPost, ParseFile? oldPostImage)? edited,
-    TResult Function(Post post)? deleted,
+    TResult Function(ServicePost newPost)? created,
+    TResult Function(ServicePost editPost, ParseFile? oldPostImage)? edited,
+    TResult Function(ServicePost post)? deleted,
     required TResult orElse(),
   }) {
     if (created != null) {
@@ -237,9 +237,9 @@ class _$ManagePostCreated implements ManagePostCreated {
 }
 
 abstract class ManagePostCreated implements ManagePostEvent {
-  const factory ManagePostCreated(Post newPost) = _$ManagePostCreated;
+  const factory ManagePostCreated(ServicePost newPost) = _$ManagePostCreated;
 
-  Post get newPost;
+  ServicePost get newPost;
   @JsonKey(ignore: true)
   $ManagePostCreatedCopyWith<ManagePostCreated> get copyWith =>
       throw _privateConstructorUsedError;
@@ -250,7 +250,7 @@ abstract class $ManagePostEditedCopyWith<$Res> {
   factory $ManagePostEditedCopyWith(
           ManagePostEdited value, $Res Function(ManagePostEdited) then) =
       _$ManagePostEditedCopyWithImpl<$Res>;
-  $Res call({Post editPost, ParseFile? oldPostImage});
+  $Res call({ServicePost editPost, ParseFile? oldPostImage});
 }
 
 /// @nodoc
@@ -273,7 +273,7 @@ class _$ManagePostEditedCopyWithImpl<$Res>
       editPost == freezed
           ? _value.editPost
           : editPost // ignore: cast_nullable_to_non_nullable
-              as Post,
+              as ServicePost,
       oldPostImage == freezed
           ? _value.oldPostImage
           : oldPostImage // ignore: cast_nullable_to_non_nullable
@@ -288,7 +288,7 @@ class _$ManagePostEdited implements ManagePostEdited {
   const _$ManagePostEdited(this.editPost, this.oldPostImage);
 
   @override
-  final Post editPost;
+  final ServicePost editPost;
   @override
   final ParseFile? oldPostImage;
 
@@ -321,9 +321,9 @@ class _$ManagePostEdited implements ManagePostEdited {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Post newPost) created,
-    required TResult Function(Post editPost, ParseFile? oldPostImage) edited,
-    required TResult Function(Post post) deleted,
+    required TResult Function(ServicePost newPost) created,
+    required TResult Function(ServicePost editPost, ParseFile? oldPostImage) edited,
+    required TResult Function(ServicePost post) deleted,
   }) {
     return edited(editPost, oldPostImage);
   }
@@ -331,9 +331,9 @@ class _$ManagePostEdited implements ManagePostEdited {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Post newPost)? created,
-    TResult Function(Post editPost, ParseFile? oldPostImage)? edited,
-    TResult Function(Post post)? deleted,
+    TResult Function(ServicePost newPost)? created,
+    TResult Function(ServicePost editPost, ParseFile? oldPostImage)? edited,
+    TResult Function(ServicePost post)? deleted,
   }) {
     return edited?.call(editPost, oldPostImage);
   }
@@ -341,9 +341,9 @@ class _$ManagePostEdited implements ManagePostEdited {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Post newPost)? created,
-    TResult Function(Post editPost, ParseFile? oldPostImage)? edited,
-    TResult Function(Post post)? deleted,
+    TResult Function(ServicePost newPost)? created,
+    TResult Function(ServicePost editPost, ParseFile? oldPostImage)? edited,
+    TResult Function(ServicePost post)? deleted,
     required TResult orElse(),
   }) {
     if (edited != null) {
@@ -388,10 +388,10 @@ class _$ManagePostEdited implements ManagePostEdited {
 }
 
 abstract class ManagePostEdited implements ManagePostEvent {
-  const factory ManagePostEdited(Post editPost, ParseFile? oldPostImage) =
+  const factory ManagePostEdited(ServicePost editPost, ParseFile? oldPostImage) =
       _$ManagePostEdited;
 
-  Post get editPost;
+  ServicePost get editPost;
   ParseFile? get oldPostImage;
   @JsonKey(ignore: true)
   $ManagePostEditedCopyWith<ManagePostEdited> get copyWith =>
@@ -403,7 +403,7 @@ abstract class $ManagePostDeletedCopyWith<$Res> {
   factory $ManagePostDeletedCopyWith(
           ManagePostDeleted value, $Res Function(ManagePostDeleted) then) =
       _$ManagePostDeletedCopyWithImpl<$Res>;
-  $Res call({Post post});
+  $Res call({ServicePost post});
 }
 
 /// @nodoc
@@ -425,7 +425,7 @@ class _$ManagePostDeletedCopyWithImpl<$Res>
       post == freezed
           ? _value.post
           : post // ignore: cast_nullable_to_non_nullable
-              as Post,
+              as ServicePost,
     ));
   }
 }
@@ -436,7 +436,7 @@ class _$ManagePostDeleted implements ManagePostDeleted {
   const _$ManagePostDeleted(this.post);
 
   @override
-  final Post post;
+  final ServicePost post;
 
   @override
   String toString() {
@@ -463,9 +463,9 @@ class _$ManagePostDeleted implements ManagePostDeleted {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Post newPost) created,
-    required TResult Function(Post editPost, ParseFile? oldPostImage) edited,
-    required TResult Function(Post post) deleted,
+    required TResult Function(ServicePost newPost) created,
+    required TResult Function(ServicePost editPost, ParseFile? oldPostImage) edited,
+    required TResult Function(ServicePost post) deleted,
   }) {
     return deleted(post);
   }
@@ -473,9 +473,9 @@ class _$ManagePostDeleted implements ManagePostDeleted {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Post newPost)? created,
-    TResult Function(Post editPost, ParseFile? oldPostImage)? edited,
-    TResult Function(Post post)? deleted,
+    TResult Function(ServicePost newPost)? created,
+    TResult Function(ServicePost editPost, ParseFile? oldPostImage)? edited,
+    TResult Function(ServicePost post)? deleted,
   }) {
     return deleted?.call(post);
   }
@@ -483,9 +483,9 @@ class _$ManagePostDeleted implements ManagePostDeleted {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Post newPost)? created,
-    TResult Function(Post editPost, ParseFile? oldPostImage)? edited,
-    TResult Function(Post post)? deleted,
+    TResult Function(ServicePost newPost)? created,
+    TResult Function(ServicePost editPost, ParseFile? oldPostImage)? edited,
+    TResult Function(ServicePost post)? deleted,
     required TResult orElse(),
   }) {
     if (deleted != null) {
@@ -530,9 +530,9 @@ class _$ManagePostDeleted implements ManagePostDeleted {
 }
 
 abstract class ManagePostDeleted implements ManagePostEvent {
-  const factory ManagePostDeleted(Post post) = _$ManagePostDeleted;
+  const factory ManagePostDeleted(ServicePost post) = _$ManagePostDeleted;
 
-  Post get post;
+  ServicePost get post;
   @JsonKey(ignore: true)
   $ManagePostDeletedCopyWith<ManagePostDeleted> get copyWith =>
       throw _privateConstructorUsedError;

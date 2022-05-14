@@ -9,7 +9,8 @@ import 'package:doors/core/widgets/restart_app.dart';
 import 'package:doors/features/home/presentation/screen/menu_screen.dart';
 import 'package:doors/features/home/presentation/widgets/custom_bottom_navigation_bar.dart';
 import 'package:doors/features/home/presentation/widgets/keep_page_alive.dart';
-import 'package:doors/features/recent_posts/presentation/widgets/recent_posts_list.dart';
+import 'package:doors/features/recent_posts/presentation/widgets/recent_job_posts_list.dart';
+import 'package:doors/features/recent_posts/presentation/widgets/recent_service_posts_list.dart';
 import 'package:doors/features/search/posts_search/presentation/screens/posts_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -178,16 +179,20 @@ class _MainScreenState extends State<MainScreen>
               itemBuilder: (context, index) {
                 if (index == 1) {
                   return const KeepPageAlive(
-                      child: RecentPostsList(postType: PostType.need));
+                    child: RecentServicePostsList(
+                      serviceType: ServiceType.need,
+                    ),
+                  );
                 }
                 if (index == 2) {
                   return const KeepPageAlive(
-                      child: RecentPostsList(postType: PostType.offer));
+                    child: RecentServicePostsList(
+                      serviceType: ServiceType.offer,
+                    ),
+                  );
                 }
                 return const KeepPageAlive(
-                  child: Center(
-                    child: Text('internal ships'),
-                  ),
+                  child: RecentJobPostsList(),
                 );
               },
             ),

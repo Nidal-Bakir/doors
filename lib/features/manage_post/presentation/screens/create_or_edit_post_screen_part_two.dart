@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/user_location/models/user_location.dart';
 import 'package:doors/core/features/user_location/presentation/widgets/user_location_widget.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
@@ -17,7 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class CreateOrEditPostScreenPartTwo extends StatefulWidget {
-  final Post post;
+  final ServicePost post;
   static const routeName = '/create-or-edit-post-two';
 
   const CreateOrEditPostScreenPartTwo({Key? key, required this.post})
@@ -41,8 +41,8 @@ class _CreateOrEditPostScreenPartTwoState
   late double? _upToCost = widget.post.maxCost;
   late String? _currency = widget.post.postCostCurrency;
   late String? _humanReadableLocation =
-      widget.post.get(Post.keyPostHumanReadableLocation);
-  late ParseGeoPoint? _userGeoLocation = widget.post.get(Post.keyPostLocation);
+      widget.post.get(ServicePost.keyPostHumanReadableLocation);
+  late ParseGeoPoint? _userGeoLocation = widget.post.get(ServicePost.keyPostLocation);
 
   @override
   void initState() {
@@ -103,14 +103,14 @@ class _CreateOrEditPostScreenPartTwoState
                             initUpToCost: _upToCost,
                             onCostSave: onCostSave,
                           ),
-                         
                           BlocConsumer<ManagePostBloc, ManagePostState>(
                             listener: (context, state) {
                               state.whenOrNull(
                                 createSuccuss: () {
                                   showSuccussSnackBar(
                                     context,
-                                    context.loc.your_service_created_successfully,
+                                    context
+                                        .loc.your_service_created_successfully,
                                   );
                                   Navigator.of(context)
                                       .popUntil((route) => route.isFirst);
@@ -118,7 +118,8 @@ class _CreateOrEditPostScreenPartTwoState
                                 editSuccuss: () {
                                   showSuccussSnackBar(
                                     context,
-                                    context.loc.your_service_edited_successfully,
+                                    context
+                                        .loc.your_service_edited_successfully,
                                   );
                                   Navigator.of(context)
                                       .popUntil((route) => route.isFirst);

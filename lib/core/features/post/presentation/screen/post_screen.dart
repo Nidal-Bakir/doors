@@ -3,7 +3,6 @@ import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
-import 'package:doors/core/features/post/model/post.dart';
 import 'package:doors/core/features/post/model/post_rate.dart';
 import 'package:doors/core/features/post/model/post_report.dart';
 import 'package:doors/core/features/post/presentation/managers/favorite_post_bloc/favorite_post_bloc.dart';
@@ -12,6 +11,7 @@ import 'package:doors/core/features/post/presentation/managers/user_rate_bloc/us
 import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_location.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
@@ -27,7 +27,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class PostScreen extends StatefulWidget {
   static const routeName = '/post-screen';
-  final Post post;
+  final ServicePost post;
 
   const PostScreen({Key? key, required this.post}) : super(key: key);
 
@@ -96,7 +96,7 @@ class _PostScreenState extends State<PostScreen> {
                   children: [
                     const Spacer(),
                     //hide the rate bar if the current user is the author of this post
-                    if (widget.post.postType == PostType.offer &&
+                    if (widget.post.postType == ServiceType.offer &&
                         _currentUser?.userId != widget.post.author.userId)
                       _PostUserRate(
                         currentPost: widget.post,
@@ -120,7 +120,7 @@ class _PostScreenState extends State<PostScreen> {
 }
 
 class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
-  final Post currentPost;
+  final ServicePost currentPost;
   final User? currentUser;
 
   const _PostImageWithBackButtonAndRateWithMenu({
@@ -146,7 +146,7 @@ class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
               ),
             ),
             const _BackButton(),
-            if (currentPost.postType == PostType.offer)
+            if (currentPost.postType == ServiceType.offer)
               _OfferedPostRate(
                 postRate: currentPost.postRate,
               ),
@@ -233,7 +233,7 @@ class _OfferedPostRate extends StatelessWidget {
 }
 
 class _PopupMenuButton extends StatelessWidget {
-  final Post currentPost;
+  final ServicePost currentPost;
   final User? currentUser;
   const _PopupMenuButton({
     Key? key,
@@ -357,7 +357,7 @@ class _PopupMenuButton extends StatelessWidget {
   }
 
   Future<void> _openConfirmationDialog(
-          BuildContext parentContext, Post currentPost, User? currentUser) =>
+          BuildContext parentContext, ServicePost currentPost, User? currentUser) =>
       showDialog(
         context: parentContext,
         builder: (context) {
@@ -420,7 +420,7 @@ class _PopupMenuButton extends StatelessWidget {
       );
 
   Future<void> _openReportDialog(
-          BuildContext parentContext, Post currentPost, User? currentUser) =>
+          BuildContext parentContext, ServicePost currentPost, User? currentUser) =>
       showDialog<void>(
         context: parentContext,
         builder: (context) {
@@ -650,7 +650,7 @@ class _PostTitle extends StatelessWidget {
 class _CategoryAndKeywordsAndPostType extends StatelessWidget {
   final String category;
   final Set<String> keywords;
-  final PostType postType;
+  final ServiceType postType;
 
   const _CategoryAndKeywordsAndPostType({
     Key? key,
@@ -688,7 +688,7 @@ class _CategoryAndKeywordsAndPostType extends StatelessWidget {
         const SizedBox(width: 16),
         Container(
           child: Text(
-            postType == PostType.need ? context.loc.need : context.loc.offer,
+            postType == ServiceType.need ? context.loc.need : context.loc.offer,
             style: Theme.of(context).textTheme.headline6,
           ),
           padding: const EdgeInsets.symmetric(
@@ -780,7 +780,7 @@ class _Description extends StatelessWidget {
 }
 
 class _PostUserRate extends StatelessWidget {
-  final Post currentPost;
+  final ServicePost currentPost;
   final User currentUser;
   const _PostUserRate({
     Key? key,
@@ -915,7 +915,7 @@ class _PostUserRate extends StatelessWidget {
 }
 
 class _FavoriteAndChatButtons extends StatefulWidget {
-  final Post currentPost;
+  final ServicePost currentPost;
   final User currentUser;
   const _FavoriteAndChatButtons({
     Key? key,

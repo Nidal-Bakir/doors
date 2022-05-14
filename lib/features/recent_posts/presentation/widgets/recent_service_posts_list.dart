@@ -7,36 +7,39 @@ import 'package:doors/core/widgets/no_internet_connection.dart';
 import 'package:doors/core/widgets/no_result_found.dart';
 import 'package:doors/core/widgets/posts_sliver_list.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
-import 'package:doors/features/recent_posts/presentation/managers/recent_posts_bloc/recent_posts_bloc.dart';
+import 'package:doors/features/recent_posts/presentation/managers/recent_service_posts_bloc/recent_service_posts_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-class RecentPostsList extends StatefulWidget {
-  final PostType postType;
+class RecentServicePostsList extends StatefulWidget {
+  final ServiceType serviceType;
 
-  const RecentPostsList({Key? key, required this.postType}) : super(key: key);
+  const RecentServicePostsList({
+    Key? key,
+    required this.serviceType,
+  }) : super(key: key);
 
   @override
-  State<RecentPostsList> createState() => _RecentPostsListState();
+  State<RecentServicePostsList> createState() => _RecentServicePostsListState();
 }
 
-class _RecentPostsListState extends State<RecentPostsList> {
+class _RecentServicePostsListState extends State<RecentServicePostsList> {
   var _refreshIndicatorCompleter = Completer<void>();
-  var _postsCount = 0;
+  var _servicePostsCount = 0;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RecentPostsBloc>(
+    return BlocProvider<RecentServicePostsBloc>(
       create: (context) => GetIt.I.get(
-        param1: widget.postType,
+        param1: widget.serviceType,
         param2: context.read<ManagePostBloc>(),
-      )..add(const RecentPostsLoaded()),
+      )..add(const RecentServicePostsLoaded()),
       child: Builder(
         builder: (context) {
-          return BlocListener<RecentPostsBloc, RecentPostsState>(
+          return BlocListener<RecentServicePostsBloc, RecentServicePostsState>(
             listener: (context, state) {
-              if (state is RecentPostsLoadFailure) {
+              if (state is RecentServicePostsLoadFailure) {
                 if (!_refreshIndicatorCompleter.isCompleted) {
                   _refreshIndicatorCompleter.complete();
                 }
@@ -48,18 +51,21 @@ class _RecentPostsListState extends State<RecentPostsList> {
               onNotification: (notification) => notificationListener(
                   notification: notification,
                   onNotify: () {
-                    final _recentPostsBloc = context.read<RecentPostsBloc>();
-                    if (_recentPostsBloc.state is RecentPostsLoadSuccess &&
-                        canGetMorePosts(_postsCount)) {
-                      _recentPostsBloc.add(const RecentPostsLoaded());
+                    final _recentServicePostsBloc =
+                        context.read<RecentServicePostsBloc>();
+                    if (_recentServicePostsBloc.state
+                            is RecentServicePostsLoadSuccess &&
+                        canGetMorePosts(_servicePostsCount)) {
+                      _recentServicePostsBloc
+                          .add(const RecentServicePostsLoaded());
                     }
                   }),
               child: RefreshIndicator(
                 onRefresh: () {
                   _refreshIndicatorCompleter = Completer<void>();
                   context
-                      .read<RecentPostsBloc>()
-                      .add(const RecentPostsRefreshed());
+                      .read<RecentServicePostsBloc>()
+                      .add(const RecentServicePostsRefreshed());
                   return _refreshIndicatorCompleter.future;
                 },
                 child: CustomScrollView(
@@ -67,27 +73,30 @@ class _RecentPostsListState extends State<RecentPostsList> {
                     // do not remove the empty SliverToBoxAdapter will case view port error
                     // its looks like a bug in the frameWork
                     const SliverToBoxAdapter(),
-                    BlocBuilder<RecentPostsBloc, RecentPostsState>(
+                    BlocBuilder<RecentServicePostsBloc,
+                        RecentServicePostsState>(
                       buildWhen: (previous, current) =>
-                          current is RecentPostsLoadSuccess,
+                          current is RecentServicePostsLoadSuccess,
                       builder: (context, state) {
-                        if (state is RecentPostsInProgress) {
+                        if (state is RecentServicePostsInProgress) {
                           return const SliverToBoxAdapter();
                         }
-                        final _recentPostsLoadSuccessState =
-                            (state as RecentPostsLoadSuccess);
+                        final _recentServicePostsLoadSuccessState =
+                            (state as RecentServicePostsLoadSuccess);
 
                         if (!_refreshIndicatorCompleter.isCompleted) {
                           _refreshIndicatorCompleter.complete();
                         }
-                        _postsCount =
-                            _recentPostsLoadSuccessState.recentPosts.length;
+                        _servicePostsCount = _recentServicePostsLoadSuccessState
+                            .recentServicePosts.length;
                         return PostsSliverList(
-                          posts: _recentPostsLoadSuccessState.recentPosts,
+                          posts: _recentServicePostsLoadSuccessState
+                              .recentServicePosts,
                         );
                       },
                     ),
-                    BlocBuilder<RecentPostsBloc, RecentPostsState>(
+                    BlocBuilder<RecentServicePostsBloc,
+                        RecentServicePostsState>(
                       builder: (context, state) {
                         return SliverFillRemaining(
                           fillOverscroll: false,
@@ -109,8 +118,9 @@ class _RecentPostsListState extends State<RecentPostsList> {
                                   return NoInternetConnection(
                                     onRetry: () {
                                       context
-                                          .read<RecentPostsBloc>()
-                                          .add(const RecentPostsLoaded());
+                                          .read<RecentServicePostsBloc>()
+                                          .add(
+                                              const RecentServicePostsLoaded());
                                     },
                                     fullScreen: true,
                                   );
@@ -118,8 +128,9 @@ class _RecentPostsListState extends State<RecentPostsList> {
                                   return NoInternetConnection(
                                     onRetry: () {
                                       context
-                                          .read<RecentPostsBloc>()
-                                          .add(const RecentPostsLoaded());
+                                          .read<RecentServicePostsBloc>()
+                                          .add(
+                                              const RecentServicePostsLoaded());
                                     },
                                   );
                                 }

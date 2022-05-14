@@ -25,7 +25,7 @@ class _$SearchFilterTearOff {
       Set<String>? keywords,
       double? maxCost,
       String? currency,
-      PostType? postType}) {
+      ServiceType? postType}) {
     return _SearchFilter(
       title: title,
       category: category,
@@ -51,7 +51,7 @@ mixin _$SearchFilter {
   Set<String>? get keywords => throw _privateConstructorUsedError;
   double? get maxCost => throw _privateConstructorUsedError;
   String? get currency => throw _privateConstructorUsedError;
-  PostType? get postType => throw _privateConstructorUsedError;
+  ServiceType? get postType => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SearchFilterCopyWith<SearchFilter> get copyWith =>
@@ -71,7 +71,7 @@ abstract class $SearchFilterCopyWith<$Res> {
       Set<String>? keywords,
       double? maxCost,
       String? currency,
-      PostType? postType});
+      ServiceType? postType});
 }
 
 /// @nodoc
@@ -125,7 +125,7 @@ class _$SearchFilterCopyWithImpl<$Res> implements $SearchFilterCopyWith<$Res> {
       postType: postType == freezed
           ? _value.postType
           : postType // ignore: cast_nullable_to_non_nullable
-              as PostType?,
+              as ServiceType?,
     ));
   }
 }
@@ -145,7 +145,7 @@ abstract class _$SearchFilterCopyWith<$Res>
       Set<String>? keywords,
       double? maxCost,
       String? currency,
-      PostType? postType});
+      ServiceType? postType});
 }
 
 /// @nodoc
@@ -201,7 +201,7 @@ class __$SearchFilterCopyWithImpl<$Res> extends _$SearchFilterCopyWithImpl<$Res>
       postType: postType == freezed
           ? _value.postType
           : postType // ignore: cast_nullable_to_non_nullable
-              as PostType?,
+              as ServiceType?,
     ));
   }
 }
@@ -234,7 +234,7 @@ class _$_SearchFilter implements _SearchFilter {
   @override
   final String? currency;
   @override
-  final PostType? postType;
+  final ServiceType? postType;
 
   @override
   String toString() {
@@ -285,7 +285,7 @@ abstract class _SearchFilter implements SearchFilter {
       Set<String>? keywords,
       double? maxCost,
       String? currency,
-      PostType? postType}) = _$_SearchFilter;
+      ServiceType? postType}) = _$_SearchFilter;
 
   @override
   String? get title;
@@ -302,7 +302,7 @@ abstract class _SearchFilter implements SearchFilter {
   @override
   String? get currency;
   @override
-  PostType? get postType;
+  ServiceType? get postType;
   @override
   @JsonKey(ignore: true)
   _$SearchFilterCopyWith<_SearchFilter> get copyWith =>

@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/server_error.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/typedef/new_types.dart';
 import 'package:doors/features/search/models/search_filter.dart';
 import 'package:doors/features/search/posts_search/data/posts_search_local_data_source/posts_search_local_data_source.dart';
@@ -26,7 +26,7 @@ class PostsSearchRepository {
   ///   * [ServerException] in case of connection error or parse error.
   /// * tail: (cached data)
   ///   * holding the local cached search posts
-  Future<EitherDataOrDataWithError<ServerException, Post>> searchPosts({
+  Future<EitherDataOrDataWithError<ServerException, ServicePost>> searchPosts({
     required SearchFilter searchFilter,
   }) async {
     if (_lastsUsedSearchFilter != searchFilter) {
@@ -37,7 +37,7 @@ class PostsSearchRepository {
     final cachedSearchPostsCount =
         _postsSearchLocalDataSource.getCountOfCachedSearchPosts();
 
-    UnmodifiableListView<Post> searchResultResponse;
+    UnmodifiableListView<ServicePost> searchResultResponse;
     try {
       searchResultResponse = await _postsSearchRemoteDataSource.searchPosts(
         searchFilter,

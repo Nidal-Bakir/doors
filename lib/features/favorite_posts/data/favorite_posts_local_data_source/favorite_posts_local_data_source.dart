@@ -1,15 +1,15 @@
 import 'dart:collection';
 
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 
 abstract class FavoritePostsLocalDataSource {
   /// Get local favorite posts
   ///
   /// Returns a unmodifiable list of local favorite posts
-  Future<UnmodifiableListView<Post>> getLocalFavoritePosts();
+  Future<UnmodifiableListView<ServicePost>> getLocalFavoritePosts();
 
   /// Add new posts to cache, will be added to the end of the current cached posts
-  Future<void> appendLocalFavoritePosts(List<Post> newFavoritePosts);
+  Future<void> appendLocalFavoritePosts(List<ServicePost> newFavoritePosts);
 
   /// Returns the count of cached favorite posts
   Future<int> getCountOfCachedFavoritePosts();
@@ -19,14 +19,14 @@ abstract class FavoritePostsLocalDataSource {
 }
 
 class FavoritePostsLocalDataSourceImpl extends FavoritePostsLocalDataSource {
-  final List<Post> _favoritePosts = [];
+  final List<ServicePost> _favoritePosts = [];
 
   @override
-  Future<UnmodifiableListView<Post>> getLocalFavoritePosts() async =>
+  Future<UnmodifiableListView<ServicePost>> getLocalFavoritePosts() async =>
       UnmodifiableListView(_favoritePosts);
 
   @override
-  Future<void> appendLocalFavoritePosts(List<Post> newFavoritePosts) async =>
+  Future<void> appendLocalFavoritePosts(List<ServicePost> newFavoritePosts) async =>
       _favoritePosts.addAll(newFavoritePosts);
 
   @override

@@ -1,20 +1,20 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
+import 'package:doors/core/widgets/keywords_head_line_text_field.dart';
 import 'package:doors/core/widgets/sized_box_16_h.dart';
 import 'package:doors/core/widgets/title_with_under_line_in_the_end.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
 import 'package:doors/features/manage_post/presentation/widgets/category_head_line_with_text_field.dart';
 import 'package:doors/features/manage_post/presentation/widgets/description_head_line_with_text_field.dart';
-import 'package:doors/core/widgets/keywords_head_line_text_field.dart';
 import 'package:doors/features/manage_post/presentation/widgets/post_type_head_line_dropdown_button_form_field.dart';
 import 'package:doors/features/manage_post/presentation/widgets/title_head_line_with_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateOrEditPostScreenPartOne extends StatefulWidget {
-  final Post? post;
+  final ServicePost? post;
   static const routeName = '/create-or-edit-post-one';
 
   const CreateOrEditPostScreenPartOne({Key? key, required this.post})
@@ -30,7 +30,7 @@ class _CreateOrEditPostScreenPartOneState
   final _keyFrom = GlobalKey<FormState>();
 
   late var _title = widget.post?.postTitle ?? '';
-  late var _postType = widget.post?.postType ?? PostType.need;
+  late var _postType = widget.post?.postType ?? ServiceType.need;
   late var _category = widget.post?.postCategory ?? '';
   late Set<String> _keywords = widget.post?.postKeywords ?? {};
   late var _description = widget.post?.postDescription ?? '';
@@ -82,7 +82,7 @@ class _CreateOrEditPostScreenPartOneState
                             child: PostTypeHeadLineWithDropdownButtonFormField(
                               initPostType: _postType,
                               onSave: (postType) {
-                                _postType = postType ?? PostType.need;
+                                _postType = postType ?? ServiceType.need;
                               },
                             ),
                           ),
@@ -138,7 +138,7 @@ class _CreateOrEditPostScreenPartOneState
   void _onPressed(BuildContext context) {
     if (_keyFrom.currentState?.validate() ?? false) {
       _keyFrom.currentState?.save();
-      Post post = Post();
+      ServicePost post = ServicePost();
       if (widget.post != null) {
         post = widget.post!.getShallowCopy();
       }

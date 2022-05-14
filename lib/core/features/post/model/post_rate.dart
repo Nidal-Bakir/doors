@@ -1,5 +1,5 @@
 import 'package:doors/core/features/auth/model/user.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -25,9 +25,9 @@ class PostRate extends ParseObject
 
   set rate(double rate) => set<double>(keyRate, rate);
 
-  Post get post => get<Post>(keyPost) as Post;
+  ServicePost get post => get<ServicePost>(keyPost) as ServicePost;
 
-  set post(Post post) => set<Post>(keyPost, post);
+  set post(ServicePost post) => set<ServicePost>(keyPost, post);
 
   User get rateAuthor => get<User>(keyRateAuthor) as User;
 

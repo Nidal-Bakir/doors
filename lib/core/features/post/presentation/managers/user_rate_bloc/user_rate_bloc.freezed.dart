@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$UserRateEventTearOff {
   const _$UserRateEventTearOff();
 
-  UserRateLoaded loaded(Post post) {
+  UserRateLoaded loaded(ServicePost post) {
     return UserRateLoaded(
       post,
     );
@@ -37,19 +37,19 @@ const $UserRateEvent = _$UserRateEventTearOff();
 mixin _$UserRateEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Post post) loaded,
+    required TResult Function(ServicePost post) loaded,
     required TResult Function(PostRate postRate) posted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Post post)? loaded,
+    TResult Function(ServicePost post)? loaded,
     TResult Function(PostRate postRate)? posted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Post post)? loaded,
+    TResult Function(ServicePost post)? loaded,
     TResult Function(PostRate postRate)? posted,
     required TResult orElse(),
   }) =>
@@ -97,7 +97,7 @@ abstract class $UserRateLoadedCopyWith<$Res> {
   factory $UserRateLoadedCopyWith(
           UserRateLoaded value, $Res Function(UserRateLoaded) then) =
       _$UserRateLoadedCopyWithImpl<$Res>;
-  $Res call({Post post});
+  $Res call({ServicePost post});
 }
 
 /// @nodoc
@@ -119,7 +119,7 @@ class _$UserRateLoadedCopyWithImpl<$Res>
       post == freezed
           ? _value.post
           : post // ignore: cast_nullable_to_non_nullable
-              as Post,
+              as ServicePost,
     ));
   }
 }
@@ -130,7 +130,7 @@ class _$UserRateLoaded implements UserRateLoaded {
   const _$UserRateLoaded(this.post);
 
   @override
-  final Post post;
+  final ServicePost post;
 
   @override
   String toString() {
@@ -157,7 +157,7 @@ class _$UserRateLoaded implements UserRateLoaded {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Post post) loaded,
+    required TResult Function(ServicePost post) loaded,
     required TResult Function(PostRate postRate) posted,
   }) {
     return loaded(post);
@@ -166,7 +166,7 @@ class _$UserRateLoaded implements UserRateLoaded {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Post post)? loaded,
+    TResult Function(ServicePost post)? loaded,
     TResult Function(PostRate postRate)? posted,
   }) {
     return loaded?.call(post);
@@ -175,7 +175,7 @@ class _$UserRateLoaded implements UserRateLoaded {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Post post)? loaded,
+    TResult Function(ServicePost post)? loaded,
     TResult Function(PostRate postRate)? posted,
     required TResult orElse(),
   }) {
@@ -218,9 +218,9 @@ class _$UserRateLoaded implements UserRateLoaded {
 }
 
 abstract class UserRateLoaded implements UserRateEvent {
-  const factory UserRateLoaded(Post post) = _$UserRateLoaded;
+  const factory UserRateLoaded(ServicePost post) = _$UserRateLoaded;
 
-  Post get post;
+  ServicePost get post;
   @JsonKey(ignore: true)
   $UserRateLoadedCopyWith<UserRateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -291,7 +291,7 @@ class _$UserRatePosted implements UserRatePosted {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Post post) loaded,
+    required TResult Function(ServicePost post) loaded,
     required TResult Function(PostRate postRate) posted,
   }) {
     return posted(postRate);
@@ -300,7 +300,7 @@ class _$UserRatePosted implements UserRatePosted {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Post post)? loaded,
+    TResult Function(ServicePost post)? loaded,
     TResult Function(PostRate postRate)? posted,
   }) {
     return posted?.call(postRate);
@@ -309,7 +309,7 @@ class _$UserRatePosted implements UserRatePosted {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Post post)? loaded,
+    TResult Function(ServicePost post)? loaded,
     TResult Function(PostRate postRate)? posted,
     required TResult orElse(),
   }) {

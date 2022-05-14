@@ -5,8 +5,8 @@ import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:flutter/material.dart' hide DropdownButtonFormField;
 
 class PostTypeHeadLineWithDropdownButtonFormField extends StatefulWidget {
-  final Function(PostType? postType) onSave;
-  final PostType initPostType;
+  final Function(ServiceType? postType) onSave;
+  final ServiceType initPostType;
   const PostTypeHeadLineWithDropdownButtonFormField({
     Key? key,
     required this.onSave,
@@ -26,17 +26,17 @@ class _PostTypeHeadLineWithDropdownButtonFormFieldState
     return Column(
       children: [
         LineWithTextOnRow(text: context.loc.type),
-        CustomDropdownButtonFormField<PostType>(
+        CustomDropdownButtonFormField<ServiceType>(
           iconEnabledColor: Colors.black,
           value: _postType,
           items: [
-            DropdownMenuItem<PostType>(
+            DropdownMenuItem<ServiceType>(
               child: Text(context.loc.need),
-              value: PostType.need,
+              value: ServiceType.need,
             ),
-            DropdownMenuItem<PostType>(
+            DropdownMenuItem<ServiceType>(
               child: Text(context.loc.offer),
-              value: PostType.offer,
+              value: ServiceType.offer,
             )
           ],
           onSaved: (postType) {
@@ -44,7 +44,7 @@ class _PostTypeHeadLineWithDropdownButtonFormFieldState
           },
           onChanged: (postType) {
             setState(() {
-              _postType = postType ?? PostType.need;
+              _postType = postType ?? ServiceType.need;
             });
           },
         ),

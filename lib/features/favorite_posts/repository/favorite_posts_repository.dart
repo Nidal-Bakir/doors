@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/exception_base.dart';
-import 'package:doors/core/features/post/model/post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/typedef/new_types.dart';
 import 'package:doors/features/favorite_posts/data/favorite_posts_local_data_source/favorite_posts_local_data_source.dart';
 import 'package:doors/features/favorite_posts/data/favorite_posts_remote_data_source/favorite_posts_remote_data_source.dart';
@@ -24,7 +24,7 @@ class FavoritePostsRepository {
   ///   * [AnonymousException] if the user is Anonymous user
   /// * tail: (cached data)
   ///   * holding the local cached favorite posts
-  Future<EitherDataOrDataWithError<ExceptionBase, Post>> getFavoritePosts({
+  Future<EitherDataOrDataWithError<ExceptionBase, ServicePost>> getFavoritePosts({
     bool fullRefresh = false,
   }) async {
     if (fullRefresh) {
@@ -33,7 +33,7 @@ class FavoritePostsRepository {
     final cachedPostsCount =
         await _favoritePostsLocalDataSource.getCountOfCachedFavoritePosts();
 
-    UnmodifiableListView<Post> newFavoritePosts;
+    UnmodifiableListView<ServicePost> newFavoritePosts;
     try {
       newFavoritePosts = await _favoritePostsRemoteDataSource
           .getFavoritePosts(cachedPostsCount);

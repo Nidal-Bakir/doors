@@ -5,8 +5,8 @@ class PostsSearchState with _$PostsSearchState {
   const factory PostsSearchState.initial() = PostsSearchInitial;
   const factory PostsSearchState.inProgress() = PostsSearchInProgress;
   const factory PostsSearchState.loadSuccess(
-      UnmodifiableListView<Post> postsSearchResult) = PostsSearchLoadSuccess;
+      UnmodifiableListView<ServicePost> postsSearchResult) = PostsSearchLoadSuccess;
 
   const factory PostsSearchState.loadFailure(ServerException error,
-      UnmodifiableListView<Post> cachedSearchResult) = PostsSearchLoadFailure;
+      UnmodifiableListView<ServicePost> cachedSearchResult) = PostsSearchLoadFailure;
 }
