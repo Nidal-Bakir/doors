@@ -27,13 +27,13 @@ class _MeasuredSizeState extends State<MeasuredSize> {
   bool _calculating = true;
   @override
   void initState() {
-    SchedulerBinding.instance!.addPostFrameCallback(postFrameCallback);
+    SchedulerBinding.instance!.addPostFrameCallback(_postFrameCallback);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance!.addPostFrameCallback(postFrameCallback);
+    SchedulerBinding.instance!.addPostFrameCallback(_postFrameCallback);
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 100),
@@ -48,10 +48,9 @@ class _MeasuredSizeState extends State<MeasuredSize> {
   var widgetKey = GlobalKey();
   Size? oldSize;
 
-  void postFrameCallback(_) {
-    
-      _calculating = true;
- 
+  void _postFrameCallback(_) {
+    _calculating = true;
+
     var context = widgetKey.currentContext!;
 
     // await Future.delayed(
@@ -62,8 +61,5 @@ class _MeasuredSizeState extends State<MeasuredSize> {
     if (oldSize == newSize) return;
     oldSize = newSize;
     widget.onChange(newSize);
-    
-      
-   
   }
 }
