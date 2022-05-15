@@ -18,7 +18,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class CreateOrEditPostScreenPartTwo extends StatefulWidget {
   final ServicePost post;
-  static const routeName = '/create-or-edit-post-two';
+  static const routeName = '/create-or-edit-service-post-two';
 
   const CreateOrEditPostScreenPartTwo({Key? key, required this.post})
       : super(key: key);

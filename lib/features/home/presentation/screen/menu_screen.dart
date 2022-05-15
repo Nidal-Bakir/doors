@@ -2,10 +2,12 @@ import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
+import 'package:doors/core/features/subscription/presentation/screens/subscription_screen.dart';
 import 'package:doors/core/features/user_posts/presentation/screens/user_posts_screen.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/widgets/menu_profile_info.dart';
+import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,8 +45,7 @@ class MenuScreen extends StatelessWidget {
                   TextButton.icon(
                     icon: const Icon(Icons.favorite_border_rounded),
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.black),
+                      foregroundColor: MaterialStateProperty.all(Colors.black),
                       overlayColor: MaterialStateProperty.all(
                           Colors.white.withOpacity(0.3)),
                     ),
@@ -66,8 +67,7 @@ class MenuScreen extends StatelessWidget {
                   TextButton.icon(
                     icon: const Icon(Icons.add_rounded),
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.black),
+                      foregroundColor: MaterialStateProperty.all(Colors.black),
                       overlayColor: MaterialStateProperty.all(
                           Colors.white.withOpacity(0.3)),
                     ),
@@ -101,6 +101,17 @@ class MenuScreen extends StatelessWidget {
                         if (openLogInScreenToNotLoggedInUser(context)) {
                           return;
                         }
+                        if (_currentUser.isCompanyAccount &&
+                            !_currentUser.isSubscribed) {
+                          Navigator.of(context).pushNamed(
+                            SubscriptionScreen.routeName,
+                            arguments: _currentUser,
+                          );
+                          return;
+                        }
+                        Navigator.of(context).pushNamed(
+                          CreateOrEditJobPost.routeName,
+                        );
                       },
                       label: Text(
                         context.loc.add_jop_offer,
@@ -110,9 +121,7 @@ class MenuScreen extends StatelessWidget {
                   if (!_currentUser.isAnonymousAccount &&
                       _currentUser.accountType == AccountType.company)
                     TextButton.icon(
-                      icon: const Icon(
-                        Icons.workspace_premium_outlined
-                      ),
+                      icon: const Icon(Icons.workspace_premium_outlined),
                       style: ButtonStyle(
                         foregroundColor:
                             MaterialStateProperty.all(Colors.black),
@@ -133,8 +142,7 @@ class MenuScreen extends StatelessWidget {
                   TextButton.icon(
                     icon: const Icon(Icons.manage_accounts_outlined),
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.black),
+                      foregroundColor: MaterialStateProperty.all(Colors.black),
                       overlayColor: MaterialStateProperty.all(
                           Colors.white.withOpacity(0.3)),
                     ),
@@ -156,8 +164,7 @@ class MenuScreen extends StatelessWidget {
                   TextButton.icon(
                     icon: const Icon(Icons.privacy_tip_outlined),
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.black),
+                      foregroundColor: MaterialStateProperty.all(Colors.black),
                       overlayColor: MaterialStateProperty.all(
                           Colors.white.withOpacity(0.3)),
                     ),
@@ -172,8 +179,7 @@ class MenuScreen extends StatelessWidget {
                   TextButton.icon(
                     icon: const Icon(Icons.tune_rounded),
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.black),
+                      foregroundColor: MaterialStateProperty.all(Colors.black),
                       overlayColor: MaterialStateProperty.all(
                           Colors.white.withOpacity(0.3)),
                     ),
@@ -188,8 +194,7 @@ class MenuScreen extends StatelessWidget {
                   TextButton.icon(
                     icon: const Icon(Icons.info_outline_rounded),
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.black),
+                      foregroundColor: MaterialStateProperty.all(Colors.black),
                       overlayColor: MaterialStateProperty.all(
                           Colors.white.withOpacity(0.3)),
                     ),
@@ -209,16 +214,14 @@ class MenuScreen extends StatelessWidget {
                         ? Icons.login_rounded
                         : Icons.logout_rounded),
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.black),
+                      foregroundColor: MaterialStateProperty.all(Colors.black),
                       overlayColor: MaterialStateProperty.all(
                           Colors.white.withOpacity(0.3)),
                     ),
                     onPressed: () {
                       ZoomDrawer.of(context)?.close();
                       if (_currentUser.isAnonymousAccount) {
-                        Navigator.of(context)
-                            .pushNamed(LogInScreen.routeName);
+                        Navigator.of(context).pushNamed(LogInScreen.routeName);
                       } else {
                         context
                             .read<AuthBloc>()

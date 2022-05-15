@@ -29,7 +29,7 @@ class UserPostsRemoteDataSourceImpl extends UserPostsRemoteDataSource {
     String userId,
   ) async {
     final userPostsQuery = QueryBuilder.name(ServicePost.keyClassName)
-      ..whereRelatedTo(User.keyUserPosts, User.keyUserClassName, userId)
+      ..whereRelatedTo(User.keyUserServicePosts, User.keyUserClassName, userId)
       ..orderByDescending(ServicePost.keyPostCreationDate)
       ..includeObject([ServicePost.keyAuthor])
       ..excludeKeys(User.keysToExcludeFromQueriesRelatedToUser())

@@ -133,6 +133,7 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
             }
             return Row(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
                   child: TypeAheadFormField<City>(

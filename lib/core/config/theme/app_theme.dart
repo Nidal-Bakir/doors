@@ -21,6 +21,15 @@ ThemeData defaultLightTheme(String langCode) {
           surface: _white,
           onSurface: _grayWhite,
           error: _redError),
+      chipTheme: ChipThemeData(
+        selectedColor: _yalow,
+        labelStyle: textTheme().bodyText2?.copyWith(
+              color: _black,
+            ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: _yalow,
       ),

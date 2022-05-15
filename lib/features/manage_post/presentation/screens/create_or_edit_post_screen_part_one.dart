@@ -15,7 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateOrEditPostScreenPartOne extends StatefulWidget {
   final ServicePost? post;
-  static const routeName = '/create-or-edit-post-one';
+  static const routeName = '/create-or-edit-service-post-one';
 
   const CreateOrEditPostScreenPartOne({Key? key, required this.post})
       : super(key: key);
@@ -68,9 +68,9 @@ class _CreateOrEditPostScreenPartOneState
                         height: 20,
                       ),
                       TitleHeadLineWithTextField(
-                        initText: _title,
+                        initTitle: _title,
                         onSave: (title) {
-                          _title = title!;
+                          _title = title;
                         },
                       ),
                       const SizedBox16H(),
@@ -93,9 +93,9 @@ class _CreateOrEditPostScreenPartOneState
                             child: Padding(
                               padding: const EdgeInsets.only(top: 2.5),
                               child: CategoryHeadLineWithTextField(
-                                initText: _category,
+                                initCategory: _category,
                                 onSave: (category) {
-                                  _category = category ?? '';
+                                  _category = category;
                                 },
                               ),
                             ),

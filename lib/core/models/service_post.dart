@@ -4,6 +4,11 @@ import 'package:doors/core/models/post.dart';
 class ServicePost extends Post {
   ServicePost() : super(keyClassName);
 
+  ServicePost.clone(Map map) : this();
+
+  @override
+  clone(Map<String, dynamic> map) => ServicePost.clone(map)..fromJson(map);
+
   static const keyPostId = Post.keyPostId;
   static const keyPostTitle = Post.keyPostTitle;
   static const keyPostDescription = Post.keyPostDescription;
@@ -15,7 +20,7 @@ class ServicePost extends Post {
   static const keyPostLastUpdatedDate = Post.keyPostLastUpdatedDate;
   static const keyAuthor = Post.keyAuthor;
 
-  static const keyClassName = 'posts';
+  static const keyClassName = 'ServicePosts';
   static const keyPostType = 'type';
   static const keyPostKeywords = 'keywords';
   static const keyPostMinCost = 'minConst';

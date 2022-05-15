@@ -9,9 +9,11 @@ import 'package:doors/core/features/auth/presentation/screens/suspended_screen.d
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/subscription/presentation/screens/subscription_screen.dart';
 import 'package:doors/core/features/user_posts/presentation/screens/user_posts_screen.dart';
+import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
+import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
 import 'package:doors/features/search/posts_search/presentation/screens/posts_search_screen.dart';
@@ -99,6 +101,13 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (_) => CreateOrEditPostScreenPartOne(
           post: settings.arguments as ServicePost?,
+        ),
+      );
+
+    case CreateOrEditJobPost.routeName:
+      return MaterialPageRoute(
+        builder: (_) => CreateOrEditJobPost(
+          jobPost: settings.arguments as JobPost?,
         ),
       );
 

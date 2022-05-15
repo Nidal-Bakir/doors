@@ -61,7 +61,7 @@ class _PostImageHeadLineWithImagePickerState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         LineWithTextOnRow(
-          text: context.loc.service_image,
+          text: context.loc.image,
         ),
         Container(
           margin: const EdgeInsets.only(top: 8.0, left: 4),
@@ -78,11 +78,13 @@ class _PostImageHeadLineWithImagePickerState
                 context,
                 _isTherePostImageToShow,
               );
+
               if (selectedPhotoResult == null) {
                 return;
               }
               selectedPhotoResult.fold((removeTheImage) {
                 _onPostImageSelected(null);
+                _initPostImage = null;
               }, (selectedPhoto) {
                 if (selectedPhoto != null) {
                   _onPostImageSelected(selectedPhoto);
@@ -94,8 +96,9 @@ class _PostImageHeadLineWithImagePickerState
               duration: const Duration(milliseconds: 100),
               child: _postImageFile == null && _initPostImage == null
                   ? const Icon(Icons.add_photo_alternate_outlined, size: 50)
-                  : SizedBox(width: double.infinity,
-                    child: ClipRRect(
+                  : SizedBox(
+                      width: double.infinity,
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(
                           5,
                         ),
@@ -117,7 +120,7 @@ class _PostImageHeadLineWithImagePickerState
                                 cacheHeight: 150,
                               ),
                       ),
-                  ),
+                    ),
             ),
           ),
         ),

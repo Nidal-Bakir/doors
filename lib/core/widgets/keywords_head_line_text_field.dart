@@ -52,7 +52,7 @@ class KeywordsHeadLineWithTextField extends StatelessWidget {
       final listOfKeywords = _extractListOfKeywords(keywords);
       for (var keyword in listOfKeywords) {
         if (keyword.contains(RegExp(
-                r'[$&%!?\*\.#@_\-\/\\\^()=+;\{\}\[\]:"0-9©s®™✓°π√•|`~×÷¶∆¥€¢£<>]')) ||
+                r'[$&%!?\*\.#@_\-\/\\\^()=+;\{\}\[\]:"0-9©®™✓°π√•|`~×÷¶∆¥€¢£<>]')) ||
             keyword.contains(RegExp(r"['\s]")) ||
             keyword.length < 2) {
           return context.loc.not_valid_keywords;

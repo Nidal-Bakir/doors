@@ -202,7 +202,7 @@ Future<Either<String, XFile?>?> showModalBottomSheetToSelectPhoto(
                 Navigator.of(context).pop(Right<String, XFile?>(
                   await _picker.pickImage(
                     source: ImageSource.camera,
-                    imageQuality: 30,
+                    imageQuality: GlobalConfig.imageQualityForImagePicker,
                     preferredCameraDevice: CameraDevice.front,
                   ),
                 ));
@@ -224,7 +224,7 @@ Future<Either<String, XFile?>?> showModalBottomSheetToSelectPhoto(
                 Navigator.of(context).pop(Right<String, XFile?>(
                   await _picker.pickImage(
                     source: ImageSource.gallery,
-                    imageQuality: 30,
+                    imageQuality: GlobalConfig.imageQualityForImagePicker,
                   ),
                 ));
               },

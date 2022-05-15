@@ -45,7 +45,8 @@ mixin _$FavoritePostEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(ServicePost post) addPostToFavoriteList,
-    required TResult Function(ServicePost favoritePost) removePostFromFavoriteList,
+    required TResult Function(ServicePost favoritePost)
+        removePostFromFavoriteList,
     required TResult Function(ServicePost post) isFavoritePost,
   }) =>
       throw _privateConstructorUsedError;
@@ -182,7 +183,8 @@ class _$FavoritePostAddPostToFavoriteList
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(ServicePost post) addPostToFavoriteList,
-    required TResult Function(ServicePost favoritePost) removePostFromFavoriteList,
+    required TResult Function(ServicePost favoritePost)
+        removePostFromFavoriteList,
     required TResult Function(ServicePost post) isFavoritePost,
   }) {
     return addPostToFavoriteList(post);
@@ -337,7 +339,8 @@ class _$FavoritePostRemovePostFromFavoriteList
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(ServicePost post) addPostToFavoriteList,
-    required TResult Function(ServicePost favoritePost) removePostFromFavoriteList,
+    required TResult Function(ServicePost favoritePost)
+        removePostFromFavoriteList,
     required TResult Function(ServicePost post) isFavoritePost,
   }) {
     return removePostFromFavoriteList(favoritePost);
@@ -410,8 +413,8 @@ class _$FavoritePostRemovePostFromFavoriteList
 
 abstract class FavoritePostRemovePostFromFavoriteList
     implements FavoritePostEvent {
-  const factory FavoritePostRemovePostFromFavoriteList(ServicePost favoritePost) =
-      _$FavoritePostRemovePostFromFavoriteList;
+  const factory FavoritePostRemovePostFromFavoriteList(
+      ServicePost favoritePost) = _$FavoritePostRemovePostFromFavoriteList;
 
   ServicePost get favoritePost;
   @JsonKey(ignore: true)
@@ -489,7 +492,8 @@ class _$FavoritePostIsFavoritePost implements FavoritePostIsFavoritePost {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(ServicePost post) addPostToFavoriteList,
-    required TResult Function(ServicePost favoritePost) removePostFromFavoriteList,
+    required TResult Function(ServicePost favoritePost)
+        removePostFromFavoriteList,
     required TResult Function(ServicePost post) isFavoritePost,
   }) {
     return isFavoritePost(post);

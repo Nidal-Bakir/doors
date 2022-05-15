@@ -3,13 +3,13 @@ import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:flutter/material.dart';
 
 class TitleHeadLineWithTextField extends StatelessWidget {
-  final Function(String? title) onSave;
-  final String initText;
+  final Function(String title) onSave;
+  final String initTitle;
 
   const TitleHeadLineWithTextField({
     Key? key,
     required this.onSave,
-    required this.initText,
+    required this.initTitle,
   }) : super(key: key);
 
   @override
@@ -18,13 +18,13 @@ class TitleHeadLineWithTextField extends StatelessWidget {
       children: [
         LineWithTextOnRow(text: context.loc.title),
         TextFormField(
-          initialValue: initText,
+          initialValue: initTitle,
           textInputAction: TextInputAction.next,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           enableSuggestions: true,
           keyboardType: TextInputType.name,
           validator: (title) => isValidTitle(title, context),
-          onSaved: onSave,
+          onSaved: (title)=>onSave(title!),
         ),
       ],
     );
@@ -32,7 +32,7 @@ class TitleHeadLineWithTextField extends StatelessWidget {
 
   String? isValidTitle(String? title, BuildContext context) {
     if (title == null || title.isEmpty) {
-      return context.loc.enter_a_service_title;
+      return context.loc.enter_a_title;
     } else if (title.length < 3) {
       return context.loc.at_least_three_character_long;
     }

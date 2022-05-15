@@ -1,4 +1,6 @@
 import 'package:doors/core/enums/enums.dart';
+import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -17,7 +19,9 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyUserSubscription = 'userSubscription';
   static const keyIsSubscribed = 'isSubscribed';
   static const keyFavoriteServicePosts = 'favoriteServicePosts';
-  static const keyUserPosts = 'userPosts';
+  static const keyFavoriteJobPosts = 'favoriteJobPosts';
+  static const keyUserServicePosts = 'userServicePosts';
+  static const keyCompanyJobPosts = 'companyJobPosts';
   static const keyUniqueUserName = keyVarUsername;
   static const keyIsPrivatePhoneNumber = 'isPrivatePhoneNumber';
   static const keyIsPrivateEmailAddress = 'isPrivateEmailAddress';
@@ -117,14 +121,31 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   bool get isAnonymousAccount =>
       emailAddress == null || username != emailAddress;
 
-  void addToFavoriteList(ServicePost post) => addRelation(User.keyFavoriteServicePosts, [
+  bool get isCompanyAccount => accountType == AccountType.company;
+  bool get isNormalUserAccount => accountType == AccountType.user;
+
+  void addToFavoriteList(Post post) {
+    if (post is ServicePost) {
+      addRelation(User.keyFavoriteServicePosts, [
         ParseObject(ServicePost.keyClassName)
           ..set(
             'objectId',
             post.objectId,
           )
       ]);
-  void removeFromFavoriteList(ServicePost favoritePost) =>
+    } else if (post is JobPost) {
+      addRelation(User.keyFavoriteJobPosts, [
+        ParseObject(JobPost.keyClassName)
+          ..set(
+            'objectId',
+            post.objectId,
+          )
+      ]);
+    }
+  }
+
+  void removeFromFavoriteList(Post favoritePost) {
+    if (favoritePost is ServicePost) {
       removeRelation(User.keyFavoriteServicePosts, [
         ParseObject(ServicePost.keyClassName)
           ..set(
@@ -132,13 +153,25 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
             favoritePost.objectId,
           )
       ]);
+    } else if (favoritePost is JobPost) {
+      removeRelation(User.keyFavoriteJobPosts, [
+        ParseObject(JobPost.keyClassName)
+          ..set(
+            'objectId',
+            favoritePost.objectId,
+          )
+      ]);
+    }
+  }
 
   static List<String> keysToExcludeFromQueriesRelatedToUser() => const [
         User.keyAccountStatues,
         User.keyUserSubscription,
         User.keyFavoriteServicePosts,
+        User.keyFavoriteJobPosts,
         User.keyPaypalEmail,
-        User.keyUserPosts
+        User.keyUserServicePosts,
+        User.keyCompanyJobPosts
       ];
 
   /// Get new user with (ALL) field set to null except objectId and profileImage is the same.
@@ -169,6 +202,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
         get<bool>(keyIsPrivatePhoneNumber),
         get<String>(keyAccountType),
         get<ParseFile>(keyProfileImage)?.url,
+        get<ParseFile>(keyProfileImage)?.name,
         get<ParseGeoPoint>(keyUserLocation)?.latitude,
         get<ParseGeoPoint>(keyUserLocation)?.longitude,
         get<String>(keyUserHumanReadableLocation),

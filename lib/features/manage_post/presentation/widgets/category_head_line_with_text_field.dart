@@ -3,13 +3,13 @@ import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:flutter/material.dart';
 
 class CategoryHeadLineWithTextField extends StatelessWidget {
-  final Function(String? category) onSave;
-  final String initText;
+  final Function(String category) onSave;
+  final String initCategory;
 
   const CategoryHeadLineWithTextField({
     Key? key,
     required this.onSave,
-    required this.initText,
+    required this.initCategory,
   }) : super(key: key);
 
   @override
@@ -20,13 +20,13 @@ class CategoryHeadLineWithTextField extends StatelessWidget {
           text: context.loc.category,
         ),
         TextFormField(
-          initialValue: initText,
+          initialValue: initCategory,
           textInputAction: TextInputAction.next,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           enableSuggestions: true,
           keyboardType: TextInputType.name,
           validator: (category) => isValidCategory(category, context),
-          onSaved: onSave,
+          onSaved: (category)=>onSave(category!),
         ),
       ],
     );

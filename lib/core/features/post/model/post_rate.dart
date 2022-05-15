@@ -15,7 +15,7 @@ class PostRate extends ParseObject
 
   static const keyClassName = 'postsRates';
   static const keyRate = 'rate';
-  static const keyPost = 'post';
+  static const keyServicePost = 'servicePost';
   static const keyRateAuthor = 'rateAuthor';
   static const keyCreationDate = keyVarCreatedAt;
   static const keyEditedDate = keyVarUpdatedAt;
@@ -25,13 +25,13 @@ class PostRate extends ParseObject
 
   set rate(double rate) => set<double>(keyRate, rate);
 
-  ServicePost get post => get<ServicePost>(keyPost) as ServicePost;
+  ServicePost get servicePost => get<ServicePost>(keyServicePost) as ServicePost;
 
-  set post(ServicePost post) => set<ServicePost>(keyPost, post);
+  set servicePost(ServicePost servicePost) => set<ServicePost>(keyServicePost, servicePost);
 
   User get rateAuthor => get<User>(keyRateAuthor) as User;
 
-  set rateAuthor(User post) => set<User>(keyRateAuthor, post);
+  set rateAuthor(User author) => set<User>(keyRateAuthor, author);
 
   DateTime get rateCreationDate => get<DateTime>(keyCreationDate) as DateTime;
 
@@ -41,7 +41,7 @@ class PostRate extends ParseObject
     return PostRate()
       ..objectId = objectId
       ..rate = rate
-      ..post = post
+      ..servicePost = servicePost
       ..rateAuthor = rateAuthor
       ..set(keyCreationDate, get<DateTime>(keyCreationDate))
       ..set(keyEditedDate, get<DateTime>(keyEditedDate));
@@ -49,5 +49,5 @@ class PostRate extends ParseObject
 
   @override
   List<Object?> get props =>
-      [get<String?>(keyVarObjectId), rate, rateAuthor, post];
+      [get<String?>(keyVarObjectId), rate, rateAuthor, servicePost];
 }

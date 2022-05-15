@@ -17,7 +17,7 @@ class PostReport extends ParseObject
   static const keyReportType = 'reportType';
   static const keyReportMoreInfo = 'reportMoreInfo';
   static const keyReportAuthor = 'reportAuthor';
-  static const keyReportedPost = 'reportedPost';
+  static const keyReportedServicePost = 'reportedServicePost';
 
   String get reportId => get<String>(keyReportId) as String;
 
@@ -30,13 +30,13 @@ class PostReport extends ParseObject
   set reportAuthor(User reportAuthor) =>
       set<User>(keyReportAuthor, reportAuthor);
 
-  set reportedPost(ServicePost reportedPost) =>
-      set<ServicePost>(keyReportedPost, reportedPost);
+  set reportedServicePost(ServicePost reportedServicePost) =>
+      set<ServicePost>(keyReportedServicePost, reportedServicePost);
 
   @override
   List<Object?> get props => [
         get<String?>(keyVarObjectId),
         get<User>(keyReportAuthor),
-        get<ServicePost>(keyReportedPost)
+        get<ServicePost>(keyReportedServicePost)
       ];
 }

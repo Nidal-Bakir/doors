@@ -52,6 +52,14 @@ class UnexpectedErrorWhileProcessingThePaymentNullNonce extends UserException {
   }
 }
 
+class UnSubscribedUser extends UserException {
+  const UnSubscribedUser(String message) : super(message);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.you_are_currently_not_subscribed_to_any_plan;
+  }
+}
+
 abstract class LocationException extends UserException {
   const LocationException(String message) : super(message);
 }

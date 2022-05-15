@@ -33,10 +33,13 @@ class RecentJobPostsRemoteDataSourceImpl
       ..setLimit(GlobalConfig.amountOfResultPeerRequest);
 
     ParseResponse jopPostsResponse;
-    try {
       jopPostsResponse = await queryBuilder.query();
+
+    try {
+      // jopPostsResponse = await queryBuilder.query();
     } catch (e) {
-      throw const NoConnectionException('con\'t load recent Job post');
+      throw NoConnectionException(
+          'con\'t load recent Job post' '\n error:  ' + e.toString());
     }
 
     if (jopPostsResponse.success &&
@@ -49,8 +52,8 @@ class RecentJobPostsRemoteDataSourceImpl
         ),
       );
     } else {
-      final error = ParseException.extractParseException(
-          jopPostsResponse.error);
+      final error =
+          ParseException.extractParseException(jopPostsResponse.error);
       // parse sdk will return error in case no results found
       if (error is ParseSuccessResponseWithNoResults) {
         return UnmodifiableListView(List.empty());

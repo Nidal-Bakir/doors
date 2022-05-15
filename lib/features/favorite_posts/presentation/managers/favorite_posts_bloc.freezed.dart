@@ -313,8 +313,8 @@ class _$FavoritePostsStateTearOff {
     );
   }
 
-  FavoritePostsLoadFailure loadFailure(
-      ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts) {
+  FavoritePostsLoadFailure loadFailure(ExceptionBase error,
+      UnmodifiableListView<ServicePost> cachedRecentPosts) {
     return FavoritePostsLoadFailure(
       error,
       cachedRecentPosts,
@@ -332,26 +332,28 @@ mixin _$FavoritePostsState {
     required TResult Function() inProgress,
     required TResult Function(UnmodifiableListView<ServicePost> favoritePosts)
         loadSuccess,
-    required TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)
+    required TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)
         loadFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)? loadSuccess,
-    TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)?
+    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)?
+        loadSuccess,
+    TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)?
         loadFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)? loadSuccess,
-    TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)?
+    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)?
+        loadSuccess,
+    TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)?
         loadFailure,
     required TResult orElse(),
   }) =>
@@ -441,8 +443,8 @@ class _$FavoritePostsInProgress implements FavoritePostsInProgress {
     required TResult Function() inProgress,
     required TResult Function(UnmodifiableListView<ServicePost> favoritePosts)
         loadSuccess,
-    required TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)
+    required TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)
         loadFailure,
   }) {
     return inProgress();
@@ -452,9 +454,10 @@ class _$FavoritePostsInProgress implements FavoritePostsInProgress {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)? loadSuccess,
-    TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)?
+    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)?
+        loadSuccess,
+    TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)?
         loadFailure,
   }) {
     return inProgress?.call();
@@ -464,9 +467,10 @@ class _$FavoritePostsInProgress implements FavoritePostsInProgress {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)? loadSuccess,
-    TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)?
+    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)?
+        loadSuccess,
+    TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -586,8 +590,8 @@ class _$FavoritePostsLoadSuccess implements FavoritePostsLoadSuccess {
     required TResult Function() inProgress,
     required TResult Function(UnmodifiableListView<ServicePost> favoritePosts)
         loadSuccess,
-    required TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)
+    required TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)
         loadFailure,
   }) {
     return loadSuccess(favoritePosts);
@@ -597,9 +601,10 @@ class _$FavoritePostsLoadSuccess implements FavoritePostsLoadSuccess {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)? loadSuccess,
-    TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)?
+    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)?
+        loadSuccess,
+    TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)?
         loadFailure,
   }) {
     return loadSuccess?.call(favoritePosts);
@@ -609,9 +614,10 @@ class _$FavoritePostsLoadSuccess implements FavoritePostsLoadSuccess {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)? loadSuccess,
-    TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)?
+    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)?
+        loadSuccess,
+    TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -658,7 +664,8 @@ class _$FavoritePostsLoadSuccess implements FavoritePostsLoadSuccess {
 
 abstract class FavoritePostsLoadSuccess implements FavoritePostsState {
   const factory FavoritePostsLoadSuccess(
-      UnmodifiableListView<ServicePost> favoritePosts) = _$FavoritePostsLoadSuccess;
+          UnmodifiableListView<ServicePost> favoritePosts) =
+      _$FavoritePostsLoadSuccess;
 
   UnmodifiableListView<ServicePost> get favoritePosts;
   @JsonKey(ignore: true)
@@ -672,7 +679,8 @@ abstract class $FavoritePostsLoadFailureCopyWith<$Res> {
           $Res Function(FavoritePostsLoadFailure) then) =
       _$FavoritePostsLoadFailureCopyWithImpl<$Res>;
   $Res call(
-      {ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts});
+      {ExceptionBase error,
+      UnmodifiableListView<ServicePost> cachedRecentPosts});
 }
 
 /// @nodoc
@@ -748,8 +756,8 @@ class _$FavoritePostsLoadFailure implements FavoritePostsLoadFailure {
     required TResult Function() inProgress,
     required TResult Function(UnmodifiableListView<ServicePost> favoritePosts)
         loadSuccess,
-    required TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)
+    required TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)
         loadFailure,
   }) {
     return loadFailure(error, cachedRecentPosts);
@@ -759,9 +767,10 @@ class _$FavoritePostsLoadFailure implements FavoritePostsLoadFailure {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)? loadSuccess,
-    TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)?
+    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)?
+        loadSuccess,
+    TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)?
         loadFailure,
   }) {
     return loadFailure?.call(error, cachedRecentPosts);
@@ -771,9 +780,10 @@ class _$FavoritePostsLoadFailure implements FavoritePostsLoadFailure {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)? loadSuccess,
-    TResult Function(
-            ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts)?
+    TResult Function(UnmodifiableListView<ServicePost> favoritePosts)?
+        loadSuccess,
+    TResult Function(ExceptionBase error,
+            UnmodifiableListView<ServicePost> cachedRecentPosts)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -819,8 +829,8 @@ class _$FavoritePostsLoadFailure implements FavoritePostsLoadFailure {
 }
 
 abstract class FavoritePostsLoadFailure implements FavoritePostsState {
-  const factory FavoritePostsLoadFailure(
-          ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts) =
+  const factory FavoritePostsLoadFailure(ExceptionBase error,
+          UnmodifiableListView<ServicePost> cachedRecentPosts) =
       _$FavoritePostsLoadFailure;
 
   ExceptionBase get error;

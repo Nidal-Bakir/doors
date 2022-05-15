@@ -8,6 +8,7 @@ abstract class Post extends ParseObject
 
   final String className;
   Post(this.className) : super.clone(className);
+  
 
   static const keyPostId = keyVarObjectId;
   static const keyPostTitle = 'title';

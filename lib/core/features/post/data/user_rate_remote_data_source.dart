@@ -53,7 +53,7 @@ class UserRateRemoteDataSourceImpl extends UserRateRemoteDataSource {
     final postRateQuery = QueryBuilder.name(PostRate.keyClassName);
     // where postRate.author=currentUser AND postRate.post=post
     postRateQuery.whereEqualTo(
-      PostRate.keyPost,
+      PostRate.keyServicePost,
       (ParseObject(ServicePost.keyClassName)..objectId = post.objectId).toPointer(),
     );
     postRateQuery.whereEqualTo(
@@ -96,7 +96,7 @@ class UserRateRemoteDataSourceImpl extends UserRateRemoteDataSource {
     try {
       postRateResponse = await cloudFunction.execute(parameters: {
         'rate': postRate.rate,
-        "postId": postRate.post.objectId,
+        "postId": postRate.servicePost.objectId,
         "rateAuthorId": postRate.rateAuthor.objectId,
       });
     } catch (e) {

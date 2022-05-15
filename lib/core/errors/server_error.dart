@@ -67,7 +67,7 @@ class ParseException extends ServerException {
       case 1:
         return ParseSuccessResponseWithNoResults.fromParseError(parseError);
     }
-    return ParseException.fromParseError(parseError);
+    return ParseUnknownError.fromParseError(parseError);
   }
   ParseException.fromParseError(ParseError parseError)
       : this._(

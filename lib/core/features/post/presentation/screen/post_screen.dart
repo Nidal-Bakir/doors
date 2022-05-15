@@ -356,8 +356,8 @@ class _PopupMenuButton extends StatelessWidget {
     );
   }
 
-  Future<void> _openConfirmationDialog(
-          BuildContext parentContext, ServicePost currentPost, User? currentUser) =>
+  Future<void> _openConfirmationDialog(BuildContext parentContext,
+          ServicePost currentPost, User? currentUser) =>
       showDialog(
         context: parentContext,
         builder: (context) {
@@ -419,8 +419,8 @@ class _PopupMenuButton extends StatelessWidget {
         },
       );
 
-  Future<void> _openReportDialog(
-          BuildContext parentContext, ServicePost currentPost, User? currentUser) =>
+  Future<void> _openReportDialog(BuildContext parentContext,
+          ServicePost currentPost, User? currentUser) =>
       showDialog<void>(
         context: parentContext,
         builder: (context) {
@@ -596,7 +596,8 @@ class _PopupMenuButton extends StatelessWidget {
                                                   ..reportType = _postReportType
                                                   ..reportMoreInfo = _reportInfo
                                                   ..reportAuthor = currentUser
-                                                  ..reportedPost = currentPost;
+                                                  ..reportedServicePost =
+                                                      currentPost;
 
                                                 context.read<ReportBloc>().add(
                                                       ReportPostReported(
@@ -682,6 +683,7 @@ class _CategoryAndKeywordsAndPostType extends StatelessWidget {
         Expanded(
           child: KeywordsRow(
             keywords: keywords,
+            isCardItemView: false,
             withColors: true,
           ),
         ),
@@ -793,11 +795,11 @@ class _PostUserRate extends StatelessWidget {
     final _colorScheme = Theme.of(context).colorScheme;
     PostRate _rate = PostRate()
       ..rate = 0.0
-      ..post = currentPost
+      ..servicePost = currentPost
       ..rateAuthor = currentUser;
     PostRate _oldRate = PostRate()
       ..rate = 0.0
-      ..post = currentPost
+      ..servicePost = currentPost
       ..rateAuthor = currentUser;
     return BlocProvider<UserRateBloc>(
       create: (context) {
@@ -821,13 +823,13 @@ class _PostUserRate extends StatelessWidget {
                 _rate = state.postRate?.getShallowCopy() ??
                     (PostRate()
                       ..rate = 0.0
-                      ..post = currentPost
+                      ..servicePost = currentPost
                       ..rateAuthor = currentUser);
 
                 _oldRate = state.postRate?.getShallowCopy() ??
                     (PostRate()
                       ..rate = 0.0
-                      ..post = currentPost
+                      ..servicePost = currentPost
                       ..rateAuthor = currentUser);
               } else if (state is UserRateLoadFailure) {
                 _rate.rate = _oldRate.rate;

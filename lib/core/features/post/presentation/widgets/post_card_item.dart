@@ -64,14 +64,10 @@ class PostCardItem extends StatelessWidget {
                         child: Center(
                           child: Container(
                             margin: const EdgeInsets.only(right: 58),
-                            child: AutoSizeText(
+                            child: Text(
                               postTitle,
                               style: Theme.of(context).textTheme.headline6,
-                              maxLines: 2,
-                              maxFontSize: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .fontSize!,
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                             ),
@@ -127,13 +123,17 @@ class PostCardItem extends StatelessWidget {
                         flex: 1,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             if (postKeywords?.isNotEmpty ?? false)
                               KeywordsRow(
+                                isCardItemView: true,
                                 keywords: postKeywords!,
                                 limit: 3,
                               ),
+                            const SizedBox(
+                              height: 8,
+                            ),
                             Container(
                               foregroundDecoration: BoxDecoration(
                                 // add fade only if its long description around 45 chars
@@ -158,9 +158,10 @@ class PostCardItem extends StatelessWidget {
                                 style: Theme.of(context).textTheme.subtitle1,
                               ),
                             ),
+                            const Spacer(),
                             if (maxCost != null || minCost != null)
                               PostCost(
-                                maxCost:minCost!=null?null: maxCost,
+                                maxCost: minCost != null ? null : maxCost,
                                 minCost: minCost,
                                 currency: postCostCurrency,
                               )

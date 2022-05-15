@@ -3,10 +3,15 @@ import 'package:doors/core/models/post.dart';
 
 class JobPost extends Post {
   JobPost() : super(keyClassName);
+
+  JobPost.clone(Map map) : this();
+  @override
+  clone(Map<String, dynamic> map) => JobPost.clone(map)..fromJson(map);
+
   static const keyClassName = 'JobPosts';
   static const keyJobId = Post.keyPostId;
   static const keyJobTitle = Post.keyPostTitle;
-  static const keyJobDescription = Post.keyPostTitle;
+  static const keyJobDescription = Post.keyPostDescription;
   static const keyJobLocation = Post.keyPostLocation;
   static const keyJobHumanReadableLocation = Post.keyPostHumanReadableLocation;
   static const keyJobImage = Post.keyPostImage;
@@ -47,6 +52,6 @@ class JobPost extends Post {
   @override
   List<Object?> get props => [
         ...super.props,
-        get<String>(keyJobTypes),
+        get(keyJobTypes),
       ];
 }

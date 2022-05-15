@@ -46,7 +46,7 @@ class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
 
     final ParseResponse savePostAsFavoriteResponse;
     try {
-      savePostAsFavoriteResponse = await _currentUser.save();
+      savePostAsFavoriteResponse = await _currentUser.update();
     } catch (e) {
       throw const NoConnectionException('can not save post as favorite post ');
     }
@@ -68,7 +68,7 @@ class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
 
     final ParseResponse removePostFromFavoritePostsResponse;
     try {
-      removePostFromFavoritePostsResponse = await _currentUser.save();
+      removePostFromFavoritePostsResponse = await _currentUser.update();
     } catch (e) {
       throw const NoConnectionException(
           'can not remove post from favorite posts ');

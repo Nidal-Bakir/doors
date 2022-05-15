@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/errors/exception_base.dart';
-import 'package:doors/core/models/service_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:doors/features/manage_post/repository/manage_post_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
