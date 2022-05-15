@@ -88,6 +88,11 @@ class _CardView extends StatefulWidget {
 
 class _CardViewState extends State<_CardView> {
   late var _limit = widget.limit ?? widget.keywords.length;
+  // sort the keyword so the shortest keywords will appear first
+  late final List<String> _keywords = widget.keywords.toList()
+    ..sort(
+      (a, b) => a.length.compareTo(b.length),
+    );
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +108,7 @@ class _CardViewState extends State<_CardView> {
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            children: widget.keywords
+            children: _keywords
                 .map(
                   (keywordLabel) => _Keyword(
                     keywordLabel: keywordLabel,
