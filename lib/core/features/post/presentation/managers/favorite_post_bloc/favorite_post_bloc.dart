@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/features/post/repository/favorite_repository.dart';
-import 'package:doors/core/models/service_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'favorite_post_event.dart';

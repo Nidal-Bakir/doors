@@ -17,20 +17,20 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$FavoritePostEventTearOff {
   const _$FavoritePostEventTearOff();
 
-  FavoritePostAddPostToFavoriteList addPostToFavoriteList(ServicePost post) {
+  FavoritePostAddPostToFavoriteList addPostToFavoriteList(Post post) {
     return FavoritePostAddPostToFavoriteList(
       post,
     );
   }
 
   FavoritePostRemovePostFromFavoriteList removePostFromFavoriteList(
-      ServicePost favoritePost) {
+      Post favoritePost) {
     return FavoritePostRemovePostFromFavoriteList(
       favoritePost,
     );
   }
 
-  FavoritePostIsFavoritePost isFavoritePost(ServicePost post) {
+  FavoritePostIsFavoritePost isFavoritePost(Post post) {
     return FavoritePostIsFavoritePost(
       post,
     );
@@ -44,24 +44,23 @@ const $FavoritePostEvent = _$FavoritePostEventTearOff();
 mixin _$FavoritePostEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ServicePost post) addPostToFavoriteList,
-    required TResult Function(ServicePost favoritePost)
-        removePostFromFavoriteList,
-    required TResult Function(ServicePost post) isFavoritePost,
+    required TResult Function(Post post) addPostToFavoriteList,
+    required TResult Function(Post favoritePost) removePostFromFavoriteList,
+    required TResult Function(Post post) isFavoritePost,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ServicePost post)? addPostToFavoriteList,
-    TResult Function(ServicePost favoritePost)? removePostFromFavoriteList,
-    TResult Function(ServicePost post)? isFavoritePost,
+    TResult Function(Post post)? addPostToFavoriteList,
+    TResult Function(Post favoritePost)? removePostFromFavoriteList,
+    TResult Function(Post post)? isFavoritePost,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ServicePost post)? addPostToFavoriteList,
-    TResult Function(ServicePost favoritePost)? removePostFromFavoriteList,
-    TResult Function(ServicePost post)? isFavoritePost,
+    TResult Function(Post post)? addPostToFavoriteList,
+    TResult Function(Post favoritePost)? removePostFromFavoriteList,
+    TResult Function(Post post)? isFavoritePost,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -118,7 +117,7 @@ abstract class $FavoritePostAddPostToFavoriteListCopyWith<$Res> {
           FavoritePostAddPostToFavoriteList value,
           $Res Function(FavoritePostAddPostToFavoriteList) then) =
       _$FavoritePostAddPostToFavoriteListCopyWithImpl<$Res>;
-  $Res call({ServicePost post});
+  $Res call({Post post});
 }
 
 /// @nodoc
@@ -142,7 +141,7 @@ class _$FavoritePostAddPostToFavoriteListCopyWithImpl<$Res>
       post == freezed
           ? _value.post
           : post // ignore: cast_nullable_to_non_nullable
-              as ServicePost,
+              as Post,
     ));
   }
 }
@@ -154,7 +153,7 @@ class _$FavoritePostAddPostToFavoriteList
   const _$FavoritePostAddPostToFavoriteList(this.post);
 
   @override
-  final ServicePost post;
+  final Post post;
 
   @override
   String toString() {
@@ -182,10 +181,9 @@ class _$FavoritePostAddPostToFavoriteList
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ServicePost post) addPostToFavoriteList,
-    required TResult Function(ServicePost favoritePost)
-        removePostFromFavoriteList,
-    required TResult Function(ServicePost post) isFavoritePost,
+    required TResult Function(Post post) addPostToFavoriteList,
+    required TResult Function(Post favoritePost) removePostFromFavoriteList,
+    required TResult Function(Post post) isFavoritePost,
   }) {
     return addPostToFavoriteList(post);
   }
@@ -193,9 +191,9 @@ class _$FavoritePostAddPostToFavoriteList
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ServicePost post)? addPostToFavoriteList,
-    TResult Function(ServicePost favoritePost)? removePostFromFavoriteList,
-    TResult Function(ServicePost post)? isFavoritePost,
+    TResult Function(Post post)? addPostToFavoriteList,
+    TResult Function(Post favoritePost)? removePostFromFavoriteList,
+    TResult Function(Post post)? isFavoritePost,
   }) {
     return addPostToFavoriteList?.call(post);
   }
@@ -203,9 +201,9 @@ class _$FavoritePostAddPostToFavoriteList
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ServicePost post)? addPostToFavoriteList,
-    TResult Function(ServicePost favoritePost)? removePostFromFavoriteList,
-    TResult Function(ServicePost post)? isFavoritePost,
+    TResult Function(Post post)? addPostToFavoriteList,
+    TResult Function(Post favoritePost)? removePostFromFavoriteList,
+    TResult Function(Post post)? isFavoritePost,
     required TResult orElse(),
   }) {
     if (addPostToFavoriteList != null) {
@@ -256,10 +254,10 @@ class _$FavoritePostAddPostToFavoriteList
 }
 
 abstract class FavoritePostAddPostToFavoriteList implements FavoritePostEvent {
-  const factory FavoritePostAddPostToFavoriteList(ServicePost post) =
+  const factory FavoritePostAddPostToFavoriteList(Post post) =
       _$FavoritePostAddPostToFavoriteList;
 
-  ServicePost get post;
+  Post get post;
   @JsonKey(ignore: true)
   $FavoritePostAddPostToFavoriteListCopyWith<FavoritePostAddPostToFavoriteList>
       get copyWith => throw _privateConstructorUsedError;
@@ -271,7 +269,7 @@ abstract class $FavoritePostRemovePostFromFavoriteListCopyWith<$Res> {
           FavoritePostRemovePostFromFavoriteList value,
           $Res Function(FavoritePostRemovePostFromFavoriteList) then) =
       _$FavoritePostRemovePostFromFavoriteListCopyWithImpl<$Res>;
-  $Res call({ServicePost favoritePost});
+  $Res call({Post favoritePost});
 }
 
 /// @nodoc
@@ -296,7 +294,7 @@ class _$FavoritePostRemovePostFromFavoriteListCopyWithImpl<$Res>
       favoritePost == freezed
           ? _value.favoritePost
           : favoritePost // ignore: cast_nullable_to_non_nullable
-              as ServicePost,
+              as Post,
     ));
   }
 }
@@ -308,7 +306,7 @@ class _$FavoritePostRemovePostFromFavoriteList
   const _$FavoritePostRemovePostFromFavoriteList(this.favoritePost);
 
   @override
-  final ServicePost favoritePost;
+  final Post favoritePost;
 
   @override
   String toString() {
@@ -338,10 +336,9 @@ class _$FavoritePostRemovePostFromFavoriteList
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ServicePost post) addPostToFavoriteList,
-    required TResult Function(ServicePost favoritePost)
-        removePostFromFavoriteList,
-    required TResult Function(ServicePost post) isFavoritePost,
+    required TResult Function(Post post) addPostToFavoriteList,
+    required TResult Function(Post favoritePost) removePostFromFavoriteList,
+    required TResult Function(Post post) isFavoritePost,
   }) {
     return removePostFromFavoriteList(favoritePost);
   }
@@ -349,9 +346,9 @@ class _$FavoritePostRemovePostFromFavoriteList
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ServicePost post)? addPostToFavoriteList,
-    TResult Function(ServicePost favoritePost)? removePostFromFavoriteList,
-    TResult Function(ServicePost post)? isFavoritePost,
+    TResult Function(Post post)? addPostToFavoriteList,
+    TResult Function(Post favoritePost)? removePostFromFavoriteList,
+    TResult Function(Post post)? isFavoritePost,
   }) {
     return removePostFromFavoriteList?.call(favoritePost);
   }
@@ -359,9 +356,9 @@ class _$FavoritePostRemovePostFromFavoriteList
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ServicePost post)? addPostToFavoriteList,
-    TResult Function(ServicePost favoritePost)? removePostFromFavoriteList,
-    TResult Function(ServicePost post)? isFavoritePost,
+    TResult Function(Post post)? addPostToFavoriteList,
+    TResult Function(Post favoritePost)? removePostFromFavoriteList,
+    TResult Function(Post post)? isFavoritePost,
     required TResult orElse(),
   }) {
     if (removePostFromFavoriteList != null) {
@@ -413,10 +410,10 @@ class _$FavoritePostRemovePostFromFavoriteList
 
 abstract class FavoritePostRemovePostFromFavoriteList
     implements FavoritePostEvent {
-  const factory FavoritePostRemovePostFromFavoriteList(
-      ServicePost favoritePost) = _$FavoritePostRemovePostFromFavoriteList;
+  const factory FavoritePostRemovePostFromFavoriteList(Post favoritePost) =
+      _$FavoritePostRemovePostFromFavoriteList;
 
-  ServicePost get favoritePost;
+  Post get favoritePost;
   @JsonKey(ignore: true)
   $FavoritePostRemovePostFromFavoriteListCopyWith<
           FavoritePostRemovePostFromFavoriteList>
@@ -428,7 +425,7 @@ abstract class $FavoritePostIsFavoritePostCopyWith<$Res> {
   factory $FavoritePostIsFavoritePostCopyWith(FavoritePostIsFavoritePost value,
           $Res Function(FavoritePostIsFavoritePost) then) =
       _$FavoritePostIsFavoritePostCopyWithImpl<$Res>;
-  $Res call({ServicePost post});
+  $Res call({Post post});
 }
 
 /// @nodoc
@@ -451,7 +448,7 @@ class _$FavoritePostIsFavoritePostCopyWithImpl<$Res>
       post == freezed
           ? _value.post
           : post // ignore: cast_nullable_to_non_nullable
-              as ServicePost,
+              as Post,
     ));
   }
 }
@@ -462,7 +459,7 @@ class _$FavoritePostIsFavoritePost implements FavoritePostIsFavoritePost {
   const _$FavoritePostIsFavoritePost(this.post);
 
   @override
-  final ServicePost post;
+  final Post post;
 
   @override
   String toString() {
@@ -491,10 +488,9 @@ class _$FavoritePostIsFavoritePost implements FavoritePostIsFavoritePost {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ServicePost post) addPostToFavoriteList,
-    required TResult Function(ServicePost favoritePost)
-        removePostFromFavoriteList,
-    required TResult Function(ServicePost post) isFavoritePost,
+    required TResult Function(Post post) addPostToFavoriteList,
+    required TResult Function(Post favoritePost) removePostFromFavoriteList,
+    required TResult Function(Post post) isFavoritePost,
   }) {
     return isFavoritePost(post);
   }
@@ -502,9 +498,9 @@ class _$FavoritePostIsFavoritePost implements FavoritePostIsFavoritePost {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(ServicePost post)? addPostToFavoriteList,
-    TResult Function(ServicePost favoritePost)? removePostFromFavoriteList,
-    TResult Function(ServicePost post)? isFavoritePost,
+    TResult Function(Post post)? addPostToFavoriteList,
+    TResult Function(Post favoritePost)? removePostFromFavoriteList,
+    TResult Function(Post post)? isFavoritePost,
   }) {
     return isFavoritePost?.call(post);
   }
@@ -512,9 +508,9 @@ class _$FavoritePostIsFavoritePost implements FavoritePostIsFavoritePost {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ServicePost post)? addPostToFavoriteList,
-    TResult Function(ServicePost favoritePost)? removePostFromFavoriteList,
-    TResult Function(ServicePost post)? isFavoritePost,
+    TResult Function(Post post)? addPostToFavoriteList,
+    TResult Function(Post favoritePost)? removePostFromFavoriteList,
+    TResult Function(Post post)? isFavoritePost,
     required TResult orElse(),
   }) {
     if (isFavoritePost != null) {
@@ -565,10 +561,10 @@ class _$FavoritePostIsFavoritePost implements FavoritePostIsFavoritePost {
 }
 
 abstract class FavoritePostIsFavoritePost implements FavoritePostEvent {
-  const factory FavoritePostIsFavoritePost(ServicePost post) =
+  const factory FavoritePostIsFavoritePost(Post post) =
       _$FavoritePostIsFavoritePost;
 
-  ServicePost get post;
+  Post get post;
   @JsonKey(ignore: true)
   $FavoritePostIsFavoritePostCopyWith<FavoritePostIsFavoritePost>
       get copyWith => throw _privateConstructorUsedError;

@@ -1,6 +1,8 @@
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -12,7 +14,7 @@ abstract class FavoritePostRemoteDataSource {
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<void> addPostToUserFavoriteList(ServicePost post);
+  Future<void> addPostToUserFavoriteList(Post post);
 
   /// Remove a post from the favorite posts list for the current user
   ///
@@ -21,7 +23,7 @@ abstract class FavoritePostRemoteDataSource {
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<void> removePostFromUserFavoriteList(ServicePost favoritePost);
+  Future<void> removePostFromUserFavoriteList(Post favoritePost);
 
   /// Check if the [post] was added to the current user favorite list or not.
   ///
@@ -31,12 +33,12 @@ abstract class FavoritePostRemoteDataSource {
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<bool> isFavoritePost(ServicePost post);
+  Future<bool> isFavoritePost(Post post);
 }
 
 class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
   @override
-  Future<void> addPostToUserFavoriteList(ServicePost post) async {
+  Future<void> addPostToUserFavoriteList(Post post) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException('Anonymous user can not favorite posts');
@@ -58,7 +60,7 @@ class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
   }
 
   @override
-  Future<void> removePostFromUserFavoriteList(ServicePost favoritePost) async {
+  Future<void> removePostFromUserFavoriteList(Post favoritePost) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException(
@@ -81,17 +83,22 @@ class FavoritePostRemoteDataSourceImpl extends FavoritePostRemoteDataSource {
   }
 
   @override
-  Future<bool> isFavoritePost(ServicePost post) async {
+  Future<bool> isFavoritePost(Post post) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException(
           'Anonymous user can not have favorite posts');
     }
 
-    final userFavoritePostsQuery = QueryBuilder.name(ServicePost.keyClassName)
+    final userFavoritePostsQuery = QueryBuilder.name(post.className)
       ..whereRelatedTo(
-          User.keyFavoriteServicePosts, User.keyUserClassName, _currentUser.userId)
-      ..whereEqualTo(ServicePost.keyPostId, post.postId);
+        post is JobPost
+            ? User.keyFavoriteJobPosts
+            : User.keyFavoriteServicePosts,
+        User.keyUserClassName,
+        _currentUser.userId,
+      )
+      ..whereEqualTo(Post.keyPostId, post.postId);
 
     final ParseResponse isFavoritePostResponse;
     try {

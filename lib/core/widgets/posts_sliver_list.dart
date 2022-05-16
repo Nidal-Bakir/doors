@@ -19,12 +19,10 @@ class PostsSliverList extends StatelessWidget {
           final _post = posts[index];
           return PostCardItem(
             onTap: () {
-              if (_post is ServicePost) {
-                Navigator.of(context).pushNamed(
-                  PostScreen.routeName,
-                  arguments: _post,
-                );
-              }
+              Navigator.of(context).pushNamed(
+                PostScreen.routeName,
+                arguments: _post,
+              );
             },
             author: _post.author,
             maxCost: _maxCost(_post),

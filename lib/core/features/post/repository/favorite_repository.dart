@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/features/post/data/favorite_post_remote_data_source.dart';
-import 'package:doors/core/models/service_post.dart';
+import 'package:doors/core/models/post.dart';
 
 class FavoriteRepository {
   final FavoritePostRemoteDataSource _favoritePostRemoteDataSource;
@@ -17,7 +17,7 @@ class FavoriteRepository {
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
   Future<Either<ExceptionBase, void>> addPostToUserFavoriteList(
-    ServicePost post,
+    Post post,
   ) async {
     try {
       return Right(
@@ -35,7 +35,7 @@ class FavoriteRepository {
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
   Future<Either<ExceptionBase, void>> removePostFromUserFavoriteList(
-      ServicePost favoritePost) async {
+      Post favoritePost) async {
     try {
       return Right(await _favoritePostRemoteDataSource
           .removePostFromUserFavoriteList(favoritePost));
@@ -48,7 +48,7 @@ class FavoriteRepository {
   ///
   /// Returns either [ServerException] or true if the post was added to user favorite list,
   /// false otherwise.
-  Future<Either<ExceptionBase, bool>> isFavoritePost(ServicePost post) async {
+  Future<Either<ExceptionBase, bool>> isFavoritePost(Post post) async {
     try {
       return Right(await _favoritePostRemoteDataSource.isFavoritePost(post));
     } on ExceptionBase catch (e) {

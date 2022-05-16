@@ -11,12 +11,15 @@ import 'package:doors/core/features/post/presentation/managers/user_rate_bloc/us
 import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_location.dart';
+import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/network_image_from_parse_file.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
+import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +28,11 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
+bool _isServicePost(Post currentPost) => currentPost is ServicePost;
+
 class PostScreen extends StatefulWidget {
   static const routeName = '/post-screen';
-  final ServicePost post;
+  final Post post;
 
   const PostScreen({Key? key, required this.post}) : super(key: key);
 
@@ -61,11 +66,17 @@ class _PostScreenState extends State<PostScreen> {
                     const SizedBox(
                       height: 8,
                     ),
-                    _CategoryAndKeywordsAndPostType(
-                      category: widget.post.postCategory,
-                      keywords: widget.post.postKeywords,
-                      postType: widget.post.postType,
-                    ),
+                    if (_isServicePost(widget.post))
+                      _ServicePostCategoryAndKeywordsAndPostType(
+                        category: widget.post.postCategory,
+                        keywords: (widget.post as ServicePost).postKeywords,
+                        postType: (widget.post as ServicePost).postType,
+                      ),
+                    if (!_isServicePost(widget.post))
+                      _JobCategoryAndJobTypes(
+                        category: widget.post.postCategory,
+                        jobTypes: (widget.post as JobPost).jobTypes,
+                      ),
                     const SizedBox(
                       height: 16,
                     ),
@@ -73,9 +84,15 @@ class _PostScreenState extends State<PostScreen> {
                       postLocation: widget.post.postLocation,
                       humanReadableLocation:
                           widget.post.postHumanReadableLocation,
-                      maxCost: widget.post.maxCost,
-                      minCost: widget.post.minCost,
-                      currency: widget.post.postCostCurrency,
+                      maxCost: _isServicePost(widget.post)
+                          ? (widget.post as ServicePost).maxCost
+                          : null,
+                      minCost: _isServicePost(widget.post)
+                          ? (widget.post as ServicePost).minCost
+                          : null,
+                      currency: _isServicePost(widget.post)
+                          ? (widget.post as ServicePost).postCostCurrency
+                          : null,
                     ),
                     const SizedBox(
                       height: 16,
@@ -95,11 +112,13 @@ class _PostScreenState extends State<PostScreen> {
                 child: Column(
                   children: [
                     const Spacer(),
-                    //hide the rate bar if the current user is the author of this post
-                    if (widget.post.postType == ServiceType.offer &&
+                    //hide the rate bar if the current user is the author of this post or its a job post
+                    if (_isServicePost(widget.post) &&
+                        (widget.post as ServicePost).postType ==
+                            ServiceType.offer &&
                         _currentUser?.userId != widget.post.author.userId)
                       _PostUserRate(
-                        currentPost: widget.post,
+                        currentPost: widget.post as ServicePost,
                         currentUser: _currentUser!,
                       ),
                     const SizedBox(height: 16),
@@ -120,7 +139,7 @@ class _PostScreenState extends State<PostScreen> {
 }
 
 class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
-  final ServicePost currentPost;
+  final Post currentPost;
   final User? currentUser;
 
   const _PostImageWithBackButtonAndRateWithMenu({
@@ -146,9 +165,10 @@ class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
               ),
             ),
             const _BackButton(),
-            if (currentPost.postType == ServiceType.offer)
+            if (_isServicePost(currentPost) &&
+                ((currentPost as ServicePost).postType == ServiceType.offer))
               _OfferedPostRate(
-                postRate: currentPost.postRate,
+                postRate: (currentPost as ServicePost).postRate,
               ),
             _PopupMenuButton(
               currentPost: currentPost,
@@ -233,7 +253,7 @@ class _OfferedPostRate extends StatelessWidget {
 }
 
 class _PopupMenuButton extends StatelessWidget {
-  final ServicePost currentPost;
+  final Post currentPost;
   final User? currentUser;
   const _PopupMenuButton({
     Key? key,
@@ -257,16 +277,25 @@ class _PopupMenuButton extends StatelessWidget {
               if (openLogInScreenToNotLoggedInUser(context)) {
                 return;
               }
-              _openReportDialog(context, currentPost, currentUser);
+              _openReportDialog(
+                  context, currentPost as ServicePost, currentUser);
               return;
             case 1:
               if (openLogInScreenToNotLoggedInUser(context)) {
                 return;
               }
-              Navigator.of(context).pushNamed(
-                CreateOrEditPostScreenPartOne.routeName,
-                arguments: currentPost,
-              );
+              if (_isServicePost(currentPost)) {
+                Navigator.of(context).pushNamed(
+                  CreateOrEditPostScreenPartOne.routeName,
+                  arguments: currentPost as ServicePost,
+                );
+              } else {
+                Navigator.of(context).pushNamed(
+                  CreateOrEditJobPost.routeName,
+                  arguments: currentPost as JobPost,
+                );
+              }
+
               return;
             case 2:
               if (openLogInScreenToNotLoggedInUser(context)) {
@@ -284,7 +313,8 @@ class _PopupMenuButton extends StatelessWidget {
         },
         itemBuilder: (BuildContext context) => [
           // hide the report button if the current user is the author of this post
-          if (currentUser != null &&
+          if (_isServicePost(currentPost) &&
+              currentUser != null &&
               currentUser!.userId != currentPost.author.userId)
             PopupMenuItem(
               value: 0,
@@ -356,8 +386,8 @@ class _PopupMenuButton extends StatelessWidget {
     );
   }
 
-  Future<void> _openConfirmationDialog(BuildContext parentContext,
-          ServicePost currentPost, User? currentUser) =>
+  Future<void> _openConfirmationDialog(
+          BuildContext parentContext, Post currentPost, User? currentUser) =>
       showDialog(
         context: parentContext,
         builder: (context) {
@@ -648,12 +678,75 @@ class _PostTitle extends StatelessWidget {
   }
 }
 
-class _CategoryAndKeywordsAndPostType extends StatelessWidget {
+class _JobCategoryAndJobTypes extends StatelessWidget {
+  final String category;
+  final Set<JobType> jobTypes;
+
+  const _JobCategoryAndJobTypes({
+    Key? key,
+    required this.category,
+    required this.jobTypes,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _TextInRoundedBox(text: category),
+        Wrap(
+          spacing: 4,
+          runSpacing: 4,
+          children: jobTypes
+              .map(
+                (e) => _TextInRoundedBox(
+                  text: e.localizedJobType(context),
+                  boxBackgroundColor: Theme.of(context).colorScheme.onPrimary,
+                ),
+              )
+              .toList(),
+        )
+      ],
+    );
+  }
+}
+
+class _TextInRoundedBox extends StatelessWidget {
+  final String text;
+
+  /// default to colorScheme.primary
+  final Color? boxBackgroundColor;
+  const _TextInRoundedBox({
+    Key? key,
+    required this.text,
+    this.boxBackgroundColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.headline6,
+      ),
+      padding: const EdgeInsets.symmetric(
+        vertical: 4,
+        horizontal: 8,
+      ),
+      decoration: BoxDecoration(
+        color: boxBackgroundColor ?? Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(5),
+      ),
+    );
+  }
+}
+
+class _ServicePostCategoryAndKeywordsAndPostType extends StatelessWidget {
   final String category;
   final Set<String> keywords;
   final ServiceType postType;
 
-  const _CategoryAndKeywordsAndPostType({
+  const _ServicePostCategoryAndKeywordsAndPostType({
     Key? key,
     required this.category,
     required this.keywords,
@@ -665,20 +758,7 @@ class _CategoryAndKeywordsAndPostType extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
-          child: Text(
-            category,
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 4,
-            horizontal: 8,
-          ),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(5),
-          ),
-        ),
+        _TextInRoundedBox(text: category),
         const SizedBox(width: 16),
         Expanded(
           child: KeywordsRow(
@@ -688,19 +768,8 @@ class _CategoryAndKeywordsAndPostType extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        Container(
-          child: Text(
-            postType == ServiceType.need ? context.loc.need : context.loc.offer,
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 4,
-            horizontal: 8,
-          ),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(5),
-          ),
+        _TextInRoundedBox(
+          text: postType.localizedServiceType(context),
         ),
       ],
     );
@@ -917,7 +986,7 @@ class _PostUserRate extends StatelessWidget {
 }
 
 class _FavoriteAndChatButtons extends StatefulWidget {
-  final ServicePost currentPost;
+  final Post currentPost;
   final User currentUser;
   const _FavoriteAndChatButtons({
     Key? key,
@@ -1010,7 +1079,11 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
         ),
         Expanded(
           child: ElevatedButton.icon(
-            icon: const Icon(Icons.textsms_rounded),
+            icon: _isServicePost(widget.currentPost)
+                ? const Icon(Icons.textsms_rounded)
+                : const ImageIcon(
+                    AssetImage('assets/icons/submit-resume.png'),
+                  ),
             onPressed:
                 widget.currentUser.userId == widget.currentPost.author.userId
                     ? null
@@ -1018,9 +1091,16 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
                         if (openLogInScreenToNotLoggedInUser(context)) {
                           return;
                         }
+                        if (_isServicePost(widget.currentPost)) {
+                          // TODO : open chat screen
+                        } else {
+                          // TODO: open apply to job screen
+                        }
                       },
             label: Text(
-              context.loc.chat,
+              _isServicePost(widget.currentPost)
+                  ? context.loc.chat
+                  : context.loc.apply,
             ),
           ),
         )

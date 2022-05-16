@@ -10,6 +10,7 @@ import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/subscription/presentation/screens/subscription_screen.dart';
 import 'package:doors/core/features/user_posts/presentation/screens/user_posts_screen.dart';
 import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
@@ -90,7 +91,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case PostScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => PostScreen(
-          post: settings.arguments as ServicePost,
+          post: settings.arguments as Post,
         ),
       );
 
