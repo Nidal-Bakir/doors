@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
+import 'package:doors/core/features/post/presentation/widgets/post_card_slide_transition.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
@@ -17,23 +18,25 @@ class PostsSliverList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           final _post = posts[index];
-          return PostCardItem(
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                PostScreen.routeName,
-                arguments: _post,
-              );
-            },
-            author: _post.author,
-            maxCost: _maxCost(_post),
-            minCost: _minCost(_post),
-            postCostCurrency: _postCostCurrency(_post),
-            postDescription: _post.postDescription,
-            postHumanReadableLocation: _post.postHumanReadableLocation,
-            postImage: _post.postImage,
-            postKeywords: _keywords(_post),
-            postLocation: _post.postLocation,
-            postTitle: _post.postTitle,
+          return PostCardSlideTransition(
+            postCardItem: PostCardItem(
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  PostScreen.routeName,
+                  arguments: _post,
+                );
+              },
+              author: _post.author,
+              maxCost: _maxCost(_post),
+              minCost: _minCost(_post),
+              postCostCurrency: _postCostCurrency(_post),
+              postDescription: _post.postDescription,
+              postHumanReadableLocation: _post.postHumanReadableLocation,
+              postImage: _post.postImage,
+              postKeywords: _keywords(_post),
+              postLocation: _post.postLocation,
+              postTitle: _post.postTitle,
+            ),
           );
         },
         childCount: posts.length,

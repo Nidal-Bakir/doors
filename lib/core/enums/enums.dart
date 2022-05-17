@@ -5,6 +5,19 @@ enum AccountType { user, company }
 enum AccountStatues { active, suspended }
 enum PaymentMethod { paypal, masterCard, visa }
 
+enum PostsViewFilter { services, jobs }
+
+extension LocalizedPostsViewFilterLabel on PostsViewFilter {
+  String localizedServiceType(BuildContext context) {
+    switch (this) {
+      case PostsViewFilter.services:
+        return context.loc.services;
+      case PostsViewFilter.jobs:
+        return context.loc.jobs;
+    }
+  }
+}
+
 enum ServiceType { need, offer }
 
 extension LocalizedServiceTypeLabel on ServiceType {

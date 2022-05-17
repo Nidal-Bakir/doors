@@ -7,16 +7,22 @@ import 'package:get_it/get_it.dart';
 final di = GetIt.I;
 void userPostsInit() {
   // blocs
-  di.registerFactory<UserPostsBloc>(() => UserPostsBloc(di.get()));
+  di.registerFactoryParam<UserPostsBloc, String, String>(
+    (String postsClassName, String relationFieldName) => UserPostsBloc(
+      userPostsRepository: di.get(),
+      postsClassName: postsClassName,
+      relationFieldName: relationFieldName,
+    ),
+  );
 
   // repositories
-  di.registerLazySingleton<UserPostsRepository>(
+  di.registerFactory<UserPostsRepository>(
       () => UserPostsRepository(di.get(), di.get()));
 
   // data sources
   di.registerLazySingleton<UserPostsRemoteDataSource>(
       () => UserPostsRemoteDataSourceImpl());
-      
+
   di.registerFactory<UserPostsLocalDataSource>(
       () => UserPostsLocalDataSourceImpl());
 }

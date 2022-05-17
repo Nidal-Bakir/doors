@@ -38,9 +38,13 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const LogInScreen());
 
     case UserPostsScreen.routeName:
+      final args = settings.arguments as Map<String, String>;
       return MaterialPageRoute(
         builder: (_) => UserPostsScreen(
-          userId: settings.arguments as String,
+          userId: args['userId']!,
+          appBarLabel: args['appBarLabel']!,
+          postsClassName: args['postsClassName']!,
+          relationFieldName: args['relationFieldName']!,
         ),
       );
 

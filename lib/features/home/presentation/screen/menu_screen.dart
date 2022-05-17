@@ -1,9 +1,12 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:doors/core/features/subscription/presentation/screens/subscription_screen.dart';
 import 'package:doors/core/features/user_posts/presentation/screens/user_posts_screen.dart';
+import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/widgets/menu_profile_info.dart';
@@ -133,6 +136,15 @@ class MenuScreen extends StatelessWidget {
                         if (openLogInScreenToNotLoggedInUser(context)) {
                           return;
                         }
+                        Navigator.of(context).pushNamed(
+                          UserPostsScreen.routeName,
+                          arguments: {
+                            'userId': _currentUser.userId,
+                            'appBarLabel': context.loc.my_jop_offers,
+                            'postsClassName': JobPost.keyClassName,
+                            'relationFieldName': User.keyCompanyJobPosts,
+                          },
+                        );
                       },
                       label: Text(
                         context.loc.my_jop_offers,
@@ -153,7 +165,12 @@ class MenuScreen extends StatelessWidget {
                       }
                       Navigator.of(context).pushNamed(
                         UserPostsScreen.routeName,
-                        arguments: _currentUser.userId,
+                        arguments: {
+                          'userId': _currentUser.userId,
+                          'appBarLabel': context.loc.my_service,
+                          'postsClassName': ServicePost.keyClassName,
+                          'relationFieldName': User.keyUserServicePosts,
+                        },
                       );
                     },
                     label: Text(

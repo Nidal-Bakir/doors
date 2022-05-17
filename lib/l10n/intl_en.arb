@@ -170,7 +170,6 @@
   "all": "ALL",
   "edit": "Edit",
   "enter_a_emil": "Enter a email",
-  "user_services": "User services",
   "no_one_can_see_it": "No one can see it",
   "any_one_can_see_it": "Any one can see it",
   "open_user_profile": "Open user profile",
@@ -198,5 +197,8 @@
   "job_type": "Job type",
   "remotely": "Remotely",
   "inSite": "In-Site",
-  "hybrid": "Hybrid"
+  "hybrid": "Hybrid",
+  "services": "Services",
+  "jobs": "Jobs",
+  "job_offers": "Job offers"
 }

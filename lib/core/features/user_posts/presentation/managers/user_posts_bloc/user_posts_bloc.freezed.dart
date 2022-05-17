@@ -395,15 +395,14 @@ class _$UserPostsStateTearOff {
     return const UserPostsInProgress();
   }
 
-  UserPostsLoadSuccess loadSuccess(
-      UnmodifiableListView<ServicePost> userPosts) {
+  UserPostsLoadSuccess loadSuccess(UnmodifiableListView<Post> userPosts) {
     return UserPostsLoadSuccess(
       userPosts,
     );
   }
 
   UserPostsLoadFailure loadFailure(
-      ExceptionBase error, UnmodifiableListView<ServicePost> cachedUserPosts) {
+      ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts) {
     return UserPostsLoadFailure(
       error,
       cachedUserPosts,
@@ -419,28 +418,27 @@ mixin _$UserPostsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() inProgress,
-    required TResult Function(UnmodifiableListView<ServicePost> userPosts)
-        loadSuccess,
-    required TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)
+    required TResult Function(UnmodifiableListView<Post> userPosts) loadSuccess,
+    required TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)
         loadFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> userPosts)? loadSuccess,
-    TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)?
+    TResult Function(UnmodifiableListView<Post> userPosts)? loadSuccess,
+    TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)?
         loadFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> userPosts)? loadSuccess,
-    TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)?
+    TResult Function(UnmodifiableListView<Post> userPosts)? loadSuccess,
+    TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)?
         loadFailure,
     required TResult orElse(),
   }) =>
@@ -528,10 +526,9 @@ class _$UserPostsInProgress implements UserPostsInProgress {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() inProgress,
-    required TResult Function(UnmodifiableListView<ServicePost> userPosts)
-        loadSuccess,
-    required TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)
+    required TResult Function(UnmodifiableListView<Post> userPosts) loadSuccess,
+    required TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)
         loadFailure,
   }) {
     return inProgress();
@@ -541,9 +538,9 @@ class _$UserPostsInProgress implements UserPostsInProgress {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> userPosts)? loadSuccess,
-    TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)?
+    TResult Function(UnmodifiableListView<Post> userPosts)? loadSuccess,
+    TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)?
         loadFailure,
   }) {
     return inProgress?.call();
@@ -553,9 +550,9 @@ class _$UserPostsInProgress implements UserPostsInProgress {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> userPosts)? loadSuccess,
-    TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)?
+    TResult Function(UnmodifiableListView<Post> userPosts)? loadSuccess,
+    TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -609,7 +606,7 @@ abstract class $UserPostsLoadSuccessCopyWith<$Res> {
   factory $UserPostsLoadSuccessCopyWith(UserPostsLoadSuccess value,
           $Res Function(UserPostsLoadSuccess) then) =
       _$UserPostsLoadSuccessCopyWithImpl<$Res>;
-  $Res call({UnmodifiableListView<ServicePost> userPosts});
+  $Res call({UnmodifiableListView<Post> userPosts});
 }
 
 /// @nodoc
@@ -631,7 +628,7 @@ class _$UserPostsLoadSuccessCopyWithImpl<$Res>
       userPosts == freezed
           ? _value.userPosts
           : userPosts // ignore: cast_nullable_to_non_nullable
-              as UnmodifiableListView<ServicePost>,
+              as UnmodifiableListView<Post>,
     ));
   }
 }
@@ -642,7 +639,7 @@ class _$UserPostsLoadSuccess implements UserPostsLoadSuccess {
   const _$UserPostsLoadSuccess(this.userPosts);
 
   @override
-  final UnmodifiableListView<ServicePost> userPosts;
+  final UnmodifiableListView<Post> userPosts;
 
   @override
   String toString() {
@@ -671,10 +668,9 @@ class _$UserPostsLoadSuccess implements UserPostsLoadSuccess {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() inProgress,
-    required TResult Function(UnmodifiableListView<ServicePost> userPosts)
-        loadSuccess,
-    required TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)
+    required TResult Function(UnmodifiableListView<Post> userPosts) loadSuccess,
+    required TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)
         loadFailure,
   }) {
     return loadSuccess(userPosts);
@@ -684,9 +680,9 @@ class _$UserPostsLoadSuccess implements UserPostsLoadSuccess {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> userPosts)? loadSuccess,
-    TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)?
+    TResult Function(UnmodifiableListView<Post> userPosts)? loadSuccess,
+    TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)?
         loadFailure,
   }) {
     return loadSuccess?.call(userPosts);
@@ -696,9 +692,9 @@ class _$UserPostsLoadSuccess implements UserPostsLoadSuccess {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> userPosts)? loadSuccess,
-    TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)?
+    TResult Function(UnmodifiableListView<Post> userPosts)? loadSuccess,
+    TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -744,10 +740,10 @@ class _$UserPostsLoadSuccess implements UserPostsLoadSuccess {
 }
 
 abstract class UserPostsLoadSuccess implements UserPostsState {
-  const factory UserPostsLoadSuccess(
-      UnmodifiableListView<ServicePost> userPosts) = _$UserPostsLoadSuccess;
+  const factory UserPostsLoadSuccess(UnmodifiableListView<Post> userPosts) =
+      _$UserPostsLoadSuccess;
 
-  UnmodifiableListView<ServicePost> get userPosts;
+  UnmodifiableListView<Post> get userPosts;
   @JsonKey(ignore: true)
   $UserPostsLoadSuccessCopyWith<UserPostsLoadSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -758,8 +754,7 @@ abstract class $UserPostsLoadFailureCopyWith<$Res> {
   factory $UserPostsLoadFailureCopyWith(UserPostsLoadFailure value,
           $Res Function(UserPostsLoadFailure) then) =
       _$UserPostsLoadFailureCopyWithImpl<$Res>;
-  $Res call(
-      {ExceptionBase error, UnmodifiableListView<ServicePost> cachedUserPosts});
+  $Res call({ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts});
 }
 
 /// @nodoc
@@ -786,7 +781,7 @@ class _$UserPostsLoadFailureCopyWithImpl<$Res>
       cachedUserPosts == freezed
           ? _value.cachedUserPosts
           : cachedUserPosts // ignore: cast_nullable_to_non_nullable
-              as UnmodifiableListView<ServicePost>,
+              as UnmodifiableListView<Post>,
     ));
   }
 }
@@ -799,7 +794,7 @@ class _$UserPostsLoadFailure implements UserPostsLoadFailure {
   @override
   final ExceptionBase error;
   @override
-  final UnmodifiableListView<ServicePost> cachedUserPosts;
+  final UnmodifiableListView<Post> cachedUserPosts;
 
   @override
   String toString() {
@@ -832,10 +827,9 @@ class _$UserPostsLoadFailure implements UserPostsLoadFailure {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() inProgress,
-    required TResult Function(UnmodifiableListView<ServicePost> userPosts)
-        loadSuccess,
-    required TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)
+    required TResult Function(UnmodifiableListView<Post> userPosts) loadSuccess,
+    required TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)
         loadFailure,
   }) {
     return loadFailure(error, cachedUserPosts);
@@ -845,9 +839,9 @@ class _$UserPostsLoadFailure implements UserPostsLoadFailure {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> userPosts)? loadSuccess,
-    TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)?
+    TResult Function(UnmodifiableListView<Post> userPosts)? loadSuccess,
+    TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)?
         loadFailure,
   }) {
     return loadFailure?.call(error, cachedUserPosts);
@@ -857,9 +851,9 @@ class _$UserPostsLoadFailure implements UserPostsLoadFailure {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> userPosts)? loadSuccess,
-    TResult Function(ExceptionBase error,
-            UnmodifiableListView<ServicePost> cachedUserPosts)?
+    TResult Function(UnmodifiableListView<Post> userPosts)? loadSuccess,
+    TResult Function(
+            ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -905,12 +899,12 @@ class _$UserPostsLoadFailure implements UserPostsLoadFailure {
 }
 
 abstract class UserPostsLoadFailure implements UserPostsState {
-  const factory UserPostsLoadFailure(ExceptionBase error,
-          UnmodifiableListView<ServicePost> cachedUserPosts) =
+  const factory UserPostsLoadFailure(
+          ExceptionBase error, UnmodifiableListView<Post> cachedUserPosts) =
       _$UserPostsLoadFailure;
 
   ExceptionBase get error;
-  UnmodifiableListView<ServicePost> get cachedUserPosts;
+  UnmodifiableListView<Post> get cachedUserPosts;
   @JsonKey(ignore: true)
   $UserPostsLoadFailureCopyWith<UserPostsLoadFailure> get copyWith =>
       throw _privateConstructorUsedError;

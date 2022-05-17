@@ -7,7 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserPostsErrorHandlerSliverFillRemaining extends StatelessWidget {
   final String userId;
-  const UserPostsErrorHandlerSliverFillRemaining({Key? key,required this.userId}) : super(key: key);
+  const UserPostsErrorHandlerSliverFillRemaining({
+    Key? key,
+    required this.userId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class UserPostsErrorHandlerSliverFillRemaining extends StatelessWidget {
                     onRetry: () {
                       context
                           .read<UserPostsBloc>()
-                          .add(  UserPostsLoaded(userId));
+                          .add(UserPostsLoaded(userId));
                     },
                     fullScreen: true,
                   );
@@ -43,7 +46,7 @@ class UserPostsErrorHandlerSliverFillRemaining extends StatelessWidget {
                     onRetry: () {
                       context
                           .read<UserPostsBloc>()
-                          .add(  UserPostsLoaded(userId));
+                          .add(UserPostsLoaded(userId));
                     },
                   );
                 }

@@ -46,7 +46,8 @@ class _CreateOrEditJobPostState extends State<CreateOrEditJobPost> {
 
   late var _description = widget.jobPost?.postDescription ?? '';
 
-  late Set<JobType>? _jobTypes = widget.jobPost?.jobTypes;
+  late Set<JobType>? _jobTypes =
+      widget.jobPost?.jobTypes ?? JobType.values.toSet();
 
   late String? _humanReadableLocation =
       widget.jobPost?.postHumanReadableLocation;

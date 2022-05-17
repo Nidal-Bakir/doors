@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/user_posts/presentation/managers/user_posts_bloc/user_posts_bloc.dart';
 import 'package:doors/core/features/user_posts/presentation/widgets/user_posts_error_handler_sliver_fill_remaining.dart';
 import 'package:doors/core/features/user_posts/presentation/widgets/user_posts_sliver_result_list.dart';
@@ -11,9 +10,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class UserPostsScreen extends StatefulWidget {
+  final String postsClassName;
+  final String relationFieldName;
+  final String appBarLabel;
   final String userId;
   static const routeName = '/user-posts';
-  const UserPostsScreen({Key? key, required this.userId}) : super(key: key);
+  const UserPostsScreen({
+    Key? key,
+    required this.userId,
+    required this.postsClassName,
+    required this.relationFieldName,
+    required this.appBarLabel,
+  }) : super(key: key);
 
   @override
   State<UserPostsScreen> createState() => _UserPostsScreenState();
@@ -30,12 +38,14 @@ class _UserPostsScreenState extends State<UserPostsScreen> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
             title: Text(
-          context.loc.my_service,
+          widget.appBarLabel,
           style: Theme.of(context).textTheme.headline6,
         )),
         body: BlocProvider<UserPostsBloc>(
-          create: (context) =>
-              GetIt.I.get<UserPostsBloc>()..add(UserPostsLoaded(widget.userId)),
+          create: (context) => GetIt.I.get<UserPostsBloc>(
+            param1: widget.postsClassName,
+            param2: widget.relationFieldName,
+          )..add(UserPostsLoaded(widget.userId)),
           child: Builder(
             builder: (context) {
               return BlocListener<UserPostsBloc, UserPostsState>(

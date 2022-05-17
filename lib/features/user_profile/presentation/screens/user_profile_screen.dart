@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/user_posts/presentation/managers/user_posts_bloc/user_posts_bloc.dart';
 import 'package:doors/core/features/user_posts/presentation/widgets/user_posts_error_handler_sliver_fill_remaining.dart';
 import 'package:doors/core/features/user_posts/presentation/widgets/user_posts_sliver_result_list.dart';
+import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
+import 'package:doors/features/user_profile/presentation/screens/current_post_view_with_view_filter.dart';
 import 'package:doors/features/user_profile/presentation/widgets/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,131 +34,186 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   var _userPostsCount = 0;
   late User _currentUser;
   late User _visitedUser;
+
+  late UserPostsBloc _servicePostsBloc;
+  late UserPostsBloc _jobPostsBloc;
+  late var _currentUsedBloc = _servicePostsBloc;
+
+  var _postsViewFilter = PostsViewFilter.services;
+
   @override
   void initState() {
     _currentUser = context.read<AuthBloc>().getCurrentUser()!;
     _visitedUser = widget.visitedUser;
+
+    _servicePostsBloc = GetIt.I.get<UserPostsBloc>(
+      param1: ServicePost.keyClassName,
+      param2: User.keyUserServicePosts,
+    );
+    _servicePostsBloc.add(UserPostsLoaded(_visitedUser.userId));
+
+    if (_visitedUser.isCompanyAccount) {
+      _jobPostsBloc = GetIt.I.get<UserPostsBloc>(
+        param1: JobPost.keyClassName,
+        param2: User.keyCompanyJobPosts,
+      );
+      _jobPostsBloc.add(UserPostsLoaded(_visitedUser.userId));
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider<UserPostsBloc>(
-        create: (context) => GetIt.I.get<UserPostsBloc>()
-          ..add(UserPostsLoaded(_visitedUser.userId)),
-        child: Builder(
-          builder: (context) {
-            return BlocListener<UserPostsBloc, UserPostsState>(
-              listener: (context, state) {
-                if (state is UserPostsLoadFailure) {
-                  if (!_refreshIndicatorCompleter.isCompleted) {
-                    _refreshIndicatorCompleter.complete();
-                  }
-                  showErrorSnackBar(
-                      context, state.error.getLocalMessageError(context));
-                } else if (state is UserPostsLoadSuccess) {
-                  _userPostsCount = state.userPosts.length;
-                  if (!_refreshIndicatorCompleter.isCompleted) {
-                    _refreshIndicatorCompleter.complete();
-                  }
-                }
-              },
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (notification) => notificationListener(
-                    notification: notification,
-                    onNotify: () {
-                      final _recentPostsBloc = context.read<UserPostsBloc>();
-                      if (_recentPostsBloc.state is UserPostsLoadSuccess &&
-                          canGetMorePosts(_userPostsCount)) {
-                        _recentPostsBloc
-                            .add(UserPostsLoaded(_visitedUser.userId));
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<UserPostsBloc>(
+            create: (_) => _servicePostsBloc,
+          ),
+          if (_visitedUser.isCompanyAccount)
+            BlocProvider<UserPostsBloc>(
+              create: (_) => _jobPostsBloc,
+            ),
+        ],
+        child: Builder(builder: (context) {
+          return BlocProvider<UserPostsBloc>.value(
+            key: Key(_postsViewFilter.name + ',provider'),
+            value: _currentUsedBloc,
+            child: Builder(
+              builder: (context) {
+                return BlocListener<UserPostsBloc, UserPostsState>(
+                  listener: (context, state) {
+                    if (state is UserPostsLoadFailure) {
+                      if (!_refreshIndicatorCompleter.isCompleted) {
+                        _refreshIndicatorCompleter.complete();
                       }
-                    }),
-                child: RefreshIndicator(
-                  key: _refreshIndicatorKey,
-                  onRefresh: () {
-                    _refreshIndicatorCompleter = Completer<void>();
-                    if (_isTheCurrentUserProfile) {
-                      context
-                          .read<AuthBloc>()
-                          .add(const AuthGetUpdatedUserDataRequested());
-                    } else {
-                      context
-                          .read<UserPostsBloc>()
-                          .add(UserPostsRefreshed(_visitedUser.userId));
+                      showErrorSnackBar(
+                          context, state.error.getLocalMessageError(context));
+                    } else if (state is UserPostsLoadSuccess) {
+                      _userPostsCount = state.userPosts.length;
+                      if (!_refreshIndicatorCompleter.isCompleted) {
+                        _refreshIndicatorCompleter.complete();
+                      }
                     }
-
-                    return _refreshIndicatorCompleter.future;
                   },
-                  child: CustomScrollView(
-                    slivers: [
-                      const SliverAppBar(),
-                      BlocConsumer<AuthBloc, AuthState>(
-                          listenWhen: (previous, current) =>
-                              _isTheCurrentUserProfile &&
-                              (current is AuthCurrentUpdatedUserLoadSuccess ||
-                                  current is AuthLoadFailure ||
-                                  current is AuthInProgress),
-                          listener: (context, state) {
-                            if (state is AuthInProgress) {
-                              _refreshIndicatorKey.currentState?.show();
-                              return;
-                            }
-                            if (state is AuthLoadFailure) {
-                              showErrorSnackBar(
-                                  context,
-                                  state.exception
-                                      .getLocalMessageError(context));
-                            }
-                            if (!_refreshIndicatorCompleter.isCompleted) {
-                              _refreshIndicatorCompleter.complete();
-                            }
-                          },
-                          buildWhen: (previous, current) =>
-                              _isTheCurrentUserProfile &&
-                              current is AuthCurrentUpdatedUserLoadSuccess,
-                          builder: (context, state) {
-                            if (state is AuthCurrentUpdatedUserLoadSuccess) {
-                              _currentUser = state.user;
-                              if (_isTheCurrentUserProfile) {
-                                _visitedUser = _currentUser;
-                              }
-                            }
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (notification) => notificationListener(
+                        notification: notification,
+                        onNotify: () {
+                          if (_currentUsedBloc.state is UserPostsLoadSuccess &&
+                              canGetMorePosts(_userPostsCount)) {
+                            _currentUsedBloc
+                                .add(UserPostsLoaded(_visitedUser.userId));
+                          }
+                        }),
+                    child: RefreshIndicator(
+                      key: _refreshIndicatorKey,
+                      onRefresh: () {
+                        _refreshIndicatorCompleter = Completer<void>();
+                        if (_isTheCurrentUserProfile) {
+                          context
+                              .read<AuthBloc>()
+                              .add(const AuthGetUpdatedUserDataRequested());
+                        } else {
+                          _currentUsedBloc
+                              .add(UserPostsRefreshed(_visitedUser.userId));
+                        }
 
-                            return SliverToBoxAdapter(
-                              child: UserInfo(
-                                visitedUser: _visitedUser,
-                                currentUser: _currentUser,
-                              ),
-                            );
-                          }),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 16,
+                        return _refreshIndicatorCompleter.future;
+                      },
+                      child: CustomScrollView(
+                        slivers: [
+                          const SliverAppBar(),
+                          BlocConsumer<AuthBloc, AuthState>(
+                              listenWhen: (previous, current) =>
+                                  _isTheCurrentUserProfile &&
+                                  (current
+                                          is AuthCurrentUpdatedUserLoadSuccess ||
+                                      current is AuthLoadFailure ||
+                                      current is AuthInProgress),
+                              listener: (context, state) {
+                                if (state is AuthInProgress) {
+                                  _refreshIndicatorKey.currentState?.show();
+                                  return;
+                                }
+                                if (state is AuthLoadFailure) {
+                                  showErrorSnackBar(
+                                      context,
+                                      state.exception
+                                          .getLocalMessageError(context));
+                                }
+                                if (!_refreshIndicatorCompleter.isCompleted) {
+                                  _refreshIndicatorCompleter.complete();
+                                }
+                              },
+                              buildWhen: (previous, current) =>
+                                  _isTheCurrentUserProfile &&
+                                  current is AuthCurrentUpdatedUserLoadSuccess,
+                              builder: (context, state) {
+                                if (state
+                                    is AuthCurrentUpdatedUserLoadSuccess) {
+                                  _currentUser = state.user;
+                                  if (_isTheCurrentUserProfile) {
+                                    _visitedUser = _currentUser;
+                                  }
+                                }
+
+                                return SliverToBoxAdapter(
+                                  child: UserInfo(
+                                    visitedUser: _visitedUser,
+                                    currentUser: _currentUser,
+                                  ),
+                                );
+                              }),
+                          CurrentPostsViewWithViewFilter(
+                            currentUserId: _currentUser.userId,
+                            visitedUser: _visitedUser,
+                            onViewChange: _onViewChange,
+                            currentPostsViewFilter: _postsViewFilter,
                           ),
-                          child: LineWithTextOnRow(
-                            text: _currentUser.userId == _visitedUser.userId
-                                ? context.loc.my_service
-                                : context.loc.user_services,
+                          UserPostsSliverResultList(
+                            key: Key(
+                              _postsViewFilter.name + ',posts',
+                            ),
                           ),
-                        ),
+                          UserPostsErrorHandlerSliverFillRemaining(
+                            key: Key(
+                              _postsViewFilter.name + ',fill',
+                            ),
+                            userId: _visitedUser.userId,
+                          ),
+                        ],
                       ),
-                      const UserPostsSliverResultList(),
-                      UserPostsErrorHandlerSliverFillRemaining(
-                        userId: _visitedUser.userId,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            );
-          },
-        ),
+                );
+              },
+            ),
+          );
+        }),
       ),
     );
+  }
+
+  void _onViewChange(PostsViewFilter currentPostsView) {
+    switch (currentPostsView) {
+      case PostsViewFilter.services:
+        if (_postsViewFilter != currentPostsView) {
+          setState(() {
+            _postsViewFilter = currentPostsView;
+            _currentUsedBloc = _servicePostsBloc;
+          });
+        }
+        break;
+      case PostsViewFilter.jobs:
+        if (_postsViewFilter != currentPostsView) {
+          setState(() {
+            _postsViewFilter = currentPostsView;
+            _currentUsedBloc = _jobPostsBloc;
+          });
+        }
+        break;
+    }
   }
 
   bool get _isTheCurrentUserProfile =>
