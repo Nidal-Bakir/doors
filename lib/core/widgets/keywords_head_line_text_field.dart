@@ -54,7 +54,8 @@ class KeywordsHeadLineWithTextField extends StatelessWidget {
         if (keyword.contains(RegExp(
                 r'[$&%!?\*\.#@_\-\/\\\^()=+;\{\}\[\]:"0-9©®™✓°π√•|`~×÷¶∆¥€¢£<>]')) ||
             keyword.contains(RegExp(r"['\s]")) ||
-            keyword.length < 2) {
+            keyword.length < 2 ||
+            keyword.length >= 15) {
           return context.loc.not_valid_keywords;
         } else {
           continue;
@@ -69,6 +70,7 @@ class KeywordsHeadLineWithTextField extends StatelessWidget {
     // two commas and the list with more elements is the used comma.
     final splitUsingEnglishComma = keywords?.split(',') ?? [];
     final splitUsingArabicComma = keywords?.split('،') ?? [];
+
     if (splitUsingEnglishComma.length > splitUsingArabicComma.length) {
       if (splitUsingEnglishComma.first.isEmpty) {
         return {};

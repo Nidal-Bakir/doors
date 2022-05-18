@@ -26,7 +26,7 @@ class CategoryHeadLineWithTextField extends StatelessWidget {
           enableSuggestions: true,
           keyboardType: TextInputType.name,
           validator: (category) => isValidCategory(category, context),
-          onSaved: (category)=>onSave(category!),
+          onSaved: (category) => onSave(category!),
         ),
       ],
     );
@@ -37,6 +37,8 @@ class CategoryHeadLineWithTextField extends StatelessWidget {
       return context.loc.specific_a_category;
     } else if (category.length < 2) {
       return context.loc.short_category;
+    } else if (category.length >= 15) {
+      return context.loc.not_valid_category;
     }
     return null;
   }

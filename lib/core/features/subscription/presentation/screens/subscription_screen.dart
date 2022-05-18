@@ -121,29 +121,37 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               const SizedBox(height: 8),
                               if (widget.currentUser.accountType ==
                                   AccountType.company)
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text(
-                                    context.loc
-                                        .add_jop_offers_and_get_jop_application_from_user_for_your_jop_offer,
+                                Row(
+                                  children: [
+                                    const Text('🔸'),
+                                    Expanded(
+                                      child: Text(
+                                        context.loc
+                                            .add_jop_offers_and_get_jop_application_from_user_for_your_jop_offer,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              Row(
+                                children: [
+                                      const Text('🔸'),
+                                  Expanded(
+                                    child: Text(
+                                      context.loc
+                                          .your_services_will_appear_at_the_top_of_every_search,
+                                    ),
                                   ),
-                                ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  context.loc
-                                      .your_services_will_appear_at_the_top_of_every_search,
-                                ),
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: Text(
-                                  context.loc.no_ads_anymore,
-                                ),
+                              Row(
+                                children: [
+                                      const Text('🔸'),
+                                  Expanded(
+                                    child: Text(
+                                      context.loc.no_ads_anymore,
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox16H(),
                               OfferedSubscriptionPlansWidget(

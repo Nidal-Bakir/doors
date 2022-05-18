@@ -8,6 +8,7 @@ import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:collection/collection.dart';
 
 class OfferedSubscriptionPlansWidget extends StatefulWidget {
   final AccountType accountType;
@@ -35,21 +36,26 @@ class _OfferedSubscriptionPlansWidgetState
           create: (_) => GetIt.I.get<OfferedSubscriptionPlansBloc>()
             ..add(OfferedSubscriptionPlansLoaded(widget.accountType)),
           child: Builder(
-            builder: (context) => BlocBuilder<OfferedSubscriptionPlansBloc,
+            builder: (context) => BlocConsumer<OfferedSubscriptionPlansBloc,
                 OfferedSubscriptionPlansState>(
+              listener: (context, state) {
+                if (state is OfferedSubscriptionPlansLoadSuccess) {
+                  widget.onPlanSelected(state.selectedPlan);
+                }
+              },
               builder: (context, state) {
                 return state.when(
-                  offeredSubscriptionPlansInProgress: () => const Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: LoadingIndicator(),
-                    ),
-                  ),
+                  offeredSubscriptionPlansInProgress: () {
+                    return const Padding(
+                      padding: EdgeInsets.all(32.0),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: LoadingIndicator(),
+                      ),
+                    );
+                  },
                   offeredSubscriptionPlansLoadSuccess:
                       (plans, defaultFreeSelectedPlan, selectedPlan) {
-                    widget.onPlanSelected(selectedPlan);
-
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -82,26 +88,12 @@ class _OfferedSubscriptionPlansWidgetState
                               ),
                             ),
                           ),
-                        Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          children: [
-                            for (var i = 0; i < plans.length; i++)
-                              InkWell(
-                                onTap: () {
-                                  context
-                                      .read<OfferedSubscriptionPlansBloc>()
-                                      .add(
-                                        OfferedSubscriptionPlansSelected(
-                                            plans[i]),
-                                      );
-                                },
-                                child: OfferedPlanCardItem(
-                                  plan: plans[i],
-                                  accountType: widget.accountType,
-                                  isSelected: selectedPlan == plans[i],
-                                ),
-                              )
-                          ],
+                        Column(
+                          children: _splitOfferedPlansToRows(
+                            plans,
+                            selectedPlan,
+                            context,
+                          ),
                         ),
                       ],
                     );
@@ -125,5 +117,61 @@ class _OfferedSubscriptionPlansWidgetState
         ),
       ],
     );
+  }
+
+  /// Split the plans into rows where each row has at most two plans and each
+  /// row wrapped with [FittedBox] so the two plans will layout as pairs in each
+  /// row no matter the screen's width.
+  List<Widget> _splitOfferedPlansToRows(
+    List<OfferedSubscriptionPlan> plans,
+    OfferedSubscriptionPlan selectedPlan,
+    BuildContext context,
+  ) {
+    final List<Widget> _listOfRowsOfferedPlans = [];
+
+    final _groupOfTowPlans = plans
+        .splitBetweenIndexed((index, first, second) => index % 2 == 0)
+        .toList();
+
+    for (int i = 0; i < _groupOfTowPlans.length; i++) {
+      List<Widget> _rowChildrenList = [];
+      _rowChildrenList.addAll(_groupOfTowPlans[i]
+          .map(
+            (plan) => InkWell(
+              onTap: () {
+                context.read<OfferedSubscriptionPlansBloc>().add(
+                      OfferedSubscriptionPlansSelected(
+                        plan,
+                      ),
+                    );
+              },
+              child: OfferedPlanCardItem(
+                plan: plan,
+                accountType: widget.accountType,
+                isSelected: selectedPlan == plan,
+              ),
+            ),
+          )
+          .toList());
+
+      // so if there is odd number of plans,
+      // the last plan will not be larger then the first plans
+      if (_rowChildrenList.length.isOdd) {
+        _rowChildrenList.add(const SizedBox(
+          height: 180,
+          width: 135,
+        ));
+      }
+      _rowChildrenList.insert(1, const SizedBox(width: 8));
+
+      _listOfRowsOfferedPlans.add(FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(children: _rowChildrenList),
+      ));
+    }
+
+    _listOfRowsOfferedPlans.insert(1, const SizedBox(height: 4));
+
+    return _listOfRowsOfferedPlans;
   }
 }

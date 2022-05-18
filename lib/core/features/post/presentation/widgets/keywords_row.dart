@@ -46,9 +46,8 @@ class _PostScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 2,
-      runSpacing: 8,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: keywords
           .map(
             (e) => _Keyword(

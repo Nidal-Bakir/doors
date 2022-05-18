@@ -45,94 +45,89 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     final _currentUser = context.read<AuthBloc>().getCurrentUser();
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: _PostImageWithBackButtonAndRateWithMenu(
-                currentPost: widget.post,
-                currentUser: _currentUser,
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          _PostImageWithBackButtonAndRateWithMenu(
+            currentPost: widget.post,
+            currentUser: _currentUser,
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Column(
+                children: [
+                  _PostTitle(
+                    title: widget.post.postTitle,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  if (_isServicePost(widget.post))
+                    _ServicePostCategoryAndKeywordsAndPostType(
+                      category: widget.post.postCategory,
+                      keywords: (widget.post as ServicePost).postKeywords,
+                      postType: (widget.post as ServicePost).postType,
+                    ),
+                  if (!_isServicePost(widget.post))
+                    _JobCategoryAndJobTypes(
+                      category: widget.post.postCategory,
+                      jobTypes: (widget.post as JobPost).jobTypes,
+                    ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  _LocationAndCost(
+                    postLocation: widget.post.postLocation,
+                    humanReadableLocation:
+                        widget.post.postHumanReadableLocation,
+                    maxCost: _isServicePost(widget.post)
+                        ? (widget.post as ServicePost).maxCost
+                        : null,
+                    minCost: _isServicePost(widget.post)
+                        ? (widget.post as ServicePost).minCost
+                        : null,
+                    currency: _isServicePost(widget.post)
+                        ? (widget.post as ServicePost).postCostCurrency
+                        : null,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  _Description(
+                    postDescription: widget.post.postDescription,
+                  )
+                ],
               ),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Column(
-                  children: [
-                    _PostTitle(
-                      title: widget.post.postTitle,
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Column(
+                children: [
+                  const Spacer(),
+                  //hide the rate bar if the current user is the author of this post or its a job post
+                  if (_isServicePost(widget.post) &&
+                      (widget.post as ServicePost).postType ==
+                          ServiceType.offer &&
+                      _currentUser?.userId != widget.post.author.userId)
+                    _PostUserRate(
+                      currentPost: widget.post as ServicePost,
+                      currentUser: _currentUser!,
                     ),
-                    const SizedBox(
-                      height: 8,
+                  const SizedBox(height: 16),
+                  if (_currentUser != null)
+                    _FavoriteAndChatButtons(
+                      currentPost: widget.post,
+                      currentUser: _currentUser,
                     ),
-                    if (_isServicePost(widget.post))
-                      _ServicePostCategoryAndKeywordsAndPostType(
-                        category: widget.post.postCategory,
-                        keywords: (widget.post as ServicePost).postKeywords,
-                        postType: (widget.post as ServicePost).postType,
-                      ),
-                    if (!_isServicePost(widget.post))
-                      _JobCategoryAndJobTypes(
-                        category: widget.post.postCategory,
-                        jobTypes: (widget.post as JobPost).jobTypes,
-                      ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    _LocationAndCost(
-                      postLocation: widget.post.postLocation,
-                      humanReadableLocation:
-                          widget.post.postHumanReadableLocation,
-                      maxCost: _isServicePost(widget.post)
-                          ? (widget.post as ServicePost).maxCost
-                          : null,
-                      minCost: _isServicePost(widget.post)
-                          ? (widget.post as ServicePost).minCost
-                          : null,
-                      currency: _isServicePost(widget.post)
-                          ? (widget.post as ServicePost).postCostCurrency
-                          : null,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    _Description(
-                      postDescription: widget.post.postDescription,
-                    )
-                  ],
-                ),
+                ],
               ),
             ),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Column(
-                  children: [
-                    const Spacer(),
-                    //hide the rate bar if the current user is the author of this post or its a job post
-                    if (_isServicePost(widget.post) &&
-                        (widget.post as ServicePost).postType ==
-                            ServiceType.offer &&
-                        _currentUser?.userId != widget.post.author.userId)
-                      _PostUserRate(
-                        currentPost: widget.post as ServicePost,
-                        currentUser: _currentUser!,
-                      ),
-                    const SizedBox(height: 16),
-                    if (_currentUser != null)
-                      _FavoriteAndChatButtons(
-                        currentPost: widget.post,
-                        currentUser: _currentUser,
-                      ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -150,33 +145,34 @@ class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _height = MediaQuery.of(context).size.height * 0.4;
-    return SizedBox(
-      height: _height,
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(25)),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: NetworkImageFromParseFile(
-                image: currentPost.postImage,
-                width: double.infinity,
-                cacheHeight: _height.toInt(),
-              ),
-            ),
-            const _BackButton(),
-            if (_isServicePost(currentPost) &&
-                ((currentPost as ServicePost).postType == ServiceType.offer))
-              _OfferedPostRate(
-                postRate: (currentPost as ServicePost).postRate,
-              ),
-            _PopupMenuButton(
-              currentPost: currentPost,
-              currentUser: currentUser,
-            )
-          ],
+    final _mediaQuery = MediaQuery.of(context);
+    final _height = _mediaQuery.size.height * 0.45;
+    return SliverAppBar(
+      toolbarHeight: 45,
+      expandedHeight: _height - _mediaQuery.viewPadding.top,
+      automaticallyImplyLeading: false,
+      leading: const _BackButton(),
+      actions: [
+        _PopupMenuButton(
+          currentPost: currentPost,
+          currentUser: currentUser,
+        )
+      ],
+      flexibleSpace: Stack(children: [
+        Positioned.fill(
+          child: NetworkImageFromParseFile(
+            height: _height,
+            image: currentPost.postImage,
+            width: double.infinity,
+            cacheHeight: _height.toInt(),
+          ),
         ),
-      ),
+        if (_isServicePost(currentPost) &&
+            ((currentPost as ServicePost).postType == ServiceType.offer))
+          _OfferedPostRate(
+            postRate: (currentPost as ServicePost).postRate,
+          ),
+      ]),
     );
   }
 }
@@ -187,16 +183,14 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 12, top: 6),
+      margin: const EdgeInsets.only(left: 16, bottom: 6, top: 6),
       child: Material(
+        type: MaterialType.button,
         borderRadius: BorderRadius.circular(5),
         color: Colors.white.withOpacity(0.7),
         child: InkWell(
           onTap: () => Navigator.of(context).pop(),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Icon(Icons.arrow_back_rounded),
-          ),
+          child: const Icon(Icons.arrow_back_rounded),
         ),
       ),
     );
@@ -213,13 +207,8 @@ class _OfferedPostRate extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
+        color: Colors.white.withOpacity(0.7),
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            5,
-          ),
-          color: Colors.white.withOpacity(0.7),
-        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -693,19 +682,69 @@ class _JobCategoryAndJobTypes extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _TextInRoundedBox(text: category),
-        Wrap(
-          spacing: 4,
-          runSpacing: 4,
-          children: jobTypes
-              .map(
-                (e) => _TextInRoundedBox(
-                  text: e.localizedJobType(context),
-                  boxBackgroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
-              )
-              .toList(),
+        Flexible(child: FittedBox(child: _TextInRoundedBox(text: category))),
+        const SizedBox(width: 8),
+        Flexible(
+          child: FittedBox(
+            child: Row(
+                children: jobTypes
+                    .map(
+                      (e) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        child: _TextInRoundedBox(
+                          text: e.localizedJobType(context),
+                          boxBackgroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                    )
+                    .toList()),
+          ),
         )
+      ],
+    );
+  }
+}
+
+class _ServicePostCategoryAndKeywordsAndPostType extends StatelessWidget {
+  final String category;
+  final Set<String> keywords;
+  final ServiceType postType;
+
+  const _ServicePostCategoryAndKeywordsAndPostType({
+    Key? key,
+    required this.category,
+    required this.keywords,
+    required this.postType,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _TextInRoundedBox(text: category),
+            const SizedBox(width: 16),
+            _TextInRoundedBox(
+              text: postType.localizedServiceType(context),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        if (keywords.isNotEmpty)
+          FittedBox(
+            child: KeywordsRow(
+              keywords: keywords,
+              isCardItemView: false,
+              withColors: true,
+            ),
+          ),
       ],
     );
   }
@@ -737,41 +776,6 @@ class _TextInRoundedBox extends StatelessWidget {
         color: boxBackgroundColor ?? Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(5),
       ),
-    );
-  }
-}
-
-class _ServicePostCategoryAndKeywordsAndPostType extends StatelessWidget {
-  final String category;
-  final Set<String> keywords;
-  final ServiceType postType;
-
-  const _ServicePostCategoryAndKeywordsAndPostType({
-    Key? key,
-    required this.category,
-    required this.keywords,
-    required this.postType,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _TextInRoundedBox(text: category),
-        const SizedBox(width: 16),
-        Expanded(
-          child: KeywordsRow(
-            keywords: keywords,
-            isCardItemView: false,
-            withColors: true,
-          ),
-        ),
-        const SizedBox(width: 16),
-        _TextInRoundedBox(
-          text: postType.localizedServiceType(context),
-        ),
-      ],
     );
   }
 }
