@@ -1,23 +1,27 @@
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/user_location/presentation/widgets/user_location_widget.dart';
 import 'package:doors/core/utils/country_currency.dart';
 import 'package:doors/core/widgets/currency_dropdown.dart';
+import 'package:doors/core/widgets/job_types_chips_multi_selection_with_head_line.dart';
 import 'package:doors/core/widgets/keywords_head_line_text_field.dart';
 import 'package:doors/features/search/models/search_filter.dart';
-import 'package:doors/features/search/posts_search/presentation/widgets/max_distance_slider.dart';
-import 'package:doors/features/search/posts_search/presentation/widgets/post_type_filter_dropdown.dart';
+import 'package:doors/features/search/presentation/widgets/max_distance_slider.dart';
+import 'package:doors/features/search/presentation/widgets/service_type_filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchFilterOverlay extends StatefulWidget {
   final void Function(SearchFilter searchFilter) onNewFilterApplied;
+  final PostsViewFilter postsView;
   final void Function() onReset;
   const SearchFilterOverlay({
     Key? key,
     required this.onNewFilterApplied,
     required this.onReset,
+    required this.postsView,
   }) : super(key: key);
 
   @override
@@ -137,75 +141,96 @@ class _SearchFilterOverlayState extends State<SearchFilterOverlay> {
                     },
                   ),
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Flexible(
-                  child: PostTypeDropdownButtonFormField(
-                    onSave: (postType) {
-                      _currentFilter =
-                          _currentFilter.copyWith(postType: postType);
-                    },
+                if (widget.postsView == PostsViewFilter.services)
+                  const SizedBox(
+                    width: 8,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: TextFormField(
-                    cursorColor: _theme.colorScheme.secondary,
-                    textInputAction: TextInputAction.next,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    enableSuggestions: true,
-                    decoration: InputDecoration(
-                      hintText: context.loc.up_to,
-                      fillColor: _theme.colorScheme.onPrimary,
+                if (widget.postsView == PostsViewFilter.services)
+                  Flexible(
+                    child: ServiceTypeDropdownButtonFormField(
+                      onSave: (serviceType) {
+                        _currentFilter =
+                            _currentFilter.copyWith(serviceType: serviceType);
+                      },
                     ),
-                    keyboardType: TextInputType.number,
-                    validator: (upToCost) => _isValidUpCost(upToCost, context),
-                    onSaved: (upToCost) {
-                      _currentFilter = _currentFilter.copyWith(
-                          maxCost: double.tryParse(upToCost ?? ''));
-                    },
                   ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Flexible(
-                  child: CurrencyDropdown(
-                    fillColor: _theme.colorScheme.onPrimary,
-                    initCurrency: null,
-                    onSaved: (currency) {
-                      _currentFilter = _currentFilter.copyWith(
-                          currency: CountryCurrency.toStringFormat(currency));
-                    },
-                  ),
-                )
               ],
             ),
             const SizedBox(
               height: 8,
             ),
-            SizedBox(
-              width: 270,
-              child: KeywordsHeadLineWithTextField(
-                cursorColor: _theme.colorScheme.secondary,
-                fillColor: _theme.colorScheme.onPrimary,
-                hideHeadLine: true,
-                maxLines: 1,
-                initKeywords: const {},
-                onKeywordsSave: (Set<String> keywords) {
-                  _currentFilter = _currentFilter.copyWith(
-                      keywords: keywords.isEmpty ? null : keywords);
+            if (widget.postsView == PostsViewFilter.jobs)
+              JobTypesChipsMultiSelectionWithHeadLine(
+                headLineLabel: context.loc.job_type_filter,
+                selectedChipColor: _theme.colorScheme.onPrimary,
+                initJobTypes: null,
+                onJobTypeChange: (filteredJobTypes) {
+                  if (filteredJobTypes.length == JobType.values.length) {
+                    // if the user select all the types no need to filter on theme
+                    _currentFilter = _currentFilter.copyWith(jobTypes: null);
+                  } else {
+                    _currentFilter =
+                        _currentFilter.copyWith(jobTypes: filteredJobTypes);
+                  }
                 },
               ),
-            ),
+            if (widget.postsView == PostsViewFilter.services)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: TextFormField(
+                      cursorColor: _theme.colorScheme.secondary,
+                      textInputAction: TextInputAction.next,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      enableSuggestions: true,
+                      decoration: InputDecoration(
+                        hintText: context.loc.up_to,
+                        fillColor: _theme.colorScheme.onPrimary,
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (upToCost) =>
+                          _isValidUpCost(upToCost, context),
+                      onSaved: (upToCost) {
+                        _currentFilter = _currentFilter.copyWith(
+                            maxCost: double.tryParse(upToCost ?? ''));
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Flexible(
+                    child: CurrencyDropdown(
+                      fillColor: _theme.colorScheme.onPrimary,
+                      initCurrency: null,
+                      onSaved: (currency) {
+                        _currentFilter = _currentFilter.copyWith(
+                            currency: CountryCurrency.toStringFormat(currency));
+                      },
+                    ),
+                  )
+                ],
+              ),
+            if (widget.postsView == PostsViewFilter.services)
+              const SizedBox(
+                height: 8,
+              ),
+            if (widget.postsView == PostsViewFilter.services)
+              SizedBox(
+                width: 270,
+                child: KeywordsHeadLineWithTextField(
+                  cursorColor: _theme.colorScheme.secondary,
+                  fillColor: _theme.colorScheme.onPrimary,
+                  hideHeadLine: true,
+                  maxLines: 1,
+                  initKeywords: const {},
+                  onKeywordsSave: (Set<String> keywords) {
+                    _currentFilter = _currentFilter.copyWith(
+                        keywords: keywords.isEmpty ? null : keywords);
+                  },
+                ),
+              ),
             const SizedBox(
               height: 16,
             ),

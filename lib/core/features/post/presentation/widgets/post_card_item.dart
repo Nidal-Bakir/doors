@@ -127,6 +127,7 @@ class PostCardItem extends StatelessWidget {
                           children: [
                             if (postKeywords?.isNotEmpty ?? false)
                               KeywordsRow(
+                                key: UniqueKey(),
                                 isCardItemView: true,
                                 keywords: postKeywords!,
                                 limit: 3,

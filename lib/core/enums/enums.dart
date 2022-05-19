@@ -1,11 +1,19 @@
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/service_post.dart';
 import 'package:flutter/widgets.dart';
 
 enum AccountType { user, company }
 enum AccountStatues { active, suspended }
 enum PaymentMethod { paypal, masterCard, visa }
 
-enum PostsViewFilter { services, jobs }
+enum PostsViewFilter {
+  /// Get services posts
+  services,
+
+  /// Get Job posts
+  jobs,
+}
 
 extension LocalizedPostsViewFilterLabel on PostsViewFilter {
   String localizedServiceType(BuildContext context) {
@@ -14,6 +22,17 @@ extension LocalizedPostsViewFilterLabel on PostsViewFilter {
         return context.loc.services;
       case PostsViewFilter.jobs:
         return context.loc.jobs;
+    }
+  }
+}
+
+extension ClassNameForPostType on PostsViewFilter {
+  String get className {
+    switch (this) {
+      case PostsViewFilter.services:
+        return ServicePost.keyClassName;
+      case PostsViewFilter.jobs:
+        return JobPost.keyClassName;
     }
   }
 }

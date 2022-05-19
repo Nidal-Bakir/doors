@@ -1,16 +1,21 @@
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/widgets/primary_color_background_for_scaffold.dart';
 import 'package:doors/features/search/models/search_filter.dart';
-import 'package:doors/features/search/posts_search/presentation/managers/posts_search_bloc/posts_search_bloc.dart';
-import 'package:doors/features/search/posts_search/presentation/widgets/search_filter_overlay.dart';
-import 'package:doors/features/search/posts_search/presentation/widgets/search_posts_result_list.dart';
+import 'package:doors/features/search/presentation/managers/posts_search_bloc/posts_search_bloc.dart';
+import 'package:doors/features/search/presentation/widgets/search_filter_overlay.dart';
+import 'package:doors/features/search/presentation/widgets/search_posts_result_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class PostsSearchScreen extends StatefulWidget {
+  final PostsViewFilter postsTypeToSearch;
   static const routeName = '/posts-search';
-  const PostsSearchScreen({Key? key}) : super(key: key);
+  const PostsSearchScreen({
+    Key? key,
+    required this.postsTypeToSearch,
+  }) : super(key: key);
 
   @override
   State<PostsSearchScreen> createState() => _PostsSearchScreenState();
@@ -25,7 +30,9 @@ class _PostsSearchScreenState extends State<PostsSearchScreen> {
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
     return BlocProvider<PostsSearchBloc>(
-      create: (context) => GetIt.I.get<PostsSearchBloc>(),
+      create: (context) => GetIt.I.get<PostsSearchBloc>(
+        param1: widget.postsTypeToSearch,
+      ),
       child: Builder(builder: (context) {
         return PrimaryColorBackgroundForScaffold(
           scaffoldWidget: WillPopScope(
@@ -71,7 +78,10 @@ class _PostsSearchScreenState extends State<PostsSearchScreen> {
                           cursorColor: _theme.colorScheme.secondary,
                           decoration: InputDecoration(
                             hintStyle: _theme.textTheme.subtitle1,
-                            hintText: context.loc.search_for_service,
+                            hintText: widget.postsTypeToSearch ==
+                                    PostsViewFilter.services
+                                ? context.loc.search_for_service
+                                : context.loc.search_for_jobs,
                             fillColor: _theme.colorScheme.onPrimary,
                             suffixIcon: Material(
                               color: Colors.transparent,
@@ -130,6 +140,7 @@ class _PostsSearchScreenState extends State<PostsSearchScreen> {
                             scale: _showFilters ? 1 : 0.7,
                             child: SearchFilterOverlay(
                               key: _searchOverlayKeyForReset,
+                              postsView: widget.postsTypeToSearch,
                               onReset: () {
                                 _searchFilter = SearchFilter(
                                   title: _searchFilter.title,

@@ -25,7 +25,8 @@ class _$SearchFilterTearOff {
       Set<String>? keywords,
       double? maxCost,
       String? currency,
-      ServiceType? postType}) {
+      ServiceType? serviceType,
+      Set<JobType>? jobTypes}) {
     return _SearchFilter(
       title: title,
       category: category,
@@ -34,7 +35,8 @@ class _$SearchFilterTearOff {
       keywords: keywords,
       maxCost: maxCost,
       currency: currency,
-      postType: postType,
+      serviceType: serviceType,
+      jobTypes: jobTypes,
     );
   }
 }
@@ -51,7 +53,8 @@ mixin _$SearchFilter {
   Set<String>? get keywords => throw _privateConstructorUsedError;
   double? get maxCost => throw _privateConstructorUsedError;
   String? get currency => throw _privateConstructorUsedError;
-  ServiceType? get postType => throw _privateConstructorUsedError;
+  ServiceType? get serviceType => throw _privateConstructorUsedError;
+  Set<JobType>? get jobTypes => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SearchFilterCopyWith<SearchFilter> get copyWith =>
@@ -71,7 +74,8 @@ abstract class $SearchFilterCopyWith<$Res> {
       Set<String>? keywords,
       double? maxCost,
       String? currency,
-      ServiceType? postType});
+      ServiceType? serviceType,
+      Set<JobType>? jobTypes});
 }
 
 /// @nodoc
@@ -91,7 +95,8 @@ class _$SearchFilterCopyWithImpl<$Res> implements $SearchFilterCopyWith<$Res> {
     Object? keywords = freezed,
     Object? maxCost = freezed,
     Object? currency = freezed,
-    Object? postType = freezed,
+    Object? serviceType = freezed,
+    Object? jobTypes = freezed,
   }) {
     return _then(_value.copyWith(
       title: title == freezed
@@ -122,10 +127,14 @@ class _$SearchFilterCopyWithImpl<$Res> implements $SearchFilterCopyWith<$Res> {
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
               as String?,
-      postType: postType == freezed
-          ? _value.postType
-          : postType // ignore: cast_nullable_to_non_nullable
+      serviceType: serviceType == freezed
+          ? _value.serviceType
+          : serviceType // ignore: cast_nullable_to_non_nullable
               as ServiceType?,
+      jobTypes: jobTypes == freezed
+          ? _value.jobTypes
+          : jobTypes // ignore: cast_nullable_to_non_nullable
+              as Set<JobType>?,
     ));
   }
 }
@@ -145,7 +154,8 @@ abstract class _$SearchFilterCopyWith<$Res>
       Set<String>? keywords,
       double? maxCost,
       String? currency,
-      ServiceType? postType});
+      ServiceType? serviceType,
+      Set<JobType>? jobTypes});
 }
 
 /// @nodoc
@@ -167,7 +177,8 @@ class __$SearchFilterCopyWithImpl<$Res> extends _$SearchFilterCopyWithImpl<$Res>
     Object? keywords = freezed,
     Object? maxCost = freezed,
     Object? currency = freezed,
-    Object? postType = freezed,
+    Object? serviceType = freezed,
+    Object? jobTypes = freezed,
   }) {
     return _then(_SearchFilter(
       title: title == freezed
@@ -198,10 +209,14 @@ class __$SearchFilterCopyWithImpl<$Res> extends _$SearchFilterCopyWithImpl<$Res>
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
               as String?,
-      postType: postType == freezed
-          ? _value.postType
-          : postType // ignore: cast_nullable_to_non_nullable
+      serviceType: serviceType == freezed
+          ? _value.serviceType
+          : serviceType // ignore: cast_nullable_to_non_nullable
               as ServiceType?,
+      jobTypes: jobTypes == freezed
+          ? _value.jobTypes
+          : jobTypes // ignore: cast_nullable_to_non_nullable
+              as Set<JobType>?,
     ));
   }
 }
@@ -217,7 +232,8 @@ class _$_SearchFilter implements _SearchFilter {
       this.keywords,
       this.maxCost,
       this.currency,
-      this.postType});
+      this.serviceType,
+      this.jobTypes});
 
   @override
   final String? title;
@@ -234,11 +250,13 @@ class _$_SearchFilter implements _SearchFilter {
   @override
   final String? currency;
   @override
-  final ServiceType? postType;
+  final ServiceType? serviceType;
+  @override
+  final Set<JobType>? jobTypes;
 
   @override
   String toString() {
-    return 'SearchFilter(title: $title, category: $category, maxDistanceInKiloMetres: $maxDistanceInKiloMetres, userGeoLocation: $userGeoLocation, keywords: $keywords, maxCost: $maxCost, currency: $currency, postType: $postType)';
+    return 'SearchFilter(title: $title, category: $category, maxDistanceInKiloMetres: $maxDistanceInKiloMetres, userGeoLocation: $userGeoLocation, keywords: $keywords, maxCost: $maxCost, currency: $currency, serviceType: $serviceType, jobTypes: $jobTypes)';
   }
 
   @override
@@ -255,7 +273,9 @@ class _$_SearchFilter implements _SearchFilter {
             const DeepCollectionEquality().equals(other.keywords, keywords) &&
             const DeepCollectionEquality().equals(other.maxCost, maxCost) &&
             const DeepCollectionEquality().equals(other.currency, currency) &&
-            const DeepCollectionEquality().equals(other.postType, postType));
+            const DeepCollectionEquality()
+                .equals(other.serviceType, serviceType) &&
+            const DeepCollectionEquality().equals(other.jobTypes, jobTypes));
   }
 
   @override
@@ -268,7 +288,8 @@ class _$_SearchFilter implements _SearchFilter {
       const DeepCollectionEquality().hash(keywords),
       const DeepCollectionEquality().hash(maxCost),
       const DeepCollectionEquality().hash(currency),
-      const DeepCollectionEquality().hash(postType));
+      const DeepCollectionEquality().hash(serviceType),
+      const DeepCollectionEquality().hash(jobTypes));
 
   @JsonKey(ignore: true)
   @override
@@ -285,7 +306,8 @@ abstract class _SearchFilter implements SearchFilter {
       Set<String>? keywords,
       double? maxCost,
       String? currency,
-      ServiceType? postType}) = _$_SearchFilter;
+      ServiceType? serviceType,
+      Set<JobType>? jobTypes}) = _$_SearchFilter;
 
   @override
   String? get title;
@@ -302,7 +324,9 @@ abstract class _SearchFilter implements SearchFilter {
   @override
   String? get currency;
   @override
-  ServiceType? get postType;
+  ServiceType? get serviceType;
+  @override
+  Set<JobType>? get jobTypes;
   @override
   @JsonKey(ignore: true)
   _$SearchFilterCopyWith<_SearchFilter> get copyWith =>

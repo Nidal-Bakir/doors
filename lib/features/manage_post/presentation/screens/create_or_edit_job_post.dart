@@ -14,7 +14,7 @@ import 'package:doors/core/widgets/title_with_under_line_in_the_end.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/manage_post/presentation/widgets/category_head_line_with_text_field.dart';
 import 'package:doors/features/manage_post/presentation/widgets/description_head_line_with_text_field.dart';
-import 'package:doors/features/manage_post/presentation/widgets/job_types_chips_multi_selection_with_head_line.dart';
+import 'package:doors/core/widgets/job_types_chips_multi_selection_with_head_line.dart';
 import 'package:doors/features/manage_post/presentation/widgets/post_image_head_line_with_image_picker.dart';
 import 'package:doors/features/manage_post/presentation/widgets/title_head_line_with_text_field.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +107,7 @@ class _CreateOrEditJobPostState extends State<CreateOrEditJobPost> {
                         ),
                         const SizedBox16H(),
                         JobTypesChipsMultiSelectionWithHeadLine(
+                          headLineLabel: context.loc.job_type,
                           initJobTypes: _jobTypes,
                           onJobTypeChange: (jobTypes) {
                             _jobTypes = jobTypes;

@@ -11,7 +11,7 @@ import 'package:doors/features/home/presentation/widgets/custom_bottom_navigatio
 import 'package:doors/features/home/presentation/widgets/keep_page_alive.dart';
 import 'package:doors/features/recent_posts/presentation/widgets/recent_job_posts_list.dart';
 import 'package:doors/features/recent_posts/presentation/widgets/recent_service_posts_list.dart';
-import 'package:doors/features/search/posts_search/presentation/screens/posts_search_screen.dart';
+import 'package:doors/features/search/presentation/screens/posts_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/config.dart';
@@ -117,8 +117,14 @@ class _MainScreenState extends State<MainScreen>
             actions: [
               IconButton(
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(PostsSearchScreen.routeName);
+                    var _postsTypeToSearch = PostsViewFilter.services;
+                    if (_currentOpenedPageIndex == 0) {
+                      _postsTypeToSearch = PostsViewFilter.jobs;
+                    }
+                    Navigator.of(context).pushNamed(
+                      PostsSearchScreen.routeName,
+                      arguments: _postsTypeToSearch,
+                    );
                   },
                   icon: const Icon(Icons.search)),
               IconButton(

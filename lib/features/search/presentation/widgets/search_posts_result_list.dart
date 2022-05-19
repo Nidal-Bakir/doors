@@ -3,7 +3,7 @@ import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/no_internet_connection.dart';
 import 'package:doors/core/widgets/no_result_found.dart';
 import 'package:doors/core/widgets/posts_sliver_list.dart';
-import 'package:doors/features/search/posts_search/presentation/managers/posts_search_bloc/posts_search_bloc.dart';
+import 'package:doors/features/search/presentation/managers/posts_search_bloc/posts_search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

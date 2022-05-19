@@ -6,11 +6,15 @@ import 'package:flutter/material.dart';
 
 class JobTypesChipsMultiSelectionWithHeadLine extends StatefulWidget {
   final Set<JobType>? initJobTypes;
+  final String headLineLabel;
+  final Color? selectedChipColor;
   final VoidCallbackWithParam<Set<JobType>> onJobTypeChange;
   const JobTypesChipsMultiSelectionWithHeadLine({
     Key? key,
     required this.onJobTypeChange,
     this.initJobTypes,
+    this.selectedChipColor,
+    required this.headLineLabel,
   }) : super(key: key);
 
   @override
@@ -28,11 +32,12 @@ class _JobTypesChipsMultiSelectionWithHeadLineState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LineWithTextOnRow(text: context.loc.job_type),
+        LineWithTextOnRow(text: widget.headLineLabel),
         Wrap(
           spacing: 8,
           children: [
             ChoiceChip(
+              selectedColor: widget.selectedChipColor,
               selected: _selectedJobTypes[0],
               label: Text(context.loc.remotely),
               onSelected: (remotely) {
@@ -40,6 +45,7 @@ class _JobTypesChipsMultiSelectionWithHeadLineState
               },
             ),
             ChoiceChip(
+              selectedColor: widget.selectedChipColor,
               selected: _selectedJobTypes[1],
               label: Text(context.loc.inSite),
               onSelected: (inSite) {
@@ -47,6 +53,7 @@ class _JobTypesChipsMultiSelectionWithHeadLineState
               },
             ),
             ChoiceChip(
+              selectedColor: widget.selectedChipColor,
               selected: _selectedJobTypes[2],
               label: Text(context.loc.hybrid),
               onSelected: (hybrid) {

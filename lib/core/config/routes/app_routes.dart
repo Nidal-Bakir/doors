@@ -17,7 +17,7 @@ import 'package:doors/features/home/presentation/screen/home_screen.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
-import 'package:doors/features/search/posts_search/presentation/screens/posts_search_screen.dart';
+import 'package:doors/features/search/presentation/screens/posts_search_screen.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/edit_profile_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
@@ -76,7 +76,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const SelectAccountTypeScreen());
 
     case PostsSearchScreen.routeName:
-      return SearchScreenFadeTransition();
+      return SearchScreenFadeTransition(settings.arguments as PostsViewFilter);
 
     case SignUpPartOneScreen.routeName:
       return MaterialPageRoute(
@@ -128,8 +128,12 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 }
 
 class SearchScreenFadeTransition extends MaterialPageRoute {
-  SearchScreenFadeTransition()
-      : super(builder: (_) => const PostsSearchScreen());
+  final PostsViewFilter postsTypeToSearch;
+  SearchScreenFadeTransition(this.postsTypeToSearch)
+      : super(
+            builder: (_) => PostsSearchScreen(
+                  postsTypeToSearch: postsTypeToSearch,
+                ));
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {

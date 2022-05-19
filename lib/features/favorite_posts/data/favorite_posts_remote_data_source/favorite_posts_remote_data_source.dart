@@ -15,9 +15,9 @@ abstract class FavoritePostsRemoteDataSource {
   ///
   /// [amountToSkip]: For pagination, where it's the count of the current
   /// loaded favorite posts.
-  /// 
+  ///
   /// [viewFilter]: favorite posts type {services | jobs}
-  /// 
+  ///
   /// Returns a UnmodifiableList of favorite posts
   ///
   /// Throws [ExceptionBase] :
@@ -41,16 +41,6 @@ class FavoritePostsRemoteDataSourceImpl extends FavoritePostsRemoteDataSource {
           'Anonymous user can not have favorite posts');
     }
 
-    var _className = ServicePost.keyClassName;
-    switch (viewFilter) {
-      case PostsViewFilter.services:
-        _className = ServicePost.keyClassName;
-        break;
-      case PostsViewFilter.jobs:
-        _className = JobPost.keyClassName;
-        break;
-    }
-
     var _relationFieldName = User.keyFavoriteServicePosts;
     switch (viewFilter) {
       case PostsViewFilter.services:
@@ -61,7 +51,7 @@ class FavoritePostsRemoteDataSourceImpl extends FavoritePostsRemoteDataSource {
         break;
     }
 
-    final userFavoritePostsQuery = QueryBuilder.name(_className)
+    final userFavoritePostsQuery = QueryBuilder.name(viewFilter.className)
       ..whereRelatedTo(
           _relationFieldName, User.keyUserClassName, _currentUser.userId)
       ..includeObject([Post.keyAuthor])

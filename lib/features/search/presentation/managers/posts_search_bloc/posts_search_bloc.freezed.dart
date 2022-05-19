@@ -368,14 +368,14 @@ class _$PostsSearchStateTearOff {
   }
 
   PostsSearchLoadSuccess loadSuccess(
-      UnmodifiableListView<ServicePost> postsSearchResult) {
+      UnmodifiableListView<Post> postsSearchResult) {
     return PostsSearchLoadSuccess(
       postsSearchResult,
     );
   }
 
-  PostsSearchLoadFailure loadFailure(ServerException error,
-      UnmodifiableListView<ServicePost> cachedSearchResult) {
+  PostsSearchLoadFailure loadFailure(
+      ServerException error, UnmodifiableListView<Post> cachedSearchResult) {
     return PostsSearchLoadFailure(
       error,
       cachedSearchResult,
@@ -392,11 +392,10 @@ mixin _$PostsSearchState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
-    required TResult Function(
-            UnmodifiableListView<ServicePost> postsSearchResult)
+    required TResult Function(UnmodifiableListView<Post> postsSearchResult)
         loadSuccess,
     required TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)
+            UnmodifiableListView<Post> cachedSearchResult)
         loadFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -404,10 +403,9 @@ mixin _$PostsSearchState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -415,10 +413,9 @@ mixin _$PostsSearchState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
     required TResult orElse(),
   }) =>
@@ -510,11 +507,10 @@ class _$PostsSearchInitial implements PostsSearchInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
-    required TResult Function(
-            UnmodifiableListView<ServicePost> postsSearchResult)
+    required TResult Function(UnmodifiableListView<Post> postsSearchResult)
         loadSuccess,
     required TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)
+            UnmodifiableListView<Post> cachedSearchResult)
         loadFailure,
   }) {
     return initial();
@@ -525,10 +521,9 @@ class _$PostsSearchInitial implements PostsSearchInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
   }) {
     return initial?.call();
@@ -539,10 +534,9 @@ class _$PostsSearchInitial implements PostsSearchInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -637,11 +631,10 @@ class _$PostsSearchInProgress implements PostsSearchInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
-    required TResult Function(
-            UnmodifiableListView<ServicePost> postsSearchResult)
+    required TResult Function(UnmodifiableListView<Post> postsSearchResult)
         loadSuccess,
     required TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)
+            UnmodifiableListView<Post> cachedSearchResult)
         loadFailure,
   }) {
     return inProgress();
@@ -652,10 +645,9 @@ class _$PostsSearchInProgress implements PostsSearchInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
   }) {
     return inProgress?.call();
@@ -666,10 +658,9 @@ class _$PostsSearchInProgress implements PostsSearchInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -726,7 +717,7 @@ abstract class $PostsSearchLoadSuccessCopyWith<$Res> {
   factory $PostsSearchLoadSuccessCopyWith(PostsSearchLoadSuccess value,
           $Res Function(PostsSearchLoadSuccess) then) =
       _$PostsSearchLoadSuccessCopyWithImpl<$Res>;
-  $Res call({UnmodifiableListView<ServicePost> postsSearchResult});
+  $Res call({UnmodifiableListView<Post> postsSearchResult});
 }
 
 /// @nodoc
@@ -748,7 +739,7 @@ class _$PostsSearchLoadSuccessCopyWithImpl<$Res>
       postsSearchResult == freezed
           ? _value.postsSearchResult
           : postsSearchResult // ignore: cast_nullable_to_non_nullable
-              as UnmodifiableListView<ServicePost>,
+              as UnmodifiableListView<Post>,
     ));
   }
 }
@@ -759,7 +750,7 @@ class _$PostsSearchLoadSuccess implements PostsSearchLoadSuccess {
   const _$PostsSearchLoadSuccess(this.postsSearchResult);
 
   @override
-  final UnmodifiableListView<ServicePost> postsSearchResult;
+  final UnmodifiableListView<Post> postsSearchResult;
 
   @override
   String toString() {
@@ -790,11 +781,10 @@ class _$PostsSearchLoadSuccess implements PostsSearchLoadSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
-    required TResult Function(
-            UnmodifiableListView<ServicePost> postsSearchResult)
+    required TResult Function(UnmodifiableListView<Post> postsSearchResult)
         loadSuccess,
     required TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)
+            UnmodifiableListView<Post> cachedSearchResult)
         loadFailure,
   }) {
     return loadSuccess(postsSearchResult);
@@ -805,10 +795,9 @@ class _$PostsSearchLoadSuccess implements PostsSearchLoadSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
   }) {
     return loadSuccess?.call(postsSearchResult);
@@ -819,10 +808,9 @@ class _$PostsSearchLoadSuccess implements PostsSearchLoadSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -872,10 +860,9 @@ class _$PostsSearchLoadSuccess implements PostsSearchLoadSuccess {
 
 abstract class PostsSearchLoadSuccess implements PostsSearchState {
   const factory PostsSearchLoadSuccess(
-          UnmodifiableListView<ServicePost> postsSearchResult) =
-      _$PostsSearchLoadSuccess;
+      UnmodifiableListView<Post> postsSearchResult) = _$PostsSearchLoadSuccess;
 
-  UnmodifiableListView<ServicePost> get postsSearchResult;
+  UnmodifiableListView<Post> get postsSearchResult;
   @JsonKey(ignore: true)
   $PostsSearchLoadSuccessCopyWith<PostsSearchLoadSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -887,8 +874,7 @@ abstract class $PostsSearchLoadFailureCopyWith<$Res> {
           $Res Function(PostsSearchLoadFailure) then) =
       _$PostsSearchLoadFailureCopyWithImpl<$Res>;
   $Res call(
-      {ServerException error,
-      UnmodifiableListView<ServicePost> cachedSearchResult});
+      {ServerException error, UnmodifiableListView<Post> cachedSearchResult});
 }
 
 /// @nodoc
@@ -915,7 +901,7 @@ class _$PostsSearchLoadFailureCopyWithImpl<$Res>
       cachedSearchResult == freezed
           ? _value.cachedSearchResult
           : cachedSearchResult // ignore: cast_nullable_to_non_nullable
-              as UnmodifiableListView<ServicePost>,
+              as UnmodifiableListView<Post>,
     ));
   }
 }
@@ -928,7 +914,7 @@ class _$PostsSearchLoadFailure implements PostsSearchLoadFailure {
   @override
   final ServerException error;
   @override
-  final UnmodifiableListView<ServicePost> cachedSearchResult;
+  final UnmodifiableListView<Post> cachedSearchResult;
 
   @override
   String toString() {
@@ -962,11 +948,10 @@ class _$PostsSearchLoadFailure implements PostsSearchLoadFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() inProgress,
-    required TResult Function(
-            UnmodifiableListView<ServicePost> postsSearchResult)
+    required TResult Function(UnmodifiableListView<Post> postsSearchResult)
         loadSuccess,
     required TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)
+            UnmodifiableListView<Post> cachedSearchResult)
         loadFailure,
   }) {
     return loadFailure(error, cachedSearchResult);
@@ -977,10 +962,9 @@ class _$PostsSearchLoadFailure implements PostsSearchLoadFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
   }) {
     return loadFailure?.call(error, cachedSearchResult);
@@ -991,10 +975,9 @@ class _$PostsSearchLoadFailure implements PostsSearchLoadFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? inProgress,
-    TResult Function(UnmodifiableListView<ServicePost> postsSearchResult)?
-        loadSuccess,
+    TResult Function(UnmodifiableListView<Post> postsSearchResult)? loadSuccess,
     TResult Function(ServerException error,
-            UnmodifiableListView<ServicePost> cachedSearchResult)?
+            UnmodifiableListView<Post> cachedSearchResult)?
         loadFailure,
     required TResult orElse(),
   }) {
@@ -1044,11 +1027,10 @@ class _$PostsSearchLoadFailure implements PostsSearchLoadFailure {
 
 abstract class PostsSearchLoadFailure implements PostsSearchState {
   const factory PostsSearchLoadFailure(ServerException error,
-          UnmodifiableListView<ServicePost> cachedSearchResult) =
-      _$PostsSearchLoadFailure;
+      UnmodifiableListView<Post> cachedSearchResult) = _$PostsSearchLoadFailure;
 
   ServerException get error;
-  UnmodifiableListView<ServicePost> get cachedSearchResult;
+  UnmodifiableListView<Post> get cachedSearchResult;
   @JsonKey(ignore: true)
   $PostsSearchLoadFailureCopyWith<PostsSearchLoadFailure> get copyWith =>
       throw _privateConstructorUsedError;

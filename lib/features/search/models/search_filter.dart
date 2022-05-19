@@ -14,6 +14,7 @@ class SearchFilter with _$SearchFilter {
     Set<String>? keywords,
     double? maxCost,
     String? currency,
-    ServiceType? postType,
+    ServiceType? serviceType,
+    Set<JobType>? jobTypes
   }) = _SearchFilter;
 }

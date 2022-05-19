@@ -3,22 +3,22 @@ import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/widgets/custom_dropdown/custom_drop_down.dart';
 import 'package:flutter/material.dart' hide DropdownButtonFormField;
 
-class PostTypeDropdownButtonFormField extends StatefulWidget {
-  final Function(ServiceType? postType) onSave;
+class ServiceTypeDropdownButtonFormField extends StatefulWidget {
+  final Function(ServiceType? serviceType) onSave;
 
-  const PostTypeDropdownButtonFormField({
+  const ServiceTypeDropdownButtonFormField({
     Key? key,
     required this.onSave,
   }) : super(key: key);
 
   @override
-  State<PostTypeDropdownButtonFormField> createState() =>
-      _PostTypeDropdownButtonFormFieldState();
+  State<ServiceTypeDropdownButtonFormField> createState() =>
+      _ServiceTypeDropdownButtonFormFieldState();
 }
 
-class _PostTypeDropdownButtonFormFieldState
-    extends State<PostTypeDropdownButtonFormField> {
-    var _postType = 'ALL';
+class _ServiceTypeDropdownButtonFormFieldState
+    extends State<ServiceTypeDropdownButtonFormField> {
+    var _serviceType = 'ALL';
   @override
   Widget build(BuildContext context) {
     final _onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
@@ -28,7 +28,7 @@ class _PostTypeDropdownButtonFormFieldState
         fillColor: _onPrimaryColor,
       ),
       iconEnabledColor: Colors.black,
-      value: _postType,
+      value: _serviceType,
       items: [
         DropdownMenuItem<String>(
           child: Text(context.loc.all),
@@ -43,17 +43,17 @@ class _PostTypeDropdownButtonFormFieldState
           value: ServiceType.offer.name,
         )
       ],
-      onSaved: (postType) {
-        if (postType == 'ALL') {
+      onSaved: (serviceType) {
+        if (serviceType == 'ALL') {
           widget.onSave(null);
           return;
         }
         widget.onSave(
-            ServiceType.values.firstWhere((element) => element.name == postType));
+            ServiceType.values.firstWhere((element) => element.name == serviceType));
       },
-      onChanged: (postType) {
+      onChanged: (serviceType) {
         setState(() {
-          _postType = postType ?? 'ALL';
+          _serviceType = serviceType ?? 'ALL';
         });
       },
     );

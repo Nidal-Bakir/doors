@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
-import 'package:doors/core/models/service_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:doors/features/search/models/search_filter.dart';
-import 'package:doors/features/search/posts_search/repository/posts_search_repository.dart';
+import 'package:doors/features/search/repository/posts_search_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -12,7 +13,8 @@ part 'posts_search_state.dart';
 
 class PostsSearchBloc extends Bloc<PostsSearchEvent, PostsSearchState> {
   final PostsSearchRepository _postsSearchRepository;
-  PostsSearchBloc(this._postsSearchRepository)
+  final PostsViewFilter postsTypeToSearch;
+  PostsSearchBloc(this._postsSearchRepository, this.postsTypeToSearch)
       : super(const PostsSearchInitial()) {
     on<PostsSearchEvent>((event, emit) async {
       await event.map(
@@ -42,8 +44,10 @@ class PostsSearchBloc extends Bloc<PostsSearchEvent, PostsSearchState> {
     }
     emit(const PostsSearchInProgress());
 
-    final searchResult =
-        await _postsSearchRepository.searchPosts(searchFilter: searchFilter);
+    final searchResult = await _postsSearchRepository.searchPosts(
+      searchFilter: searchFilter,
+      postsTypeToSearch: postsTypeToSearch,
+    );
 
     searchResult.fold(
         (errorWithData) => emit(

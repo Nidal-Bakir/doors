@@ -167,6 +167,7 @@
   "not_valid_keywords": "Not valid keywords",
   "at_lest_one_cost_range": "At lest one cost range",
   "search_for_service": "Search for service . . . .",
+  "search_for_jobs": "Search for jobs . . . .",
   "set_a_location_first": "Set a location first",
   "not_valid_cost": "Not valid cost",
   "apply": "APPLY",
@@ -203,5 +204,6 @@
   "hybrid": "Hybrid",
   "services": "Services",
   "jobs": "Jobs",
-  "job_offers": "Job offers"
+  "job_offers": "Job offers",
+  "job_type_filter": "Job type filter"
 }

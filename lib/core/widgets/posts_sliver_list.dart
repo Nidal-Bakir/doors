@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_card_slide_transition.dart';
@@ -33,7 +34,7 @@ class PostsSliverList extends StatelessWidget {
               postDescription: _post.postDescription,
               postHumanReadableLocation: _post.postHumanReadableLocation,
               postImage: _post.postImage,
-              postKeywords: _keywords(_post),
+              postKeywords: _keywords(_post, context),
               postLocation: _post.postLocation,
               postTitle: _post.postTitle,
             ),
@@ -44,9 +45,14 @@ class PostsSliverList extends StatelessWidget {
     );
   }
 
-  Set<String> _keywords(Post _post) => _post is ServicePost
-      ? _post.postKeywords
-      : (_post as JobPost).jobTypes.map((e) => e.name).toSet();
+  Set<String> _keywords(Post post, BuildContext context) {
+    if (post is ServicePost) {
+      return post.postKeywords;
+    } else if (post is JobPost) {
+      return post.jobTypes.map((e) => e.localizedJobType(context)).toSet();
+    }
+    return {};
+  }
 
   String? _postCostCurrency(Post _post) =>
       _post is ServicePost ? _post.postCostCurrency : null;
