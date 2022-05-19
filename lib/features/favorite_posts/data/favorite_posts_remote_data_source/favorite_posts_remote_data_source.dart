@@ -1,8 +1,11 @@
 import 'package:doors/core/config/global_config.dart';
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/job_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -11,29 +14,57 @@ abstract class FavoritePostsRemoteDataSource {
   /// Get a list of user favorite posts.
   ///
   /// [amountToSkip]: For pagination, where it's the count of the current
-  /// loaded favorite posts
-  ///
+  /// loaded favorite posts.
+  /// 
+  /// [viewFilter]: favorite posts type {services | jobs}
+  /// 
   /// Returns a UnmodifiableList of favorite posts
   ///
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
   /// * [AnonymousException] if the user is Anonymous user
-  Future<UnmodifiableListView<ServicePost>> getFavoritePosts(int amountToSkip);
+  Future<UnmodifiableListView<Post>> getFavoritePosts(
+    int amountToSkip,
+    PostsViewFilter viewFilter,
+  );
 }
 
 class FavoritePostsRemoteDataSourceImpl extends FavoritePostsRemoteDataSource {
   @override
-  Future<UnmodifiableListView<ServicePost>> getFavoritePosts(int amountToSkip) async {
+  Future<UnmodifiableListView<Post>> getFavoritePosts(
+    int amountToSkip,
+    PostsViewFilter viewFilter,
+  ) async {
     final _currentUser = (await ParseUser.currentUser()) as User;
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException(
           'Anonymous user can not have favorite posts');
     }
 
-    final userFavoritePostsQuery = QueryBuilder.name(ServicePost.keyClassName)
+    var _className = ServicePost.keyClassName;
+    switch (viewFilter) {
+      case PostsViewFilter.services:
+        _className = ServicePost.keyClassName;
+        break;
+      case PostsViewFilter.jobs:
+        _className = JobPost.keyClassName;
+        break;
+    }
+
+    var _relationFieldName = User.keyFavoriteServicePosts;
+    switch (viewFilter) {
+      case PostsViewFilter.services:
+        _relationFieldName = User.keyFavoriteServicePosts;
+        break;
+      case PostsViewFilter.jobs:
+        _relationFieldName = User.keyFavoriteJobPosts;
+        break;
+    }
+
+    final userFavoritePostsQuery = QueryBuilder.name(_className)
       ..whereRelatedTo(
-          User.keyFavoriteServicePosts, User.keyUserClassName, _currentUser.userId)
-      ..includeObject([ServicePost.keyAuthor])
+          _relationFieldName, User.keyUserClassName, _currentUser.userId)
+      ..includeObject([Post.keyAuthor])
       ..excludeKeys(User.keysToExcludeFromQueriesRelatedToUser())
       ..setAmountToSkip(amountToSkip)
       ..setLimit(GlobalConfig.amountOfResultPeerRequest);
@@ -48,7 +79,7 @@ class FavoritePostsRemoteDataSourceImpl extends FavoritePostsRemoteDataSource {
         listOfFavoritePostsResponse.error == null &&
         listOfFavoritePostsResponse.result != null) {
       return UnmodifiableListView(
-        List<ServicePost>.from(
+        List<Post>.from(
           listOfFavoritePostsResponse.results!,
         ),
       );

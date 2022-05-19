@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/exception_base.dart';
-import 'package:doors/core/models/service_post.dart';
+import 'package:doors/core/models/post.dart';
 import 'package:doors/features/favorite_posts/repository/favorite_posts_repository.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,8 +14,12 @@ part 'favorite_posts_bloc.freezed.dart';
 class FavoritePostsBloc extends Bloc<FavoritePostsEvent, FavoritePostsState> {
   final FavoritePostsRepository _favoritePostsRepository;
   final ManagePostBloc _managePostBloc;
-  FavoritePostsBloc(this._favoritePostsRepository, this._managePostBloc)
-      : super(const FavoritePostsInProgress()) {
+  final PostsViewFilter viewFilter;
+  FavoritePostsBloc(
+    this._favoritePostsRepository,
+    this._managePostBloc,
+    this.viewFilter,
+  ) : super(const FavoritePostsInProgress()) {
     on<FavoritePostsEvent>((event, emit) async {
       await event.map(
         loaded: (event) async => await _onFavoritePostsLoaded(event, emit),
@@ -38,7 +43,7 @@ class FavoritePostsBloc extends Bloc<FavoritePostsEvent, FavoritePostsState> {
 
   Future<void> _onFavoritePostsRefreshed(
       FavoritePostsRefreshed event, Emitter<FavoritePostsState> emit) async {
-    await _populateFavoritePosts(true, emit);
+    await _populateFavoritePosts(true, emit,);
   }
 
   Future<void> _populateFavoritePosts(
@@ -48,7 +53,9 @@ class FavoritePostsBloc extends Bloc<FavoritePostsEvent, FavoritePostsState> {
     emit(const FavoritePostsInProgress());
 
     final favoritePostsResult = await _favoritePostsRepository.getFavoritePosts(
-        fullRefresh: fullRefresh);
+      fullRefresh: fullRefresh,
+      viewFilter: viewFilter,
+    );
     favoritePostsResult.fold(
         (errorAndCachedFavoritePosts) => emit(
               FavoritePostsLoadFailure(

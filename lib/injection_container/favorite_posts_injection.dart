@@ -1,3 +1,4 @@
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/features/favorite_posts/data/favorite_posts_local_data_source/favorite_posts_local_data_source.dart';
 import 'package:doors/features/favorite_posts/data/favorite_posts_remote_data_source/favorite_posts_remote_data_source.dart';
 import 'package:doors/features/favorite_posts/presentation/managers/favorite_posts_bloc.dart';
@@ -8,10 +9,11 @@ import 'package:get_it/get_it.dart';
 final di = GetIt.I;
 void favoritePostsInit() {
   // blocs
-  di.registerFactoryParam<FavoritePostsBloc, ManagePostBloc, void>(
-    (managePostBloc, _) => FavoritePostsBloc(
+  di.registerFactoryParam<FavoritePostsBloc, ManagePostBloc, PostsViewFilter>(
+    (managePostBloc, viewFilter) => FavoritePostsBloc(
       di.get(),
       managePostBloc,
+      viewFilter,
     ),
   );
 

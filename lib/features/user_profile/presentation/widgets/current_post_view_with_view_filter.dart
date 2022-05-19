@@ -2,17 +2,17 @@ import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/model/user.dart';
 import 'package:doors/core/utils/typedef/new_types.dart';
-import 'package:doors/core/widgets/custom_dropdown/custom_drop_down.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
+import 'package:doors/core/widgets/posts_view_filter_dropdown_button.dart';
 import 'package:flutter/material.dart';
 
-class CurrentPostsViewWithViewFilter extends StatelessWidget {
+class CurrentPostsViewLabelWithPostsViewFilter extends StatelessWidget {
   final String currentUserId;
   final User visitedUser;
   final PostsViewFilter currentPostsViewFilter;
 
   final VoidCallbackWithParam<PostsViewFilter> onViewChange;
-  const CurrentPostsViewWithViewFilter({
+  const CurrentPostsViewLabelWithPostsViewFilter({
     Key? key,
     required this.currentUserId,
     required this.onViewChange,
@@ -56,22 +56,9 @@ class CurrentPostsViewWithViewFilter extends StatelessWidget {
             ),
             if (visitedUser.isCompanyAccount)
               Flexible(
-                flex: 1,
-                child: CustomDropdownButtonFormField<PostsViewFilter>(
-                  value: currentPostsViewFilter,
-                  items: [
-                    DropdownMenuItem(
-                      child: Text(context.loc.services),
-                      value: PostsViewFilter.services,
-                    ),
-                    DropdownMenuItem(
-                      child: Text(context.loc.jobs),
-                      value: PostsViewFilter.jobs,
-                    ),
-                  ],
-                  onChanged: (postsView) {
-                    onViewChange(postsView!);
-                  },
+                child: PostsViewFilterDropdownButton(
+                  currentPostsViewFilter: currentPostsViewFilter,
+                  onViewChange: onViewChange,
                 ),
               )
           ],

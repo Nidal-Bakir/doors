@@ -171,7 +171,9 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
         User.keyFavoriteJobPosts,
         User.keyPaypalEmail,
         User.keyUserServicePosts,
-        User.keyCompanyJobPosts
+        User.keyCompanyJobPosts,
+        keyVarPassword,
+        keyVarAuthData
       ];
 
   /// Get new user with (ALL) field set to null except objectId and profileImage is the same.

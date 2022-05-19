@@ -5,9 +5,9 @@ class FavoritePostsState with _$FavoritePostsState {
   const factory FavoritePostsState.inProgress() = FavoritePostsInProgress;
 
   const factory FavoritePostsState.loadSuccess(
-      UnmodifiableListView<ServicePost> favoritePosts) = FavoritePostsLoadSuccess;
+      UnmodifiableListView<Post> favoritePosts) = FavoritePostsLoadSuccess;
 
   const factory FavoritePostsState.loadFailure(
-          ExceptionBase error, UnmodifiableListView<ServicePost> cachedRecentPosts) =
+          ExceptionBase error, UnmodifiableListView<Post> cachedRecentPosts) =
       FavoritePostsLoadFailure;
 }

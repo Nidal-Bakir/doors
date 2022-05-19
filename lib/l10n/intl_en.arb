@@ -112,6 +112,8 @@
   "offered_service": "Offered services",
   "need_service": "Needed services",
   "favorite_posts": "Favorite posts",
+  "favorite_service": "Favorite services",
+  "favorite_jobs": "Favorite jobs",
   "report_this_post": "Report this post",
   "delete_this_post": "Delete this post",
   "delete": "Delete",
