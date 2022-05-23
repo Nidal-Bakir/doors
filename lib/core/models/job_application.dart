@@ -1,11 +1,12 @@
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/cloneable.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class JobApplication extends ParseObject
     with EquatableMixin
-    implements ParseCloneable {
+    implements ParseCloneable,Cloneable {
   JobApplication() : super.clone(keyClassName);
 
   JobApplication.clone(Map map) : this();
@@ -34,6 +35,7 @@ class JobApplication extends ParseObject
   DateTime get applicationCreationDate =>
       get<DateTime>(keyApplicationCreationDate) as DateTime;
 
+  @override
   JobApplication getShallowCopy() {
     return JobApplication()
       ..objectId = objectId

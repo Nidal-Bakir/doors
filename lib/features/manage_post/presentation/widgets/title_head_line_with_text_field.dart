@@ -15,6 +15,7 @@ class TitleHeadLineWithTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         LineWithTextOnRow(text: context.loc.title),
         TextFormField(
@@ -24,7 +25,7 @@ class TitleHeadLineWithTextField extends StatelessWidget {
           enableSuggestions: true,
           keyboardType: TextInputType.name,
           validator: (title) => isValidTitle(title, context),
-          onSaved: (title)=>onSave(title!),
+          onSaved: (title) => onSave(title!),
         ),
       ],
     );

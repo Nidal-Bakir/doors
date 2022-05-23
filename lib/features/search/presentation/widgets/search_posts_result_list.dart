@@ -36,6 +36,7 @@ class _SearchPostsResultListState extends State<SearchPostsResultList> {
           },
         ),
         child: CustomScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           slivers: [
             // do not remove the empty SliverToBoxAdapter will case view port error
             // its looks like a bug in the frameWork

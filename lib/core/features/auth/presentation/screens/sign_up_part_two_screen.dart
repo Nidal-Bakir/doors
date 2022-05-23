@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/widgets/bio_head_line_with_text_field.dart';
 import 'package:doors/core/features/auth/presentation/widgets/profile_image.dart';

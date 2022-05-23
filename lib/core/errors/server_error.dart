@@ -192,6 +192,10 @@ class ParseSuccessResponseWithNoResults extends ParseException {
 /// ---------------------------------------------------------------------------
 /// |   1006  | Unable to delete post image from the server                   |
 /// ---------------------------------------------------------------------------
+/// |   1007  | Error creating job post the author not Subscribed             |
+/// ---------------------------------------------------------------------------
+/// |   1008  | Error creating job post the author accountType is not company |
+/// ---------------------------------------------------------------------------
 /// |  1010  | Unable to login because the user account has been suspended    |
 /// ---------------------------------------------------------------------------
 class ParseCloudCodeCustomException extends ParseException {
@@ -211,6 +215,12 @@ class ParseCloudCodeCustomException extends ParseException {
         return ErrorWhileProcessingClientPayment.fromParseError(parseError);
       case 1006:
         return ErrorWhileDeletingImageFromTheServer.fromParseError(parseError);
+      case 1007:
+        return ErrorCreatingJobPostTheAuthorNotSubscribed.fromParseError(
+            parseError);
+      case 1008:
+        return ErrorCreatingJobPostTheAuthorAccountTypeNotCompany
+            .fromParseError(parseError);
       case 1010:
         return SuspendedAccount.fromParseError(parseError);
     }
@@ -281,5 +291,29 @@ class ErrorWhileDeletingImageFromTheServer
   @override
   String getLocalMessageError(BuildContext context) {
     return context.loc.an_unexpected_error_occurred;
+  }
+}
+
+class ErrorCreatingJobPostTheAuthorNotSubscribed
+    extends ParseCloudCodeCustomException {
+  ErrorCreatingJobPostTheAuthorNotSubscribed.fromParseError(
+      ParseError parseError)
+      : super.fromParseError(parseError);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.you_are_currently_not_subscribed_to_any_plan;
+  }
+}
+
+class ErrorCreatingJobPostTheAuthorAccountTypeNotCompany
+    extends ParseCloudCodeCustomException {
+  ErrorCreatingJobPostTheAuthorAccountTypeNotCompany.fromParseError(
+      ParseError parseError)
+      : super.fromParseError(parseError);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.only_company_accounts_can_create_job_posts;
   }
 }

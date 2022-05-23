@@ -1,5 +1,5 @@
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
 import 'package:doors/core/widgets/primary_color_background_for_scaffold.dart';

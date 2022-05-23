@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:doors/core/errors/server_error.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+
 
 /// Save the new image to parse server
 ///
@@ -17,7 +20,7 @@ Future<void> saveNewImageToParseServer(ParseFile newImage) async {
 }
 
 /// Delete the [oldImage] if the user delete or replace the [currentImage].
-/// 
+///
 /// [objectId]: The object id that's holding the image.
 ///
 /// [className]: The name of the class which the object holding the image live in.

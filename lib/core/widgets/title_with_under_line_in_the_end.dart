@@ -11,12 +11,13 @@ class TitleWithUnderLineInTheEnd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final _theme = Theme.of(context);
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.headline4,
+          style: _theme.textTheme.headline4,
         ),
         Positioned.directional(
           textDirection: Directionality.of(context),
@@ -26,7 +27,7 @@ class TitleWithUnderLineInTheEnd extends StatelessWidget {
             alignment: Alignment.bottomRight,
             height: 3,
             width: numberOfUnderLinedChars * 15,
-            color: Theme.of(context).colorScheme.primary,
+            color: _theme.colorScheme.primary,
           ),
         ),
       ],

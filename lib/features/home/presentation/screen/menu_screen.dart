@@ -1,6 +1,6 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:doors/core/features/subscription/presentation/screens/subscription_screen.dart';

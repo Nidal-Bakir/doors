@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/post/presentation/widgets/keywords_row.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_cost.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
@@ -122,12 +122,13 @@ class PostCardItem extends StatelessWidget {
                       Flexible(
                         flex: 1,
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             if (postKeywords?.isNotEmpty ?? false)
                               KeywordsRow(
-                                key: UniqueKey(),
+                                key: Key(postKeywords!.join('')),
                                 isCardItemView: true,
                                 keywords: postKeywords!,
                                 limit: 3,

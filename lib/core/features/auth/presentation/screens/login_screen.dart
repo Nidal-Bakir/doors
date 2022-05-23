@@ -1,6 +1,6 @@
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/screens/suspended_screen.dart';
 import 'package:doors/core/features/auth/presentation/widgets/auth_error_text.dart';

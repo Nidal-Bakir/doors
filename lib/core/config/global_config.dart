@@ -3,5 +3,5 @@ class GlobalConfig {
   static const int amountOfResultPeerRequest = 20;
 
   /// the quality of the image, ranging from 0-100 where 100 is the original/max quality.
-  static const int imageQualityForImagePicker = 70;
+  static const int imageQualityForImagePicker = 100;
 }

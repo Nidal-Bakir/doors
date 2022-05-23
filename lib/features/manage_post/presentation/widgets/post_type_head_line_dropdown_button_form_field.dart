@@ -24,6 +24,7 @@ class _PostTypeHeadLineWithDropdownButtonFormFieldState
   @override
   Widget build(BuildContext context) {
     return Column(
+       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         LineWithTextOnRow(text: context.loc.type),
         CustomDropdownButtonFormField<ServiceType>(

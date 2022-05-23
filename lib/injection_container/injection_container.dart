@@ -1,9 +1,11 @@
 import 'package:doors/injection_container/auth_injection.dart';
 import 'package:doors/injection_container/favorite_posts_injection.dart';
+import 'package:doors/injection_container/file_uploader.dart';
 import 'package:doors/injection_container/manage_post_injection.dart';
 import 'package:doors/injection_container/post_injection.dart';
 import 'package:doors/injection_container/recent_posts_injection.dart';
 import 'package:doors/injection_container/search_injection.dart';
+import 'package:doors/injection_container/sned_job_application.dart';
 import 'package:doors/injection_container/subscription_injection.dart';
 import 'package:doors/injection_container/parse_init.dart';
 import 'package:doors/injection_container/security_error_flow_injection.dart';
@@ -49,4 +51,10 @@ Future<void> init({bool forRestart = false}) async {
 
   // user profile init
   userProfileInit();
+
+  // file uploader init
+  fileUploaderInit();
+
+  // send job application init
+  sendJobApplicationInit();
 }

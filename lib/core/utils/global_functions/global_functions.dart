@@ -1,4 +1,5 @@
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
+import 'dart:math';
 
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/config/global_config.dart';
@@ -18,6 +19,15 @@ String currencyCode(BuildContext context) {
   Locale locale = Localizations.localeOf(context);
   var format = NumberFormat.simpleCurrency(locale: locale.toString());
   return format.currencyName ?? 'USD';
+}
+
+Future<String> getFileSize(String filepath, int decimals) async {
+  var file = File(filepath);
+  int bytes = await file.length();
+  if (bytes <= 0) return "0 B";
+  const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  var i = (log(bytes) / log(1024)).floor();
+  return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) + ' ' + suffixes[i];
 }
 
 /// there is more posts to load if the remainder of loaded posts with

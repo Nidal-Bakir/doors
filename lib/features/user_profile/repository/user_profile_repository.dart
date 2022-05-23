@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/exception_base.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/features/user_profile/data/user_profile_remote_data_source/user_profile_remote_data_source.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 

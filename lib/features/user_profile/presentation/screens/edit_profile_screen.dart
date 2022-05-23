@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/user_location/models/user_location.dart';
 import 'package:doors/core/features/user_location/presentation/widgets/user_location_widget.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
@@ -63,11 +63,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircularProfileImageWithImagePicker(
-                          initProfileImage: _currentUserProfile.profileImage,
-                          onProfileImageSelected: _onProfileImageSelected,
+                        Align(alignment: Alignment.center,
+                          child: CircularProfileImageWithImagePicker(
+                            initProfileImage: _currentUserProfile.profileImage,
+                            onProfileImageSelected: _onProfileImageSelected,
+                          ),
                         ),
                         const SizedBox16H(),
                         LineWithTextOnRow(text: context.loc.name),

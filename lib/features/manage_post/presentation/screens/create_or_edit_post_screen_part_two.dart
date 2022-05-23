@@ -42,7 +42,8 @@ class _CreateOrEditPostScreenPartTwoState
   late String? _currency = widget.post.postCostCurrency;
   late String? _humanReadableLocation =
       widget.post.get(ServicePost.keyPostHumanReadableLocation);
-  late ParseGeoPoint? _userGeoLocation = widget.post.get(ServicePost.keyPostLocation);
+  late ParseGeoPoint? _userGeoLocation =
+      widget.post.get(ServicePost.keyPostLocation);
 
   @override
   void initState() {
@@ -82,7 +83,11 @@ class _CreateOrEditPostScreenPartTwoState
                           const SizedBox(
                             height: 20,
                           ),
-                          LineWithTextOnRow(text: context.loc.location),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child:
+                                LineWithTextOnRow(text: context.loc.location),
+                          ),
                           UserLocationWidget(
                             inputDecoration: InputDecoration(
                               hintText: context.loc.enter_your_city_name,

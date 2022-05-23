@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:doors/core/enums/enums.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/user_posts/presentation/managers/user_posts_bloc/user_posts_bloc.dart';
 import 'package:doors/core/features/user_posts/presentation/widgets/user_posts_error_handler_sliver_fill_remaining.dart';

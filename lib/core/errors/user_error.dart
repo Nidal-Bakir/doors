@@ -60,6 +60,23 @@ class UnSubscribedUser extends UserException {
   }
 }
 
+class ParseFileNotSavedToTheServer extends UserException {
+  const ParseFileNotSavedToTheServer(String message) : super(message);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc
+        .an_unexpected_error_occurred_your_cv_file_not_uploaded_successfully;
+  }
+}
+
+class UserAccountCanNotCreateJobPosts extends UserException {
+  const UserAccountCanNotCreateJobPosts(String message) : super(message);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.only_company_accounts_can_create_job_posts;
+  }
+}
+
 abstract class LocationException extends UserException {
   const LocationException(String message) : super(message);
 }
@@ -78,4 +95,29 @@ class PermanentlyDeniedLocationPermissionsException extends LocationException {
   const PermanentlyDeniedLocationPermissionsException()
       : super(
             'Location permissions are permanently denied, we cannot request permissions.');
+}
+
+abstract class StoragePermissionsException extends UserException {
+  const StoragePermissionsException(String message) : super(message);
+}
+
+class DeniedStoragePermissionsException extends StoragePermissionsException {
+  const DeniedStoragePermissionsException()
+      : super('storage permissions are denied');
+}
+
+class PermanentlyDeniedStoragePermissionsException
+    extends StoragePermissionsException {
+  const PermanentlyDeniedStoragePermissionsException()
+      : super(
+          'Storage permissions are permanently denied, we cannot request permissions.',
+        );
+}
+
+class UnknownError extends UserException {
+  const UnknownError(String message) : super(message);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.an_unexpected_error_occurred;
+  }
 }

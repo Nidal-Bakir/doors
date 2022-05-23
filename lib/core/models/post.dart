@@ -1,14 +1,13 @@
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/cloneable.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class Post extends ParseObject
     with EquatableMixin
-    implements ParseCloneable {
-
+    implements ParseCloneable, Cloneable {
   final String className;
   Post(this.className) : super.clone(className);
-  
 
   static const keyPostId = keyVarObjectId;
   static const keyPostTitle = 'title';
@@ -63,6 +62,7 @@ abstract class Post extends ParseObject
   User get author => get<User>(keyAuthor) as User;
   set author(User author) => set<User>(keyAuthor, author);
 
+  @override
   Post getShallowCopy();
 
   @override

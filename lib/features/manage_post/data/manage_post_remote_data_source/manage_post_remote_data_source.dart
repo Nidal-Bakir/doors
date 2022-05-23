@@ -1,6 +1,6 @@
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/post.dart';
 import 'package:doors/core/utils/parse_util_global_functions/parse_util_global_function.dart';
@@ -15,8 +15,10 @@ abstract class ManagePostRemoteDataSource {
   ///
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
-  /// * [UnSubscribedUser] if the company trying to create new job offer and not Subscribed to any plan.
-  /// * [AnonymousException] if the user is Anonymous user
+  /// * [UserException]:
+  ///   * [UnSubscribedUser] if the company trying to create new job offer and not Subscribed to any plan.
+  ///   * [UserAccountCanNotCreateJobPosts] if the normal user trying to create job post
+  ///   * [AnonymousException] if the user is Anonymous user
   Future<void> createPost(Post post);
 
   /// Edit a post.
@@ -28,8 +30,10 @@ abstract class ManagePostRemoteDataSource {
   ///
   /// Throws [ExceptionBase] :
   /// * [ServerException] in case of connection error or parse error.
-  /// * [AnonymousException] if the user is Anonymous user
-  /// * [ForbiddenOperation] if the user is trying to edit other users posts,
+  /// * [UserException]:
+  ///   * [AnonymousException] if the user is Anonymous user
+  ///   * [ForbiddenOperation] if the user is trying to edit other users posts,
+  /// OR normal user is trying to edit JobPost,
   /// that should not happened, but just in case!
   Future<void> editPost(Post post, ParseFile? oldPostImage);
 
@@ -38,9 +42,11 @@ abstract class ManagePostRemoteDataSource {
   /// Returns void to indicate that the delete operation was successful.
   ///
   /// Throws [ExceptionBase] :
-  /// * [ServerException] in case of connection error or parse error.
-  /// * [AnonymousException] if the user is Anonymous user
-  /// * [ForbiddenOperation] if the user is trying to delete other users posts,
+  /// * [ServerException]: in case of connection error or parse error.
+  /// * [UserException]:
+  ///   * [AnonymousException] if the user is Anonymous user
+  ///   * [ForbiddenOperation] if the user is trying to delete other users posts,
+  /// OR normal user is trying to delete JobPost,
   /// that should not happened, but just in case!
   Future<void> deletePost(Post post);
 }
@@ -54,12 +60,18 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException('Anonymous user can not create posts');
     }
-    if (_currentUser.isCompanyAccount &&
-        post is JobPost &&
-        !_currentUser.isSubscribed) {
-      throw const UnSubscribedUser(
-        'UnSubscribed company can not create job offers',
-      );
+
+    if (post is JobPost) {
+      if (_currentUser.isNormalUserAccount) {
+        throw const UserAccountCanNotCreateJobPosts(
+            'Normal users can not create job posts');
+      }
+
+      if (!_currentUser.isSubscribed) {
+        throw const UnSubscribedUser(
+          'UnSubscribed company can not create job offers',
+        );
+      }
     }
 
     if (post.postImage != null) {
@@ -81,14 +93,23 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
   @override
   Future<void> editPost(Post post, ParseFile? oldPostImage) async {
     assert(post.objectId != null);
+
     final _currentUser = (await ParseUser.currentUser()) as User;
+
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException('Anonymous user can not edit posts');
     }
+
     if (post.author.userId != _currentUser.userId) {
       throw const ForbiddenOperation(
           'the user can not edit other users posts!!');
     }
+
+    if (post is JobPost && _currentUser.isNormalUserAccount) {
+      throw const ForbiddenOperation(
+          'the normal user can not edit job posts they do not have one in first place!');
+    }
+
     await deleteOldImageIfTheCurrentImageChanged(
       oldImage: oldPostImage,
       currentImage: post.postImage,
@@ -116,14 +137,23 @@ class ManagePostRemoteDataSourceImpl extends ManagePostRemoteDataSource {
   @override
   Future<void> deletePost(Post post) async {
     assert(post.objectId != null);
+
     final _currentUser = (await ParseUser.currentUser()) as User;
+
     if (_currentUser.isAnonymousAccount) {
       throw const AnonymousException('Anonymous user can not delete posts');
     }
+
     if (post.author.userId != _currentUser.userId) {
       throw const ForbiddenOperation(
           'the user can not delete other users posts!!');
     }
+
+    if (post is JobPost && _currentUser.isNormalUserAccount) {
+      throw const ForbiddenOperation(
+          'the normal user can not delete job posts they do not have one in first place!');
+    }
+
     if (post.postImage != null) {
       await deleteImageFromParserServer(
         objectId: post.objectId!,

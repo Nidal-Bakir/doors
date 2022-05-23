@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:doors/core/config/global_config.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';

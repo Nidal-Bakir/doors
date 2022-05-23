@@ -1,6 +1,6 @@
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/screens/sign_up_part_two_screen.dart';
 import 'package:doors/core/widgets/email_text_field.dart';
 import 'package:doors/core/widgets/name_text_field.dart';

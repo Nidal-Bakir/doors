@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/post/model/post_rate.dart';
 import 'package:doors/core/features/post/model/post_report.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';

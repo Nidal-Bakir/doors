@@ -9,6 +9,7 @@ class NetworkImageFromParseFile extends StatelessWidget {
   final double? width;
   final int? cacheHeight;
   final int? cacheWidth;
+  final Color? circularProgressIndicatorColor;
   final bool withHeroAnimation;
 
   const NetworkImageFromParseFile({
@@ -20,6 +21,7 @@ class NetworkImageFromParseFile extends StatelessWidget {
     this.cacheHeight,
     this.cacheWidth,
     this.withHeroAnimation = true,
+    this.circularProgressIndicatorColor,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class NetworkImageFromParseFile extends StatelessWidget {
         return Hero(
           tag: image!.url!,
           child: _NetworkImage(
+            circularProgressIndicatorColor: circularProgressIndicatorColor,
             image: image,
             boxFit: boxFit,
             cacheHeight: cacheHeight,
@@ -40,6 +43,7 @@ class NetworkImageFromParseFile extends StatelessWidget {
       } else {
         return _NetworkImage(
           image: image,
+          circularProgressIndicatorColor: circularProgressIndicatorColor,
           boxFit: boxFit,
           cacheHeight: cacheHeight,
           cacheWidth: cacheWidth,
@@ -54,6 +58,7 @@ class NetworkImageFromParseFile extends StatelessWidget {
 }
 
 class _NetworkImage extends StatelessWidget {
+  final Color? circularProgressIndicatorColor;
   final ParseFile? image;
   final BoxFit boxFit;
   final double? height;
@@ -67,42 +72,46 @@ class _NetworkImage extends StatelessWidget {
       this.height,
       this.width,
       this.cacheHeight,
-      this.cacheWidth})
+      this.cacheWidth,
+      this.circularProgressIndicatorColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(image!.url!,
-        fit: boxFit,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) {
-            return child;
-          }
-          return Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded /
-                      loadingProgress.expectedTotalBytes!
-                  : null,
-            ),
-          );
-        },
-        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-          if (wasSynchronouslyLoaded) {
-            return child;
-          }
-          return AnimatedOpacity(
-            child: child,
-            opacity: frame == null ? 0 : 1,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeOut,
-          );
-        },
-        height: height,
-        width: width,
-        cacheHeight: cacheHeight,
-        cacheWidth: cacheWidth,
-        errorBuilder: (_, __, ___) =>
-            NoImageProvided(height: height, width: width));
+    return Image.network(
+      image!.url!,
+      fit: boxFit,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        }
+        return Center(
+          child: CircularProgressIndicator(
+            color: circularProgressIndicatorColor,
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                : null,
+          ),
+        );
+      },
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) {
+          return child;
+        }
+        return AnimatedOpacity(
+          child: child,
+          opacity: frame == null ? 0 : 1,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
+      },
+      height: height,
+      width: width,
+      cacheHeight: cacheHeight,
+      cacheWidth: cacheWidth,
+      errorBuilder: (_, __, ___) =>
+          NoImageProvided(height: height, width: width),
+    );
   }
 }

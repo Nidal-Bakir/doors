@@ -64,7 +64,13 @@ dependencies:
   json_annotation: ^4.4.0
   intl_phone_number_input: ^0.7.0+2
   image_picker: ^0.8.5
+  file_picker: ^4.5.1
   url_launcher: ^6.0.20
+  pdf: ^3.8.0
+  printing: ^5.9.0
+  path_provider: ^2.0.10
+  collection: ^1.15.0
+  permission_handler: ^9.2.0
 
   # bloc
   flutter_bloc: ^8.0.1

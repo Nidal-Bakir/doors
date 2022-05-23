@@ -18,23 +18,23 @@ class PostCost extends StatelessWidget {
   Widget build(BuildContext context) {
     if (maxCost != null && minCost != null) {
       return FittedBox(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             LineWithTextOnRow(
               textStyle: Theme.of(context)
                   .textTheme
                   .subtitle2
                   ?.copyWith(fontFamily: 'Roboto'),
-              text:
-                  '${context.loc.from} $minCost ${currency ?? '\$'}',
+              text: '${context.loc.from} $minCost ${currency ?? '\$'}',
             ),
             LineWithTextOnRow(
               textStyle: Theme.of(context)
                   .textTheme
                   .subtitle2
                   ?.copyWith(fontFamily: 'Roboto'),
-              text:
-                  '${context.loc.to} $maxCost ${currency ?? '\$'}',
+              text: '${context.loc.to} $maxCost ${currency ?? '\$'}',
             ),
           ],
         ),

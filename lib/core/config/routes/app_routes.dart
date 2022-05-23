@@ -1,5 +1,5 @@
 import 'package:doors/core/enums/enums.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/screens/forgat_password_screen.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:doors/core/features/auth/presentation/screens/select_account_type_screen.dart';
@@ -18,6 +18,8 @@ import 'package:doors/features/manage_post/presentation/screens/create_or_edit_j
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
 import 'package:doors/features/search/presentation/screens/posts_search_screen.dart';
+import 'package:doors/features/send_job_application/presentation/screens/congratulations_screen.dart';
+import 'package:doors/features/send_job_application/presentation/screens/send_job_application_screen.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/edit_profile_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
@@ -122,7 +124,20 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           post: settings.arguments as ServicePost,
         ),
       );
+
+    case SendJobApplicationScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => SendJobApplicationScreen(
+          jobPost: settings.arguments as JobPost,
+        ),
+      );
+
+    case CongratulationsScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => const CongratulationsScreen(),
+      );
   }
+
   assert(false, 'Need to implement ${settings.name}');
   return null;
 }
@@ -131,9 +146,10 @@ class SearchScreenFadeTransition extends MaterialPageRoute {
   final PostsViewFilter postsTypeToSearch;
   SearchScreenFadeTransition(this.postsTypeToSearch)
       : super(
-            builder: (_) => PostsSearchScreen(
-                  postsTypeToSearch: postsTypeToSearch,
-                ));
+          builder: (_) => PostsSearchScreen(
+            postsTypeToSearch: postsTypeToSearch,
+          ),
+        );
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {

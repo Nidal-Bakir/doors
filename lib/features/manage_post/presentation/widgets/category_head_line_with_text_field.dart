@@ -15,6 +15,7 @@ class CategoryHeadLineWithTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         LineWithTextOnRow(
           text: context.loc.category,

@@ -4,7 +4,7 @@ import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/features/auth/data/auth_data_source/auth_local_data_source.dart';
 import 'package:doors/core/features/auth/data/auth_data_source/auth_remote_data_source.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 
 class AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;

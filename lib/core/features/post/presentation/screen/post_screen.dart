@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/auth/model/user.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/post/model/post_rate.dart';
 import 'package:doors/core/features/post/model/post_report.dart';
@@ -21,6 +21,7 @@ import 'package:doors/core/widgets/network_image_from_parse_file.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
+import 'package:doors/features/send_job_application/presentation/screens/send_job_application_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -162,6 +163,8 @@ class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
         Positioned.fill(
           child: NetworkImageFromParseFile(
             height: _height,
+            circularProgressIndicatorColor:
+                Theme.of(context).colorScheme.secondary,
             image: currentPost.postImage,
             width: double.infinity,
             cacheHeight: _height.toInt(),
@@ -1098,7 +1101,10 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
                         if (_isServicePost(widget.currentPost)) {
                           // TODO : open chat screen
                         } else {
-                          // TODO: open apply to job screen
+                          Navigator.of(context).pushNamed(
+                            SendJobApplicationScreen.routeName,
+                            arguments: widget.currentPost,
+                          );
                         }
                       },
             label: Text(
