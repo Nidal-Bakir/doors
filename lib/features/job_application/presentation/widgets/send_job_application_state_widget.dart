@@ -1,7 +1,7 @@
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/widgets/sized_box_16_h.dart';
-import 'package:doors/features/send_job_application/presentation/managers/send_job_application_bloc/send_job_application_bloc.dart';
-import 'package:doors/features/send_job_application/presentation/screens/congratulations_screen.dart';
+import 'package:doors/features/job_application/presentation/managers/send_job_application_bloc/send_job_application_bloc.dart';
+import 'package:doors/features/job_application/presentation/screens/congratulations_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

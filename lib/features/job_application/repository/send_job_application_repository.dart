@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/models/job_application.dart';
-import 'package:doors/features/send_job_application/data/send_job_application_remote_data_source/send_job_application_remote_data_source.dart';
+import 'package:doors/features/job_application/data/send_job_application_remote_data_source/send_job_application_remote_data_source.dart';
 
 class SendJobApplicationRepository {
   final SendJobApplicationRemoteDataSource

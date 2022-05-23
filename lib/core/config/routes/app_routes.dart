@@ -18,8 +18,8 @@ import 'package:doors/features/manage_post/presentation/screens/create_or_edit_j
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
 import 'package:doors/features/search/presentation/screens/posts_search_screen.dart';
-import 'package:doors/features/send_job_application/presentation/screens/congratulations_screen.dart';
-import 'package:doors/features/send_job_application/presentation/screens/send_job_application_screen.dart';
+import 'package:doors/features/job_application/presentation/screens/congratulations_screen.dart';
+import 'package:doors/features/job_application/presentation/screens/send_job_application_screen.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/edit_profile_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';

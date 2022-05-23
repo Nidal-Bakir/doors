@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/models/job_application.dart';
-import 'package:doors/features/send_job_application/repository/send_job_application_repository.dart';
+import 'package:doors/features/job_application/repository/send_job_application_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'send_job_application_event.dart';

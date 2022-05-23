@@ -21,7 +21,7 @@ import 'package:doors/core/widgets/network_image_from_parse_file.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
-import 'package:doors/features/send_job_application/presentation/screens/send_job_application_screen.dart';
+import 'package:doors/features/job_application/presentation/screens/send_job_application_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
