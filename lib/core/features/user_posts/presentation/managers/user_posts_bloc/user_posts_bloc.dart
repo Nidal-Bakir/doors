@@ -19,12 +19,15 @@ class UserPostsBloc extends Bloc<UserPostsEvent, UserPostsState> {
     required this.relationFieldName,
   })  : _userPostsRepository = userPostsRepository,
         super(const UserPostsInProgress()) {
-    on<UserPostsEvent>((event, emit) async {
-      await event.map(
-        loaded: (event) async => await _onUserPostsLoaded(event, emit),
-        refreshed: (event) async => await _onUserPostsRefreshed(event, emit),
-      );
+
+    on<UserPostsLoaded>((event, emit) async {
+      await _onUserPostsLoaded(event, emit);
     }, transformer: bloc_concurrency.droppable());
+
+    on<UserPostsRefreshed>((event, emit) async {
+      await _onUserPostsRefreshed(event, emit);
+    }, transformer: bloc_concurrency.restartable());
+
   }
 
   Future<void> _onUserPostsLoaded(

@@ -20,13 +20,13 @@ class FavoritePostsBloc extends Bloc<FavoritePostsEvent, FavoritePostsState> {
     this._managePostBloc,
     this.viewFilter,
   ) : super(const FavoritePostsInProgress()) {
-    on<FavoritePostsEvent>((event, emit) async {
-      await event.map(
-        loaded: (event) async => await _onFavoritePostsLoaded(event, emit),
-        refreshed: (event) async =>
-            await _onFavoritePostsRefreshed(event, emit),
-      );
+    on<FavoritePostsLoaded>((event, emit) async {
+      await _onFavoritePostsLoaded(event, emit);
     }, transformer: bloc_concurrency.droppable());
+
+    on<FavoritePostsRefreshed>((event, emit) async {
+      await _onFavoritePostsRefreshed(event, emit);
+    }, transformer: bloc_concurrency.restartable());
 
     // so the deleted or the edit post will not appear if they loaded locally
     _managePostBloc.stream.listen((event) {
@@ -43,7 +43,10 @@ class FavoritePostsBloc extends Bloc<FavoritePostsEvent, FavoritePostsState> {
 
   Future<void> _onFavoritePostsRefreshed(
       FavoritePostsRefreshed event, Emitter<FavoritePostsState> emit) async {
-    await _populateFavoritePosts(true, emit,);
+    await _populateFavoritePosts(
+      true,
+      emit,
+    );
   }
 
   Future<void> _populateFavoritePosts(

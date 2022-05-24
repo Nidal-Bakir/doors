@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:doors/core/errors/user_error.dart';
-import 'package:doors/core/features/file_uploader/data/file_uploader_local_data_source/file_uploader_local_data_source.dart';
+import 'package:doors/core/features/file_manager/file_uploader/data/file_uploader_local_data_source/file_uploader_local_data_source.dart';
 import 'package:file_picker/file_picker.dart';
 
 class FileUploaderRepository {

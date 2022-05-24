@@ -61,6 +61,10 @@ class CountryCurrency {
           String stringFormatCurrency) =>
       stringFormatCurrency.split(' ')[0];
 
+  static String extractCurrencySymbolFromStringFormat(
+          String stringFormatCurrency) =>
+      stringFormatCurrency.split(' ')[1];
+
   static String toStringFormat(CountryCurrency? countryCurrency) =>
       (countryCurrency?.code ?? 'USD') +
       ' ' +

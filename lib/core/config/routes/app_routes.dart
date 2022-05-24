@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/screens/forgat_password_screen.dart';
@@ -14,6 +16,8 @@ import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
+import 'package:doors/features/job_application/presentation/screens/view_post_job_applications_screen.dart';
+import 'package:doors/features/job_application/presentation/screens/pdf_preview_screen.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
@@ -135,6 +139,20 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case CongratulationsScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => const CongratulationsScreen(),
+      );
+
+    case ViewPostJobApplicationsScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => ViewPostJobApplicationsScreen(
+          jobPost: settings.arguments as JobPost,
+        ),
+      );
+
+    case PdfPreviewScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => PdfPreviewScreen(
+          pdfFile: settings.arguments as File,
+        ),
       );
   }
 

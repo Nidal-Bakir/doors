@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
-import 'package:doors/core/features/file_uploader/repository/file_uploader_repository.dart';
+import 'package:doors/core/features/file_manager/file_uploader/repository/file_uploader_repository.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -34,12 +34,11 @@ class FileUploaderBloc extends Bloc<FileUploaderEvent, FileUploaderState> {
     FileUploaderFileUploaded fileUploaderFileUploaded,
     Emitter<FileUploaderState> emit,
   ) async {
+    String fileSize = '';
     if (fileUploaderFileUploaded.file.file != null) {
-      String fileSize =
-          await getFileSize(fileUploaderFileUploaded.file.file!.path, 1);
-      fileUploaderFileUploaded.file.set('size', fileSize);
+      fileSize = await getFileSize(fileUploaderFileUploaded.file.file!.path, 1);
     }
-    // TODO: rmove this line when new version of pares flutter sdk relesed 
+    // TODO: rmove this line when new version of pares flutter sdk relesed
     // and fixes the dio bug not calling progressCallback
     emit(const FileUploaderUploadInProgress(1, 1));
     await fileUploaderFileUploaded.file.upload(
@@ -49,7 +48,8 @@ class FileUploaderBloc extends Bloc<FileUploaderEvent, FileUploaderState> {
     ).then(
       (ParseResponse uploadResponse) {
         if (uploadResponse.success || uploadResponse.error == null) {
-          emit(FileUploaderUploadSuccess(fileUploaderFileUploaded.file));
+          emit(FileUploaderUploadSuccess(
+              fileUploaderFileUploaded.file, fileSize));
         } else {
           emit(
             FileUploaderUploadFailure(

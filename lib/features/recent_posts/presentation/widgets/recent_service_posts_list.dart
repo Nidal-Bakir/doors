@@ -55,7 +55,7 @@ class _RecentServicePostsListState extends State<RecentServicePostsList> {
                         context.read<RecentServicePostsBloc>();
                     if (_recentServicePostsBloc.state
                             is RecentServicePostsLoadSuccess &&
-                        canGetMorePosts(_servicePostsCount)) {
+                        canLoadMoreData(_servicePostsCount)) {
                       _recentServicePostsBloc
                           .add(const RecentServicePostsLoaded());
                     }

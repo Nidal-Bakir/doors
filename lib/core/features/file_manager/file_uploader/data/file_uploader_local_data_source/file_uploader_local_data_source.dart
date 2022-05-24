@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:doors/core/errors/user_error.dart';
+import 'package:doors/core/utils/permission_checker_service.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 abstract class FileUploaderLocalDataSource {
   /// Open native file manager to select a file.
@@ -26,7 +26,7 @@ class FileUploaderLocalDataSourceImpl extends FileUploaderLocalDataSource {
     List<String>? allowedExtensions,
     FileType? fileType = FileType.any,
   }) async {
-    await _checkStoragePermission();
+    await PermissionCheckerService.checkStoragePermission();
 
     FilePickerResult? selectedFile;
     try {
@@ -48,20 +48,7 @@ class FileUploaderLocalDataSourceImpl extends FileUploaderLocalDataSource {
     return null;
   }
 
-  /// Throws [StoragePermissionsException] in case of permission denied
-  Future<void> _checkStoragePermission() async {
-    PermissionStatus storagePermissionStatus;
-    storagePermissionStatus = await Permission.storage.status;
-    if (storagePermissionStatus.isDenied) {
-      storagePermissionStatus = await Permission.storage.request();
-      if (storagePermissionStatus.isDenied) {
-        throw const DeniedStoragePermissionsException();
-      }
-    }
-    if (storagePermissionStatus.isPermanentlyDenied) {
-      throw const PermanentlyDeniedStoragePermissionsException();
-    }
-  }
+
 
   @override
   Future<void> clearTemporaryFiles() async {

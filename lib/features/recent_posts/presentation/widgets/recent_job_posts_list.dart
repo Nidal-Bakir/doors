@@ -54,7 +54,7 @@ class _RecentJobPostsListState extends State<RecentJobPostsList> {
                         context.read<RecentJobPostsBloc>();
                     if (_recentJobPostsBloc.state
                             is RecentJobPostsLoadSuccess &&
-                        canGetMorePosts(_jobPostsCount)) {
+                        canLoadMoreData(_jobPostsCount)) {
                       _recentJobPostsBloc.add(const RecentJobPostsLoaded());
                     }
                   }),

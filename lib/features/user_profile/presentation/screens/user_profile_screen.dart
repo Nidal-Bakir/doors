@@ -108,7 +108,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         notification: notification,
                         onNotify: () {
                           if (_currentUsedBloc.state is UserPostsLoadSuccess &&
-                              canGetMorePosts(_userPostsCount)) {
+                              canLoadMoreData(_userPostsCount)) {
                             _currentUsedBloc
                                 .add(UserPostsLoaded(_visitedUser.userId));
                           }

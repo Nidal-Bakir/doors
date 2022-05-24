@@ -6,7 +6,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class JobApplication extends ParseObject
     with EquatableMixin
-    implements ParseCloneable,Cloneable {
+    implements ParseCloneable, Cloneable {
   JobApplication() : super.clone(keyClassName);
 
   JobApplication.clone(Map map) : this();
@@ -18,6 +18,7 @@ class JobApplication extends ParseObject
   static const keyApplicationId = keyVarObjectId;
   static const keyCVFile = 'cvFile';
   static const keyJob = 'job';
+  static const keyCVFileSize = 'fileSize';
   static const keyAuthor = 'author';
   static const keyApplicationCreationDate = keyVarCreatedAt;
 
@@ -34,6 +35,9 @@ class JobApplication extends ParseObject
 
   DateTime get applicationCreationDate =>
       get<DateTime>(keyApplicationCreationDate) as DateTime;
+
+  String get fileSize => get(keyCVFileSize) as String;
+  set fileSize(String fileSize) => set(keyCVFileSize, fileSize);
 
   @override
   JobApplication getShallowCopy() {

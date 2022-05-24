@@ -15,6 +15,7 @@ class UserNameWithIconAccountType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -24,9 +25,11 @@ class UserNameWithIconAccountType extends StatelessWidget {
               : Icons.apartment_rounded,
           size: 50,
         ),
-        TitleWithUnderLineInTheEnd(
-          label: name,
-          numberOfUnderLinedChars: 2,
+        Flexible(
+          child: TitleWithUnderLineInTheEnd(
+            label: name,
+            numberOfUnderLinedChars: 2,
+          ),
         )
       ],
     );

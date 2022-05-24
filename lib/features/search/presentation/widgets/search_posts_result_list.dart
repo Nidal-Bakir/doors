@@ -30,7 +30,7 @@ class _SearchPostsResultListState extends State<SearchPostsResultList> {
           onNotify: () {
             final _recentPostsBloc = context.read<PostsSearchBloc>();
             if (_recentPostsBloc.state is PostsSearchLoadSuccess &&
-                canGetMorePosts(_postsCount)) {
+                canLoadMoreData(_postsCount)) {
               _recentPostsBloc.add(const PostsSearchMoreSearchResultLoaded());
             }
           },

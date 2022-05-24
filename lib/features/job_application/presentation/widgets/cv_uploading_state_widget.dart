@@ -1,7 +1,7 @@
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
-import 'package:doors/core/features/file_uploader/presentation/managers/file_uploader_bloc/file_uploader_bloc.dart';
+import 'package:doors/core/features/file_manager/file_uploader/presentation/managers/file_uploader_bloc/file_uploader_bloc.dart';
 import 'package:doors/core/models/job_application.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
@@ -40,6 +40,7 @@ class _CVUploadingStateWidgetState extends State<CVUploadingStateWidget> {
               final _jobApplication = JobApplication()
                 ..job = widget.jobPost
                 ..cvFile = state.uploadedFile
+                ..fileSize = state.fileSize
                 ..author = context.read<AuthBloc>().getCurrentUser()!;
 
               context.read<SendJobApplicationBloc>().add(
@@ -52,10 +53,23 @@ class _CVUploadingStateWidgetState extends State<CVUploadingStateWidget> {
               final error = state.error;
               if (error is StoragePermissionsException) {
                 if (error is DeniedStoragePermissionsException) {
-                  _showDialogToExplainWhyWeNeedStoragePermission(context);
+                  showDialogToExplainWhyWeNeedStoragePermission(
+                    context: context,
+                    content: context.loc
+                        .in_order_to_upload_your_cv_you_need_to_give_the_app_storage_permissions,
+                    onRetryPressed: () {
+                      context.read<FileUploaderBloc>().add(
+                            const FileUploaderFileManagerOpened(
+                              ['pdf'],
+                              FileType.custom,
+                            ),
+                          );
+                      Navigator.of(context).pop();
+                    },
+                  );
                 }
                 if (error is PermanentlyDeniedStoragePermissionsException) {
-                  _showDialogTellTheUserThatStoragePermissionIsPermanentlyDenied(
+                  showDialogTellTheUserThatStoragePermissionIsPermanentlyDenied(
                     context,
                   );
                 }
@@ -98,7 +112,7 @@ class _CVUploadingStateWidgetState extends State<CVUploadingStateWidget> {
               },
               fileSelectingSuccess: (_) => const SizedBox.shrink(),
               fileSelectingFailure: (_) => const SizedBox.shrink(),
-              uploadSuccess: (_) => const SizedBox.shrink(),
+              uploadSuccess: (_, __) => const SizedBox.shrink(),
               uploadFailure: (error) {
                 return Text(
                   error.getLocalMessageError(context),
@@ -110,76 +124,6 @@ class _CVUploadingStateWidgetState extends State<CVUploadingStateWidget> {
             );
           },
         ),
-      ],
-    );
-  }
-
-  Future<void> _showDialogToExplainWhyWeNeedStoragePermission(
-      BuildContext context) async {
-    await openSimpleAlertDialog(
-      context: context,
-      title: context.loc.we_do_not_have_storage_permissions,
-      content: context.loc
-          .in_order_to_upload_your_cv_you_need_to_give_the_app_storage_permissions,
-      actions: [
-        TextButton(
-          style: Theme.of(context).textButtonTheme.style?.copyWith(
-                foregroundColor: MaterialStateProperty.all(
-                  Colors.grey,
-                ),
-              ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(context.loc.cancel),
-        ),
-        TextButton(
-          onPressed: () {
-            context.read<FileUploaderBloc>().add(
-                  const FileUploaderFileManagerOpened(
-                    ['pdf'],
-                    FileType.custom,
-                  ),
-                );
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            context.loc.retry,
-          ),
-        )
-      ],
-    );
-  }
-
-  Future<void> _showDialogTellTheUserThatStoragePermissionIsPermanentlyDenied(
-    BuildContext context,
-  ) async {
-    await openSimpleAlertDialog(
-      context: context,
-      title: context.loc.we_permanently_can_not_have_storage_permissions,
-      content:
-          context.loc.please_go_to_setting_and_give_the_app_storage_permissions,
-      actions: [
-        TextButton(
-          style: Theme.of(context).textButtonTheme.style?.copyWith(
-                foregroundColor: MaterialStateProperty.all(
-                  Colors.grey,
-                ),
-              ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(context.loc.cancel),
-        ),
-        TextButton(
-          onPressed: () {
-            openAppSettings();
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            context.loc.open_app_settings,
-          ),
-        )
       ],
     );
   }

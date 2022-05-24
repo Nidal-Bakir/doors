@@ -1,5 +1,5 @@
 import 'package:doors/core/extensions/build_context/loc.dart';
-import 'package:doors/core/features/file_uploader/presentation/managers/file_uploader_bloc/file_uploader_bloc.dart';
+import 'package:doors/core/features/file_manager/file_uploader/presentation/managers/file_uploader_bloc/file_uploader_bloc.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:doors/core/widgets/sized_box_16_h.dart';

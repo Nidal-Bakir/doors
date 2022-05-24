@@ -1,19 +1,18 @@
-import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
 import 'package:flutter/widgets.dart';
 
-class PostCardSlideTransition extends StatefulWidget {
-  final PostCardItem postCardItem;
-  const PostCardSlideTransition({
+class CustomSlideTransition extends StatefulWidget {
+  final Widget child;
+  const CustomSlideTransition({
     Key? key,
-    required this.postCardItem,
+    required this.child,
   }) : super(key: key);
 
   @override
-  State<PostCardSlideTransition> createState() =>
-      _PostCardSlideTransitionState();
+  State<CustomSlideTransition> createState() =>
+      _CustomSlideTransitionState();
 }
 
-class _PostCardSlideTransitionState extends State<PostCardSlideTransition>
+class _CustomSlideTransitionState extends State<CustomSlideTransition>
     with SingleTickerProviderStateMixin {
   late final _slidController = AnimationController(
     vsync: this,
@@ -44,7 +43,7 @@ class _PostCardSlideTransitionState extends State<PostCardSlideTransition>
   Widget build(BuildContext context) {
     return SlideTransition(
       position: _slidAnimation,
-      child: widget.postCardItem,
+      child: widget.child,
     );
   }
 }

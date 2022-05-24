@@ -121,3 +121,11 @@ class UnknownError extends UserException {
     return context.loc.an_unexpected_error_occurred;
   }
 }
+
+class ErrorWhileSavingTheFile extends UserException {
+  const ErrorWhileSavingTheFile(String message) : super(message);
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.error_while_saving_the_file_file_not_saved;
+  }
+}

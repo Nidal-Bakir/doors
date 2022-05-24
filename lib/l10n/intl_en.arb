@@ -181,6 +181,7 @@
   "you_changed_your_email_address": "You changed your email address!",
   "we_sent_you_an_email_to_verify_this_email": "We sent you an email to verify this email, Go to your email address inbox and click on the link we sent to you.",
   "edit_your_profile_details": "Edit your profile details",
+  "edit_profile": "Edit profile",
   "your_profile_has_been_updated_successfully": "Your profile has been updated successfully.",
   "subscriptions": "Subscriptions",
   "promotion": "Promotion",
@@ -222,5 +223,10 @@
   "we_do_not_have_storage_permissions": "We don't have storage permissions",
   "in_order_to_upload_your_cv_you_need_to_give_the_app_storage_permissions": "In order to upload your CV you need to give the app storage permissions",
   "we_permanently_can_not_have_storage_permissions": "We permanently can't have storage permissions",
-  "please_go_to_setting_and_give_the_app_storage_permissions": "Please go to settings and  give the app storage permissions"
+  "please_go_to_setting_and_give_the_app_storage_permissions": "Please go to settings and  give the app storage permissions",
+  "view_job_applications": "View job applications",
+  "job_applications": "Job applications",
+  "error_while_saving_the_file_file_not_saved": "Error while saving the file, file not saved",
+  "in_order_to_save_a_file_you_need_to_give_the_app_storage_permissions": "In order to save a file you need to give the app storage permissions",
+  "file_saved_successfully": "File saved successfully"
 }

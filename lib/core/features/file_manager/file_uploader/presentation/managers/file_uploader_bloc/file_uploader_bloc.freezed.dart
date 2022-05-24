@@ -596,9 +596,11 @@ class _$FileUploaderStateTearOff {
     );
   }
 
-  FileUploaderUploadSuccess uploadSuccess(ParseFile uploadedFile) {
+  FileUploaderUploadSuccess uploadSuccess(
+      ParseFile uploadedFile, String fileSize) {
     return FileUploaderUploadSuccess(
       uploadedFile,
+      fileSize,
     );
   }
 
@@ -630,7 +632,8 @@ mixin _$FileUploaderState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(int progress, int total) uploadInProgress,
-    required TResult Function(ParseFile uploadedFile) uploadSuccess,
+    required TResult Function(ParseFile uploadedFile, String fileSize)
+        uploadSuccess,
     required TResult Function(ServerException error) uploadFailure,
     required TResult Function(UserException error) fileSelectingFailure,
     required TResult Function(File? selectedFile) fileSelectingSuccess,
@@ -640,7 +643,7 @@ mixin _$FileUploaderState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -650,7 +653,7 @@ mixin _$FileUploaderState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -757,7 +760,8 @@ class _$FileUploaderInitial implements FileUploaderInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(int progress, int total) uploadInProgress,
-    required TResult Function(ParseFile uploadedFile) uploadSuccess,
+    required TResult Function(ParseFile uploadedFile, String fileSize)
+        uploadSuccess,
     required TResult Function(ServerException error) uploadFailure,
     required TResult Function(UserException error) fileSelectingFailure,
     required TResult Function(File? selectedFile) fileSelectingSuccess,
@@ -770,7 +774,7 @@ class _$FileUploaderInitial implements FileUploaderInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -783,7 +787,7 @@ class _$FileUploaderInitial implements FileUploaderInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -931,7 +935,8 @@ class _$FileUploaderUploadInProgress implements FileUploaderUploadInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(int progress, int total) uploadInProgress,
-    required TResult Function(ParseFile uploadedFile) uploadSuccess,
+    required TResult Function(ParseFile uploadedFile, String fileSize)
+        uploadSuccess,
     required TResult Function(ServerException error) uploadFailure,
     required TResult Function(UserException error) fileSelectingFailure,
     required TResult Function(File? selectedFile) fileSelectingSuccess,
@@ -944,7 +949,7 @@ class _$FileUploaderUploadInProgress implements FileUploaderUploadInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -957,7 +962,7 @@ class _$FileUploaderUploadInProgress implements FileUploaderUploadInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -1036,7 +1041,7 @@ abstract class $FileUploaderUploadSuccessCopyWith<$Res> {
   factory $FileUploaderUploadSuccessCopyWith(FileUploaderUploadSuccess value,
           $Res Function(FileUploaderUploadSuccess) then) =
       _$FileUploaderUploadSuccessCopyWithImpl<$Res>;
-  $Res call({ParseFile uploadedFile});
+  $Res call({ParseFile uploadedFile, String fileSize});
 }
 
 /// @nodoc
@@ -1054,12 +1059,17 @@ class _$FileUploaderUploadSuccessCopyWithImpl<$Res>
   @override
   $Res call({
     Object? uploadedFile = freezed,
+    Object? fileSize = freezed,
   }) {
     return _then(FileUploaderUploadSuccess(
       uploadedFile == freezed
           ? _value.uploadedFile
           : uploadedFile // ignore: cast_nullable_to_non_nullable
               as ParseFile,
+      fileSize == freezed
+          ? _value.fileSize
+          : fileSize // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -1067,14 +1077,16 @@ class _$FileUploaderUploadSuccessCopyWithImpl<$Res>
 /// @nodoc
 
 class _$FileUploaderUploadSuccess implements FileUploaderUploadSuccess {
-  const _$FileUploaderUploadSuccess(this.uploadedFile);
+  const _$FileUploaderUploadSuccess(this.uploadedFile, this.fileSize);
 
   @override
   final ParseFile uploadedFile;
+  @override
+  final String fileSize;
 
   @override
   String toString() {
-    return 'FileUploaderState.uploadSuccess(uploadedFile: $uploadedFile)';
+    return 'FileUploaderState.uploadSuccess(uploadedFile: $uploadedFile, fileSize: $fileSize)';
   }
 
   @override
@@ -1083,12 +1095,15 @@ class _$FileUploaderUploadSuccess implements FileUploaderUploadSuccess {
         (other.runtimeType == runtimeType &&
             other is FileUploaderUploadSuccess &&
             const DeepCollectionEquality()
-                .equals(other.uploadedFile, uploadedFile));
+                .equals(other.uploadedFile, uploadedFile) &&
+            const DeepCollectionEquality().equals(other.fileSize, fileSize));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(uploadedFile));
+      runtimeType,
+      const DeepCollectionEquality().hash(uploadedFile),
+      const DeepCollectionEquality().hash(fileSize));
 
   @JsonKey(ignore: true)
   @override
@@ -1101,12 +1116,13 @@ class _$FileUploaderUploadSuccess implements FileUploaderUploadSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(int progress, int total) uploadInProgress,
-    required TResult Function(ParseFile uploadedFile) uploadSuccess,
+    required TResult Function(ParseFile uploadedFile, String fileSize)
+        uploadSuccess,
     required TResult Function(ServerException error) uploadFailure,
     required TResult Function(UserException error) fileSelectingFailure,
     required TResult Function(File? selectedFile) fileSelectingSuccess,
   }) {
-    return uploadSuccess(uploadedFile);
+    return uploadSuccess(uploadedFile, fileSize);
   }
 
   @override
@@ -1114,12 +1130,12 @@ class _$FileUploaderUploadSuccess implements FileUploaderUploadSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
   }) {
-    return uploadSuccess?.call(uploadedFile);
+    return uploadSuccess?.call(uploadedFile, fileSize);
   }
 
   @override
@@ -1127,14 +1143,14 @@ class _$FileUploaderUploadSuccess implements FileUploaderUploadSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
     required TResult orElse(),
   }) {
     if (uploadSuccess != null) {
-      return uploadSuccess(uploadedFile);
+      return uploadSuccess(uploadedFile, fileSize);
     }
     return orElse();
   }
@@ -1191,10 +1207,11 @@ class _$FileUploaderUploadSuccess implements FileUploaderUploadSuccess {
 }
 
 abstract class FileUploaderUploadSuccess implements FileUploaderState {
-  const factory FileUploaderUploadSuccess(ParseFile uploadedFile) =
-      _$FileUploaderUploadSuccess;
+  const factory FileUploaderUploadSuccess(
+      ParseFile uploadedFile, String fileSize) = _$FileUploaderUploadSuccess;
 
   ParseFile get uploadedFile;
+  String get fileSize;
   @JsonKey(ignore: true)
   $FileUploaderUploadSuccessCopyWith<FileUploaderUploadSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1269,7 +1286,8 @@ class _$FileUploaderUploadFailure implements FileUploaderUploadFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(int progress, int total) uploadInProgress,
-    required TResult Function(ParseFile uploadedFile) uploadSuccess,
+    required TResult Function(ParseFile uploadedFile, String fileSize)
+        uploadSuccess,
     required TResult Function(ServerException error) uploadFailure,
     required TResult Function(UserException error) fileSelectingFailure,
     required TResult Function(File? selectedFile) fileSelectingSuccess,
@@ -1282,7 +1300,7 @@ class _$FileUploaderUploadFailure implements FileUploaderUploadFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -1295,7 +1313,7 @@ class _$FileUploaderUploadFailure implements FileUploaderUploadFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -1440,7 +1458,8 @@ class _$FileUploaderFileSelectingFailure
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(int progress, int total) uploadInProgress,
-    required TResult Function(ParseFile uploadedFile) uploadSuccess,
+    required TResult Function(ParseFile uploadedFile, String fileSize)
+        uploadSuccess,
     required TResult Function(ServerException error) uploadFailure,
     required TResult Function(UserException error) fileSelectingFailure,
     required TResult Function(File? selectedFile) fileSelectingSuccess,
@@ -1453,7 +1472,7 @@ class _$FileUploaderFileSelectingFailure
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -1466,7 +1485,7 @@ class _$FileUploaderFileSelectingFailure
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -1612,7 +1631,8 @@ class _$FileUploaderFileSelectingSuccess
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function(int progress, int total) uploadInProgress,
-    required TResult Function(ParseFile uploadedFile) uploadSuccess,
+    required TResult Function(ParseFile uploadedFile, String fileSize)
+        uploadSuccess,
     required TResult Function(ServerException error) uploadFailure,
     required TResult Function(UserException error) fileSelectingFailure,
     required TResult Function(File? selectedFile) fileSelectingSuccess,
@@ -1625,7 +1645,7 @@ class _$FileUploaderFileSelectingSuccess
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,
@@ -1638,7 +1658,7 @@ class _$FileUploaderFileSelectingSuccess
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function(int progress, int total)? uploadInProgress,
-    TResult Function(ParseFile uploadedFile)? uploadSuccess,
+    TResult Function(ParseFile uploadedFile, String fileSize)? uploadSuccess,
     TResult Function(ServerException error)? uploadFailure,
     TResult Function(UserException error)? fileSelectingFailure,
     TResult Function(File? selectedFile)? fileSelectingSuccess,

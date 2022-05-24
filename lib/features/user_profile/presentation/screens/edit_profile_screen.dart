@@ -52,7 +52,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       create: (context) => GetIt.I.get<EditProfileBloc>(),
       child: Builder(
         builder: (context) => Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            title: Text(
+              context.loc.edit_profile,
+               style: Theme.of(context).textTheme.headline6
+            ),
+          ),
           body: SingleChildScrollView(
             child: SizedBox(
               width: double.infinity,
@@ -65,7 +70,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Align(alignment: Alignment.center,
+                        Align(
+                          alignment: Alignment.center,
                           child: CircularProfileImageWithImagePicker(
                             initProfileImage: _currentUserProfile.profileImage,
                             onProfileImageSelected: _onProfileImageSelected,
@@ -111,6 +117,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ],
                         ),
                         const SizedBox16H(),
+                        LineWithTextOnRow(
+                          text: context.loc.optional_phone_number,
+                        ),
                         Row(
                           children: [
                             Expanded(

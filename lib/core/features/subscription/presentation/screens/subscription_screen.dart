@@ -122,8 +122,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               if (widget.currentUser.accountType ==
                                   AccountType.company)
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text('🔸'),
+                                    const Padding(
+                                      padding: EdgeInsets.only(top: 3),
+                                      child: Text('🔸'),
+                                    ),
                                     Expanded(
                                       child: Text(
                                         context.loc
@@ -133,8 +137,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                   ],
                                 ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                      const Text('🔸'),
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 3),
+                                    child: Text('🔸'),
+                                  ),
                                   Expanded(
                                     child: Text(
                                       context.loc
@@ -145,7 +153,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               ),
                               Row(
                                 children: [
-                                      const Text('🔸'),
+                                  const Text('🔸'),
                                   Expanded(
                                     child: Text(
                                       context.loc.no_ads_anymore,

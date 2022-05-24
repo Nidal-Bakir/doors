@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final GlobalKey _homeScaffoldGlobalKey = GlobalKey();
 GlobalKey getHomeScaffoldGlobalKey() => _homeScaffoldGlobalKey;
@@ -34,7 +35,7 @@ Future<String> getFileSize(String filepath, int decimals) async {
 /// amountOfResultPeerRequest equal zero.
 ///
 /// (in the most of the cases, not allows true).
-bool canGetMorePosts(int postsCount) {
+bool canLoadMoreData(int postsCount) {
   if (postsCount == 0) {
     return false;
   }
@@ -250,5 +251,69 @@ Future<Either<String, XFile?>?> showModalBottomSheetToSelectPhoto(
         ),
       );
     },
+  );
+}
+
+Future<void> showDialogTellTheUserThatStoragePermissionIsPermanentlyDenied(
+  BuildContext context,
+) async {
+  await openSimpleAlertDialog(
+    context: context,
+    title: context.loc.we_permanently_can_not_have_storage_permissions,
+    content:
+        context.loc.please_go_to_setting_and_give_the_app_storage_permissions,
+    actions: [
+      TextButton(
+        style: Theme.of(context).textButtonTheme.style?.copyWith(
+              foregroundColor: MaterialStateProperty.all(
+                Colors.grey,
+              ),
+            ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(context.loc.cancel),
+      ),
+      TextButton(
+        onPressed: () {
+          openAppSettings();
+          Navigator.of(context).pop();
+        },
+        child: Text(
+          context.loc.open_app_settings,
+        ),
+      )
+    ],
+  );
+}
+
+Future<void> showDialogToExplainWhyWeNeedStoragePermission({
+  required BuildContext context,
+  required VoidCallback onRetryPressed,
+  required String content,
+}) async {
+  await openSimpleAlertDialog(
+    context: context,
+    title: context.loc.we_do_not_have_storage_permissions,
+    content: content,
+    actions: [
+      TextButton(
+        style: Theme.of(context).textButtonTheme.style?.copyWith(
+              foregroundColor: MaterialStateProperty.all(
+                Colors.grey,
+              ),
+            ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(context.loc.cancel),
+      ),
+      TextButton(
+        onPressed: onRetryPressed,
+        child: Text(
+          context.loc.retry,
+        ),
+      )
+    ],
   );
 }

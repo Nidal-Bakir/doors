@@ -18,6 +18,7 @@ import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/network_image_from_parse_file.dart';
+import 'package:doors/features/job_application/presentation/screens/view_post_job_applications_screen.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
@@ -44,7 +45,7 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
-    final _currentUser = context.read<AuthBloc>().getCurrentUser();
+    final _currentUser = context.read<AuthBloc>().getCurrentUser()!;
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -56,7 +57,7 @@ class _PostScreenState extends State<PostScreen> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _PostTitle(
                     title: widget.post.postTitle,
@@ -113,17 +114,17 @@ class _PostScreenState extends State<PostScreen> {
                   if (_isServicePost(widget.post) &&
                       (widget.post as ServicePost).postType ==
                           ServiceType.offer &&
-                      _currentUser?.userId != widget.post.author.userId)
+                      _currentUser.userId != widget.post.author.userId)
                     _PostUserRate(
                       currentPost: widget.post as ServicePost,
-                      currentUser: _currentUser!,
-                    ),
-                  const SizedBox(height: 16),
-                  if (_currentUser != null)
-                    _FavoriteAndChatButtons(
-                      currentPost: widget.post,
                       currentUser: _currentUser,
                     ),
+                  const SizedBox(height: 16),
+
+                  _FavoriteAndChatButtons(
+                    currentPost: widget.post,
+                    currentUser: _currentUser,
+                  ),
                 ],
               ),
             ),
@@ -136,7 +137,7 @@ class _PostScreenState extends State<PostScreen> {
 
 class _PostImageWithBackButtonAndRateWithMenu extends StatelessWidget {
   final Post currentPost;
-  final User? currentUser;
+  final User currentUser;
 
   const _PostImageWithBackButtonAndRateWithMenu({
     Key? key,
@@ -246,12 +247,15 @@ class _OfferedPostRate extends StatelessWidget {
 
 class _PopupMenuButton extends StatelessWidget {
   final Post currentPost;
-  final User? currentUser;
+  final User currentUser;
   const _PopupMenuButton({
     Key? key,
     required this.currentPost,
     required this.currentUser,
   }) : super(key: key);
+
+  bool get _isCurrentUserThePostAuthor =>
+      currentUser.userId == currentPost.author.userId;
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +297,7 @@ class _PopupMenuButton extends StatelessWidget {
               if (openLogInScreenToNotLoggedInUser(context)) {
                 return;
               }
-              _openConfirmationDialog(context, currentPost, currentUser);
+              _openConfirmationDialog(context, currentPost);
               return;
             case 3:
               Navigator.of(context).pushNamed(
@@ -304,10 +308,9 @@ class _PopupMenuButton extends StatelessWidget {
           }
         },
         itemBuilder: (BuildContext context) => [
-          // hide the report button if the current user is the author of this post
-          if (_isServicePost(currentPost) &&
-              currentUser != null &&
-              currentUser!.userId != currentPost.author.userId)
+          // show the report button if its a service post and the current user
+          // is not the author of this post
+          if (_isServicePost(currentPost) && !_isCurrentUserThePostAuthor)
             PopupMenuItem(
               value: 0,
               child: Row(
@@ -323,8 +326,7 @@ class _PopupMenuButton extends StatelessWidget {
               ),
             ),
           // show the edit button if the current user is the author of this post
-          if (currentUser != null &&
-              currentUser!.userId == currentPost.author.userId)
+          if (_isCurrentUserThePostAuthor)
             PopupMenuItem(
               value: 1,
               child: Row(
@@ -340,8 +342,7 @@ class _PopupMenuButton extends StatelessWidget {
               ),
             ),
           // show the delete button if the current user is the author of this post
-          if (currentUser != null &&
-              currentUser!.userId == currentPost.author.userId)
+          if (_isCurrentUserThePostAuthor)
             PopupMenuItem(
               value: 2,
               child: Row(
@@ -357,8 +358,7 @@ class _PopupMenuButton extends StatelessWidget {
               ),
             ),
           // show open user profile button if the current user is not the author of the this post
-          if (currentUser != null &&
-              currentUser!.userId != currentPost.author.userId)
+          if (!_isCurrentUserThePostAuthor)
             PopupMenuItem(
               value: 3,
               child: Row(
@@ -379,7 +379,7 @@ class _PopupMenuButton extends StatelessWidget {
   }
 
   Future<void> _openConfirmationDialog(
-          BuildContext parentContext, Post currentPost, User? currentUser) =>
+          BuildContext parentContext, Post currentPost) =>
       showDialog(
         context: parentContext,
         builder: (context) {
@@ -442,7 +442,7 @@ class _PopupMenuButton extends StatelessWidget {
       );
 
   Future<void> _openReportDialog(BuildContext parentContext,
-          ServicePost currentPost, User? currentUser) =>
+          ServicePost currentPost, User currentUser) =>
       showDialog<void>(
         context: parentContext,
         builder: (context) {
@@ -611,9 +611,7 @@ class _PopupMenuButton extends StatelessWidget {
                                                           PostReportType
                                                               .other) {
                                                 _formKey.currentState?.save();
-                                                if (currentUser == null) {
-                                                  return;
-                                                }
+
                                                 final _postReport = PostReport()
                                                   ..reportType = _postReportType
                                                   ..reportMoreInfo = _reportInfo
@@ -1085,36 +1083,84 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
           width: 16,
         ),
         Expanded(
-          child: ElevatedButton.icon(
-            icon: _isServicePost(widget.currentPost)
-                ? const Icon(Icons.textsms_rounded)
-                : const ImageIcon(
-                    AssetImage('assets/icons/submit-resume.png'),
-                  ),
-            onPressed:
-                widget.currentUser.userId == widget.currentPost.author.userId
-                    ? null
-                    : () {
-                        if (openLogInScreenToNotLoggedInUser(context)) {
-                          return;
-                        }
-                        if (_isServicePost(widget.currentPost)) {
-                          // TODO : open chat screen
-                        } else {
-                          Navigator.of(context).pushNamed(
-                            SendJobApplicationScreen.routeName,
-                            arguments: widget.currentPost,
-                          );
-                        }
-                      },
-            label: Text(
-              _isServicePost(widget.currentPost)
-                  ? context.loc.chat
-                  : context.loc.apply,
-            ),
-          ),
-        )
+            child: _ElevatedButton(
+          currentPost: widget.currentPost,
+          currentUser: widget.currentUser,
+        ))
       ],
+    );
+  }
+}
+
+class _ElevatedButton extends StatelessWidget {
+  final User currentUser;
+  final Post currentPost;
+  const _ElevatedButton({
+    Key? key,
+    required this.currentUser,
+    required this.currentPost,
+  }) : super(key: key);
+
+  bool get _isCurrentUserTheAuthorOfCurrentPost =>
+      currentUser.userId == currentPost.author.userId;
+
+  Widget get _icon {
+    if (_isServicePost(currentPost)) {
+      return const Icon(Icons.textsms_rounded);
+    } else {
+      if (_isCurrentUserTheAuthorOfCurrentPost) {
+        return const ImageIcon(
+          AssetImage('assets/icons/search-resume.png'),
+        );
+      }
+      return const ImageIcon(
+        AssetImage('assets/icons/submit-resume.png'),
+      );
+    }
+  }
+
+  String _label(BuildContext context) {
+    if (_isServicePost(currentPost)) {
+      return context.loc.chat;
+    } else {
+      if (_isCurrentUserTheAuthorOfCurrentPost) {
+        return context.loc.view_job_applications;
+      }
+      return context.loc.apply;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      icon: _icon,
+      onPressed:
+          _isServicePost(currentPost) && _isCurrentUserTheAuthorOfCurrentPost
+              ? null
+              : () {
+                  if (openLogInScreenToNotLoggedInUser(context)) {
+                    return;
+                  }
+
+                  if (_isServicePost(currentPost)) {
+                    // TODO : open chat screen
+                    return;
+                  }
+
+                  if (_isCurrentUserTheAuthorOfCurrentPost) {
+                    Navigator.of(context).pushNamed(
+                      ViewPostJobApplicationsScreen.routeName,
+                      arguments: currentPost,
+                    );
+                    return;
+                  }
+
+                  Navigator.of(context).pushNamed(
+                    SendJobApplicationScreen.routeName,
+                    arguments: currentPost,
+                  );
+                },
+      label: Text(_label(context)),
     );
   }
 }

@@ -21,6 +21,10 @@
   		<string>https</string>
   		<string>http</string>
 	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UISupportsDocumentBrowser</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>

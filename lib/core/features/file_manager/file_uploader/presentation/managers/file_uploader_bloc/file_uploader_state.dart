@@ -7,7 +7,7 @@ class FileUploaderState with _$FileUploaderState {
   const factory FileUploaderState.uploadInProgress(int progress, int total) =
       FileUploaderUploadInProgress;
 
-  const factory FileUploaderState.uploadSuccess(ParseFile uploadedFile) =
+  const factory FileUploaderState.uploadSuccess(ParseFile uploadedFile,String fileSize) =
       FileUploaderUploadSuccess;
 
   const factory FileUploaderState.uploadFailure(ServerException error) =

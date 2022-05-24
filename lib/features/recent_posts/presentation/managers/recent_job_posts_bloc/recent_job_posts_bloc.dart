@@ -18,13 +18,14 @@ class RecentJobPostsBloc
     this._recentJobPostsRepository,
     this._managePostBloc,
   ) : super(const RecentJobPostsInProgress()) {
-    on<RecentJobPostsEvent>((event, emit) async {
-      await event.map(
-        loaded: (event) async => await _onRecentJobPostsLoaded(event, emit),
-        refreshed: (event) async =>
-            await _onRecentJobPostsRefreshed(event, emit),
-      );
+    
+    on<RecentJobPostsLoaded>((event, emit) async {
+      await _onRecentJobPostsLoaded(event, emit);
     }, transformer: bloc_concurrency.droppable());
+
+    on<RecentJobPostsRefreshed>((event, emit) async {
+      await _onRecentJobPostsRefreshed(event, emit);
+    }, transformer: bloc_concurrency.restartable());
 
     // so the deleted or the edit post will not appear if they loaded locally
     _managePostBloc.stream.listen((event) {

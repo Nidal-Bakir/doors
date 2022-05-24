@@ -69,7 +69,7 @@ class _UserPostsScreenState extends State<UserPostsScreen> {
                       onNotify: () {
                         final _recentPostsBloc = context.read<UserPostsBloc>();
                         if (_recentPostsBloc.state is UserPostsLoadSuccess &&
-                            canGetMorePosts(_userPostsCount)) {
+                            canLoadMoreData(_userPostsCount)) {
                           _recentPostsBloc.add(UserPostsLoaded(widget.userId));
                         }
                       }),

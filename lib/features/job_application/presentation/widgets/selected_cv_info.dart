@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:doors/core/features/file_uploader/presentation/managers/file_uploader_bloc/file_uploader_bloc.dart';
+import 'package:doors/core/features/file_manager/file_uploader/presentation/managers/file_uploader_bloc/file_uploader_bloc.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/features/job_application/presentation/managers/send_job_application_bloc/send_job_application_bloc.dart';
 import 'package:flutter/material.dart';

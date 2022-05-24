@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/features/post/presentation/screen/post_screen.dart';
 import 'package:doors/core/features/post/presentation/widgets/post_card_item.dart';
-import 'package:doors/core/features/post/presentation/widgets/post_card_slide_transition.dart';
+import 'package:doors/core/widgets/custom_slide_transition.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
@@ -19,8 +19,8 @@ class PostsSliverList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           final _post = posts[index];
-          return PostCardSlideTransition(
-            postCardItem: PostCardItem(
+          return CustomSlideTransition(
+            child: PostCardItem(
               onTap: () {
                 Navigator.of(context).pushNamed(
                   PostScreen.routeName,

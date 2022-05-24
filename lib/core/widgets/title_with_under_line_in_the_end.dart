@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class TitleWithUnderLineInTheEnd extends StatelessWidget {
@@ -11,13 +12,15 @@ class TitleWithUnderLineInTheEnd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final _theme = Theme.of(context);
+    final _theme = Theme.of(context);
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
-        Text(
-          label,
+        AutoSizeText(
+          label, 
+          maxLines: 1,
           style: _theme.textTheme.headline4,
+          minFontSize: _theme.textTheme.headline6!.fontSize!,
         ),
         Positioned.directional(
           textDirection: Directionality.of(context),

@@ -60,10 +60,11 @@ class _FavoritePostsScreenState extends State<FavoritePostsScreen> {
       scaffoldWidget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-            title: Text(
-          context.loc.favorite_posts,
-          style: Theme.of(context).textTheme.headline6,
-        )),
+          title: Text(
+            context.loc.favorite_posts,
+            style: Theme.of(context).textTheme.headline6,
+          ),
+        ),
         body: MultiBlocProvider(
           providers: [
             BlocProvider<FavoritePostsBloc>(
@@ -75,133 +76,131 @@ class _FavoritePostsScreenState extends State<FavoritePostsScreen> {
               create: (_) => _createJobFavoritePostsBloc(),
             ),
           ],
-          child: Builder(
-            builder: (context) {
-              return BlocProvider.value(
-                key: Key(_favoritePostsViewFilter.name + ',provider'),
-                value: _currentUsedFavoritePostsBloc,
-                child: Builder(
-                  builder: (context) {
-                    return BlocListener<FavoritePostsBloc, FavoritePostsState>(
-                      listener: (context, state) {
-                        if (state is FavoritePostsLoadFailure) {
-                          if (!_refreshIndicatorCompleter.isCompleted) {
-                            _refreshIndicatorCompleter.complete();
-                          }
-                          showErrorSnackBar(
-                              context, state.error.getLocalMessageError(context));
+          child: Builder(builder: (context) {
+            return BlocProvider.value(
+              key: Key(_favoritePostsViewFilter.name + ',provider'),
+              value: _currentUsedFavoritePostsBloc,
+              child: Builder(
+                builder: (context) {
+                  return BlocListener<FavoritePostsBloc, FavoritePostsState>(
+                    listener: (context, state) {
+                      if (state is FavoritePostsLoadFailure) {
+                        if (!_refreshIndicatorCompleter.isCompleted) {
+                          _refreshIndicatorCompleter.complete();
                         }
-                      },
-                      child: NotificationListener<ScrollNotification>(
-                        onNotification: (notification) => notificationListener(
-                            notification: notification,
-                            onNotify: () {
-                              final _recentPostsBloc =
-                                  context.read<FavoritePostsBloc>();
-                              if (_recentPostsBloc.state
-                                      is FavoritePostsLoadSuccess &&
-                                  canGetMorePosts(_favoritePostsCount)) {
-                                _recentPostsBloc.add(const FavoritePostsLoaded());
-                              }
-                            }),
-                        child: RefreshIndicator(
-                          onRefresh: () {
-                            _refreshIndicatorCompleter = Completer<void>();
-                            context
-                                .read<FavoritePostsBloc>()
-                                .add(const FavoritePostsRefreshed());
+                        showErrorSnackBar(
+                            context, state.error.getLocalMessageError(context));
+                      }
+                    },
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (notification) => notificationListener(
+                          notification: notification,
+                          onNotify: () {
+                            final _recentPostsBloc =
+                                context.read<FavoritePostsBloc>();
+                            if (_recentPostsBloc.state
+                                    is FavoritePostsLoadSuccess &&
+                                canLoadMoreData(_favoritePostsCount)) {
+                              _recentPostsBloc.add(const FavoritePostsLoaded());
+                            }
+                          }),
+                      child: RefreshIndicator(
+                        onRefresh: () {
+                          _refreshIndicatorCompleter = Completer<void>();
+                          context
+                              .read<FavoritePostsBloc>()
+                              .add(const FavoritePostsRefreshed());
 
-                            return _refreshIndicatorCompleter.future;
-                          },
-                          child: CustomScrollView(
-                            slivers: [
-                              CurrentFavoritePostsLabelWithPostsViewFilter(
-                                currentPostsViewFilter: _favoritePostsViewFilter,
-                                onViewChange: _onViewChange,
+                          return _refreshIndicatorCompleter.future;
+                        },
+                        child: CustomScrollView(
+                          slivers: [
+                            CurrentFavoritePostsLabelWithPostsViewFilter(
+                              currentPostsViewFilter: _favoritePostsViewFilter,
+                              onViewChange: _onViewChange,
+                            ),
+                            BlocBuilder<FavoritePostsBloc, FavoritePostsState>(
+                              key: Key(
+                                _favoritePostsViewFilter.name + ',posts',
                               ),
-                              BlocBuilder<FavoritePostsBloc, FavoritePostsState>(
-                                key: Key(
-                                  _favoritePostsViewFilter.name + ',posts',
-                                ),
-                                buildWhen: (previous, current) =>
-                                    current is FavoritePostsLoadSuccess,
-                                builder: (context, state) {
-                                  if (state is FavoritePostsInProgress) {
-                                    return const SliverToBoxAdapter();
-                                  }
-                                  final _favoritePostsLoadSuccessState =
-                                      (state as FavoritePostsLoadSuccess);
+                              buildWhen: (previous, current) =>
+                                  current is FavoritePostsLoadSuccess,
+                              builder: (context, state) {
+                                if (state is FavoritePostsInProgress) {
+                                  return const SliverToBoxAdapter();
+                                }
+                                final _favoritePostsLoadSuccessState =
+                                    (state as FavoritePostsLoadSuccess);
 
-                                  if (!_refreshIndicatorCompleter.isCompleted) {
-                                    _refreshIndicatorCompleter.complete();
-                                  }
-                                  _favoritePostsCount =
-                                      _favoritePostsLoadSuccessState
-                                          .favoritePosts.length;
-                                  return PostsSliverList(
-                                    posts: _favoritePostsLoadSuccessState
-                                        .favoritePosts,
-                                  );
-                                },
+                                if (!_refreshIndicatorCompleter.isCompleted) {
+                                  _refreshIndicatorCompleter.complete();
+                                }
+                                _favoritePostsCount =
+                                    _favoritePostsLoadSuccessState
+                                        .favoritePosts.length;
+                                return PostsSliverList(
+                                  posts: _favoritePostsLoadSuccessState
+                                      .favoritePosts,
+                                );
+                              },
+                            ),
+                            BlocBuilder<FavoritePostsBloc, FavoritePostsState>(
+                              key: Key(
+                                _favoritePostsViewFilter.name + ',fill',
                               ),
-                              BlocBuilder<FavoritePostsBloc, FavoritePostsState>(
-                                key: Key(
-                                  _favoritePostsViewFilter.name + ',fill',
-                                ),
-                                builder: (context, state) {
-                                  return SliverFillRemaining(
-                                    fillOverscroll: false,
-                                    hasScrollBody: false,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(bottom: 20),
-                                      child: state.when(
-                                        inProgress: () => const Padding(
-                                          padding:
-                                              EdgeInsets.symmetric(vertical: 16.0),
-                                          child: Center(
-                                            child: LoadingIndicator(),
-                                          ),
+                              builder: (context, state) {
+                                return SliverFillRemaining(
+                                  fillOverscroll: false,
+                                  hasScrollBody: false,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 20),
+                                    child: state.when(
+                                      inProgress: () => const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 16.0),
+                                        child: Center(
+                                          child: LoadingIndicator(),
                                         ),
-                                        loadSuccess: (posts) => posts.isEmpty
-                                            ? const NoResultFound()
-                                            : const SizedBox.shrink(),
-                                        loadFailure: (error, cachedPosts) {
-                                          if (cachedPosts.isEmpty) {
-                                            return NoInternetConnection(
-                                              onRetry: () {
-                                                context
-                                                    .read<FavoritePostsBloc>()
-                                                    .add(
-                                                        const FavoritePostsLoaded());
-                                              },
-                                              fullScreen: true,
-                                            );
-                                          } else {
-                                            return NoInternetConnection(
-                                              onRetry: () {
-                                                context
-                                                    .read<FavoritePostsBloc>()
-                                                    .add(
-                                                        const FavoritePostsLoaded());
-                                              },
-                                            );
-                                          }
-                                        },
                                       ),
+                                      loadSuccess: (posts) => posts.isEmpty
+                                          ? const NoResultFound()
+                                          : const SizedBox.shrink(),
+                                      loadFailure: (error, cachedPosts) {
+                                        if (cachedPosts.isEmpty) {
+                                          return NoInternetConnection(
+                                            onRetry: () {
+                                              context
+                                                  .read<FavoritePostsBloc>()
+                                                  .add(
+                                                      const FavoritePostsLoaded());
+                                            },
+                                            fullScreen: true,
+                                          );
+                                        } else {
+                                          return NoInternetConnection(
+                                            onRetry: () {
+                                              context
+                                                  .read<FavoritePostsBloc>()
+                                                  .add(
+                                                      const FavoritePostsLoaded());
+                                            },
+                                          );
+                                        }
+                                      },
                                     ),
-                                  );
-                                },
-                              )
-                            ],
-                          ),
+                                  ),
+                                );
+                              },
+                            )
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
-              );
-            }
-          ),
+                    ),
+                  );
+                },
+              ),
+            );
+          }),
         ),
       ),
     );

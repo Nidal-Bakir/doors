@@ -19,13 +19,14 @@ class RecentServicePostsBloc
   RecentServicePostsBloc(
       this._recentPostsRepository, this._postType, this._manageServicePostBloc)
       : super(const RecentServicePostsInProgress()) {
-    on<RecentServicePostsEvent>((event, emit) async {
-      await event.map(
-        loaded: (event) async => await _onRecentServicePostsLoaded(event, emit),
-        refreshed: (event) async =>
-            await _onRecentServicePostsRefreshed(event, emit),
-      );
+        
+    on<RecentServicePostsLoaded>((event, emit) async {
+      await _onRecentServicePostsLoaded(event, emit);
     }, transformer: bloc_concurrency.droppable());
+
+    on<RecentServicePostsRefreshed>((event, emit) async {
+      await _onRecentServicePostsRefreshed(event, emit);
+    }, transformer: bloc_concurrency.restartable());
 
     // so the deleted or the edit post will not appear if they loaded locally
     _manageServicePostBloc.stream.listen((event) {
