@@ -27,6 +27,7 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
         supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         onGenerateTitle: (context) => context.loc.device_app_description,
         theme: defaultLightTheme(extractLangCodeFromPlatformService()),

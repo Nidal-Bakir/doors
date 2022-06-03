@@ -17,9 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$FileSaverEventTearOff {
   const _$FileSaverEventTearOff();
 
-  FileSaverFileSaved fileSaved(File file) {
+  FileSaverFileSaved fileSaved(File file, AppFolder appFolder) {
     return FileSaverFileSaved(
       file,
+      appFolder,
     );
   }
 }
@@ -30,20 +31,21 @@ const $FileSaverEvent = _$FileSaverEventTearOff();
 /// @nodoc
 mixin _$FileSaverEvent {
   File get file => throw _privateConstructorUsedError;
+  AppFolder get appFolder => throw _privateConstructorUsedError;
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(File file) fileSaved,
+    required TResult Function(File file, AppFolder appFolder) fileSaved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(File file)? fileSaved,
+    TResult Function(File file, AppFolder appFolder)? fileSaved,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(File file)? fileSaved,
+    TResult Function(File file, AppFolder appFolder)? fileSaved,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -74,7 +76,7 @@ abstract class $FileSaverEventCopyWith<$Res> {
   factory $FileSaverEventCopyWith(
           FileSaverEvent value, $Res Function(FileSaverEvent) then) =
       _$FileSaverEventCopyWithImpl<$Res>;
-  $Res call({File file});
+  $Res call({File file, AppFolder appFolder});
 }
 
 /// @nodoc
@@ -89,12 +91,17 @@ class _$FileSaverEventCopyWithImpl<$Res>
   @override
   $Res call({
     Object? file = freezed,
+    Object? appFolder = freezed,
   }) {
     return _then(_value.copyWith(
       file: file == freezed
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as File,
+      appFolder: appFolder == freezed
+          ? _value.appFolder
+          : appFolder // ignore: cast_nullable_to_non_nullable
+              as AppFolder,
     ));
   }
 }
@@ -106,7 +113,7 @@ abstract class $FileSaverFileSavedCopyWith<$Res>
           FileSaverFileSaved value, $Res Function(FileSaverFileSaved) then) =
       _$FileSaverFileSavedCopyWithImpl<$Res>;
   @override
-  $Res call({File file});
+  $Res call({File file, AppFolder appFolder});
 }
 
 /// @nodoc
@@ -123,12 +130,17 @@ class _$FileSaverFileSavedCopyWithImpl<$Res>
   @override
   $Res call({
     Object? file = freezed,
+    Object? appFolder = freezed,
   }) {
     return _then(FileSaverFileSaved(
       file == freezed
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as File,
+      appFolder == freezed
+          ? _value.appFolder
+          : appFolder // ignore: cast_nullable_to_non_nullable
+              as AppFolder,
     ));
   }
 }
@@ -136,14 +148,16 @@ class _$FileSaverFileSavedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$FileSaverFileSaved implements FileSaverFileSaved {
-  const _$FileSaverFileSaved(this.file);
+  const _$FileSaverFileSaved(this.file, this.appFolder);
 
   @override
   final File file;
+  @override
+  final AppFolder appFolder;
 
   @override
   String toString() {
-    return 'FileSaverEvent.fileSaved(file: $file)';
+    return 'FileSaverEvent.fileSaved(file: $file, appFolder: $appFolder)';
   }
 
   @override
@@ -151,12 +165,15 @@ class _$FileSaverFileSaved implements FileSaverFileSaved {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is FileSaverFileSaved &&
-            const DeepCollectionEquality().equals(other.file, file));
+            const DeepCollectionEquality().equals(other.file, file) &&
+            const DeepCollectionEquality().equals(other.appFolder, appFolder));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(file));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(file),
+      const DeepCollectionEquality().hash(appFolder));
 
   @JsonKey(ignore: true)
   @override
@@ -166,27 +183,27 @@ class _$FileSaverFileSaved implements FileSaverFileSaved {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(File file) fileSaved,
+    required TResult Function(File file, AppFolder appFolder) fileSaved,
   }) {
-    return fileSaved(file);
+    return fileSaved(file, appFolder);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(File file)? fileSaved,
+    TResult Function(File file, AppFolder appFolder)? fileSaved,
   }) {
-    return fileSaved?.call(file);
+    return fileSaved?.call(file, appFolder);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(File file)? fileSaved,
+    TResult Function(File file, AppFolder appFolder)? fileSaved,
     required TResult orElse(),
   }) {
     if (fileSaved != null) {
-      return fileSaved(file);
+      return fileSaved(file, appFolder);
     }
     return orElse();
   }
@@ -221,10 +238,13 @@ class _$FileSaverFileSaved implements FileSaverFileSaved {
 }
 
 abstract class FileSaverFileSaved implements FileSaverEvent {
-  const factory FileSaverFileSaved(File file) = _$FileSaverFileSaved;
+  const factory FileSaverFileSaved(File file, AppFolder appFolder) =
+      _$FileSaverFileSaved;
 
   @override
   File get file;
+  @override
+  AppFolder get appFolder;
   @override
   @JsonKey(ignore: true)
   $FileSaverFileSavedCopyWith<FileSaverFileSaved> get copyWith =>

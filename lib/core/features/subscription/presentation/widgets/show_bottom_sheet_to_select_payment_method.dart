@@ -127,14 +127,13 @@ class _PaymentSelection extends StatelessWidget {
         const Divider(),
         InkWell(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => AddCreditCardScreen(
-                  subscriptionBloc: subscriptionBloc,
-                  selectedPlan: selectedPlan,
-                  userId: userId,
-                ),
-              ),
+            Navigator.of(context).pushNamed(
+              AddCreditCardScreen.routeName,
+              arguments: {
+                'subscriptionBloc': subscriptionBloc,
+                'selectedPlan': selectedPlan,
+                'userId': userId,
+              },
             );
           },
           child: Row(

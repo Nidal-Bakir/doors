@@ -9,6 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
+import 'package:path/path.dart' as path;
 
 part 'file_uploader_event.dart';
 part 'file_uploader_state.dart';
@@ -20,13 +21,13 @@ class FileUploaderBloc extends Bloc<FileUploaderEvent, FileUploaderState> {
       : super(const FileUploaderInitial()) {
     on<FileUploaderEvent>((event, emit) async {
       await event.map(
-        fileUploaded: (fileUploaderFileUploaded) async =>
-            await _onFileUploaded(fileUploaderFileUploaded, emit),
-        fileManagerOpened: (fileManagerOpened) async =>
-            await _onFileManagerOpened(fileManagerOpened, emit),
-        selectedFileCanceled: (selectedFileCanceled) async =>
-            await _onSelectedFileCanceled(selectedFileCanceled, emit),
-      );
+          fileUploaded: (fileUploaderFileUploaded) async =>
+              await _onFileUploaded(fileUploaderFileUploaded, emit),
+          fileManagerOpened: (fileManagerOpened) async =>
+              await _onFileManagerOpened(fileManagerOpened, emit),
+          selectedFileCanceled: (selectedFileCanceled) async =>
+              await _onSelectedFileCanceled(selectedFileCanceled, emit),
+          fileSelected: (event) async => _onFileSelected(event, emit));
     }, transformer: bloc_concurrency.restartable());
   }
 
@@ -34,22 +35,28 @@ class FileUploaderBloc extends Bloc<FileUploaderEvent, FileUploaderState> {
     FileUploaderFileUploaded fileUploaderFileUploaded,
     Emitter<FileUploaderState> emit,
   ) async {
-    String fileSize = '';
-    if (fileUploaderFileUploaded.file.file != null) {
-      fileSize = await getFileSize(fileUploaderFileUploaded.file.file!.path, 1);
-    }
+    final _validParseFileToUpload =
+        _getValidParseFileToUpload(fileUploaderFileUploaded.file.file!);
+
+    String fileSize = await getFileSize(_validParseFileToUpload.file!.path, 1);
+
     // TODO: rmove this line when new version of pares flutter sdk relesed
     // and fixes the dio bug not calling progressCallback
     emit(const FileUploaderUploadInProgress(1, 1));
-    await fileUploaderFileUploaded.file.upload(
+
+    await _validParseFileToUpload.upload(
       progressCallback: (count, total) {
         emit(FileUploaderUploadInProgress(count, total));
       },
     ).then(
       (ParseResponse uploadResponse) {
         if (uploadResponse.success || uploadResponse.error == null) {
-          emit(FileUploaderUploadSuccess(
-              fileUploaderFileUploaded.file, fileSize));
+          emit(
+            FileUploaderUploadSuccess(
+              _validParseFileToUpload,
+              fileSize,
+            ),
+          );
         } else {
           emit(
             FileUploaderUploadFailure(
@@ -93,5 +100,24 @@ class FileUploaderBloc extends Bloc<FileUploaderEvent, FileUploaderState> {
       Emitter<FileUploaderState> emit) async {
     _fileUploaderRepository.clearTemporaryFiles();
     emit(const FileUploaderInitial());
+  }
+
+  void _onFileSelected(
+    FileUploaderFileSelected event,
+    Emitter<FileUploaderState> emit,
+  ) {
+    emit(FileUploaderFileSelectingSuccess(event.selectedFile));
+  }
+
+  /// remove all not valid chars from file name
+  ParseFile _getValidParseFileToUpload(File file) {
+    final fileExt = path.extension(file.path);
+    final validFileNameWithoutExt = path
+        .basenameWithoutExtension(file.path)
+        .replaceAll(
+            RegExp(
+                r'[$&%!?\*\.#@_\-\/\\\^()=+;\{\}\[\]:"0-9©®™✓°π√•|`~×÷¶∆¥€¢£<>]'),
+            '');
+    return ParseFile(file, name: validFileNameWithoutExt + fileExt);
   }
 }

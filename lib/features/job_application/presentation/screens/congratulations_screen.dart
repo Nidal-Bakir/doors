@@ -50,7 +50,6 @@ class CongratulationsScreen extends StatelessWidget {
                               cacheHeight: 250,
                             ),
                           ),
-                        
                           Align(
                             alignment: Alignment.center,
                             child: Text(
@@ -80,7 +79,7 @@ class CongratulationsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                               const SizedBox16H(),
+                          const SizedBox16H(),
                         ],
                       ),
                     ),

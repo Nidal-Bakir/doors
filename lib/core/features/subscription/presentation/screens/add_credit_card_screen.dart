@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 
 class AddCreditCardScreen extends StatefulWidget {
+  static const routeName = '/add-credit-card';
+
   final SubscriptionBloc subscriptionBloc;
   final OfferedSubscriptionPlan selectedPlan;
   final String userId;

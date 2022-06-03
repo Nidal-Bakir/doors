@@ -55,6 +55,7 @@ class SendJobApplicationScreen extends StatelessWidget {
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Align(
                               alignment: Alignment.center,
@@ -97,7 +98,7 @@ class SendJobApplicationScreen extends StatelessWidget {
                                   ),
                                   TextSpan(
                                     text: context.loc
-                                        .file_click_on_upload_or_you_can_create_one_using_one_of_our_predefined_templates,
+                                        .file_click_on_upload_or_you_can_create_one_using_our_predefined_template,
                                   ),
                                 ],
                               ),

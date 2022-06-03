@@ -3,6 +3,19 @@ import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:flutter/widgets.dart';
 
+enum AppFolder { jobApplications, myResumes }
+
+extension AppFolderName on AppFolder {
+  String get folderName {
+    switch (this) {
+      case AppFolder.jobApplications:
+        return 'job applications';
+      case AppFolder.myResumes:
+        return 'my resumes';
+    }
+  }
+}
+
 enum AccountType { user, company }
 enum AccountStatues { active, suspended }
 enum PaymentMethod { paypal, masterCard, visa }

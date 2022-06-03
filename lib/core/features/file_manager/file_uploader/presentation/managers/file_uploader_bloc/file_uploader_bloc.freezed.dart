@@ -29,6 +29,12 @@ class _$FileUploaderEventTearOff {
     );
   }
 
+  FileUploaderFileSelected fileSelected(File selectedFile) {
+    return FileUploaderFileSelected(
+      selectedFile,
+    );
+  }
+
   FileUploaderFileManagerOpened fileManagerOpened(
       List<String> allowedExtensions, FileType fileType) {
     return FileUploaderFileManagerOpened(
@@ -47,6 +53,7 @@ mixin _$FileUploaderEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(ParseFile file) fileUploaded,
     required TResult Function(File file) selectedFileCanceled,
+    required TResult Function(File selectedFile) fileSelected,
     required TResult Function(List<String> allowedExtensions, FileType fileType)
         fileManagerOpened,
   }) =>
@@ -55,6 +62,7 @@ mixin _$FileUploaderEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(ParseFile file)? fileUploaded,
     TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
     TResult Function(List<String> allowedExtensions, FileType fileType)?
         fileManagerOpened,
   }) =>
@@ -63,6 +71,7 @@ mixin _$FileUploaderEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(ParseFile file)? fileUploaded,
     TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
     TResult Function(List<String> allowedExtensions, FileType fileType)?
         fileManagerOpened,
     required TResult orElse(),
@@ -73,6 +82,7 @@ mixin _$FileUploaderEvent {
     required TResult Function(FileUploaderFileUploaded value) fileUploaded,
     required TResult Function(FileUploaderSelectedFileCanceled value)
         selectedFileCanceled,
+    required TResult Function(FileUploaderFileSelected value) fileSelected,
     required TResult Function(FileUploaderFileManagerOpened value)
         fileManagerOpened,
   }) =>
@@ -82,6 +92,7 @@ mixin _$FileUploaderEvent {
     TResult Function(FileUploaderFileUploaded value)? fileUploaded,
     TResult Function(FileUploaderSelectedFileCanceled value)?
         selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
     TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
   }) =>
       throw _privateConstructorUsedError;
@@ -90,6 +101,7 @@ mixin _$FileUploaderEvent {
     TResult Function(FileUploaderFileUploaded value)? fileUploaded,
     TResult Function(FileUploaderSelectedFileCanceled value)?
         selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
     TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
     required TResult orElse(),
   }) =>
@@ -182,6 +194,7 @@ class _$FileUploaderFileUploaded implements FileUploaderFileUploaded {
   TResult when<TResult extends Object?>({
     required TResult Function(ParseFile file) fileUploaded,
     required TResult Function(File file) selectedFileCanceled,
+    required TResult Function(File selectedFile) fileSelected,
     required TResult Function(List<String> allowedExtensions, FileType fileType)
         fileManagerOpened,
   }) {
@@ -193,6 +206,7 @@ class _$FileUploaderFileUploaded implements FileUploaderFileUploaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(ParseFile file)? fileUploaded,
     TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
     TResult Function(List<String> allowedExtensions, FileType fileType)?
         fileManagerOpened,
   }) {
@@ -204,6 +218,7 @@ class _$FileUploaderFileUploaded implements FileUploaderFileUploaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(ParseFile file)? fileUploaded,
     TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
     TResult Function(List<String> allowedExtensions, FileType fileType)?
         fileManagerOpened,
     required TResult orElse(),
@@ -220,6 +235,7 @@ class _$FileUploaderFileUploaded implements FileUploaderFileUploaded {
     required TResult Function(FileUploaderFileUploaded value) fileUploaded,
     required TResult Function(FileUploaderSelectedFileCanceled value)
         selectedFileCanceled,
+    required TResult Function(FileUploaderFileSelected value) fileSelected,
     required TResult Function(FileUploaderFileManagerOpened value)
         fileManagerOpened,
   }) {
@@ -232,6 +248,7 @@ class _$FileUploaderFileUploaded implements FileUploaderFileUploaded {
     TResult Function(FileUploaderFileUploaded value)? fileUploaded,
     TResult Function(FileUploaderSelectedFileCanceled value)?
         selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
     TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
   }) {
     return fileUploaded?.call(this);
@@ -243,6 +260,7 @@ class _$FileUploaderFileUploaded implements FileUploaderFileUploaded {
     TResult Function(FileUploaderFileUploaded value)? fileUploaded,
     TResult Function(FileUploaderSelectedFileCanceled value)?
         selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
     TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
     required TResult orElse(),
   }) {
@@ -335,6 +353,7 @@ class _$FileUploaderSelectedFileCanceled
   TResult when<TResult extends Object?>({
     required TResult Function(ParseFile file) fileUploaded,
     required TResult Function(File file) selectedFileCanceled,
+    required TResult Function(File selectedFile) fileSelected,
     required TResult Function(List<String> allowedExtensions, FileType fileType)
         fileManagerOpened,
   }) {
@@ -346,6 +365,7 @@ class _$FileUploaderSelectedFileCanceled
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(ParseFile file)? fileUploaded,
     TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
     TResult Function(List<String> allowedExtensions, FileType fileType)?
         fileManagerOpened,
   }) {
@@ -357,6 +377,7 @@ class _$FileUploaderSelectedFileCanceled
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(ParseFile file)? fileUploaded,
     TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
     TResult Function(List<String> allowedExtensions, FileType fileType)?
         fileManagerOpened,
     required TResult orElse(),
@@ -373,6 +394,7 @@ class _$FileUploaderSelectedFileCanceled
     required TResult Function(FileUploaderFileUploaded value) fileUploaded,
     required TResult Function(FileUploaderSelectedFileCanceled value)
         selectedFileCanceled,
+    required TResult Function(FileUploaderFileSelected value) fileSelected,
     required TResult Function(FileUploaderFileManagerOpened value)
         fileManagerOpened,
   }) {
@@ -385,6 +407,7 @@ class _$FileUploaderSelectedFileCanceled
     TResult Function(FileUploaderFileUploaded value)? fileUploaded,
     TResult Function(FileUploaderSelectedFileCanceled value)?
         selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
     TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
   }) {
     return selectedFileCanceled?.call(this);
@@ -396,6 +419,7 @@ class _$FileUploaderSelectedFileCanceled
     TResult Function(FileUploaderFileUploaded value)? fileUploaded,
     TResult Function(FileUploaderSelectedFileCanceled value)?
         selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
     TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
     required TResult orElse(),
   }) {
@@ -414,6 +438,163 @@ abstract class FileUploaderSelectedFileCanceled implements FileUploaderEvent {
   @JsonKey(ignore: true)
   $FileUploaderSelectedFileCanceledCopyWith<FileUploaderSelectedFileCanceled>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FileUploaderFileSelectedCopyWith<$Res> {
+  factory $FileUploaderFileSelectedCopyWith(FileUploaderFileSelected value,
+          $Res Function(FileUploaderFileSelected) then) =
+      _$FileUploaderFileSelectedCopyWithImpl<$Res>;
+  $Res call({File selectedFile});
+}
+
+/// @nodoc
+class _$FileUploaderFileSelectedCopyWithImpl<$Res>
+    extends _$FileUploaderEventCopyWithImpl<$Res>
+    implements $FileUploaderFileSelectedCopyWith<$Res> {
+  _$FileUploaderFileSelectedCopyWithImpl(FileUploaderFileSelected _value,
+      $Res Function(FileUploaderFileSelected) _then)
+      : super(_value, (v) => _then(v as FileUploaderFileSelected));
+
+  @override
+  FileUploaderFileSelected get _value =>
+      super._value as FileUploaderFileSelected;
+
+  @override
+  $Res call({
+    Object? selectedFile = freezed,
+  }) {
+    return _then(FileUploaderFileSelected(
+      selectedFile == freezed
+          ? _value.selectedFile
+          : selectedFile // ignore: cast_nullable_to_non_nullable
+              as File,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$FileUploaderFileSelected implements FileUploaderFileSelected {
+  const _$FileUploaderFileSelected(this.selectedFile);
+
+  @override
+  final File selectedFile;
+
+  @override
+  String toString() {
+    return 'FileUploaderEvent.fileSelected(selectedFile: $selectedFile)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is FileUploaderFileSelected &&
+            const DeepCollectionEquality()
+                .equals(other.selectedFile, selectedFile));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(selectedFile));
+
+  @JsonKey(ignore: true)
+  @override
+  $FileUploaderFileSelectedCopyWith<FileUploaderFileSelected> get copyWith =>
+      _$FileUploaderFileSelectedCopyWithImpl<FileUploaderFileSelected>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(ParseFile file) fileUploaded,
+    required TResult Function(File file) selectedFileCanceled,
+    required TResult Function(File selectedFile) fileSelected,
+    required TResult Function(List<String> allowedExtensions, FileType fileType)
+        fileManagerOpened,
+  }) {
+    return fileSelected(selectedFile);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(ParseFile file)? fileUploaded,
+    TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
+    TResult Function(List<String> allowedExtensions, FileType fileType)?
+        fileManagerOpened,
+  }) {
+    return fileSelected?.call(selectedFile);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ParseFile file)? fileUploaded,
+    TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
+    TResult Function(List<String> allowedExtensions, FileType fileType)?
+        fileManagerOpened,
+    required TResult orElse(),
+  }) {
+    if (fileSelected != null) {
+      return fileSelected(selectedFile);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(FileUploaderFileUploaded value) fileUploaded,
+    required TResult Function(FileUploaderSelectedFileCanceled value)
+        selectedFileCanceled,
+    required TResult Function(FileUploaderFileSelected value) fileSelected,
+    required TResult Function(FileUploaderFileManagerOpened value)
+        fileManagerOpened,
+  }) {
+    return fileSelected(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(FileUploaderFileUploaded value)? fileUploaded,
+    TResult Function(FileUploaderSelectedFileCanceled value)?
+        selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
+    TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
+  }) {
+    return fileSelected?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(FileUploaderFileUploaded value)? fileUploaded,
+    TResult Function(FileUploaderSelectedFileCanceled value)?
+        selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
+    TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
+    required TResult orElse(),
+  }) {
+    if (fileSelected != null) {
+      return fileSelected(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class FileUploaderFileSelected implements FileUploaderEvent {
+  const factory FileUploaderFileSelected(File selectedFile) =
+      _$FileUploaderFileSelected;
+
+  File get selectedFile;
+  @JsonKey(ignore: true)
+  $FileUploaderFileSelectedCopyWith<FileUploaderFileSelected> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -498,6 +679,7 @@ class _$FileUploaderFileManagerOpened implements FileUploaderFileManagerOpened {
   TResult when<TResult extends Object?>({
     required TResult Function(ParseFile file) fileUploaded,
     required TResult Function(File file) selectedFileCanceled,
+    required TResult Function(File selectedFile) fileSelected,
     required TResult Function(List<String> allowedExtensions, FileType fileType)
         fileManagerOpened,
   }) {
@@ -509,6 +691,7 @@ class _$FileUploaderFileManagerOpened implements FileUploaderFileManagerOpened {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(ParseFile file)? fileUploaded,
     TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
     TResult Function(List<String> allowedExtensions, FileType fileType)?
         fileManagerOpened,
   }) {
@@ -520,6 +703,7 @@ class _$FileUploaderFileManagerOpened implements FileUploaderFileManagerOpened {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(ParseFile file)? fileUploaded,
     TResult Function(File file)? selectedFileCanceled,
+    TResult Function(File selectedFile)? fileSelected,
     TResult Function(List<String> allowedExtensions, FileType fileType)?
         fileManagerOpened,
     required TResult orElse(),
@@ -536,6 +720,7 @@ class _$FileUploaderFileManagerOpened implements FileUploaderFileManagerOpened {
     required TResult Function(FileUploaderFileUploaded value) fileUploaded,
     required TResult Function(FileUploaderSelectedFileCanceled value)
         selectedFileCanceled,
+    required TResult Function(FileUploaderFileSelected value) fileSelected,
     required TResult Function(FileUploaderFileManagerOpened value)
         fileManagerOpened,
   }) {
@@ -548,6 +733,7 @@ class _$FileUploaderFileManagerOpened implements FileUploaderFileManagerOpened {
     TResult Function(FileUploaderFileUploaded value)? fileUploaded,
     TResult Function(FileUploaderSelectedFileCanceled value)?
         selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
     TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
   }) {
     return fileManagerOpened?.call(this);
@@ -559,6 +745,7 @@ class _$FileUploaderFileManagerOpened implements FileUploaderFileManagerOpened {
     TResult Function(FileUploaderFileUploaded value)? fileUploaded,
     TResult Function(FileUploaderSelectedFileCanceled value)?
         selectedFileCanceled,
+    TResult Function(FileUploaderFileSelected value)? fileSelected,
     TResult Function(FileUploaderFileManagerOpened value)? fileManagerOpened,
     required TResult orElse(),
   }) {

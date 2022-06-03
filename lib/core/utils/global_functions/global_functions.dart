@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:path/path.dart' as path;
 
 final GlobalKey _homeScaffoldGlobalKey = GlobalKey();
 GlobalKey getHomeScaffoldGlobalKey() => _homeScaffoldGlobalKey;
@@ -316,4 +317,27 @@ Future<void> showDialogToExplainWhyWeNeedStoragePermission({
       )
     ],
   );
+}
+
+/// pad pdf file name with numbers in case of duplication.
+///
+/// Returns unique file name in dir
+Future<String> getNonDuplicatedFileNameInDir(String filePath) async {
+  final fileExt = path.extension(filePath);
+  final fileDir = path.dirname(filePath);
+  final fileNameWithoutExt = path.basenameWithoutExtension(filePath);
+  
+  var newFileNameWithoutExt = fileNameWithoutExt;
+
+  var file = File(filePath);
+
+  for (int i = 1;; i++) {
+    if (!(await file.exists())) {
+      break;
+    }
+    newFileNameWithoutExt = fileNameWithoutExt + '_$i';
+
+    file = File('$fileDir/$newFileNameWithoutExt$fileExt');
+  }
+  return '$newFileNameWithoutExt$fileExt';
 }

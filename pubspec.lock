@@ -874,7 +874,7 @@ packages:
       name: pdf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.8.0"
+    version: "3.8.1"
   permission_handler:
     dependency: "direct main"
     description:
@@ -980,6 +980,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  rxdart:
+    dependency: "direct main"
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.4"
   sembast:
     dependency: transitive
     description:

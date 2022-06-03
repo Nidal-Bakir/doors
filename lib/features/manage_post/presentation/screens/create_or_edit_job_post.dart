@@ -65,131 +65,132 @@ class _CreateOrEditJobPostState extends State<CreateOrEditJobPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 32.0,
-              ),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20.0,
-                    horizontal: 40.0,
-                  ),
-                  child: Form(
-                    key: _keyFrom,
-                    child: Column(
-                      children: [
-                        TitleWithUnderLineInTheEnd(
-                          label: _jobPost.objectId == null
-                              ? context.loc.create_job_offer
-                              : context.loc.edit_job_offer,
-                          numberOfUnderLinedChars: 2,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 32.0,
+            ),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20.0,
+                  horizontal: 40.0,
+                ),
+                child: Form(
+                  key: _keyFrom,
+                  child: Column(
+                    children: [
+                      TitleWithUnderLineInTheEnd(
+                        label: _jobPost.objectId == null
+                            ? context.loc.create_job_offer
+                            : context.loc.edit_job_offer,
+                        numberOfUnderLinedChars: 2,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TitleHeadLineWithTextField(
+                        onSave: (title) {
+                          _title = title;
+                        },
+                        initTitle: _title,
+                      ),
+                      const SizedBox16H(),
+                      CategoryHeadLineWithTextField(
+                        onSave: (category) {
+                          _category = category;
+                        },
+                        initCategory: _category,
+                      ),
+                      const SizedBox16H(),
+                      JobTypesChipsMultiSelectionWithHeadLine(
+                        headLineLabel: context.loc.job_type,
+                        initJobTypes: _jobTypes,
+                        onJobTypeChange: (jobTypes) {
+                          _jobTypes = jobTypes;
+                        },
+                      ),
+                      const SizedBox16H(),
+                      LineWithTextOnRow(text: context.loc.location),
+                      UserLocationWidget(
+                        inputDecoration: InputDecoration(
+                          hintText: context.loc.enter_your_city_name,
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        TitleHeadLineWithTextField(
-                          onSave: (title) {
-                            _title = title;
-                          },
-                          initTitle: _title,
-                        ),
-                        const SizedBox16H(),
-                        CategoryHeadLineWithTextField(
-                          onSave: (category) {
-                            _category = category;
-                          },
-                          initCategory: _category,
-                        ),
-                        const SizedBox16H(),
-                        JobTypesChipsMultiSelectionWithHeadLine(
-                          headLineLabel: context.loc.job_type,
-                          initJobTypes: _jobTypes,
-                          onJobTypeChange: (jobTypes) {
-                            _jobTypes = jobTypes;
-                          },
-                        ),
-                        const SizedBox16H(),
-                        LineWithTextOnRow(text: context.loc.location),
-                        UserLocationWidget(
-                          inputDecoration: InputDecoration(
-                            hintText: context.loc.enter_your_city_name,
-                          ),
-                          initHumanReadableLocation: _humanReadableLocation,
-                          initUserLocation: _jobGeoLocation,
-                          onUserLocationDetermined: _onUserLocationDetermined,
-                        ),
-                        const SizedBox16H(),
-                        DescriptionHeadLineWithTextField(
-                          initDescription: _description,
-                          onDescriptionSave: (description) {
-                            _description = description;
-                          },
-                        ),
-                        const SizedBox16H(),
-                        PostImageHeadLineWithImagePicker(
-                          initImage: _postImage,
-                          onPostImageSelected: _onPostImageSelected,
-                        ),
-                        BlocConsumer<ManagePostBloc, ManagePostState>(
-                          listener: (context, state) {
-                            state.whenOrNull(
-                              createSuccuss: () {
-                                showSuccussSnackBar(
-                                  context,
-                                  context.loc
-                                      .your_job_offer_was_successfully_posted,
-                                );
-                                Navigator.of(context)
-                                    .popUntil((route) => route.isFirst);
-                              },
-                              editSuccuss: () {
-                                showSuccussSnackBar(
-                                  context,
-                                  context.loc
-                                      .your_job_offer_was_successfully_edited,
-                                );
-                                Navigator.of(context)
-                                    .popUntil((route) => route.isFirst);
-                              },
-                              operationFailure: (error) => showErrorSnackBar(
+                        initHumanReadableLocation: _humanReadableLocation,
+                        initUserLocation: _jobGeoLocation,
+                        onUserLocationDetermined: _onUserLocationDetermined,
+                      ),
+                      const SizedBox16H(),
+                      DescriptionHeadLineWithTextField(
+                        initDescription: _description,
+                        onDescriptionSave: (description) {
+                          _description = description;
+                        },
+                      ),
+                      const SizedBox16H(),
+                      PostImageHeadLineWithImagePicker(
+                        initImage: _postImage,
+                        onPostImageSelected: _onPostImageSelected,
+                      ),
+                      BlocConsumer<ManagePostBloc, ManagePostState>(
+                        listener: (context, state) {
+                          state.whenOrNull(
+                            createSuccuss: () {
+                              showSuccussSnackBar(
                                 context,
-                                error.getLocalMessageError(context),
-                              ),
-                            );
-                          },
-                          builder: (context, state) {
-                            if (state is ManagePostInProgress) {
-                              return const Padding(
-                                padding: EdgeInsets.only(top: 16),
-                                child: LoadingIndicator(),
+                                context
+                                    .loc.your_job_offer_was_successfully_posted,
                               );
-                            }
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: ElevatedButton(
-                                child: Text(
-                                  _jobPost.objectId == null
-                                      ? context.loc.post
-                                      : context.loc.save,
-                                ),
-                                onPressed: () => _onPressed(context),
-                              ),
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            },
+                            editSuccuss: () {
+                              showSuccussSnackBar(
+                                context,
+                                context
+                                    .loc.your_job_offer_was_successfully_edited,
+                              );
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            },
+                            operationFailure: (error) => showErrorSnackBar(
+                              context,
+                              error.getLocalMessageError(context),
+                            ),
+                          );
+                        },
+                        builder: (context, state) {
+                          if (state is ManagePostInProgress) {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 16),
+                              child: LoadingIndicator(),
                             );
-                          },
-                        ),
-                      ],
-                    ),
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: ElevatedButton(
+                              child: Text(
+                                _jobPost.objectId == null
+                                    ? context.loc.post
+                                    : context.loc.save,
+                              ),
+                              onPressed: () => _onPressed(context),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   void _onPressed(BuildContext context) {

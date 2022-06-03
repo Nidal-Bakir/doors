@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/user_location/models/user_location.dart';
@@ -53,10 +54,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       child: Builder(
         builder: (context) => Scaffold(
           appBar: AppBar(
-            title: Text(
-              context.loc.edit_profile,
-               style: Theme.of(context).textTheme.headline6
-            ),
+            title: Text(context.loc.edit_profile,
+                style: Theme.of(context).textTheme.headline6),
           ),
           body: SingleChildScrollView(
             child: SizedBox(
@@ -81,7 +80,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         LineWithTextOnRow(text: context.loc.name),
                         NameTextField(
                           initName: _currentUserProfile.name,
-                          accountType: widget.currentUserProfile.accountType,
+                          hint: widget.currentUserProfile.accountType ==
+                                  AccountType.user
+                              ? context.loc.name
+                              : context.loc.company_name,
                           onSave: (name) {
                             _editedUser.name = name;
                           },

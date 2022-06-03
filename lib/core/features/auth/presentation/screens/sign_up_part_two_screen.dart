@@ -5,7 +5,7 @@ import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/widgets/bio_head_line_with_text_field.dart';
-import 'package:doors/core/features/auth/presentation/widgets/profile_image.dart';
+import 'package:doors/core/widgets/profile_image.dart';
 import 'package:doors/core/features/auth/presentation/widgets/sign_up_headline_text_with_icon.dart';
 import 'package:doors/core/features/subscription/model/offered_subscription_plan.dart';
 import 'package:doors/core/features/subscription/presentation/managers/subscription_bloc/subscription_bloc.dart';
@@ -71,6 +71,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
                                 horizontal: 40.0,
                               ),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   SignUpHeadLineTextWithIcon(
@@ -119,23 +120,31 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
                                       },
                                       builder: (context, state) {
                                         if (state is AuthInProgress) {
-                                          return const LoadingIndicator();
+                                          return const Align(
+                                              alignment: Alignment.center,
+                                              child: LoadingIndicator());
                                         } else if (state is AuthSignUpSuccess) {
-                                          return ElevatedButton(
-                                            child: Text(context.loc.checkout),
-                                            onPressed: () {
-                                              _onAuthSignUpSuccessThenCheckout(
-                                                state.user,
-                                                context,
-                                              );
-                                            },
+                                          return Align(
+                                            alignment: Alignment.center,
+                                            child: ElevatedButton(
+                                              child: Text(context.loc.checkout),
+                                              onPressed: () {
+                                                _onAuthSignUpSuccessThenCheckout(
+                                                  state.user,
+                                                  context,
+                                                );
+                                              },
+                                            ),
                                           );
                                         }
-                                        return ElevatedButton(
-                                          child: Text(context.loc.sign_up),
-                                          onPressed: () {
-                                            _onSignUpPressed(context);
-                                          },
+                                        return Align(
+                                          alignment: Alignment.center,
+                                          child: ElevatedButton(
+                                            child: Text(context.loc.sign_up),
+                                            onPressed: () {
+                                              _onSignUpPressed(context);
+                                            },
+                                          ),
                                         );
                                       },
                                     ),

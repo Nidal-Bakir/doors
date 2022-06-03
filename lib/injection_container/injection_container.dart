@@ -4,6 +4,7 @@ import 'package:doors/injection_container/file_manager.dart';
 import 'package:doors/injection_container/manage_post_injection.dart';
 import 'package:doors/injection_container/post_injection.dart';
 import 'package:doors/injection_container/recent_posts_injection.dart';
+import 'package:doors/injection_container/resume_creator_injection.dart';
 import 'package:doors/injection_container/search_injection.dart';
 import 'package:doors/injection_container/sned_job_application.dart';
 import 'package:doors/injection_container/subscription_injection.dart';
@@ -61,4 +62,7 @@ Future<void> init({bool forRestart = false}) async {
 
   /// view post job applications init
   viewPostJobApplicationsInit();
+
+  /// resume creator init
+  resumeCreatorInit();
 }

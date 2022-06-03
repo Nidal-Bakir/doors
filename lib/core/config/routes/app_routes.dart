@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:doors/core/enums/enums.dart';
+import 'package:doors/core/features/subscription/presentation/screens/add_credit_card_screen.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/screens/forgat_password_screen.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
@@ -21,6 +22,7 @@ import 'package:doors/features/job_application/presentation/screens/pdf_preview_
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_two.dart';
+import 'package:doors/features/resume_creator/presentation/screens/resume_creator_screen.dart';
 import 'package:doors/features/search/presentation/screens/posts_search_screen.dart';
 import 'package:doors/features/job_application/presentation/screens/congratulations_screen.dart';
 import 'package:doors/features/job_application/presentation/screens/send_job_application_screen.dart';
@@ -97,6 +99,15 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           user: settings.arguments as User,
         ),
       );
+    case AddCreditCardScreen.routeName:
+      final args = settings.arguments as Map<String, dynamic>;
+      return MaterialPageRoute(
+        builder: (_) => AddCreditCardScreen(
+          subscriptionBloc: args['subscriptionBloc'],
+          selectedPlan: args['selectedPlan'],
+          userId: args['userId'],
+        ),
+      );
 
     case PostScreen.routeName:
       return MaterialPageRoute(
@@ -153,6 +164,11 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => PdfPreviewScreen(
           pdfFile: settings.arguments as File,
         ),
+      );
+      
+    case ResumeCreatorScreen.routeName:
+      return MaterialPageRoute<File?>(
+        builder: (_) => const ResumeCreatorScreen(),
       );
   }
 

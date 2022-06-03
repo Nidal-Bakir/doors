@@ -4,6 +4,7 @@ import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/file_manager/file_uploader/presentation/managers/file_uploader_bloc/file_uploader_bloc.dart';
 import 'package:doors/core/widgets/sized_box_16_h.dart';
 import 'package:doors/features/job_application/presentation/managers/send_job_application_bloc/send_job_application_bloc.dart';
+import 'package:doors/features/resume_creator/presentation/screens/resume_creator_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
@@ -58,13 +59,26 @@ class _UploadAndCreateCVButtonsState extends State<UploadAndCreateCVButtons> {
             ),
             ElevatedButton(
               child: Text(context.loc.create),
-              onPressed: _isUploading ? null : () {},
+              onPressed: _isUploading ? null : _onCreatePressed,
             ),
             const SizedBox16H(),
           ],
         ),
       ),
     );
+  }
+
+  void _onCreatePressed() async {
+    final createdPdfFile = await Navigator.of(context).pushNamed<File?>(
+      ResumeCreatorScreen.routeName,
+    );
+    if (createdPdfFile != null) {
+      context.read<FileUploaderBloc>().add(
+            FileUploaderFileSelected(
+              createdPdfFile,
+            ),
+          );
+    }
   }
 
   void _onUploadPressed(BuildContext context) async {

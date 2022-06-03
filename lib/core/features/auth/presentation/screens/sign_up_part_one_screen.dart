@@ -62,7 +62,9 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
                               height: 60,
                             ),
                             NameTextField(
-                              accountType: widget.accountType,
+                              hint: widget.accountType == AccountType.user
+                                  ? context.loc.name
+                                  : context.loc.company_name,
                               onSave: (name) {
                                 _name = name;
                               },
@@ -82,7 +84,6 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
                               onSave: (phoneNumber) {
                                 _phoneNamer = phoneNumber;
                               },
-                             
                             ),
                             const Spacer(),
                             Padding(
@@ -130,5 +131,3 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
     }
   }
 }
-
- 

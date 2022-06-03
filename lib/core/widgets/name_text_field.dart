@@ -1,15 +1,15 @@
-import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/utils/typedef/new_types.dart';
 import 'package:flutter/material.dart';
 
 class NameTextField extends StatelessWidget {
-  final Function(String name) onSave;
-  final AccountType accountType;
+  final VoidCallbackWithParam<String> onSave;
+  final String hint;
   final String? initName;
   const NameTextField({
     Key? key,
     required this.onSave,
-    required this.accountType,
+    required this.hint,
     this.initName,
   }) : super(key: key);
 
@@ -20,13 +20,11 @@ class NameTextField extends StatelessWidget {
       textInputAction: TextInputAction.next,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       enableSuggestions: true,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.name,
       validator: (name) => isValidName(name, context),
       onSaved: (name) => onSave(name!),
       decoration: InputDecoration(
-        hintText: accountType == AccountType.user
-            ? context.loc.name
-            : context.loc.company_name,
+        hintText: hint,
       ),
     );
   }
