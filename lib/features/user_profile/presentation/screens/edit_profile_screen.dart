@@ -153,6 +153,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const SizedBox16H(),
                         LineWithTextOnRow(text: context.loc.location),
                         UserLocationWidget(
+                          allowEmptyLocation: true,
                           initHumanReadableLocation:
                               _currentUserProfile.userHumanReadableLocation,
                           initUserLocation: _currentUserProfile.userLocation,

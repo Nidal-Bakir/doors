@@ -16,9 +16,11 @@ class PostReportRemoteDataSourceImpl extends PostReportRemoteDataSource {
   Future<void> reportPost(PostReport postReport) async {
     final ParseResponse reportResponse;
     try {
-      reportResponse = await postReport.save();
-    }catch (e) {
-      throw const NoConnectionException('cannot sent the post report');
+      reportResponse = await postReport.create();
+    } catch (e) {
+      throw NoConnectionException(
+        'cannot sent the post report' '\nError:' + e.toString(),
+      );
     }
     if (!reportResponse.success && reportResponse.error != null) {
       throw ParseException.extractParseException(reportResponse.error!);

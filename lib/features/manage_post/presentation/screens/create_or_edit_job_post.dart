@@ -114,7 +114,10 @@ class _CreateOrEditJobPostState extends State<CreateOrEditJobPost> {
                         },
                       ),
                       const SizedBox16H(),
-                      LineWithTextOnRow(text: context.loc.location),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: LineWithTextOnRow(text: context.loc.location),
+                      ),
                       UserLocationWidget(
                         inputDecoration: InputDecoration(
                           hintText: context.loc.enter_your_city_name,
@@ -125,6 +128,7 @@ class _CreateOrEditJobPostState extends State<CreateOrEditJobPost> {
                       ),
                       const SizedBox16H(),
                       DescriptionHeadLineWithTextField(
+                        hint: context.loc.job_description,
                         initDescription: _description,
                         onDescriptionSave: (description) {
                           _description = description;

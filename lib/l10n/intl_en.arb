@@ -243,5 +243,6 @@
   "add_new_section": "Add new section",
   "current_residence": "Current residence",
   "enter_your_current_residence": "Enter your current residence",
-  "preview": "PREVIEW"
+  "preview": "PREVIEW",
+  "job_description": "Job description"
 }

@@ -105,6 +105,7 @@ class _CreateOrEditPostScreenPartOneState
                       const SizedBox16H(),
                       DescriptionHeadLineWithTextField(
                         initDescription: _description,
+                        hint: context.loc.what_do_you_need_or_offer,
                         onDescriptionSave: (description) {
                           _description = description;
                         },

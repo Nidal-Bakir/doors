@@ -8,6 +8,7 @@ import 'package:doors/core/features/user_location/presentation/managers/user_loc
 import 'package:doors/core/features/user_location/presentation/widgets/current_user_location_using_gps_icon.dart';
 import 'package:doors/core/features/user_location/repository/user_location_repository.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
+import 'package:doors/core/utils/typedef/new_types.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,11 +18,11 @@ import 'package:get_it/get_it.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class UserLocationWidget extends StatefulWidget {
+  final bool allowEmptyLocation;
   final String? initHumanReadableLocation;
   final ParseGeoPoint? initUserLocation;
-  final void Function(UserLocation userLocation) onUserLocationDetermined;
-  final void Function(String enteredTextLocation)?
-      onTextFieldUserLocationChanged;
+  final VoidCallbackWithParam<UserLocation> onUserLocationDetermined;
+  final VoidCallbackWithParam<String>? onTextFieldUserLocationChanged;
   final InputDecoration inputDecoration;
   final Color? gpsButtonBackgroundColor;
   final Color? suggestionsBoxColor;
@@ -38,6 +39,7 @@ class UserLocationWidget extends StatefulWidget {
     this.suggestionsBoxColor,
     this.suggestionsLoadingIndicatorColor,
     this.onTextFieldUserLocationChanged,
+    this.allowEmptyLocation = false,
   }) : super(key: key);
 
   @override
@@ -138,12 +140,22 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
                 Flexible(
                   child: TypeAheadFormField<City>(
                     onSaved: (citeName) {
-                      widget.onUserLocationDetermined(
-                        UserLocation(
-                          _userGeoLocation,
-                          _selectedCity,
-                        ),
-                      );
+                      if (widget.allowEmptyLocation &&
+                          (citeName?.isEmpty ?? true)) {
+                        widget.onUserLocationDetermined(
+                          const UserLocation(
+                            null,
+                            null,
+                          ),
+                        );
+                      } else {
+                        widget.onUserLocationDetermined(
+                          UserLocation(
+                            _userGeoLocation,
+                            _selectedCity,
+                          ),
+                        );
+                      }
                     },
                     minCharsForSuggestions: 3,
                     hideOnEmpty: true,
@@ -338,6 +350,9 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
   }
 
   String? _cityNameValidator(String? cityName) {
+    if (widget.allowEmptyLocation && (cityName?.isEmpty ?? true)) {
+      return null;
+    }
     if (_userGeoLocation == null ||
         cityName == null ||
         cityName.isEmpty ||

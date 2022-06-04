@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 
 class DescriptionHeadLineWithTextField extends StatefulWidget {
   final String initDescription;
+  final String hint;
   final void Function(String description) onDescriptionSave;
   const DescriptionHeadLineWithTextField({
     Key? key,
     required this.onDescriptionSave,
     required this.initDescription,
+    required this.hint,
   }) : super(key: key);
 
   @override
@@ -35,12 +37,10 @@ class _DescriptionHeadLineWithTextFieldState
           decoration: InputDecoration(
             counterText:
                 _description.length > 30 ? null : '${_description.length}/30',
-            counterStyle:
-                TextStyle(color: Theme.of(context).colorScheme.error),
-            hintText: context.loc.what_do_you_need_or_offer,
+            counterStyle: TextStyle(color: Theme.of(context).colorScheme.error),
+            hintText: widget.hint,
           ),
-          validator: (description) =>
-              isValidDescription(description, context),
+          validator: (description) => isValidDescription(description, context),
           maxLines: 3,
           onChanged: (description) {
             setState(() {
