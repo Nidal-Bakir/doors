@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:doors/core/enums/enums.dart';
@@ -71,48 +70,52 @@ class _BasicResumeCreatorState extends State<BasicResumeCreator> {
             create: (context) => GetIt.I.get(
               param1: context.read<ResumeSectionsManagerBloc>(),
             ),
-            child: Builder(builder: (context) {
-              return Scaffold(
-                floatingActionButton: const RemoveSubdivisionFAB(),
-                backgroundColor: _theme.colorScheme.primary,
-                body: SafeArea(
-                  child: BlocListener<ResumeSubdivisionsManagerBloc,
-                      ResumeSubdivisionsManagerState>(
-                    listener: (context, state) {
-                      state.whenOrNull(
-                        dragUpdate: _onDragUpdate,
-                      );
-                    },
-                    child: CustomScrollView(
-                      controller: _scrollController,
-                      slivers: [
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                              vertical: 16.0,
-                            ),
-                            child: Card(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0,
-                                  horizontal: 20.0,
-                                ),
-                                child: Form(
-                                  key: _keyFrom,
-                                  child: const _BasicResumeCreatorMainBody(),
+            child: Builder(
+              builder: (context) {
+                return Scaffold(
+                  floatingActionButton: const RemoveSubdivisionFAB(),
+                  backgroundColor: _theme.colorScheme.primary,
+                  body: SafeArea(
+                    child: BlocListener<ResumeSubdivisionsManagerBloc,
+                        ResumeSubdivisionsManagerState>(
+                      listener: (context, state) {
+                        state.whenOrNull(
+                          dragUpdate: _onDragUpdate,
+                        );
+                      },
+                      child: CustomScrollView(
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        controller: _scrollController,
+                        slivers: [
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 16.0,
+                              ),
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  child: Form(
+                                    key: _keyFrom,
+                                    child: const _BasicResumeCreatorMainBody(),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
           );
         },
       ),
@@ -177,7 +180,7 @@ class _BasicResumeCreatorMainBodyState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Align(
-          alignment: Alignment.center,
+          alignment: AlignmentDirectional.center,
           child: TitleWithUnderLineInTheEnd(
             label: context.loc.resume_creator,
             numberOfUnderLinedChars: 2,

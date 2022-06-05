@@ -178,7 +178,7 @@ class _MainScreenState extends State<MainScreen>
             },
           ),
           body: Padding(
-            padding: const EdgeInsets.only(bottom: 70),
+            padding: const EdgeInsetsDirectional.only(bottom: 70),
             child: PageView.builder(
               itemCount: 3,
               controller: _pageController,

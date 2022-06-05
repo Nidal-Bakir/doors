@@ -114,7 +114,7 @@ class _CircularProfileImageWithImagePickerState
                             ),
                     ),
                     Align(
-                      alignment: Alignment.bottomCenter,
+                      alignment: AlignmentDirectional.bottomCenter,
                       child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(

@@ -64,7 +64,7 @@ class _PostImageHeadLineWithImagePickerState
           text: context.loc.image,
         ),
         Container(
-          margin: const EdgeInsets.only(top: 8.0, left: 4),
+          margin: const EdgeInsetsDirectional.only(top: 8.0, start: 4),
           height: 150,
           width: double.infinity,
           decoration: BoxDecoration(

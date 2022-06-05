@@ -10,7 +10,7 @@ class AddNewSectionFAB extends StatelessWidget {
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
     return Align(
-      alignment: Alignment.center,
+      alignment: AlignmentDirectional.center,
       child: FloatingActionButton(
         tooltip: context.loc.add_new_section,
         onPressed: () {

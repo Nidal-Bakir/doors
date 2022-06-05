@@ -100,7 +100,7 @@ class _CVUploadingStateWidgetState extends State<CVUploadingStateWidget> {
                     // TODO: uncoment this line when new version of pares flutter sdk relesed
                     // and fixes the dio bug not calling progressCallback
                     // Align(
-                    //   alignment: Alignment.centerRight,
+                      // alignment: AlignmentDirectional.centerEnd,
                     //   child: Text(
                     //     ((progress / total) * 100).toStringAsFixed(0) + '%',
                     //     style: _theme.textTheme.subtitle2,

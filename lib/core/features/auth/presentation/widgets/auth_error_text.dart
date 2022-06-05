@@ -13,7 +13,7 @@ class AuthErrorText extends StatelessWidget {
       builder: (context, state) {
         if (state is AuthLoadFailure) {
           return Padding(
-            padding: const EdgeInsets.only(bottom: 24.0),
+            padding: const EdgeInsetsDirectional.only(bottom: 24.0),
             child: Text(
               state.exception.getLocalMessageError(context),
               style: Theme.of(context).textTheme.bodyText1?.copyWith(

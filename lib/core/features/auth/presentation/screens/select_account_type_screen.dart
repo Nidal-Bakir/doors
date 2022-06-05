@@ -24,9 +24,9 @@ class SelectAccountTypeScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
+                    padding: const EdgeInsetsDirectional.only(top: 16.0),
                     child: Align(
-                      alignment: Alignment.topCenter,
+                      alignment: AlignmentDirectional.topCenter,
                       child: TitleWithUnderLineInTheEnd(
                         label: context.loc.account_type,
                         numberOfUnderLinedChars: 2,

@@ -23,7 +23,7 @@ class SectionControllerButtons extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Align(
-          alignment: Alignment.center,
+          alignment: AlignmentDirectional.center,
           child: Container(
             height: 30,
             decoration: BoxDecoration(

@@ -79,14 +79,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Align(
-                                alignment: Alignment.center,
+                                alignment: AlignmentDirectional.center,
                                 child: TitleWithUnderLineInTheEnd(
                                   label: _subscriptionOrPromotionLabel,
                                   numberOfUnderLinedChars: 2,
                                 ),
                               ),
                               Align(
-                                alignment: Alignment.center,
+                                alignment: AlignmentDirectional.center,
                                 child: Image.asset(
                                   _isCompanyAccount
                                       ? 'assets/images/tariff-plans-subscription.png'
@@ -125,7 +125,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Padding(
-                                      padding: EdgeInsets.only(top: 3),
+                                      padding: EdgeInsetsDirectional.only(top: 3),
                                       child: Text('🔸'),
                                     ),
                                     Expanded(
@@ -140,7 +140,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Padding(
-                                    padding: EdgeInsets.only(top: 3),
+                                    padding: EdgeInsetsDirectional.only(top: 3),
                                     child: Text('🔸'),
                                   ),
                                   Expanded(
@@ -171,7 +171,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               const SizedBox16H(),
                               const Spacer(),
                               Align(
-                                alignment: Alignment.center,
+                                alignment: AlignmentDirectional.center,
                                 child: ElevatedButton(
                                   child: Text(context.loc.checkout),
                                   onPressed: () {

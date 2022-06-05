@@ -17,7 +17,7 @@ class OfferedPlanCardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 8.0, left: 4),
+      margin: const EdgeInsetsDirectional.only(top: 8.0, start: 4),
       height: 180,
       width: 135,
       decoration: BoxDecoration(
@@ -34,7 +34,7 @@ class OfferedPlanCardItem extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Align(
-              alignment: Alignment.topLeft,
+              alignment: AlignmentDirectional.topStart,
               child: Icon(isSelected ? Icons.circle : Icons.circle_outlined,
                   color: isSelected
                       ? Theme.of(context).colorScheme.primary
@@ -55,7 +55,7 @@ class OfferedPlanCardItem extends StatelessWidget {
               label: context.loc.no_ads,
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 6),
+              padding: const EdgeInsetsDirectional.only(top: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -98,7 +98,7 @@ class _PlanFeature extends StatelessWidget {
     return Row(
       children: [
         Container(
-          margin: const EdgeInsets.only(left: 3),
+          margin: const EdgeInsetsDirectional.only(start: 3),
           height: 19,
           width: 19,
           decoration: BoxDecoration(

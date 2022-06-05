@@ -43,7 +43,7 @@ class _ResumeSectionSubdivisionWidgetState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 4, top: 32),
+          padding: const EdgeInsetsDirectional.only(end: 4, top: 32),
           child: Draggable(
             data: widget.sectionSubdivision,
             onDragStarted: () {

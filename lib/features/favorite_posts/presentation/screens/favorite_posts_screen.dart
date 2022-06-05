@@ -153,7 +153,7 @@ class _FavoritePostsScreenState extends State<FavoritePostsScreen> {
                                   fillOverscroll: false,
                                   hasScrollBody: false,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 20),
+                                    padding: const EdgeInsetsDirectional.only(bottom: 20),
                                     child: state.when(
                                       inProgress: () => const Padding(
                                         padding: EdgeInsets.symmetric(

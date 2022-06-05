@@ -105,7 +105,7 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
                               .subtitle1
                               ?.copyWith(letterSpacing: 1),
                           label: Padding(
-                            padding: const EdgeInsets.only(bottom: 25),
+                            padding: const EdgeInsetsDirectional.only(bottom: 25),
                             child: Text(context.loc.card_number),
                           ),
                           hintText: 'XXXX XXXX XXXX XXXX',
@@ -127,7 +127,7 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
                               .subtitle1
                               ?.copyWith(letterSpacing: 1),
                           label: Padding(
-                            padding: const EdgeInsets.only(bottom: 25),
+                            padding: const EdgeInsetsDirectional.only(bottom: 25),
                             child: Text(context.loc.expired_Date),
                           ),
                           hintText: 'XX/XX',
@@ -149,7 +149,7 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
                               .subtitle1
                               ?.copyWith(letterSpacing: 1),
                           label: const Padding(
-                            padding: EdgeInsets.only(bottom: 25),
+                            padding: EdgeInsetsDirectional.only(bottom: 25),
                             child: Text('CVV'),
                           ),
                           hintText: 'XXX',

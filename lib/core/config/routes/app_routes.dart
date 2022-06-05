@@ -26,6 +26,7 @@ import 'package:doors/features/resume_creator/presentation/screens/resume_creato
 import 'package:doors/features/search/presentation/screens/posts_search_screen.dart';
 import 'package:doors/features/job_application/presentation/screens/congratulations_screen.dart';
 import 'package:doors/features/job_application/presentation/screens/send_job_application_screen.dart';
+import 'package:doors/features/settings/presentation/screens/settings_screen.dart';
 import 'package:doors/features/splash_screen/screens/splash_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/edit_profile_screen.dart';
 import 'package:doors/features/user_profile/presentation/screens/user_profile_screen.dart';
@@ -165,10 +166,15 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           pdfFile: settings.arguments as File,
         ),
       );
-      
+
     case ResumeCreatorScreen.routeName:
       return MaterialPageRoute<File?>(
         builder: (_) => const ResumeCreatorScreen(),
+      );
+
+    case SettingsScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => const SettingsScreen(),
       );
   }
 

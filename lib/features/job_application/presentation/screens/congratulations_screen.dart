@@ -35,7 +35,7 @@ class CongratulationsScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Align(
-                            alignment: Alignment.center,
+                            alignment: AlignmentDirectional.center,
                             child: TitleWithUnderLineInTheEnd(
                               label: context.loc.apply,
                               numberOfUnderLinedChars: 2,
@@ -43,7 +43,7 @@ class CongratulationsScreen extends StatelessWidget {
                           ),
                           const SizedBox16H(),
                           Align(
-                            alignment: Alignment.center,
+                            alignment: AlignmentDirectional.center,
                             child: Image.asset(
                               'assets/images/check.png',
                               height: 250,
@@ -51,7 +51,7 @@ class CongratulationsScreen extends StatelessWidget {
                             ),
                           ),
                           Align(
-                            alignment: Alignment.center,
+                            alignment: AlignmentDirectional.center,
                             child: Text(
                               context.loc.congratulations,
                               style: _theme.textTheme.headline5,
@@ -60,7 +60,7 @@ class CongratulationsScreen extends StatelessWidget {
                           const SizedBox16H(),
                           LineWithTextOnRow(
                             textStyle: _theme.textTheme.subtitle1,
-                            lineMargin: const EdgeInsets.only(top: 3),
+                            lineMargin: const EdgeInsetsDirectional.only(top: 3),
                             crossAxisAlignment: CrossAxisAlignment.start,
                             text: context.loc
                                 .your_application_was_successfully_submitted,
@@ -68,7 +68,7 @@ class CongratulationsScreen extends StatelessWidget {
                           const SizedBox16H(),
                           const Spacer(),
                           Align(
-                            alignment: Alignment.center,
+                            alignment: AlignmentDirectional.center,
                             child: SizedBox(
                               width: 200,
                               child: ElevatedButton(

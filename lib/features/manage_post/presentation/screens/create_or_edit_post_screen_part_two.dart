@@ -83,8 +83,8 @@ class _CreateOrEditPostScreenPartTwoState
                           const SizedBox(
                             height: 20,
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
+                          Align( 
+                            alignment: AlignmentDirectional.centerStart,
                             child:
                                 LineWithTextOnRow(text: context.loc.location),
                           ),
@@ -138,12 +138,12 @@ class _CreateOrEditPostScreenPartTwoState
                             builder: (context, state) {
                               if (state is ManagePostInProgress) {
                                 return const Padding(
-                                  padding: EdgeInsets.only(top: 16),
+                                  padding: EdgeInsetsDirectional.only(top: 16),
                                   child: LoadingIndicator(),
                                 );
                               }
                               return Padding(
-                                padding: const EdgeInsets.only(top: 16),
+                                padding: const EdgeInsetsDirectional.only(top: 16),
                                 child: ElevatedButton(
                                   child: Text(
                                     widget.post.objectId == null

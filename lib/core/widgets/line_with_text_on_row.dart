@@ -4,7 +4,7 @@ class LineWithTextOnRow extends StatelessWidget {
   final Size lineSize;
   final Color? lineColor;
   final InlineSpan textSpan;
-  final EdgeInsets? lineMargin;
+  final EdgeInsetsDirectional? lineMargin;
   final CrossAxisAlignment crossAxisAlignment;
   final TextStyle? textStyle;
   LineWithTextOnRow({
@@ -43,7 +43,7 @@ class LineWithTextOnRow extends StatelessWidget {
         ),
         Flexible(
           child: Padding(
-            padding: const EdgeInsets.only(left: 3),
+            padding: const EdgeInsetsDirectional.only(start: 3),
             child: Text.rich(
               textSpan,
               style: textStyle ?? Theme.of(context).textTheme.headline6,

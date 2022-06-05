@@ -60,7 +60,6 @@ class _CurrentUserLocationUsingGPSIconState
       _crossFadeState = CrossFadeState.showFirst;
     }
     return Container(
-      margin: const EdgeInsets.only(left: 4),
       decoration: BoxDecoration(
           color:
               widget.backgroundColor ?? Theme.of(context).colorScheme.onSurface,

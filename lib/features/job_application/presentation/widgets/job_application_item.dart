@@ -147,7 +147,7 @@ class JobApplicationItem extends StatelessWidget {
                               ),
                               if (state is! FileDownloaderDownloadSuccess)
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 2),
+                                  padding: const EdgeInsetsDirectional.only(top: 2),
                                   child: Text(
                                     jobApplication.fileSize,
                                   ),

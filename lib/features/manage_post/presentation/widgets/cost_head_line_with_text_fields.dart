@@ -148,7 +148,7 @@ class _CostHeadLineWithTextFieldsState
               },
             )),
         Padding(
-          padding: const EdgeInsets.only(left: 8),
+          padding: const EdgeInsetsDirectional.only(start: 8),
           child: Row(
             children: [
               Text(context.loc.i_do_not_know,

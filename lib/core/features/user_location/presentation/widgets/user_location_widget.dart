@@ -245,6 +245,9 @@ class UserLocationWidgetState extends State<UserLocationWidget> {
                     },
                   ),
                 ),
+                const SizedBox(
+                  width: 4,
+                ),
                 CurrentUserLocationUsingGPSIcon(
                   userLocationState: state,
                   backgroundColor: widget.gpsButtonBackgroundColor,

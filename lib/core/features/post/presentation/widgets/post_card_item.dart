@@ -53,7 +53,7 @@ class PostCardItem extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Padding(
-                          padding: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsetsDirectional.only(end: 8),
                           child: CircularProfileImage(
                             profileImage: author.profileImage,
                           ),
@@ -63,7 +63,7 @@ class PostCardItem extends StatelessWidget {
                       Expanded(
                         child: Center(
                           child: Container(
-                            margin: const EdgeInsets.only(right: 58),
+                            margin: const EdgeInsetsDirectional.only(end: 58),
                             child: Text(
                               postTitle,
                               style: Theme.of(context).textTheme.headline6,
@@ -107,7 +107,7 @@ class PostCardItem extends StatelessWidget {
                 Container(
                   height: 140,
                   width: double.infinity,
-                  padding: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsetsDirectional.only(top: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,7 +151,7 @@ class PostCardItem extends StatelessWidget {
                                         ],
                                       ),
                               ),
-                              padding: const EdgeInsets.only(top: 4),
+                              padding: const EdgeInsetsDirectional.only(top: 4),
                               child: Text(
                                 postDescription,
                                 maxLines: 3,

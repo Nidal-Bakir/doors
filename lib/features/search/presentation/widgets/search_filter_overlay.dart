@@ -53,9 +53,9 @@ class _SearchFilterOverlayState extends State<SearchFilterOverlay> {
         ),
         color: _theme.colorScheme.primary,
       ),
-      padding: const EdgeInsets.only(
-        left: 50,
-        right: 45,
+      padding: const EdgeInsetsDirectional.only(
+        start: 50,
+        end: 45,
         top: 16,
         bottom: 16,
       ),

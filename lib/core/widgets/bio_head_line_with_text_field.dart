@@ -20,7 +20,7 @@ class BioHeadLineWithTextField extends StatelessWidget {
           text: context.loc.bio,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 4),
+          padding: const EdgeInsetsDirectional.only(top: 8.0, start: 4),
           child: TextFormField(
             textInputAction: TextInputAction.newline,
             keyboardType: TextInputType.multiline,

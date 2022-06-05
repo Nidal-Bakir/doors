@@ -91,7 +91,7 @@ class _CreateOrEditPostScreenPartOneState
                           ),
                           Flexible(
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 2.5),
+                              padding: const EdgeInsetsDirectional.only(top: 2.5),
                               child: CategoryHeadLineWithTextField(
                                 initCategory: _category,
                                 onSave: (category) {
@@ -119,7 +119,7 @@ class _CreateOrEditPostScreenPartOneState
                       ),
                       const SizedBox16H(),
                       Padding(
-                        padding: const EdgeInsets.only(top: 16),
+                        padding: const EdgeInsetsDirectional.only(top: 16),
                         child: ElevatedButton(
                           child: Text(context.loc.next),
                           onPressed: () => _onPressed(context),

@@ -70,7 +70,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Align(
-                          alignment: Alignment.center,
+                          alignment: AlignmentDirectional.center,
                           child: CircularProfileImageWithImagePicker(
                             initProfileImage: _currentUserProfile.profileImage,
                             onProfileImageSelected: _onProfileImageSelected,
@@ -181,7 +181,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           height: 32,
                         ),
                         Align(
-                          alignment: Alignment.centerRight,
+                          alignment: AlignmentDirectional.centerEnd,
                           child:
                               BlocConsumer<EditProfileBloc, EditProfileState>(
                             listener: (context, state) {

@@ -244,5 +244,6 @@
   "current_residence": "Current residence",
   "enter_your_current_residence": "Enter your current residence",
   "preview": "PREVIEW",
-  "job_description": "Job description"
+  "job_description": "Job description",
+  "app_language": "App language"
 }

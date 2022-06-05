@@ -6,6 +6,7 @@ import 'package:doors/injection_container/post_injection.dart';
 import 'package:doors/injection_container/recent_posts_injection.dart';
 import 'package:doors/injection_container/resume_creator_injection.dart';
 import 'package:doors/injection_container/search_injection.dart';
+import 'package:doors/injection_container/settings_injection.dart';
 import 'package:doors/injection_container/sned_job_application.dart';
 import 'package:doors/injection_container/subscription_injection.dart';
 import 'package:doors/injection_container/parse_init.dart';
@@ -60,9 +61,12 @@ Future<void> init({bool forRestart = false}) async {
   // send job application init
   sendJobApplicationInit();
 
-  /// view post job applications init
+  // view post job applications init
   viewPostJobApplicationsInit();
 
-  /// resume creator init
+  // resume creator init
   resumeCreatorInit();
+
+  // inti app settings
+  await settingsInit();
 }

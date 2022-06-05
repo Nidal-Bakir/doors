@@ -187,7 +187,7 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 16, bottom: 6, top: 6),
+      margin: const EdgeInsetsDirectional.only(start: 16, bottom: 6, top: 6),
       child: Material(
         type: MaterialType.button,
         borderRadius: BorderRadius.circular(5),
@@ -209,7 +209,7 @@ class _OfferedPostRate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.bottomRight,
+      alignment: AlignmentDirectional.bottomEnd,
       child: Container(
         color: Colors.white.withOpacity(0.7),
         padding: const EdgeInsets.all(8),
@@ -260,7 +260,7 @@ class _PopupMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.topRight,
+      alignment: AlignmentDirectional.topEnd,
       child: PopupMenuButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
@@ -806,7 +806,7 @@ class _LocationAndCost extends StatelessWidget {
       children: [
         Flexible(
           child: Align(
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: PostLocation(
               maxLines: 2,
               humanReadableLocation: humanReadableLocation,
@@ -819,7 +819,7 @@ class _LocationAndCost extends StatelessWidget {
         ),
         Flexible(
           child: Align(
-            alignment: Alignment.centerRight,
+            alignment: AlignmentDirectional.centerStart,
             child: PostCost(
               minCost: minCost,
               maxCost: maxCost,
@@ -844,7 +844,7 @@ class _Description extends StatelessWidget {
       children: [
         LineWithTextOnRow(text: context.loc.description),
         Padding(
-          padding: const EdgeInsets.only(left: 7),
+          padding: const EdgeInsetsDirectional.only(start: 7),
           child: Text(
             postDescription,
             style: Theme.of(context).textTheme.subtitle1,

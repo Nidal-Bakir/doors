@@ -4,9 +4,7 @@ import 'package:doors/core/errors/exception_base.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/models/user.dart';
-import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/post.dart';
-import 'package:doors/core/models/service_post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 

@@ -58,7 +58,7 @@ class SendJobApplicationScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Align(
-                              alignment: Alignment.center,
+                              alignment: AlignmentDirectional.center,
                               child: TitleWithUnderLineInTheEnd(
                                 label: context.loc.apply,
                                 numberOfUnderLinedChars: 2,
@@ -66,7 +66,7 @@ class SendJobApplicationScreen extends StatelessWidget {
                             ),
                             const SizedBox16H(),
                             Align(
-                              alignment: Alignment.center,
+                              alignment: AlignmentDirectional.center,
                               child: Image.asset(
                                 'assets/images/cv.png',
                                 height: 200,
@@ -75,7 +75,7 @@ class SendJobApplicationScreen extends StatelessWidget {
                             ),
                             const SizedBox16H(),
                             LineWithTextOnRow.rich(
-                              lineMargin: const EdgeInsets.only(top: 3),
+                              lineMargin: const EdgeInsetsDirectional.only(top: 3),
                               crossAxisAlignment: CrossAxisAlignment.start,
                               textSpan: TextSpan(
                                 style: _theme.textTheme.subtitle1,

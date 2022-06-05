@@ -136,7 +136,7 @@ class _CustomBottomNavigationBarItemTileState
         child: Stack(
           children: <Widget>[
             Container(
-              margin: const EdgeInsets.only(bottom: 4.0),
+              margin: const EdgeInsetsDirectional.only(bottom: 4.0),
               child: AnimatedAlign(
                 curve: Curves.easeOutCirc,
                 duration: const Duration(milliseconds: 300),
@@ -177,9 +177,9 @@ class _CustomBottomNavigationBarItemTileState
                 duration: const Duration(milliseconds: 150),
                 curve: Curves.easeInOut,
                 child: Align(
-                  alignment: Alignment.bottomCenter,
+                  alignment: AlignmentDirectional.bottomCenter,
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 12.0),
+                    margin: const EdgeInsetsDirectional.only(bottom: 12.0),
                     width: 70.0,
                     child: Text(
                       widget.item.title!,

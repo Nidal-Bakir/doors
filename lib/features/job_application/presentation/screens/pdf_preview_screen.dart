@@ -97,8 +97,8 @@ class PdfPreviewScreen extends StatelessWidget {
                       ),
                       secondChild: Center(
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                            right: 8,
+                          padding: const EdgeInsetsDirectional.only(
+                            end: 8,
                             top: 4,
                             bottom: 4,
                           ),

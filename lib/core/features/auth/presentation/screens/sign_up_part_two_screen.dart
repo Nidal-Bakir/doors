@@ -101,7 +101,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
                                     ),
                                   const Spacer(),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 16.0),
+                                    padding: const EdgeInsetsDirectional.only(top: 16.0),
                                     child: BlocConsumer<AuthBloc, AuthState>(
                                       listener: (context, state) {
                                         state.whenOrNull(
@@ -121,11 +121,11 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
                                       builder: (context, state) {
                                         if (state is AuthInProgress) {
                                           return const Align(
-                                              alignment: Alignment.center,
+                                              alignment: AlignmentDirectional.center,
                                               child: LoadingIndicator());
                                         } else if (state is AuthSignUpSuccess) {
                                           return Align(
-                                            alignment: Alignment.center,
+                                            alignment: AlignmentDirectional.center,
                                             child: ElevatedButton(
                                               child: Text(context.loc.checkout),
                                               onPressed: () {
@@ -138,7 +138,7 @@ class _SignUpPartTwoScreenState extends State<SignUpPartTwoScreen> {
                                           );
                                         }
                                         return Align(
-                                          alignment: Alignment.center,
+                                          alignment: AlignmentDirectional.center,
                                           child: ElevatedButton(
                                             child: Text(context.loc.sign_up),
                                             onPressed: () {

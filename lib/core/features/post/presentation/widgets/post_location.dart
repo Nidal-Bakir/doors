@@ -65,7 +65,7 @@ class _PostLocationDistance extends StatelessWidget {
     }
     if (currentUser.userLocation != null && !currentUser.isAnonymousAccount) {
       return Padding(
-        padding: const EdgeInsets.only(left: 23),
+        padding: const EdgeInsetsDirectional.only(start: 23),
         child: Text(
           currentUser.userLocation!
                   .computeDistanceInKilometers(postLocation)

@@ -47,7 +47,7 @@ class _UploadAndCreateCVButtonsState extends State<UploadAndCreateCVButtons> {
     }
 
     return Align(
-      alignment: Alignment.center,
+      alignment: AlignmentDirectional.center,
       child: SizedBox(
         width: 200,
         child: Column(

@@ -49,7 +49,7 @@ class _ForgatPasswordScreenState extends State<ForgatPasswordScreen> {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 32.0),
+                                  padding: const EdgeInsetsDirectional.only(bottom: 32.0),
                                   child: Text(
                                     context.loc.enter_your_address_to_rest,
                                     style:

@@ -57,7 +57,7 @@ class _ProfileImageState extends State<ProfileImage> {
           text: context.loc.profile_image,
         ),
         Container(
-          margin: const EdgeInsets.only(top: 8.0, left: 4),
+          margin: const EdgeInsetsDirectional.only(top: 8.0, start: 4),
           height: 100,
           width: 105,
           decoration: BoxDecoration(

@@ -12,6 +12,7 @@ import 'package:doors/features/favorite_posts/presentation/screens/favorite_post
 import 'package:doors/features/home/presentation/widgets/menu_profile_info.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_post_screen_part_one.dart';
+import 'package:doors/features/settings/presentation/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -202,6 +203,7 @@ class MenuScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       ZoomDrawer.of(context)?.close();
+                      Navigator.of(context).pushNamed(SettingsScreen.routeName);
                     },
                     label: Text(
                       context.loc.settings,

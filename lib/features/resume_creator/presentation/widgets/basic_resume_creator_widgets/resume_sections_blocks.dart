@@ -1,4 +1,3 @@
-import 'package:doors/features/resume_creator/models/resume_data.dart';
 import 'package:doors/features/resume_creator/presentation/managers/resume_sections_manager_bloc/resume_sections_manager_bloc.dart';
 import 'package:doors/features/resume_creator/presentation/widgets/basic_resume_creator_widgets/resume_section_widget.dart';
 import 'package:flutter/material.dart';

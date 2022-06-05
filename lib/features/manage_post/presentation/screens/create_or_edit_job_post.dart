@@ -115,7 +115,7 @@ class _CreateOrEditJobPostState extends State<CreateOrEditJobPost> {
                       ),
                       const SizedBox16H(),
                       Align(
-                        alignment: Alignment.centerLeft,
+                        alignment: AlignmentDirectional.centerStart,
                         child: LineWithTextOnRow(text: context.loc.location),
                       ),
                       UserLocationWidget(
@@ -169,12 +169,12 @@ class _CreateOrEditJobPostState extends State<CreateOrEditJobPost> {
                         builder: (context, state) {
                           if (state is ManagePostInProgress) {
                             return const Padding(
-                              padding: EdgeInsets.only(top: 16),
+                              padding: EdgeInsetsDirectional.only(top: 16),
                               child: LoadingIndicator(),
                             );
                           }
                           return Padding(
-                            padding: const EdgeInsets.only(top: 16),
+                            padding: const EdgeInsetsDirectional.only(top: 16),
                             child: ElevatedButton(
                               child: Text(
                                 _jobPost.objectId == null

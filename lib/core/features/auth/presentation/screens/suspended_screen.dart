@@ -40,7 +40,7 @@ class SuspendedScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsetsDirectional.only(bottom: 8),
                       child: Text(
                         context.loc.for_more_information_contact_our,
                         style: _theme.textTheme.headline6?.copyWith(

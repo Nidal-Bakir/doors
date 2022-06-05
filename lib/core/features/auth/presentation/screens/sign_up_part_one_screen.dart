@@ -87,7 +87,7 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
                             ),
                             const Spacer(),
                             Padding(
-                              padding: const EdgeInsets.only(top: 16),
+                              padding: const EdgeInsetsDirectional.only(top: 16),
                               child: ElevatedButton(
                                 child: Text(context.loc.next),
                                 onPressed: () => _onPressed(context),

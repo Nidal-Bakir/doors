@@ -10,7 +10,7 @@ class ForgatPasswordTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentDirectional.centerStart,
       child: TextButton(
         onPressed: () {
           Navigator.of(context).pushNamed(ForgatPasswordScreen.routeName);

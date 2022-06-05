@@ -61,7 +61,7 @@ class _OfferedSubscriptionPlansWidgetState
                       children: [
                         if (defaultFreeSelectedPlan != null)
                           Padding(
-                            padding: const EdgeInsets.only(left: 6.5),
+                            padding: const EdgeInsetsDirectional.only(start: 6.5),
                             child: RichText(
                               text: TextSpan(
                                 text: context.loc.free + ' ',
