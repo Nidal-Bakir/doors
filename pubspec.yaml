@@ -45,6 +45,7 @@ dependencies:
 
   # local cache
   shared_preferences: ^2.0.13
+  sqflite: ^2.0.2+1
 
   # payments
   flutter_braintree: ^3.0.0-dev.1
@@ -52,6 +53,10 @@ dependencies:
 
   # backend server
   parse_server_sdk_flutter: ^3.1.0
+
+  # for notifications
+  firebase_messaging: ^11.4.1
+  awesome_notifications: ^0.7.0-beta.4
 
   # location
   geolocator: ^8.2.0

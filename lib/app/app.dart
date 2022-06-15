@@ -10,8 +10,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   const App({Key? key}) : super(key: key);
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  void initState() {
+    // reassign the navigatorKey when the entire widget tree rebuilds
+    // to avoid unexpected behaviors with navigation
+    App.navigatorKey = GlobalKey<NavigatorState>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +49,7 @@ class App extends StatelessWidget {
           builder: (context, state) {
             return state.when(loadSuccess: (appLocale) {
               return MaterialApp(
+                navigatorKey: App.navigatorKey,
                 supportedLocales: AppLocalizations.supportedLocales,
                 locale: appLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,

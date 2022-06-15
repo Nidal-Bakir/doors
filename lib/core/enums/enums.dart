@@ -16,6 +16,19 @@ extension AppFolderName on AppFolder {
   }
 }
 
+enum MessageType { text, image, unSupported }
+
+enum MessageStatues {
+  /// not sent yet
+  pending,
+
+  /// message sent successfully
+  sent,
+
+  /// error while sending the message
+  error,
+}
+
 enum AccountType { user, company }
 enum AccountStatues { active, suspended }
 enum PaymentMethod { paypal, masterCard, visa }

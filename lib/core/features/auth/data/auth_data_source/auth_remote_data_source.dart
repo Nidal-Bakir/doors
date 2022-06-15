@@ -1,6 +1,8 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/models/user.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class AuthRemoteDataSource {
@@ -179,6 +181,9 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
 
   @override
   Future<void> logout(User currentUser) async {
+    FirebaseMessaging.instance.deleteToken();
+    AwesomeNotifications().cancelAll();
+    
     ParseResponse logoutRes;
     try {
       logoutRes = await currentUser.logout();

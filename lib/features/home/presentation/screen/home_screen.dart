@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:doors/core/config/constants.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
@@ -19,7 +22,8 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home-screen';
-  final ZoomDrawerController _drawerController = ZoomDrawerController()..open;
+
+  final ZoomDrawerController _drawerController = ZoomDrawerController();
 
   HomeScreen({Key? key}) : super(key: key);
 

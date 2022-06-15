@@ -1,4 +1,5 @@
 import 'package:doors/core/errors/user_error.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -41,6 +42,27 @@ class PermissionCheckerService {
 
     if (permission == LocationPermission.deniedForever) {
       throw const PermanentlyDeniedLocationPermissionsException();
+    }
+  }
+
+  static Future<AuthorizationStatus> checkPushNotificationPermission() async {
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: true,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      return AuthorizationStatus.authorized;
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      return AuthorizationStatus.provisional;
+    } else {
+      return AuthorizationStatus.denied;
     }
   }
 }

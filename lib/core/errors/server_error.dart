@@ -196,6 +196,9 @@ class ParseSuccessResponseWithNoResults extends ParseException {
 /// ---------------------------------------------------------------------------
 /// |   1008  | Error creating job post the author accountType is not company |
 /// ---------------------------------------------------------------------------
+/// |  1009  | Error sending chat message the current user was blocked by the |
+///          | other user.                                                    |
+/// ---------------------------------------------------------------------------
 /// |  1010  | Unable to login because the user account has been suspended    |
 /// ---------------------------------------------------------------------------
 class ParseCloudCodeCustomException extends ParseException {
@@ -220,6 +223,9 @@ class ParseCloudCodeCustomException extends ParseException {
             parseError);
       case 1008:
         return ErrorCreatingJobPostTheAuthorAccountTypeNotCompany
+            .fromParseError(parseError);
+      case 1009:
+        return ErrorTheCurrentUserWasBlockedByTheOtherUser
             .fromParseError(parseError);
       case 1010:
         return SuspendedAccount.fromParseError(parseError);
@@ -315,5 +321,17 @@ class ErrorCreatingJobPostTheAuthorAccountTypeNotCompany
   @override
   String getLocalMessageError(BuildContext context) {
     return context.loc.only_company_accounts_can_create_job_posts;
+  }
+}
+
+class ErrorTheCurrentUserWasBlockedByTheOtherUser
+    extends ParseCloudCodeCustomException {
+  ErrorTheCurrentUserWasBlockedByTheOtherUser.fromParseError(
+      ParseError parseError)
+      : super.fromParseError(parseError);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.you_can_not_send_messages_to_this_user;
   }
 }

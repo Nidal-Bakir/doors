@@ -245,5 +245,6 @@
   "enter_your_current_residence": "Enter your current residence",
   "preview": "PREVIEW",
   "job_description": "Job description",
-  "app_language": "App language"
+  "app_language": "App language",
+  "you_can_not_send_messages_to_this_user": "You can not send messages to this user."
 }

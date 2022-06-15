@@ -38,7 +38,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const SuspendedScreen());
 
     case HomeScreen.routeName:
-      return MaterialPageRoute(builder: (_) => HomeScreen());
+      return MaterialPageRoute(builder: (_) =>  HomeScreen());
 
     case SplashScreen.routeName:
       return MaterialPageRoute(builder: (_) => const SplashScreen());

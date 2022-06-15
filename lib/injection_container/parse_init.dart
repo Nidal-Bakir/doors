@@ -15,9 +15,11 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 Future<void> parseInit() async {
+ 
   await Parse().initialize(
     ParseKeys.AppID, ParseKeys.ServerURL,
     clientKey: ParseKeys.ClientKey,
+    liveQueryUrl: ParseKeys.LiveQueryUrl,
     // Required for authentication and ACL
     autoSendSessionId: true,
     connectivityProvider: CustomParseConnectivityProvider(),
