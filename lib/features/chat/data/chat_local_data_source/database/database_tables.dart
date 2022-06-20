@@ -9,20 +9,24 @@ abstract class LocalChatTable {
   static const messageType = 'messageType';
   static const messageStatues = 'messageStatues';
   static const sentDate = 'sentDate';
-  static const userId = 'userId';
+  static const messageServerCreationDate = 'messageServerCreationDate';
+  static const isRead = 'isRead';
+  static const receiverUserId = 'receiverUserId';
 
   static String tableCreationCommand = '''
         CREATE TABLE ${LocalChatTable.tableName} (
         ${LocalChatTable.localMessageId} INTEGER PRIMARY KEY,
-        ${LocalChatTable.remoteMessageId} TEXT,
+        ${LocalChatTable.remoteMessageId} TEXT UNIQUE,
         ${LocalChatTable.textMessage} TEXT,
         ${LocalChatTable.mediaPath} TEXT,
         ${LocalChatTable.mediaUrl} TEXT,
         ${LocalChatTable.messageType} TEXT NOT NULL,
         ${LocalChatTable.sentDate} INTEGER NOT NULL,
-        ${LocalChatTable.messageStatues} TEXT,
-        ${LocalChatTable.userId} TEXT NOT NULL,
-        FOREIGN KEY(${LocalChatTable.userId}) REFERENCES ${LocalChatUserInfo.tableName} (${LocalChatUserInfo.userId})
+        ${LocalChatTable.messageServerCreationDate} INTEGER,
+        ${LocalChatTable.messageStatues} TEXT NOT NULL,
+        ${LocalChatTable.isRead} INTEGER NOT NULL DEFAULT 0,
+        ${LocalChatTable.receiverUserId} TEXT NOT NULL,
+        FOREIGN KEY(${LocalChatTable.receiverUserId}) REFERENCES ${LocalChatUserInfo.tableName} (${LocalChatUserInfo.userId})
         )''';
 }
 
@@ -33,12 +37,18 @@ abstract class LocalChatUserInfo {
   static const name = 'name';
   static const profileImagePath = 'profileImagePath';
   static const profileImageUrl = 'profileImageUrl';
+  static const isCurrentUserBlockedByThisUser = 'isCurrentUserBlockedByThisUser';
 
   static String tableCreationCommand = '''
         CREATE TABLE ${LocalChatUserInfo.tableName} (
         ${LocalChatUserInfo.userId} TEXT PRIMARY KEY,
         ${LocalChatUserInfo.name} TEXT NOT NULL,
         ${LocalChatUserInfo.profileImagePath} TEXT,
-        ${LocalChatUserInfo.profileImageUrl} TEXT
+        ${LocalChatUserInfo.profileImageUrl} TEXT,
+        ${LocalChatUserInfo.isCurrentUserBlockedByThisUser} INTEGER NOT NULL DEFAULT 0
         )''';
+
+  /// this is not part of the table schema its the name of result a Query
+  /// in ChatLocalDataSource.getUsersWithLatestMessageAndUnreadCounts.
+  static const unReadCount = 'unReadCount';
 }

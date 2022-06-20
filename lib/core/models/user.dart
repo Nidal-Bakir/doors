@@ -25,6 +25,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyUniqueUserName = keyVarUsername;
   static const keyIsPrivatePhoneNumber = 'isPrivatePhoneNumber';
   static const keyIsPrivateEmailAddress = 'isPrivateEmailAddress';
+  static const keyBlockedUsers = 'blockedUsers';
 
   static const keyEmail = ParseUser.keyEmailAddress;
 
@@ -163,6 +164,14 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
       ]);
     }
   }
+
+  void addUserToBlockedList(String userId) =>
+      setAddUnique(keyBlockedUsers, userId);
+
+  void removeUserFromBlockedList(String userId) =>
+      setRemove(keyBlockedUsers, userId);
+
+  List<String> getListOfBlockedUsers() => List<String>.of(get(keyBlockedUsers));
 
   static List<String> keysToExcludeFromQueriesRelatedToUser() => const [
         User.keyAccountStatues,

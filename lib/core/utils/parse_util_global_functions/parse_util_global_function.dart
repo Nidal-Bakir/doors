@@ -55,7 +55,7 @@ bool _isCurrentImageChanged(ParseFile? currentImage) {
   return false;
 }
 
-/// Delete delete image from parse server
+/// Delete image from parse server
 ///
 /// [objectId]: The object id that's holding the image
 ///

@@ -326,7 +326,7 @@ Future<String> getNonDuplicatedFileNameInDir(String filePath) async {
   final fileExt = path.extension(filePath);
   final fileDir = path.dirname(filePath);
   final fileNameWithoutExt = path.basenameWithoutExtension(filePath);
-  
+
   var newFileNameWithoutExt = fileNameWithoutExt;
 
   var file = File(filePath);
@@ -341,3 +341,10 @@ Future<String> getNonDuplicatedFileNameInDir(String filePath) async {
   }
   return '$newFileNameWithoutExt$fileExt';
 }
+
+
+const undefined = Object();
+
+/// If [param] not passed to [copyWith] function its value will be [undefined].
+/// So we can differentiate between null parameter and not passed parameter.
+bool isNotPassedParameter(Object? param) => param == undefined;

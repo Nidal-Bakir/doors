@@ -73,7 +73,7 @@ Future<UnmodifiableListView<ServicePost>> _loadServicePosts(
     );
   } else {
     final error = ParseException.extractParseException(
-        recentNeededServicePostsResponse.error!);
+        recentNeededServicePostsResponse.error);
     // parse sdk will return error in case no results found
     if (error is ParseSuccessResponseWithNoResults) {
       return UnmodifiableListView(List.empty());

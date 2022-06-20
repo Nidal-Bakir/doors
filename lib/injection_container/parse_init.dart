@@ -10,12 +10,12 @@ import 'package:doors/core/features/user_location/models/city.dart';
 import 'package:doors/core/models/job_application.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/service_post.dart';
+import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_chat_message.dart';
 import 'package:doors/parse_keys.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 Future<void> parseInit() async {
- 
   await Parse().initialize(
     ParseKeys.AppID, ParseKeys.ServerURL,
     clientKey: ParseKeys.ClientKey,
@@ -32,6 +32,7 @@ Future<void> parseInit() async {
       City.keyClassName: () => City(),
       JobPost.keyClassName: () => JobPost(),
       JobApplication.keyClassName: () => JobApplication(),
+      RemoteChatMessage.keyClassName: () => RemoteChatMessage(),
     },
     //TODO: remove the debug mode
     debug: true,

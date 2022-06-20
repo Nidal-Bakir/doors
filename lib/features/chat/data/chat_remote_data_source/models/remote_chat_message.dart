@@ -21,6 +21,7 @@ class RemoteChatMessage extends ParseObject with EquatableMixin {
   static const keySentDate = 'sentDate';
   static const keySender = 'sender';
   static const keyReceiver = 'receiver';
+  static const keyMessageCreatedAt = keyVarCreatedAt;
 
   String get messageId => get(keyMessageId) as String;
 
@@ -30,13 +31,7 @@ class RemoteChatMessage extends ParseObject with EquatableMixin {
   ParseFile? get media => get(keyMedia) as ParseFile?;
   set media(ParseFile? textMessage) => set(keyMedia, textMessage);
 
-  MessageType get messageType {
-    final messageType = (get(keyMessageType) as String);
-    return MessageType.values.firstWhere(
-      (type) => type.name == messageType,
-      orElse: () => MessageType.unSupported,
-    );
-  }
+  String get receivedMessageType => (get(keyMessageType) as String);
 
   set messageType(MessageType messageType) =>
       set(keyMessageType, messageType.name);
@@ -50,12 +45,14 @@ class RemoteChatMessage extends ParseObject with EquatableMixin {
   User get receiver => get(keyReceiver) as User;
   set receiver(User receiver) => set(keyReceiver, receiver);
 
+  DateTime get messageCreationDate => get(keyMessageCreatedAt) as DateTime;
+
   @override
   List<Object?> get props => [
         get(keyMessageId),
         textMessage,
         media,
-        messageType,
+        receivedMessageType,
         sentDate,
         sender,
         receiver

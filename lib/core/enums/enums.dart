@@ -16,7 +16,7 @@ extension AppFolderName on AppFolder {
   }
 }
 
-enum MessageType { text, image, unSupported }
+enum MessageType { text, image }
 
 enum MessageStatues {
   /// not sent yet
@@ -27,6 +27,9 @@ enum MessageStatues {
 
   /// error while sending the message
   error,
+
+  // message received from other user.
+  received
 }
 
 enum AccountType { user, company }

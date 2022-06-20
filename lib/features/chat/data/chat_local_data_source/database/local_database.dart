@@ -21,10 +21,13 @@ class LocalDatabase {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, '$currentUserId.db');
 
-    return await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
-      await db.execute(LocalChatTable.tableCreationCommand);
-      await db.execute(LocalChatUserInfo.tableCreationCommand);
-    });
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (Database db, int version) async {
+        await db.execute(LocalChatTable.tableCreationCommand);
+        await db.execute(LocalChatUserInfo.tableCreationCommand);
+      },
+    );
   }
 }

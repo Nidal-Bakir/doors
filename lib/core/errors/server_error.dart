@@ -201,6 +201,8 @@ class ParseSuccessResponseWithNoResults extends ParseException {
 /// ---------------------------------------------------------------------------
 /// |  1010  | Unable to login because the user account has been suspended    |
 /// ---------------------------------------------------------------------------
+/// |  1011  | Error while deleting media message in chat                     |
+/// ---------------------------------------------------------------------------
 class ParseCloudCodeCustomException extends ParseException {
   ParseCloudCodeCustomException.fromParseError(ParseError parseError)
       : super.fromParseError(parseError);
@@ -225,10 +227,13 @@ class ParseCloudCodeCustomException extends ParseException {
         return ErrorCreatingJobPostTheAuthorAccountTypeNotCompany
             .fromParseError(parseError);
       case 1009:
-        return ErrorTheCurrentUserWasBlockedByTheOtherUser
-            .fromParseError(parseError);
+        return ErrorTheCurrentUserWasBlockedByTheOtherUser.fromParseError(
+            parseError);
       case 1010:
         return SuspendedAccount.fromParseError(parseError);
+      case 1011:
+        return ErrorWhileDeletingMediaMessageFromChat.fromParseError(
+            parseError);
     }
     return ParseCloudCodeCustomException.fromParseError(parseError);
   }
@@ -324,8 +329,14 @@ class ErrorCreatingJobPostTheAuthorAccountTypeNotCompany
   }
 }
 
-class ErrorTheCurrentUserWasBlockedByTheOtherUser
+abstract class ChatRelatedCloudCodeException
     extends ParseCloudCodeCustomException {
+  ChatRelatedCloudCodeException.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+}
+
+class ErrorTheCurrentUserWasBlockedByTheOtherUser
+    extends ChatRelatedCloudCodeException {
   ErrorTheCurrentUserWasBlockedByTheOtherUser.fromParseError(
       ParseError parseError)
       : super.fromParseError(parseError);
@@ -333,5 +344,16 @@ class ErrorTheCurrentUserWasBlockedByTheOtherUser
   @override
   String getLocalMessageError(BuildContext context) {
     return context.loc.you_can_not_send_messages_to_this_user;
+  }
+}
+
+class ErrorWhileDeletingMediaMessageFromChat
+    extends ChatRelatedCloudCodeException {
+  ErrorWhileDeletingMediaMessageFromChat.fromParseError(ParseError parseError)
+      : super.fromParseError(parseError);
+
+  @override
+  String getLocalMessageError(BuildContext context) {
+    return context.loc.an_unexpected_error_occurred;
   }
 }
