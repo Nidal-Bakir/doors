@@ -1,5 +1,5 @@
-import 'package:doors/core/models/user.dart';
 import 'package:doors/core/enums/enums.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -45,7 +45,8 @@ class RemoteChatMessage extends ParseObject with EquatableMixin {
   User get receiver => get(keyReceiver) as User;
   set receiver(User receiver) => set(keyReceiver, receiver);
 
-  DateTime get messageCreationDate => get(keyMessageCreatedAt) as DateTime;
+  DateTime get messageCreationDateOnServer =>
+      get(keyMessageCreatedAt) as DateTime;
 
   @override
   List<Object?> get props => [

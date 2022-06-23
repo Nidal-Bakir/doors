@@ -11,6 +11,9 @@ abstract class LocalChatTable {
   static const sentDate = 'sentDate';
   static const messageServerCreationDate = 'messageServerCreationDate';
   static const isRead = 'isRead';
+  static const isSendedByCurrentUser = 'isSendedByCurrentUser';
+  static const receivedMessageDeletionFromServerStatues =
+      'receivedMessageDeletionFromServerStatues';
   static const receiverUserId = 'receiverUserId';
 
   static String tableCreationCommand = '''
@@ -25,7 +28,9 @@ abstract class LocalChatTable {
         ${LocalChatTable.messageServerCreationDate} INTEGER,
         ${LocalChatTable.messageStatues} TEXT NOT NULL,
         ${LocalChatTable.isRead} INTEGER NOT NULL DEFAULT 0,
+        ${LocalChatTable.isSendedByCurrentUser} INTEGER NOT NULL,
         ${LocalChatTable.receiverUserId} TEXT NOT NULL,
+        ${LocalChatTable.receivedMessageDeletionFromServerStatues} TEXT,
         FOREIGN KEY(${LocalChatTable.receiverUserId}) REFERENCES ${LocalChatUserInfo.tableName} (${LocalChatUserInfo.userId})
         )''';
 }
@@ -37,7 +42,8 @@ abstract class LocalChatUserInfo {
   static const name = 'name';
   static const profileImagePath = 'profileImagePath';
   static const profileImageUrl = 'profileImageUrl';
-  static const isCurrentUserBlockedByThisUser = 'isCurrentUserBlockedByThisUser';
+  static const isCurrentUserBlockedByThisUser =
+      'isCurrentUserBlockedByThisUser';
 
   static String tableCreationCommand = '''
         CREATE TABLE ${LocalChatUserInfo.tableName} (

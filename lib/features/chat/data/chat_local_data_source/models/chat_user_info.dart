@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/database/database_tables.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
@@ -43,13 +44,31 @@ class ChatUserInfo extends Equatable {
     );
   }
 
+  factory ChatUserInfo.buildFromRemoteUser(
+      User remoteSender, String currentUserId) {
+    final isCurrentUserBlockedBySender =
+        remoteSender.getListOfBlockedUsers().contains(currentUserId);
+    return ChatUserInfo(
+      name: remoteSender.name,
+      userId: remoteSender.userId,
+      isCurrentUserBlockedByThisUser: isCurrentUserBlockedBySender,
+      profileImage:
+          remoteSender.profileImage == null || isCurrentUserBlockedBySender
+              ? null
+              : MediaFile(
+                  mediaUrl: remoteSender.profileImage?.url,
+                  file: null,
+                ),
+    );
+  }
+
   static MediaFile? _profileImageFromJson(Map<String, dynamic> jsonMap) {
     if (jsonMap[LocalChatUserInfo.profileImagePath] == null &&
         jsonMap[LocalChatUserInfo.profileImageUrl] == null) {
       return null;
     }
     return MediaFile(
-      mediaFile: File(jsonMap[LocalChatUserInfo.profileImagePath]),
+      file: File(jsonMap[LocalChatUserInfo.profileImagePath]),
       mediaUrl: jsonMap[LocalChatUserInfo.profileImageUrl],
     );
   }
@@ -57,7 +76,7 @@ class ChatUserInfo extends Equatable {
   Map<String, dynamic> toJson() => {
         LocalChatUserInfo.userId: userId,
         LocalChatUserInfo.name: name,
-        LocalChatUserInfo.profileImagePath: profileImage?.mediaFile?.path,
+        LocalChatUserInfo.profileImagePath: profileImage?.file?.path,
         LocalChatUserInfo.profileImageUrl: profileImage?.mediaUrl,
         LocalChatUserInfo.isCurrentUserBlockedByThisUser:
             isCurrentUserBlockedByThisUser ? 1 : 0,

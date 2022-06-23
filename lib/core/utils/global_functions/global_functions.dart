@@ -319,7 +319,7 @@ Future<void> showDialogToExplainWhyWeNeedStoragePermission({
   );
 }
 
-/// pad pdf file name with numbers in case of duplication.
+/// pad file name with numbers in case of duplication.
 ///
 /// Returns unique file name in dir
 Future<String> getNonDuplicatedFileNameInDir(String filePath) async {

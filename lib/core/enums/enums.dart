@@ -18,6 +18,12 @@ extension AppFolderName on AppFolder {
 
 enum MessageType { text, image }
 
+enum ReceivedMessageDeletionFromServerStatues {
+  needToBeDeletedFromServer,
+  onHoldToBeDownLoadedFromServer,
+  deleted,
+}
+
 enum MessageStatues {
   /// not sent yet
   pending,

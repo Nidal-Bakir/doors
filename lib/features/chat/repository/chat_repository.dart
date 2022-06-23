@@ -1,7 +1,9 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' show Random;
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:collection/collection.dart';
 import 'package:doors/core/config/constants.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/models/user.dart';
@@ -9,10 +11,11 @@ import 'package:doors/features/chat/data/chat_local_data_source/data_source/chat
 import 'package:doors/features/chat/data/chat_local_data_source/data_source/chat_users_local_data_source.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
-import 'package:doors/features/chat/data/chat_local_data_source/models/media_file.dart';
 import 'package:doors/features/chat/data/chat_remote_data_source/data_source/chat_remote_data_source.dart';
 import 'package:doors/features/chat/data/chat_remote_data_source/data_source/chat_users_remote_data_source.dart';
 import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_chat_message.dart';
+import 'package:doors/features/chat/data/process/messaging_process_base.dart';
+import 'package:doors/features/chat/util/chat_typedef.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class ChatRepository {
@@ -21,21 +24,61 @@ class ChatRepository {
   final ChatLocalDataSource _chatLocalDataSource;
   final ChatUsersLocalDataSource _chatUsersLocalDataSource;
 
-  String? currentlyOpenedChatUserId;
+  final MessagingProcessBase<Future<EitherServerErrorOrLocalMessage>,
+      LocalChatMessage> _sendTextMessageProcessManager;
+
+  final MessagingProcessBase<ValueStreamOfEitherTuple2OrLocalMessage,
+      LocalChatMessage> _mediaMessageProcessManager;
 
   late final _messagesSteamController = StreamController<LocalChatMessage>();
+
+  String? currentlyOpenedChatUserId;
 
   ChatRepository(
     this._chatRemoteDataSource,
     this._chatUsersRemoteDataSource,
     this._chatLocalDataSource,
     this._chatUsersLocalDataSource,
+    this._sendTextMessageProcessManager,
+    this._mediaMessageProcessManager,
   ) {
+    _deleteAllMessagesMarkedAsNeedsToBeDeletedFromServer();
+    pullUpdatedChatUsersInfoFromRemoteServer();
+
     _chatRemoteDataSource.liveQueryConnectionStatus().listen((event) async {
       if (event == LiveQueryClientEvent.CONNECTED) {
-        _syncWithRemoteServer();
+        _pullMissedMessagesFromRemoteServer();
       }
     });
+  }
+
+  bool _isReceivedMessageFromCurrentlyOpenedUserChat(
+    String messageSenderUserId,
+  ) {
+    return currentlyOpenedChatUserId == messageSenderUserId;
+  }
+
+  Future<EitherServerErrorOrLocalMessage> sendTextMessage(
+    LocalChatMessage newTextMessage,
+  ) {
+    return _sendTextMessageProcessManager
+        .startOrAttachToRunningProcess(newTextMessage);
+  }
+
+  Future<ChatUserInfo> createChatUserIfNotExistsOrUpdate(
+    User remoteChatUser,
+  ) async {
+    final currentUser = (await ParseUser.currentUser()) as User;
+
+    final chatUserInfo = ChatUserInfo.buildFromRemoteUser(
+      remoteChatUser,
+      currentUser.userId,
+    );
+
+    await _chatUsersLocalDataSource
+        .createChatUserIfNotExistsOrUpdate(chatUserInfo);
+
+    return chatUserInfo;
   }
 
   Stream<LocalChatMessage> startListingForNewMessages() async* {
@@ -48,13 +91,14 @@ class ChatRepository {
         .startListingForNewMessages(lastReceivedMessageDate)
         .listen(
       (remoteMessage) async {
-        final receivedMessage =
-            await _addRemoteMessageToLocalDatabase(remoteMessage, currentUser);
+        final receivedMessage = await _addRemoteReceivedMessageToLocalDatabase(
+            remoteMessage, currentUser);
 
         if (receivedMessage != null) {
           _messagesSteamController.sink.add(receivedMessage);
 
-          if (receivedMessage.userId != currentlyOpenedChatUserId) {
+          if (!_isReceivedMessageFromCurrentlyOpenedUserChat(
+              receivedMessage.userId)) {
             _showMessageNotification(
               receivedMessage,
               remoteMessage.sender.userId,
@@ -68,7 +112,7 @@ class ChatRepository {
     yield* _messagesSteamController.stream;
   }
 
-  Future<void> _syncWithRemoteServer() async {
+  Future<void> _pullMissedMessagesFromRemoteServer() async {
     final currentUser = (await ParseUser.currentUser()) as User;
 
     final lastReceivedMessageDate =
@@ -78,56 +122,45 @@ class ChatRepository {
         .getMissedMessagesFromRemoteServer(lastReceivedMessageDate);
 
     for (var remoteMessage in listOfMissedRemoteMessages) {
-      final receivedMessage =
-          await _addRemoteMessageToLocalDatabase(remoteMessage, currentUser);
+      final receivedMessage = await _addRemoteReceivedMessageToLocalDatabase(
+        remoteMessage,
+        currentUser,
+      );
       if (receivedMessage != null) {
         _messagesSteamController.sink.add(receivedMessage);
       }
     }
   }
 
-  Future<LocalChatMessage?> _addRemoteMessageToLocalDatabase(
+  Future<LocalChatMessage?> _addRemoteReceivedMessageToLocalDatabase(
     RemoteChatMessage remoteMessage,
     User currentUser,
   ) async {
-    final receivedMessage = LocalChatMessage.receivedMessage(
-      remoteMessageId: remoteMessage.messageId,
-      textMessage: remoteMessage.textMessage,
-      mediaFile: remoteMessage.receivedMessageType == MessageType.text.name
-          ? null
-          : MediaFile(mediaUrl: remoteMessage.media?.url, mediaFile: null),
-      messageType: remoteMessage.receivedMessageType,
-      sentDate: remoteMessage.sentDate,
-      messageServerCreationDate: remoteMessage.messageCreationDate,
-      senderId: remoteMessage.sender.userId,
+    final receivedMessage = LocalChatMessage.buildFromRemoteReceivedChatMessage(
+      remoteMessage,
+      _isReceivedMessageFromCurrentlyOpenedUserChat(
+          remoteMessage.sender.userId),
     );
 
-    final remoteSender = remoteMessage.sender;
-    final senderUserInfo = ChatUserInfo(
-      name: remoteSender.name,
-      userId: remoteSender.userId,
-      isCurrentUserBlockedByThisUser:
-          remoteSender.getListOfBlockedUsers().contains(currentUser.userId),
-      profileImage: remoteSender.profileImage == null
-          ? null
-          : MediaFile(
-              mediaUrl: remoteSender.profileImage?.url,
-              mediaFile: null,
-            ),
+    final senderUserInfo = ChatUserInfo.buildFromRemoteUser(
+      remoteMessage.sender,
+      currentUser.userId,
     );
 
-    await _chatUsersLocalDataSource.createChatUserIfNotExists(senderUserInfo);
+    await _chatUsersLocalDataSource
+        .createChatUserIfNotExistsOrUpdate(senderUserInfo);
 
     final isAddedSuccessfully =
         await _chatLocalDataSource.addNewMessageToChat(receivedMessage);
 
+    if (receivedMessage.messageType == MessageType.text.name) {
+      _deleteReceivedTextMessageFromServer(receivedMessage.remoteMessageId!);
+    }
+
     return isAddedSuccessfully ? receivedMessage : null;
   }
 
-  Future<void> dispose() async {
-    await _messagesSteamController.close();
-    await _chatRemoteDataSource.dispose();
-  }
+
 
   Future<void> _showMessageNotification(
     LocalChatMessage chatMessage,
@@ -166,5 +199,87 @@ class ChatRepository {
         actionType: ActionType.Default,
       ),
     );
+  }
+
+  Future<void> _deleteAllMessagesMarkedAsNeedsToBeDeletedFromServer() async {
+    final messageNeedsToBeDeletedFromServer = await _chatLocalDataSource
+        .getAllMessagesMarkedAsNeedsToBeDeletedFromServer();
+
+    for (var message in messageNeedsToBeDeletedFromServer) {
+      if (message.messageType == MessageType.text.name) {
+        await _deleteReceivedTextMessageFromServer(message.remoteMessageId!);
+      } else {
+        await _deleteReceivedMediaMessageFromServer(message.remoteMessageId!);
+      }
+    }
+  }
+    Future<void> _deleteReceivedTextMessageFromServer(
+      String remoteMessageId) async {
+    try {
+      await _chatRemoteDataSource.deleteMessageFromServer(
+        remoteMessageId,
+        true,
+      );
+      await _chatLocalDataSource
+          .markReceivedChatMessageWithDeletionFromServerStatues(
+        remoteMessageId,
+        ReceivedMessageDeletionFromServerStatues.deleted,
+      );
+    } catch (error) {
+      log(
+        'could not delete received text message from server, marking as needToBeDeletedFromServer in local database...',
+        error: error,
+      );
+    }
+  }
+
+  Future<void> _deleteReceivedMediaMessageFromServer(
+    String remoteMessageId,
+  ) async {
+    await _chatLocalDataSource
+        .markReceivedChatMessageWithDeletionFromServerStatues(
+      remoteMessageId,
+      ReceivedMessageDeletionFromServerStatues.needToBeDeletedFromServer,
+    );
+    try {
+      await _chatRemoteDataSource.deleteMessageFromServer(
+        remoteMessageId,
+        false,
+      );
+      await _chatLocalDataSource
+          .markReceivedChatMessageWithDeletionFromServerStatues(
+        remoteMessageId,
+        ReceivedMessageDeletionFromServerStatues.deleted,
+      );
+    } catch (error) {
+      log(
+        'could not delete received media message from server, marking as needToBeDeletedFromServer in local database... ',
+        error: error,
+      );
+    }
+  }
+
+  Future<void> pullUpdatedChatUsersInfoFromRemoteServer() async {
+    final chatUsers = await _chatUsersLocalDataSource.getAllChatUsers();
+
+    final UnmodifiableListView<ChatUserInfo> updatedChatUsers;
+    try {
+      updatedChatUsers =
+          await _chatUsersRemoteDataSource.getUpdatedChatUserInfoFromServer(
+        chatUsers.map((user) => user.userId).toList(),
+      );
+    } catch (error) {
+      log('can not get updated chat users info from server', error: error);
+      return;
+    }
+
+    for (var updatedChatUser in updatedChatUsers) {
+      await _chatUsersLocalDataSource.updateReceiverUser(updatedChatUser);
+    }
+  }
+
+  Future<void> dispose() async {
+    await _messagesSteamController.close();
+    await _chatRemoteDataSource.dispose();
   }
 }

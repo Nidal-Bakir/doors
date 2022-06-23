@@ -18,6 +18,14 @@ abstract class ChatLocalDataSource {
 
   Future<void> markChatAsRead(String userId);
 
+  Future<void> markReceivedChatMessageWithDeletionFromServerStatues(
+    String remoteChatMessageId,
+    ReceivedMessageDeletionFromServerStatues deletionStatues,
+  );
+
+  Future<UnmodifiableListView<LocalChatMessage>>
+      getAllMessagesMarkedAsNeedsToBeDeletedFromServer();
+
   Future<DateTime?> getLastReceivedMessageDate();
 }
 
@@ -107,6 +115,40 @@ class ChatLocalDataSourceImpl extends ChatLocalDataSource {
       {LocalChatTable.isRead: 1},
       where: '${LocalChatTable.receiverUserId}= ?',
       whereArgs: [userId],
+    );
+  }
+
+  @override
+  Future<void> markReceivedChatMessageWithDeletionFromServerStatues(
+    String remoteChatMessageId,
+    ReceivedMessageDeletionFromServerStatues deletionStatues,
+  ) async {
+    final database = await localDatabase.database;
+    await database.update(
+      LocalChatTable.tableName,
+      {
+        LocalChatTable.receivedMessageDeletionFromServerStatues:
+            deletionStatues.name
+      },
+      where: '${LocalChatTable.remoteMessageId}= ?',
+      whereArgs: [remoteChatMessageId],
+    );
+  }
+
+  @override
+  Future<UnmodifiableListView<LocalChatMessage>>
+      getAllMessagesMarkedAsNeedsToBeDeletedFromServer() async {
+    final database = await localDatabase.database;
+    final messagesNeedsToBeDeletedFromServer = await database.query(
+      LocalChatTable.tableName,
+      where: '${LocalChatTable.receivedMessageDeletionFromServerStatues} = ?',
+      whereArgs: [
+        ReceivedMessageDeletionFromServerStatues.needToBeDeletedFromServer.name
+      ],
+    );
+    return UnmodifiableListView(
+      messagesNeedsToBeDeletedFromServer
+          .map((e) => LocalChatMessage.formJson(e)),
     );
   }
 }

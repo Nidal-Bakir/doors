@@ -1,4 +1,3 @@
-
 import 'package:collection/collection.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/database/database_tables.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/database/local_database.dart';
@@ -11,11 +10,13 @@ abstract class ChatUsersLocalDataSource {
   Future<UnmodifiableListView<ChatUserInfo>>
       getUsersWithLatestMessageAndUnreadCounts();
 
-  Future<void> createChatUserIfNotExists(ChatUserInfo newChatUserInfo);
+  Future<void> createChatUserIfNotExistsOrUpdate(ChatUserInfo newChatUserInfo);
 
   Future<void> updateReceiverUser(ChatUserInfo updatedUserInfo);
 
   Future<ChatUserInfo> getReceiverUserInfo(String userId);
+  
+  Future<ChatUserInfo> markTheCurrentUserAsBlockedByTheOtherUser(String otherUserId);
 }
 
 class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
@@ -49,13 +50,13 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
   }
 
   @override
-  Future<void> createChatUserIfNotExists(ChatUserInfo newChatUserInfo) async {
- 
+  Future<void> createChatUserIfNotExistsOrUpdate(
+      ChatUserInfo newChatUserInfo) async {
     final database = await localDatabase.database;
     await database.insert(
       LocalChatUserInfo.tableName,
       newChatUserInfo.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.ignore,
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -88,5 +89,11 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
     return UnmodifiableListView(
       chatUsersResult.map((e) => ChatUserInfo.fromJson(e)),
     );
+  }
+
+  @override
+  Future<ChatUserInfo> markTheCurrentUserAsBlockedByTheOtherUser(String otherUserId) {
+    // TODO: implement markTheCurrentUserAsBlockedByTheOtherUser
+    throw UnimplementedError();
   }
 }

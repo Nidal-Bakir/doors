@@ -3,17 +3,18 @@ import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/media_file.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 abstract class ChatUsersRemoteDataSource {
-  Future<List<ChatUserInfo>> getUpdatedChatUserInfoFromServer(
+  Future<UnmodifiableListView<ChatUserInfo>> getUpdatedChatUserInfoFromServer(
     List<String> usersIds,
   );
 }
 
 class ChatUsersRemoteDataSourceImpl extends ChatUsersRemoteDataSource {
   @override
-  Future<List<ChatUserInfo>> getUpdatedChatUserInfoFromServer(
+  Future<UnmodifiableListView<ChatUserInfo>> getUpdatedChatUserInfoFromServer(
     List<String> usersIds,
   ) async {
     final _listOfUpdatedChatUsersInfo = <ChatUserInfo>[];
@@ -41,7 +42,7 @@ class ChatUsersRemoteDataSourceImpl extends ChatUsersRemoteDataSource {
             error.toString(),
       );
     }
-    
+
     if (updatedUsersInfoResponse.success &&
         updatedUsersInfoResponse.results != null &&
         updatedUsersInfoResponse.count != 0) {
@@ -52,25 +53,25 @@ class ChatUsersRemoteDataSourceImpl extends ChatUsersRemoteDataSource {
             isCurrentUserBlockedByThisUser:
                 user.getListOfBlockedUsers().contains(currentUser.userId),
             name: user.name,
-            profileImage: user.profileImage == null ||
-                    _isThereIsABlock(user, currentUser)
-                ? null
-                : MediaFile(mediaUrl: user.profileImage!.url, mediaFile: null),
+            profileImage:
+                user.profileImage == null || _isThereIsABlock(user, currentUser)
+                    ? null
+                    : MediaFile(mediaUrl: user.profileImage!.url, file: null),
           ),
         );
       }
-      return _listOfUpdatedChatUsersInfo;
+      return UnmodifiableListView(_listOfUpdatedChatUsersInfo);
     }
 
     if (updatedUsersInfoResponse.error != null) {
       final error =
           ParseException.extractParseException(updatedUsersInfoResponse.error);
       if (error is ParseSuccessResponseWithNoResults) {
-        return [];
+        return UnmodifiableListView([]);
       }
       throw error;
     }
-    return [];
+    return UnmodifiableListView([]);
   }
 
   bool _isThereIsABlock(User chatUser, User currentUser) {
