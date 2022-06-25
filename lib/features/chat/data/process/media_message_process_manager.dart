@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -14,6 +15,7 @@ import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_c
 import 'package:doors/features/chat/data/process/messaging_process_base.dart';
 import 'package:doors/features/chat/util/chat_typedef.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 class MediaMessageProcessManager extends MessagingProcessBase<
@@ -52,7 +54,8 @@ class MediaMessageProcessManager extends MessagingProcessBase<
     if (message.isSendedByCurrentUser) {
       _startSending(processBehaviorSubject, message);
     } else {
-      // start downloading process
+      // received media message start downloading
+      _startDownloading(processBehaviorSubject, message);
     }
 
     return processBehaviorSubject;
@@ -153,18 +156,108 @@ class MediaMessageProcessManager extends MessagingProcessBase<
       ),
     );
 
-    processBehaviorSubject.add(Right(sendedMediaMessage));
-
     await _chatLocalDataSource.updateMessageInChat(sendedMediaMessage);
+
+    processBehaviorSubject.add(Right(sendedMediaMessage));
 
     await processBehaviorSubject.close();
     _disposableProcesses.add(message.localMessageId);
   }
 
+  Future<void> _startDownloading(
+    BehaviorSubjectOfEitherTuple2OrLocalMessage processBehaviorSubject,
+    LocalChatMessage message,
+  ) async {
+    final mediaUrl = message.mediaFile!.mediaUrl!;
+    final mediaFileToDownload = ParseFile(
+      null,
+      url: mediaUrl,
+      name: path.basename(mediaUrl),
+    );
+
+    final ParseFile downloadedFile;
+    try {
+      downloadedFile =
+          await mediaFileToDownload.download(progressCallback: (count, total) {
+        processBehaviorSubject.sink.add(Left(Tuple2(count, total)));
+      });
+    } catch (error) {
+      processBehaviorSubject.sink.addError(
+        ErrorWhileSavingTheFile(
+          'can not save the media file to app documents directory \n Error:' +
+              error.toString(),
+        ),
+      );
+      await _markMessageWithErrorThenDisposeProcess(message);
+
+      return;
+    }
+
+    final File savedFile;
+    try {
+      savedFile = await _saveMediaFileToAppDocumentsDirectory(
+        downloadedFile.file!,
+      );
+    } catch (error) {
+      processBehaviorSubject.sink.addError(
+        ErrorWhileSavingTheFile(
+          'can not save the media file to app documents directory \n Error:' +
+              error.toString(),
+        ),
+      );
+      await _markMessageWithErrorThenDisposeProcess(message);
+
+      return;
+    }
+
+    final downloadedMediaMessage = message.copyWith(
+      mediaFile: MediaFile(mediaUrl: null, file: savedFile),
+      messageStatues: MessageStatues.received,
+      receivedMessageDeletionFromServerStatues:
+          ReceivedMessageDeletionFromServerStatues.needToBeDeletedFromServer,
+    );
+
+    await _chatLocalDataSource.updateMessageInChat(downloadedMediaMessage);
+
+    processBehaviorSubject.add(Right(downloadedMediaMessage));
+
+    await processBehaviorSubject.close();
+    _disposableProcesses.add(message.localMessageId);
+
+    await _deleteReceivedDownloadedMediaMessageFromServer(
+      downloadedMediaMessage.remoteMessageId!,
+    );
+  }
+
+  Future<void> _deleteReceivedDownloadedMediaMessageFromServer(
+    String remoteMessageId,
+  ) async {
+    try {
+      await _chatRemoteDataSource.deleteMessageFromServer(
+        remoteMessageId,
+        false,
+      );
+    } catch (error) {
+      log(
+        '''could not delete received media message from server,
+        the message still marked as needToBeDeletedFromServer in local database... ''',
+        error: error,
+      );
+
+      return;
+    }
+
+    await _chatLocalDataSource
+        .markReceivedChatMessageWithDeletionFromServerStatues(
+      remoteMessageId,
+      ReceivedMessageDeletionFromServerStatues.deleted,
+    );
+  }
+
   Future<void> _markMessageWithErrorThenDisposeProcess(
       LocalChatMessage message) async {
     await _markMessageWithErrorInLocalDatabase(message);
-    await _runningProcesses[message.localMessageId]?.close();
+    await _runningProcesses[message.localMessageId]!.close();
     _runningProcesses.remove(message.localMessageId);
   }
 
@@ -181,7 +274,9 @@ class MediaMessageProcessManager extends MessagingProcessBase<
     _path = (await path_provider.getApplicationDocumentsDirectory()).path;
     _path += '/chat/media';
 
-    _createChatFolderWithItsSubFolders(_path);
+    await _createChatFolderWithItsSubFolders(_path);
+
+    _path += '/' + path.basename(file.path);
 
     var savedFile = await File(_path).writeAsBytes(
       await file.readAsBytes(),
@@ -205,12 +300,20 @@ class MediaMessageProcessManager extends MessagingProcessBase<
   }
 
   @override
-  Future<void> disposeAllFinishedProcesses() {
-    throw UnimplementedError();
+  Future<void> disposeAllFinishedProcesses() async {
+    for (var processId in _disposableProcesses) {
+      await _runningProcesses[processId]?.close();
+      _runningProcesses.remove(processId);
+    }
+    _disposableProcesses.clear();
   }
 
   @override
-  Future<void> disposeAllProcesses() {
-    throw UnimplementedError();
+  Future<void> disposeAllProcesses() async {
+    for (var process in _runningProcesses.values) {
+      await process.close();
+    }
+    _runningProcesses.clear();
+    _disposableProcesses.clear();
   }
 }

@@ -15,8 +15,8 @@ abstract class ChatUsersLocalDataSource {
   Future<void> updateReceiverUser(ChatUserInfo updatedUserInfo);
 
   Future<ChatUserInfo> getReceiverUserInfo(String userId);
-  
-  Future<ChatUserInfo> markTheCurrentUserAsBlockedByTheOtherUser(String otherUserId);
+
+  Future<void> markTheCurrentUserAsBlockedByTheOtherUser(String otherUserId);
 }
 
 class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
@@ -92,8 +92,15 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
   }
 
   @override
-  Future<ChatUserInfo> markTheCurrentUserAsBlockedByTheOtherUser(String otherUserId) {
-    // TODO: implement markTheCurrentUserAsBlockedByTheOtherUser
-    throw UnimplementedError();
+  Future<void> markTheCurrentUserAsBlockedByTheOtherUser(
+    String otherUserId,
+  ) async {
+    final database = await localDatabase.database;
+    await database.update(
+      LocalChatUserInfo.tableName,
+      {LocalChatUserInfo.isCurrentUserBlockedByThisUser: 1},
+      where: '${LocalChatUserInfo.userId} = ?',
+      whereArgs: [otherUserId],
+    );
   }
 }

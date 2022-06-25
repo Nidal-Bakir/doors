@@ -3,6 +3,7 @@ import 'package:doors/core/config/theme/app_theme.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
+import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/settings/presentation/managers/bloc/app_locale_bloc.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,11 @@ class _AppState extends State<App> {
           lazy: false,
           create: (_) =>
               GetIt.I.get<AuthBloc>()..add(const AuthCurrentUserLoaded()),
+        ),
+        BlocProvider<MessagingBloc>(
+          // will be activated in splash screen if the user is not anonymous
+          lazy: true,
+          create: (_) => GetIt.I.get<MessagingBloc>(),
         ),
         BlocProvider<ManagePostBloc>(
           create: (_) => GetIt.I.get<ManagePostBloc>(),

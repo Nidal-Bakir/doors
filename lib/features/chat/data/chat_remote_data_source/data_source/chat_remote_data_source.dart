@@ -25,7 +25,9 @@ abstract class ChatRemoteDataSource {
 }
 
 class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
-  late final _messagesStreamController = StreamController<RemoteChatMessage>();
+  late final _remoteReceivedMessagesSteamController =
+      StreamController<RemoteChatMessage>();
+      
   late final _messagesLiveQuery = LiveQuery();
 
   @override
@@ -60,11 +62,11 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
     subscription.on(
       LiveQueryEvent.create,
       (newMessage) {
-        _messagesStreamController.sink.add(newMessage);
+        _remoteReceivedMessagesSteamController.sink.add(newMessage);
       },
     );
 
-    yield* _messagesStreamController.stream;
+    yield* _remoteReceivedMessagesSteamController.stream;
   }
 
   @override
@@ -198,6 +200,6 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
   @override
   Future<void> dispose() async {
     await _messagesLiveQuery.client.disconnect();
-    await _messagesStreamController.close();
+    await _remoteReceivedMessagesSteamController.close();
   }
 }

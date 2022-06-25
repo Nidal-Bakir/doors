@@ -30,9 +30,20 @@ class ChatRepository {
   final MessagingProcessBase<ValueStreamOfEitherTuple2OrLocalMessage,
       LocalChatMessage> _mediaMessageProcessManager;
 
-  late final _messagesSteamController = StreamController<LocalChatMessage>();
+  late final _receivedMessagesSteamController =
+      StreamController<LocalChatMessage>();
 
-  String? currentlyOpenedChatUserId;
+  String? _currentlyOpenedChatUserId;
+
+  set currentlyOpenedChatUserId(String? userId) {
+    _currentlyOpenedChatUserId = userId;
+    if (userId == null) {
+      _mediaMessageProcessManager.disposeAllFinishedProcesses();
+      _sendTextMessageProcessManager.disposeAllFinishedProcesses();
+    }
+  }
+
+  String? get currentlyOpenedChatUserId => _currentlyOpenedChatUserId;
 
   ChatRepository(
     this._chatRemoteDataSource,
@@ -52,17 +63,25 @@ class ChatRepository {
     });
   }
 
-  bool _isReceivedMessageFromCurrentlyOpenedUserChat(
-    String messageSenderUserId,
-  ) {
-    return currentlyOpenedChatUserId == messageSenderUserId;
-  }
-
   Future<EitherServerErrorOrLocalMessage> sendTextMessage(
-    LocalChatMessage newTextMessage,
+    LocalChatMessage textMessage,
   ) {
     return _sendTextMessageProcessManager
-        .startOrAttachToRunningProcess(newTextMessage);
+        .startOrAttachToRunningProcess(textMessage);
+  }
+
+  ValueStreamOfEitherTuple2OrLocalMessage sendMediaMessage(
+    LocalChatMessage mediaMessage,
+  ) {
+    return _mediaMessageProcessManager
+        .startOrAttachToRunningProcess(mediaMessage);
+  }
+
+  ValueStreamOfEitherTuple2OrLocalMessage downloadReceivedMediaMessage(
+    LocalChatMessage receivedMediaMessage,
+  ) {
+    return _mediaMessageProcessManager
+        .startOrAttachToRunningProcess(receivedMediaMessage);
   }
 
   Future<ChatUserInfo> createChatUserIfNotExistsOrUpdate(
@@ -89,27 +108,54 @@ class ChatRepository {
 
     _chatRemoteDataSource
         .startListingForNewMessages(lastReceivedMessageDate)
-        .listen(
-      (remoteMessage) async {
-        final receivedMessage = await _addRemoteReceivedMessageToLocalDatabase(
-            remoteMessage, currentUser);
+        .listen((remoteMessage) async {
+      final receivedMessage = await _addRemoteReceivedMessageToLocalDatabase(
+        remoteMessage,
+        currentUser,
+      );
 
-        if (receivedMessage != null) {
-          _messagesSteamController.sink.add(receivedMessage);
+      if (receivedMessage != null) {
+        _receivedMessagesSteamController.sink.add(receivedMessage);
 
-          if (!_isReceivedMessageFromCurrentlyOpenedUserChat(
-              receivedMessage.userId)) {
-            _showMessageNotification(
-              receivedMessage,
-              remoteMessage.sender.userId,
-              remoteMessage.sender.name,
-            );
-          }
+        if (!_isReceivedMessageFromCurrentlyOpenedUserChat(
+          receivedMessage.userId,
+        )) {
+          _showMessageNotification(
+            receivedMessage,
+            remoteMessage.sender.userId,
+            remoteMessage.sender.name,
+          );
         }
-      },
-    );
+      }
+    });
 
-    yield* _messagesSteamController.stream;
+    yield* _receivedMessagesSteamController.stream;
+  }
+
+  Future<void> pullUpdatedChatUsersInfoFromRemoteServer() async {
+    final chatUsers = await _chatUsersLocalDataSource.getAllChatUsers();
+
+    final UnmodifiableListView<ChatUserInfo> updatedChatUsers;
+    try {
+      updatedChatUsers =
+          await _chatUsersRemoteDataSource.getUpdatedChatUserInfoFromServer(
+        chatUsers.map((user) => user.userId).toList(),
+      );
+    } catch (error) {
+      log('can not get updated chat users info from server', error: error);
+      return;
+    }
+
+    for (var updatedChatUser in updatedChatUsers) {
+      await _chatUsersLocalDataSource.updateReceiverUser(updatedChatUser);
+    }
+  }
+
+  Future<void> dispose() async {
+    await _receivedMessagesSteamController.close();
+    await _chatRemoteDataSource.dispose();
+    await _sendTextMessageProcessManager.disposeAllProcesses();
+    await _mediaMessageProcessManager.disposeAllProcesses();
   }
 
   Future<void> _pullMissedMessagesFromRemoteServer() async {
@@ -127,7 +173,7 @@ class ChatRepository {
         currentUser,
       );
       if (receivedMessage != null) {
-        _messagesSteamController.sink.add(receivedMessage);
+        _receivedMessagesSteamController.sink.add(receivedMessage);
       }
     }
   }
@@ -159,8 +205,6 @@ class ChatRepository {
 
     return isAddedSuccessfully ? receivedMessage : null;
   }
-
-
 
   Future<void> _showMessageNotification(
     LocalChatMessage chatMessage,
@@ -213,34 +257,33 @@ class ChatRepository {
       }
     }
   }
-    Future<void> _deleteReceivedTextMessageFromServer(
+
+  Future<void> _deleteReceivedTextMessageFromServer(
       String remoteMessageId) async {
     try {
       await _chatRemoteDataSource.deleteMessageFromServer(
         remoteMessageId,
         true,
       );
-      await _chatLocalDataSource
-          .markReceivedChatMessageWithDeletionFromServerStatues(
-        remoteMessageId,
-        ReceivedMessageDeletionFromServerStatues.deleted,
-      );
     } catch (error) {
       log(
         'could not delete received text message from server, marking as needToBeDeletedFromServer in local database...',
         error: error,
       );
+
+      return;
     }
+
+    await _chatLocalDataSource
+        .markReceivedChatMessageWithDeletionFromServerStatues(
+      remoteMessageId,
+      ReceivedMessageDeletionFromServerStatues.deleted,
+    );
   }
 
   Future<void> _deleteReceivedMediaMessageFromServer(
     String remoteMessageId,
   ) async {
-    await _chatLocalDataSource
-        .markReceivedChatMessageWithDeletionFromServerStatues(
-      remoteMessageId,
-      ReceivedMessageDeletionFromServerStatues.needToBeDeletedFromServer,
-    );
     try {
       await _chatRemoteDataSource.deleteMessageFromServer(
         remoteMessageId,
@@ -253,33 +296,16 @@ class ChatRepository {
       );
     } catch (error) {
       log(
-        'could not delete received media message from server, marking as needToBeDeletedFromServer in local database... ',
+        '''could not delete received media message from server,
+        the message still marked as needToBeDeletedFromServer in local database... ''',
         error: error,
       );
     }
   }
 
-  Future<void> pullUpdatedChatUsersInfoFromRemoteServer() async {
-    final chatUsers = await _chatUsersLocalDataSource.getAllChatUsers();
-
-    final UnmodifiableListView<ChatUserInfo> updatedChatUsers;
-    try {
-      updatedChatUsers =
-          await _chatUsersRemoteDataSource.getUpdatedChatUserInfoFromServer(
-        chatUsers.map((user) => user.userId).toList(),
-      );
-    } catch (error) {
-      log('can not get updated chat users info from server', error: error);
-      return;
-    }
-
-    for (var updatedChatUser in updatedChatUsers) {
-      await _chatUsersLocalDataSource.updateReceiverUser(updatedChatUser);
-    }
-  }
-
-  Future<void> dispose() async {
-    await _messagesSteamController.close();
-    await _chatRemoteDataSource.dispose();
+  bool _isReceivedMessageFromCurrentlyOpenedUserChat(
+    String messageSenderUserId,
+  ) {
+    return _currentlyOpenedChatUserId == messageSenderUserId;
   }
 }
