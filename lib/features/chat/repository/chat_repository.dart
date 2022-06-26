@@ -63,6 +63,23 @@ class ChatRepository {
     });
   }
 
+  Future<UnmodifiableListView<LocalChatMessage>> getChatMessages(
+    String userId,
+    int amountToSkip,
+  ) {
+    return _chatLocalDataSource.getChatWithUser(userId, amountToSkip);
+  }
+
+  Future<UnmodifiableListView<ChatUserInfo>>
+      getUsersWithLatestMessageAndUnreadCounts() async {
+    return await _chatUsersLocalDataSource
+        .getUsersWithLatestMessageAndUnreadCounts();
+  }
+
+  Future<void> markChatAsRead(String userId) async {
+    await _chatLocalDataSource.markChatAsRead(userId);
+  }
+
   Future<EitherServerErrorOrLocalMessage> sendTextMessage(
     LocalChatMessage textMessage,
   ) {
@@ -289,18 +306,20 @@ class ChatRepository {
         remoteMessageId,
         false,
       );
-      await _chatLocalDataSource
-          .markReceivedChatMessageWithDeletionFromServerStatues(
-        remoteMessageId,
-        ReceivedMessageDeletionFromServerStatues.deleted,
-      );
     } catch (error) {
       log(
         '''could not delete received media message from server,
         the message still marked as needToBeDeletedFromServer in local database... ''',
         error: error,
       );
+      return;
     }
+
+    await _chatLocalDataSource
+        .markReceivedChatMessageWithDeletionFromServerStatues(
+      remoteMessageId,
+      ReceivedMessageDeletionFromServerStatues.deleted,
+    );
   }
 
   bool _isReceivedMessageFromCurrentlyOpenedUserChat(

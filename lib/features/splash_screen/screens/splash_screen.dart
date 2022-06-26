@@ -54,10 +54,6 @@ class SplashScreen extends StatelessWidget {
               },
               listener: (context, state) {
                 if (state is AuthCurrentUpdatedUserLoadSuccess) {
-                  if (!state.user.isAnonymousAccount) {
-                    // activate messaging bloc if the current user is not anonymous
-                    context.read<MessagingBloc>();
-                  }
                   Navigator.of(context)
                       .pushReplacementNamed(HomeScreen.routeName);
                 }

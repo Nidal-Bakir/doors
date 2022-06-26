@@ -39,8 +39,6 @@ class _AppState extends State<App> {
               GetIt.I.get<AuthBloc>()..add(const AuthCurrentUserLoaded()),
         ),
         BlocProvider<MessagingBloc>(
-          // will be activated in splash screen if the user is not anonymous
-          lazy: true,
           create: (_) => GetIt.I.get<MessagingBloc>(),
         ),
         BlocProvider<ManagePostBloc>(
