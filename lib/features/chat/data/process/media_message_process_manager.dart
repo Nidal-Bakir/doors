@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:developer';
 import 'dart:io';
 
@@ -28,12 +29,19 @@ class MediaMessageProcessManager extends MessagingProcessBase<
       _runningProcesses = {};
 
   final _disposableProcesses = <int>{};
+  final _pendingPrecesses = ListQueue<LocalChatMessage>();
 
   MediaMessageProcessManager(
     this._chatLocalDataSource,
     this._chatRemoteDataSource,
     this._chatUsersLocalDataSource,
-  );
+  ) {
+    _chatRemoteDataSource.liveQueryConnectionStatus().listen((event) {
+      if (event == LiveQueryClientEvent.CONNECTED) {
+        _restartAllPendingProcesses();
+      }
+    });
+  }
 
   @override
   ValueStreamOfEitherTuple2OrLocalMessage startOrAttachToRunningProcess(
@@ -79,7 +87,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
               error.toString(),
         ),
       );
-      await _markMessageWithErrorThenDisposeProcess(message);
+      await _markMessageWithErrorThenDisposeProcess(message, error);
 
       return;
     }
@@ -113,7 +121,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
               error.toString(),
         ),
       );
-      await _markMessageWithErrorThenDisposeProcess(message);
+      await _markMessageWithErrorThenDisposeProcess(message, error);
 
       return;
     }
@@ -121,7 +129,10 @@ class MediaMessageProcessManager extends MessagingProcessBase<
       processBehaviorSubject.sink.addError(
         ParseException.extractParseException(uploadMediaResponse.error),
       );
-      await _markMessageWithErrorThenDisposeProcess(message);
+      await _markMessageWithErrorThenDisposeProcess(
+        message,
+        uploadMediaResponse.error!,
+      );
 
       return;
     }
@@ -141,7 +152,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
       }
 
       processBehaviorSubject.sink.addError(error);
-      await _markMessageWithErrorThenDisposeProcess(message);
+      await _markMessageWithErrorThenDisposeProcess(message, error);
 
       return;
     }
@@ -188,7 +199,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
               error.toString(),
         ),
       );
-      await _markMessageWithErrorThenDisposeProcess(message);
+      await _markMessageWithErrorThenDisposeProcess(message, error);
 
       return;
     }
@@ -205,7 +216,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
               error.toString(),
         ),
       );
-      await _markMessageWithErrorThenDisposeProcess(message);
+      await _markMessageWithErrorThenDisposeProcess(message, error);
 
       return;
     }
@@ -255,10 +266,18 @@ class MediaMessageProcessManager extends MessagingProcessBase<
   }
 
   Future<void> _markMessageWithErrorThenDisposeProcess(
-      LocalChatMessage message) async {
+    LocalChatMessage message,
+    Object error,
+  ) async {
     await _markMessageWithErrorInLocalDatabase(message);
     await _runningProcesses[message.localMessageId]!.close();
     _runningProcesses.remove(message.localMessageId);
+
+    if (error is NoConnectionException) {
+      // Add the process(message) to pending precesses so when the connection
+      // returns the process will restart and try to resend the message.
+      _pendingPrecesses.addLast(message);
+    }
   }
 
   Future<void> _markMessageWithErrorInLocalDatabase(
@@ -299,6 +318,12 @@ class MediaMessageProcessManager extends MessagingProcessBase<
     }
   }
 
+  void _restartAllPendingProcesses() {
+    for (int i = 0; i < _pendingPrecesses.length; i++) {
+      startOrAttachToRunningProcess(_pendingPrecesses.removeFirst());
+    }
+  }
+
   @override
   Future<void> disposeAllFinishedProcesses() async {
     for (var processId in _disposableProcesses) {
@@ -313,6 +338,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
     for (var process in _runningProcesses.values) {
       await process.close();
     }
+    _pendingPrecesses.clear();
     _runningProcesses.clear();
     _disposableProcesses.clear();
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
@@ -15,10 +16,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final MessagingBloc _messagingBloc;
   final ChatRepository _chatRepository;
 
+  late final StreamSubscription _messagingBlocStateStreamSubscription;
+  final Queue<LocalChatMessage> _currentMessages = Queue();
+
   ChatBloc(this._messagingBloc, this._chatRepository, this.userId)
       : super(const ChatInProgress()) {
-    _chatRepository.currentlyOpenedChatUserId = userId;
-
     on<ChatEvent>((event, emit) async {
       await event.map(
         messagesLoaded: (event) async => await _onMessagesLoaded(event, emit),
@@ -26,15 +28,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
     });
 
-    _messagingBloc.stream.listen((messagingBlocState) {
+    _chatRepository.currentlyOpenedChatUserId = userId;
+
+    _messagingBlocStateStreamSubscription =
+        _messagingBloc.stream.listen((messagingBlocState) {
       messagingBlocState.whenOrNull<void>(
         newMessageReceivedSuccessfully: _onNewMessageEmittedFromMessagingBloc,
         sendingMessageInProgress: _onNewMessageEmittedFromMessagingBloc,
       );
     });
   }
-
-  final Queue<LocalChatMessage> _currentMessages = Queue();
 
   void _onNewMessageEmittedFromMessagingBloc(LocalChatMessage newMessage) {
     if (_isNewMessageForThisChat(newMessage)) {
@@ -44,12 +47,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   bool _isNewMessageForThisChat(LocalChatMessage newMessage) =>
       newMessage.userId == userId;
-
-  @override
-  Future<void> close() {
-    _chatRepository.currentlyOpenedChatUserId = null;
-    return super.close();
-  }
 
   Future<void> _onMessagesLoaded(
       ChatMessagesLoaded event, Emitter<ChatState> emit) async {
@@ -81,5 +78,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _currentMessages.addLast(event.newMessage);
 
     emit(ChatNewMessageAddedSuccessfully(event.newMessage));
+  }
+
+  @override
+  Future<void> close() {
+    _messagingBlocStateStreamSubscription.cancel();
+    _chatRepository.currentlyOpenedChatUserId = null;
+    _currentMessages.clear();
+    return super.close();
   }
 }

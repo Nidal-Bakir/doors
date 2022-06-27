@@ -14,7 +14,7 @@ abstract class LocalChatTable {
   static const isSendedByCurrentUser = 'isSendedByCurrentUser';
   static const receivedMessageDeletionFromServerStatues =
       'receivedMessageDeletionFromServerStatues';
-  static const receiverUserId = 'receiverUserId';
+  static const userId = 'userId';
 
   static String tableCreationCommand = '''
         CREATE TABLE ${LocalChatTable.tableName} (
@@ -29,9 +29,9 @@ abstract class LocalChatTable {
         ${LocalChatTable.messageStatues} TEXT NOT NULL,
         ${LocalChatTable.isRead} INTEGER NOT NULL DEFAULT 0,
         ${LocalChatTable.isSendedByCurrentUser} INTEGER NOT NULL,
-        ${LocalChatTable.receiverUserId} TEXT NOT NULL,
+        ${LocalChatTable.userId} TEXT NOT NULL,
         ${LocalChatTable.receivedMessageDeletionFromServerStatues} TEXT,
-        FOREIGN KEY(${LocalChatTable.receiverUserId}) REFERENCES ${LocalChatUserInfo.tableName} (${LocalChatUserInfo.userId})
+        FOREIGN KEY(${LocalChatTable.userId}) REFERENCES ${LocalChatUserInfo.tableName} (${LocalChatUserInfo.userId})
         )''';
 }
 

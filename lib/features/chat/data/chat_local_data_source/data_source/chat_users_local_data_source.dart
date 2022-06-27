@@ -38,9 +38,9 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
             FROM ${LocalChatTable.tableName}
             ORDER BY ${LocalChatTable.sentDate} DESC
            )
-           GROUP BY ${LocalChatTable.receiverUserId}
+           GROUP BY ${LocalChatTable.userId}
         ) AS chat
-        ON users.${LocalChatUserInfo.userId} = chat.${LocalChatTable.receiverUserId} 
+        ON users.${LocalChatUserInfo.userId} = chat.${LocalChatTable.userId} 
         ORDER BY chat.${LocalChatTable.sentDate} DESC
     ''');
 

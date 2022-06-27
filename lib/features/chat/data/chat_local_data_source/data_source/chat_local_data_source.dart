@@ -45,7 +45,7 @@ class ChatLocalDataSourceImpl extends ChatLocalDataSource {
       limit: GlobalConfig.amountOfMessagesPerPageFromLocalDatabase,
       offset: amountToSkip,
       orderBy: '${LocalChatTable.sentDate} DESC',
-      where: '${LocalChatTable.receiverUserId} = ?',
+      where: '${LocalChatTable.userId} = ?',
       whereArgs: [userId],
     );
     return UnmodifiableListView(
@@ -86,13 +86,12 @@ class ChatLocalDataSourceImpl extends ChatLocalDataSource {
       columns: [LocalChatTable.messageServerCreationDate],
       limit: 1,
       orderBy: '${LocalChatTable.messageServerCreationDate} DESC',
-      where:
-          '${LocalChatTable.receiverUserId} != ? AND ${LocalChatTable.messageStatues} = ? ',
+      where: '${LocalChatTable.isSendedByCurrentUser} = ? ',
       whereArgs: [
-        localDatabase.currentUserId,
-        MessageStatues.received.name,
+        0, //false
       ],
     );
+    
     if (lastReceivedMessageDateResult.isEmpty ||
         lastReceivedMessageDateResult
                 .firstOrNull?[LocalChatTable.messageServerCreationDate] ==
@@ -113,7 +112,7 @@ class ChatLocalDataSourceImpl extends ChatLocalDataSource {
     database.update(
       LocalChatTable.tableName,
       {LocalChatTable.isRead: 1},
-      where: '${LocalChatTable.receiverUserId}= ?',
+      where: '${LocalChatTable.userId}= ?',
       whereArgs: [userId],
     );
   }

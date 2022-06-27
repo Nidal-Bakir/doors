@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
@@ -10,6 +12,7 @@ part 'messaging_bloc.freezed.dart';
 
 class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   final ChatRepository _chatRepository;
+  late final StreamSubscription _newMessagesStreamSubscription;
   MessagingBloc(this._chatRepository) : super(const MessagingInitial()) {
     on<MessagingEvent>((event, emit) async {
       await event.map(
@@ -20,7 +23,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       );
     });
 
-    _chatRepository.startListingForNewMessages().listen((event) {
+    _newMessagesStreamSubscription =
+        _chatRepository.startListingForNewMessages().listen((event) {
       add(MessagingNewMessageReceived(event));
     });
   }
@@ -38,5 +42,11 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   Future<void> _onNewMessageReceived(
       MessagingNewMessageReceived event, Emitter<MessagingState> emit) async {
     emit(MessagingNewMessageReceivedSuccessfully(event.message));
+  }
+
+  @override
+  Future<void> close() {
+    _newMessagesStreamSubscription.cancel();
+    return super.close();
   }
 }

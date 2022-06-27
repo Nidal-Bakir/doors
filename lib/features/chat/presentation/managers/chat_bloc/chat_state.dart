@@ -7,9 +7,11 @@ class ChatState with _$ChatState {
   const factory ChatState.moreMessagesInProgress() = ChatMoreMessagesInProgress;
 
   const factory ChatState.newMessageAddedSuccessfully(
-      LocalChatMessage newMessage) = ChatNewMessageAddedSuccessfully;
+    LocalChatMessage newMessage,
+  ) = ChatNewMessageAddedSuccessfully;
 
   const factory ChatState.messagesLoadSuccess(
-    UnmodifiableListView<LocalChatMessage> chatMessages,bool isCanLoadMore
+    UnmodifiableListView<LocalChatMessage> chatMessages,
+    bool isCanLoadMore,
   ) = ChatMessagesLoadSuccess;
 }

@@ -61,7 +61,7 @@ class LocalChatMessage extends Equatable {
       isRead: jsonMap[LocalChatTable.isRead] == 1 ? true : false,
       isSendedByCurrentUser:
           jsonMap[LocalChatTable.isSendedByCurrentUser] == 1 ? true : false,
-      userId: jsonMap[LocalChatTable.receiverUserId],
+      userId: jsonMap[LocalChatTable.userId],
     );
   }
 
@@ -152,7 +152,7 @@ class LocalChatMessage extends Equatable {
         LocalChatTable.mediaUrl: mediaFile?.mediaUrl,
         LocalChatTable.messageType: messageType,
         LocalChatTable.messageStatues: messageStatues.name,
-        LocalChatTable.receiverUserId: userId,
+        LocalChatTable.userId: userId,
         LocalChatTable.sentDate: sentDate.millisecondsSinceEpoch,
         LocalChatTable.isRead: isRead ? 1 : 0,
         LocalChatTable.isSendedByCurrentUser: isSendedByCurrentUser ? 1 : 0,

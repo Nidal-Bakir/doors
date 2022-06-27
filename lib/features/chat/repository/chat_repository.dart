@@ -17,6 +17,7 @@ import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_c
 import 'package:doors/features/chat/data/process/messaging_process_base.dart';
 import 'package:doors/features/chat/util/chat_typedef.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:rxdart/subjects.dart';
 
 class ChatRepository {
   final ChatRemoteDataSource _chatRemoteDataSource;
@@ -32,6 +33,12 @@ class ChatRepository {
 
   late final _receivedMessagesSteamController =
       StreamController<LocalChatMessage>();
+
+  StreamSubscription? _receivedMessagesFromServerStreamSubscription;
+
+  late final _connectionStatusBehaviorSubject =
+      BehaviorSubject<LiveQueryClientEvent>();
+  late final StreamSubscription _connectionStatusStreamSubscription;
 
   String? _currentlyOpenedChatUserId;
 
@@ -56,12 +63,18 @@ class ChatRepository {
     _deleteAllMessagesMarkedAsNeedsToBeDeletedFromServer();
     pullUpdatedChatUsersInfoFromRemoteServer();
 
-    _chatRemoteDataSource.liveQueryConnectionStatus().listen((event) async {
+    _connectionStatusStreamSubscription =
+        _chatRemoteDataSource.liveQueryConnectionStatus().listen((event) async {
+      _connectionStatusBehaviorSubject.add(event);
+
       if (event == LiveQueryClientEvent.CONNECTED) {
         _pullMissedMessagesFromRemoteServer();
       }
     });
   }
+
+  Stream<LiveQueryClientEvent> connectionStatusSteam() =>
+      _connectionStatusBehaviorSubject.stream;
 
   Future<UnmodifiableListView<LocalChatMessage>> getChatMessages(
     String userId,
@@ -123,7 +136,7 @@ class ChatRepository {
     final lastReceivedMessageDate =
         await _chatLocalDataSource.getLastReceivedMessageDate();
 
-    _chatRemoteDataSource
+    _receivedMessagesFromServerStreamSubscription = _chatRemoteDataSource
         .startListingForNewMessages(lastReceivedMessageDate)
         .listen((remoteMessage) async {
       final receivedMessage = await _addRemoteReceivedMessageToLocalDatabase(
@@ -169,10 +182,16 @@ class ChatRepository {
   }
 
   Future<void> dispose() async {
-    await _receivedMessagesSteamController.close();
     await _chatRemoteDataSource.dispose();
+
     await _sendTextMessageProcessManager.disposeAllProcesses();
     await _mediaMessageProcessManager.disposeAllProcesses();
+
+    await _receivedMessagesSteamController.close();
+    await _connectionStatusBehaviorSubject.close();
+    
+    _receivedMessagesFromServerStreamSubscription?.cancel();
+    _connectionStatusStreamSubscription.cancel();
   }
 
   Future<void> _pullMissedMessagesFromRemoteServer() async {
