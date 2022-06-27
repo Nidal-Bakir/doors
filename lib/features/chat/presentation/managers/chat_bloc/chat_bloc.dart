@@ -19,8 +19,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   late final StreamSubscription _messagingBlocStateStreamSubscription;
   final Queue<LocalChatMessage> _currentMessages = Queue();
 
-  ChatBloc(this._messagingBloc, this._chatRepository, this.userId)
-      : super(const ChatInProgress()) {
+  ChatBloc(
+    this._chatRepository,
+    this._messagingBloc,
+    this.userId,
+  ) : super(const ChatInProgress()) {
     on<ChatEvent>((event, emit) async {
       await event.map(
         messagesLoaded: (event) async => await _onMessagesLoaded(event, emit),
