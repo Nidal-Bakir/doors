@@ -15,6 +15,7 @@ import 'package:doors/features/chat/presentation/managers/download_received_medi
 import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/send_media_message_bloc/send_media_message_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/send_text_message_bloc/send_text_message_bloc.dart';
+import 'package:doors/features/chat/presentation/managers/unread_messages_counter_bloc/unread_messages_counter_bloc.dart';
 import 'package:doors/features/chat/repository/chat_repository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -39,6 +40,10 @@ Future<void> chatInit() async {
 
   di.registerFactory<ConnectionStatusBloc>(
     () => ConnectionStatusBloc(di.get()),
+  );
+
+  di.registerFactory<UnreadMessagesCounterBloc>(
+    () => UnreadMessagesCounterBloc(di.get()),
   );
 
   di.registerFactory<ChatUsersBloc>(

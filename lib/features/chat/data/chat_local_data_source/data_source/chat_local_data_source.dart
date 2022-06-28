@@ -16,7 +16,9 @@ abstract class ChatLocalDataSource {
 
   Future<void> updateMessageInChat(LocalChatMessage updatedMessage);
 
-  Future<void> markChatAsRead(String userId);
+  Future<int> markChatAsRead(String userId);
+
+  Future<int> getCountOfUnreadMessages();
 
   Future<void> markReceivedChatMessageWithDeletionFromServerStatues(
     String remoteChatMessageId,
@@ -91,7 +93,7 @@ class ChatLocalDataSourceImpl extends ChatLocalDataSource {
         0, //false
       ],
     );
-    
+
     if (lastReceivedMessageDateResult.isEmpty ||
         lastReceivedMessageDateResult
                 .firstOrNull?[LocalChatTable.messageServerCreationDate] ==
@@ -106,15 +108,30 @@ class ChatLocalDataSourceImpl extends ChatLocalDataSource {
   }
 
   @override
-  Future<void> markChatAsRead(String userId) async {
+  Future<int> markChatAsRead(String userId) async {
     final database = await localDatabase.database;
 
-    database.update(
+    return database.update(
       LocalChatTable.tableName,
       {LocalChatTable.isRead: 1},
-      where: '${LocalChatTable.userId}= ?',
-      whereArgs: [userId],
+      where: '${LocalChatTable.userId}= ? AND ${LocalChatTable.isRead} = ?',
+      whereArgs: [
+        userId,
+        0, // false
+      ],
     );
+  }
+
+  @override
+  Future<int> getCountOfUnreadMessages() async {
+    final database = await localDatabase.database;
+
+    final result = await database.rawQuery('''
+            SELECT COUNT(*) FROM ${LocalChatTable.tableName}
+            WHERE ${LocalChatTable.isRead} = 0
+        ''');
+
+    return Sqflite.firstIntValue(result) ?? 0;
   }
 
   @override

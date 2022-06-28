@@ -31,26 +31,12 @@ class ChatRepository {
   final MessagingProcessBase<ValueStreamOfEitherTuple2OrLocalMessage,
       LocalChatMessage> _mediaMessageProcessManager;
 
-  late final _receivedMessagesSteamController =
-      StreamController<LocalChatMessage>();
-
-  StreamSubscription? _receivedMessagesFromServerStreamSubscription;
-
   late final _connectionStatusBehaviorSubject =
       BehaviorSubject<LiveQueryClientEvent>();
   late final StreamSubscription _connectionStatusStreamSubscription;
 
-  String? _currentlyOpenedChatUserId;
-
-  set currentlyOpenedChatUserId(String? userId) {
-    _currentlyOpenedChatUserId = userId;
-    if (userId == null) {
-      _mediaMessageProcessManager.disposeAllFinishedProcesses();
-      _sendTextMessageProcessManager.disposeAllFinishedProcesses();
-    }
-  }
-
-  String? get currentlyOpenedChatUserId => _currentlyOpenedChatUserId;
+  late final _overallUnReadMessagesCountBehaviorSubject =
+      BehaviorSubject<int>.seeded(0);
 
   ChatRepository(
     this._chatRemoteDataSource,
@@ -63,6 +49,10 @@ class ChatRepository {
     _deleteAllMessagesMarkedAsNeedsToBeDeletedFromServer();
     pullUpdatedChatUsersInfoFromRemoteServer();
 
+    _chatLocalDataSource.getCountOfUnreadMessages().then((unreadCount) {
+      _overallUnReadMessagesCountBehaviorSubject.add(unreadCount);
+    });
+
     _connectionStatusStreamSubscription =
         _chatRemoteDataSource.liveQueryConnectionStatus().listen((event) async {
       _connectionStatusBehaviorSubject.add(event);
@@ -71,6 +61,34 @@ class ChatRepository {
         _pullMissedMessagesFromRemoteServer();
       }
     });
+  }
+
+  late final _receivedMessagesSteamController =
+      StreamController<LocalChatMessage>();
+
+  StreamSubscription? _receivedMessagesFromServerStreamSubscription;
+
+  String? _currentlyOpenedChatUserId;
+  String? get currentlyOpenedChatUserId => _currentlyOpenedChatUserId;
+  set currentlyOpenedChatUserId(String? userId) {
+    _currentlyOpenedChatUserId = userId;
+    if (userId == null) {
+      _mediaMessageProcessManager.disposeAllFinishedProcesses();
+      _sendTextMessageProcessManager.disposeAllFinishedProcesses();
+    }
+  }
+
+  Stream<int> get overallUnReadMessagesCountStream =>
+      _overallUnReadMessagesCountBehaviorSubject.stream;
+
+  void _incrementOverallUnReadMessagesCount([int incrementBy = 1]) {
+    final currentValue = _overallUnReadMessagesCountBehaviorSubject.value;
+    _overallUnReadMessagesCountBehaviorSubject.add(currentValue + incrementBy);
+  }
+
+  void _decrementOverallUnReadMessagesCount(int decrementBy) {
+    final currentValue = _overallUnReadMessagesCountBehaviorSubject.value;
+    _overallUnReadMessagesCountBehaviorSubject.add(currentValue - decrementBy);
   }
 
   Stream<LiveQueryClientEvent> connectionStatusSteam() =>
@@ -84,13 +102,15 @@ class ChatRepository {
   }
 
   Future<UnmodifiableListView<ChatUserInfo>>
-      getUsersWithLatestMessageAndUnreadCounts() async {
-    return await _chatUsersLocalDataSource
-        .getUsersWithLatestMessageAndUnreadCounts();
+      getUsersWithLatestMessageAndUnreadCounts() {
+    return _chatUsersLocalDataSource.getUsersWithLatestMessageAndUnreadCounts();
   }
 
   Future<void> markChatAsRead(String userId) async {
-    await _chatLocalDataSource.markChatAsRead(userId);
+    final numberOfMessagesMarkedAsRead =
+        await _chatLocalDataSource.markChatAsRead(userId);
+
+    _decrementOverallUnReadMessagesCount(numberOfMessagesMarkedAsRead);
   }
 
   Future<EitherServerErrorOrLocalMessage> sendTextMessage(
@@ -193,6 +213,7 @@ class ChatRepository {
 
     await _receivedMessagesSteamController.close();
     await _connectionStatusBehaviorSubject.close();
+    await _overallUnReadMessagesCountBehaviorSubject.close();
 
     _receivedMessagesFromServerStreamSubscription?.cancel();
     _connectionStatusStreamSubscription.cancel();
@@ -222,10 +243,14 @@ class ChatRepository {
     RemoteChatMessage remoteMessage,
     User currentUser,
   ) async {
+    final shouldMarkReceivedMessageAsRead =
+        _isReceivedMessageFromCurrentlyOpenedUserChat(
+      remoteMessage.sender.userId,
+    );
+
     final receivedMessage = LocalChatMessage.buildFromRemoteReceivedChatMessage(
       remoteMessage,
-      _isReceivedMessageFromCurrentlyOpenedUserChat(
-          remoteMessage.sender.userId),
+      shouldMarkReceivedMessageAsRead,
     );
 
     final senderUserInfo = ChatUserInfo.buildFromRemoteUser(
@@ -241,6 +266,10 @@ class ChatRepository {
 
     if (receivedMessage.messageType == MessageType.text.name) {
       _deleteReceivedTextMessageFromServer(receivedMessage.remoteMessageId!);
+    }
+
+    if (isAddedSuccessfully && !shouldMarkReceivedMessageAsRead) {
+      _incrementOverallUnReadMessagesCount();
     }
 
     return isAddedSuccessfully ? receivedMessage : null;
