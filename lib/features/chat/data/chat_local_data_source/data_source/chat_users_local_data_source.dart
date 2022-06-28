@@ -12,9 +12,9 @@ abstract class ChatUsersLocalDataSource {
 
   Future<void> createChatUserIfNotExistsOrUpdate(ChatUserInfo newChatUserInfo);
 
-  Future<void> updateReceiverUser(ChatUserInfo updatedUserInfo);
+  Future<void> updateChatUser(ChatUserInfo updatedUserInfo);
 
-  Future<ChatUserInfo> getReceiverUserInfo(String userId);
+  Future<ChatUserInfo> getChatUserInfo(String userId);
 
   Future<void> markTheCurrentUserAsBlockedByTheOtherUser(String otherUserId);
 }
@@ -61,7 +61,7 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
   }
 
   @override
-  Future<ChatUserInfo> getReceiverUserInfo(String userId) async {
+  Future<ChatUserInfo> getChatUserInfo(String userId) async {
     final database = await localDatabase.database;
     final chatUserResult = await database.query(
       LocalChatUserInfo.tableName,
@@ -72,7 +72,7 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
   }
 
   @override
-  Future<void> updateReceiverUser(ChatUserInfo updatedUserInfo) async {
+  Future<void> updateChatUser(ChatUserInfo updatedUserInfo) async {
     final database = await localDatabase.database;
     await database.update(
       LocalChatUserInfo.tableName,

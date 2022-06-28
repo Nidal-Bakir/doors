@@ -32,6 +32,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
 
     _chatRepository.currentlyOpenedChatUserId = userId;
+    _chatRepository.markChatAsRead(userId);
 
     _messagingBlocStateStreamSubscription =
         _messagingBloc.stream.listen((messagingBlocState) {

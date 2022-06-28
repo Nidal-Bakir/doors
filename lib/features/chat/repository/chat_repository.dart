@@ -130,6 +130,10 @@ class ChatRepository {
     return chatUserInfo;
   }
 
+  Future<ChatUserInfo> getChatUserInfo(String userId) {
+    return _chatUsersLocalDataSource.getChatUserInfo(userId);
+  }
+
   Stream<LocalChatMessage> startListingForNewMessages() async* {
     final currentUser = (await ParseUser.currentUser()) as User;
 
@@ -177,7 +181,7 @@ class ChatRepository {
     }
 
     for (var updatedChatUser in updatedChatUsers) {
-      await _chatUsersLocalDataSource.updateReceiverUser(updatedChatUser);
+      await _chatUsersLocalDataSource.updateChatUser(updatedChatUser);
     }
   }
 
@@ -189,7 +193,7 @@ class ChatRepository {
 
     await _receivedMessagesSteamController.close();
     await _connectionStatusBehaviorSubject.close();
-    
+
     _receivedMessagesFromServerStreamSubscription?.cancel();
     _connectionStatusStreamSubscription.cancel();
   }
