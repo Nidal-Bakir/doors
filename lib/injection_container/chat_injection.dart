@@ -9,6 +9,7 @@ import 'package:doors/features/chat/data/process/media_message_process_manager.d
 import 'package:doors/features/chat/data/process/messaging_process_base.dart';
 import 'package:doors/features/chat/data/process/send_text_message_process_manager.dart';
 import 'package:doors/features/chat/presentation/managers/chat_bloc/chat_bloc.dart';
+import 'package:doors/features/chat/presentation/managers/chat_users_bloc/chat_users_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/connection_status_bloc/connection_status_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/download_received_media_message_bloc/download_received_media_message_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';
@@ -40,6 +41,10 @@ Future<void> chatInit() async {
     () => ConnectionStatusBloc(di.get()),
   );
 
+  di.registerFactory<ChatUsersBloc>(
+    () => ChatUsersBloc(di.get()),
+  );
+
   di.registerFactoryParam<ChatBloc, MessagingBloc, String>(
     (messagingBloc, userId) => ChatBloc(di.get(), messagingBloc, userId),
   );
@@ -51,7 +56,7 @@ Future<void> chatInit() async {
   di.registerFactoryParam<SendMediaMessageBloc, LocalChatMessage, void>(
     (mediaMessage, _) => SendMediaMessageBloc(di.get(), mediaMessage),
   );
-  
+
   di.registerFactoryParam<DownloadReceivedMediaMessageBloc, LocalChatMessage,
       void>(
     (mediaMessage, _) =>
