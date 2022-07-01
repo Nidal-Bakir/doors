@@ -32,7 +32,7 @@ class MenuProfileInfo extends StatelessWidget {
         overflowSpacing: 8,
         children: [
           CircularProfileImage(
-            profileImage: currentUser.profileImage,
+            url: currentUser.profileImage?.url,
             height: 70,
             width: 70,
           ),

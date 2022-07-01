@@ -55,7 +55,7 @@ class PostCardItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsetsDirectional.only(end: 8),
                           child: CircularProfileImage(
-                            profileImage: author.profileImage,
+                            url: author.profileImage?.url,
                           ),
                         ),
                         flex: 0,

@@ -188,6 +188,9 @@ class ChatRepository {
 
   Future<void> pullUpdatedChatUsersInfoFromRemoteServer() async {
     final chatUsers = await _chatUsersLocalDataSource.getAllChatUsers();
+    if (chatUsers.isEmpty) {
+      return;
+    }
 
     final UnmodifiableListView<ChatUserInfo> updatedChatUsers;
     try {

@@ -17,6 +17,7 @@ import 'package:doors/features/chat/presentation/managers/send_media_message_blo
 import 'package:doors/features/chat/presentation/managers/send_text_message_bloc/send_text_message_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/unread_messages_counter_bloc/unread_messages_counter_bloc.dart';
 import 'package:doors/features/chat/repository/chat_repository.dart';
+import 'package:doors/features/chat/util/chat_typedef.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -46,8 +47,8 @@ Future<void> chatInit() async {
     () => UnreadMessagesCounterBloc(di.get()),
   );
 
-  di.registerFactory<ChatUsersBloc>(
-    () => ChatUsersBloc(di.get()),
+  di.registerFactoryParam<ChatUsersBloc, MessagingBloc, void>(
+    (messagingBloc, _) => ChatUsersBloc(di.get(), messagingBloc),
   );
 
   di.registerFactoryParam<ChatBloc, MessagingBloc, String>(
@@ -75,8 +76,8 @@ Future<void> chatInit() async {
       di.get(),
       di.get(),
       di.get(),
-      di.get(instanceName: 'SendTextMessageProcessManager'),
-      di.get(instanceName: 'MediaMessageProcessManager'),
+      di.get(),
+      di.get(),
     ),
     dispose: (chatRepository) async {
       await chatRepository.dispose();
@@ -84,22 +85,24 @@ Future<void> chatInit() async {
   );
 
   // processes
-  di.registerLazySingleton<MessagingProcessBase>(
+  di.registerLazySingleton<
+      MessagingProcessBase<Future<EitherServerErrorOrLocalMessage>,
+          LocalChatMessage>>(
     () => SendTextMessageProcessManager(
       di.get(),
       di.get(),
       di.get(),
     ),
-    instanceName: 'SendTextMessageProcessManager',
   );
 
-  di.registerLazySingleton<MessagingProcessBase>(
+  di.registerLazySingleton<
+      MessagingProcessBase<ValueStreamOfEitherTuple2OrLocalMessage,
+          LocalChatMessage>>(
     () => MediaMessageProcessManager(
       di.get(),
       di.get(),
       di.get(),
     ),
-    instanceName: 'MediaMessageProcessManager',
   );
 
   // data sources

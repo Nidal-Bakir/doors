@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:doors/core/config/constants.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
@@ -10,6 +7,7 @@ import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/primary_color_background_for_scaffold.dart';
 import 'package:doors/core/widgets/restart_app.dart';
 import 'package:doors/features/home/presentation/screen/menu_screen.dart';
+import 'package:doors/features/home/presentation/widgets/chat_icon_btn_with_unread_messages_badge.dart';
 import 'package:doors/features/home/presentation/widgets/custom_bottom_navigation_bar.dart';
 import 'package:doors/features/home/presentation/widgets/keep_page_alive.dart';
 import 'package:doors/features/recent_posts/presentation/widgets/recent_job_posts_list.dart';
@@ -119,26 +117,22 @@ class _MainScreenState extends State<MainScreen>
               currentOpenedTapIndex: _currentOpenedPageIndex,
             ),
             actions: [
-              IconButton(
-                  onPressed: () {
-                    var _postsTypeToSearch = PostsViewFilter.services;
-                    if (_currentOpenedPageIndex == 0) {
-                      _postsTypeToSearch = PostsViewFilter.jobs;
-                    }
-                    Navigator.of(context).pushNamed(
-                      PostsSearchScreen.routeName,
-                      arguments: _postsTypeToSearch,
-                    );
-                  },
-                  icon: const Icon(Icons.search)),
-              IconButton(
-                onPressed: () {},
-                icon: const ImageIcon(
-                  AssetImage(
-                    'assets/icons/message.png',
-                  ),
-                ),
+              Material(
+                color: Colors.transparent,
+                child: IconButton(
+                    onPressed: () {
+                      var _postsTypeToSearch = PostsViewFilter.services;
+                      if (_currentOpenedPageIndex == 0) {
+                        _postsTypeToSearch = PostsViewFilter.jobs;
+                      }
+                      Navigator.of(context).pushNamed(
+                        PostsSearchScreen.routeName,
+                        arguments: _postsTypeToSearch,
+                      );
+                    },
+                    icon: const Icon(Icons.search)),
               ),
+              const ChatIconBtnWithUnreadMessagesBadge(),
             ],
             leading: InkWell(
               onTap: () {

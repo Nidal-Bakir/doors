@@ -246,5 +246,12 @@
   "preview": "PREVIEW",
   "job_description": "Job description",
   "app_language": "App language",
-  "you_can_not_send_messages_to_this_user": "You can not send messages to this user."
+  "you_can_not_send_messages_to_this_user": "You can not send messages to this user.",
+  "photo": "📷️ Photo ",
+  "unsupported_message_type": "Unsupported message type",
+  "just_now": "Just now",
+  "connecting": "Connecting",
+  "connected": "Connected",
+  "no_chats_to_show": "No Chat to show",
+  "you_can_chat_with_any_one_about_service_they_provide_or_offer": "You can chat with any one about service they provide or offer"
 }

@@ -1,14 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class CircularProfileImage extends StatelessWidget {
   final double height;
   final double width;
-  final ParseFile? profileImage;
+  final String? url;
+  final File? fileImage;
 
   const CircularProfileImage({
     Key? key,
-    required this.profileImage,
+    this.url,
+    this.fileImage,
     this.height = 40,
     this.width = 40,
   }) : super(key: key);
@@ -26,51 +29,117 @@ class CircularProfileImage extends StatelessWidget {
         ),
       ),
       child: ClipOval(
-        child: (profileImage == null || profileImage?.url == null)
+        child: (url == null && fileImage == null)
             ? _DefaultProfileImage(height: height, width: width)
-            : Image.network(
-                profileImage!.url!,
-                height: height,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-                  return SizedBox.square(
-                    dimension: width,
-                    child: Stack(
-                      children: [
-                        _DefaultProfileImage(height: height, width: width),
-                        Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded) {
-                    return child;
-                  }
-                  return AnimatedOpacity(
-                    child: child,
-                    opacity: frame == null ? 0 : 1,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                  );
-                },
-                width: width,
-                cacheHeight: height.toInt(),
-                cacheWidth: width.toInt(),
-                errorBuilder: (_, __, ___) =>
-                    _DefaultProfileImage(height: height, width: width),
-                fit: BoxFit.cover,
-              ),
+            : fileImage != null
+                ? _FileImage(
+                    fileImage: fileImage!,
+                    height: height,
+                    width: width,
+                  )
+                : _NetworkImage(
+                    url: url!,
+                    height: height,
+                    width: width,
+                  ),
       ),
+    );
+  }
+}
+
+class _NetworkImage extends StatelessWidget {
+  const _NetworkImage({
+    Key? key,
+    required this.url,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
+
+  final String url;
+  final double height;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.network(
+      url,
+      height: height,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        }
+        return SizedBox.square(
+          dimension: width,
+          child: Stack(
+            children: [
+              _DefaultProfileImage(height: height, width: width),
+              Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) {
+          return child;
+        }
+        return AnimatedOpacity(
+          child: child,
+          opacity: frame == null ? 0 : 1,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
+      },
+      width: width,
+      cacheHeight: height.toInt(),
+      cacheWidth: width.toInt(),
+      errorBuilder: (_, __, ___) =>
+          _DefaultProfileImage(height: height, width: width),
+      fit: BoxFit.cover,
+    );
+  }
+}
+
+class _FileImage extends StatelessWidget {
+  const _FileImage({
+    Key? key,
+    required this.fileImage,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
+
+  final File fileImage;
+  final double height;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.file(
+      fileImage,
+      height: height,
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) {
+          return child;
+        }
+        return AnimatedOpacity(
+          child: child,
+          opacity: frame == null ? 0 : 1,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
+      },
+      width: width,
+      cacheHeight: height.toInt(),
+      cacheWidth: width.toInt(),
+      errorBuilder: (_, __, ___) =>
+          _DefaultProfileImage(height: height, width: width),
+      fit: BoxFit.cover,
     );
   }
 }

@@ -64,8 +64,7 @@ class JobApplicationItem extends StatelessWidget {
                             child: Row(
                               children: [
                                 CircularProfileImage(
-                                  profileImage:
-                                      jobApplication.author.profileImage,
+                                  url: jobApplication.author.profileImage?.url,
                                   height: 60,
                                   width: 60,
                                 ),
@@ -147,7 +146,8 @@ class JobApplicationItem extends StatelessWidget {
                               ),
                               if (state is! FileDownloaderDownloadSuccess)
                                 Padding(
-                                  padding: const EdgeInsetsDirectional.only(top: 2),
+                                  padding:
+                                      const EdgeInsetsDirectional.only(top: 2),
                                   child: Text(
                                     jobApplication.fileSize,
                                   ),

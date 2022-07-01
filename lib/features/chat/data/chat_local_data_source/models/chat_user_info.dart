@@ -37,7 +37,7 @@ class ChatUserInfo extends Equatable {
           jsonMap[LocalChatUserInfo.isCurrentUserBlockedByThisUser] == 0
               ? false
               : true,
-      unReadCount: jsonMap[LocalChatUserInfo.unReadCount],
+      unReadCount: jsonMap[LocalChatUserInfo.unReadCount] ?? 0,
       latestMessage: jsonMap[LocalChatTable.localMessageId] == null
           ? null
           : LocalChatMessage.formJson(jsonMap),

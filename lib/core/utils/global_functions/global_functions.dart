@@ -342,7 +342,6 @@ Future<String> getNonDuplicatedFileNameInDir(String filePath) async {
   return '$newFileNameWithoutExt$fileExt';
 }
 
-
 const undefined = Object();
 
 /// If [param] not passed to [copyWith] function its value will be [undefined].

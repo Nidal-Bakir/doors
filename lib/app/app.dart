@@ -53,6 +53,7 @@ class _AppState extends State<App> {
           builder: (context, state) {
             return state.when(loadSuccess: (appLocale) {
               return MaterialApp(
+                debugShowCheckedModeBanner: false,
                 navigatorKey: App.navigatorKey,
                 supportedLocales: AppLocalizations.supportedLocales,
                 locale: appLocale,

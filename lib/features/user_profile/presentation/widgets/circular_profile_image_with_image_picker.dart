@@ -81,7 +81,7 @@ class _CircularProfileImageWithImagePickerState
           duration: const Duration(milliseconds: 100),
           child: _profileImageFile == null && _initProfileImage == null
               ? const CircularProfileImage(
-                  profileImage: null,
+                  url: null,
                   height: 150,
                   width: 150,
                 )
@@ -107,7 +107,7 @@ class _CircularProfileImageWithImagePickerState
                           : Hero(
                               tag: 'profileImage',
                               child: CircularProfileImage(
-                                profileImage: _initProfileImage,
+                                url: _initProfileImage?.url,
                                 height: 150,
                                 width: 150,
                               ),

@@ -15,6 +15,9 @@ import 'package:doors/core/features/user_posts/presentation/screens/user_posts_s
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
+import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
+import 'package:doors/features/chat/presentation/screens/chat_screen.dart';
+import 'package:doors/features/chat/presentation/screens/chat_users_screen.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
 import 'package:doors/features/job_application/presentation/screens/view_post_job_applications_screen.dart';
@@ -38,7 +41,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const SuspendedScreen());
 
     case HomeScreen.routeName:
-      return MaterialPageRoute(builder: (_) =>  HomeScreen());
+      return MaterialPageRoute(builder: (_) => HomeScreen());
 
     case SplashScreen.routeName:
       return MaterialPageRoute(builder: (_) => const SplashScreen());
@@ -176,6 +179,14 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (_) => const SettingsScreen(),
       );
+
+    case ChatUsersScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => const ChatUsersScreen(),
+      );
+
+    case ChatScreen.routeName:
+      return ChatScreenSlideTransition(settings.arguments as ChatUserInfo);
   }
 
   assert(false, 'Need to implement ${settings.name}');
@@ -194,5 +205,22 @@ class SearchScreenFadeTransition extends MaterialPageRoute {
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     return FadeTransition(opacity: animation, child: child);
+  }
+}
+
+class ChatScreenSlideTransition extends MaterialPageRoute {
+  final ChatUserInfo chatUserInfo;
+  ChatScreenSlideTransition(this.chatUserInfo)
+      : super(
+          builder: (_) => ChatScreen(chatUserInfo: chatUserInfo),
+        );
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    final _pageSlideTransition = Tween<Offset>(
+      begin: const Offset(1, 0),
+      end: Offset.zero,
+    ).animate(animation);
+    return SlideTransition(position: _pageSlideTransition, child: child);
   }
 }

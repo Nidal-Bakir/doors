@@ -30,18 +30,26 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
     final database = await localDatabase.database;
 
     final usersWithLatestMessages = await database.rawQuery('''
-        SELECT * FROM ${LocalChatUserInfo.tableName} AS users
-        LEFT JOIN 
-        (SELECT * FROM
-           (
-            SELECT *, COUNT(IIF( ${LocalChatTable.isRead} = 0, 1, NULL)) AS ${LocalChatUserInfo.unReadCount}
-            FROM ${LocalChatTable.tableName}
-            ORDER BY ${LocalChatTable.sentDate} DESC
-           )
-           GROUP BY ${LocalChatTable.userId}
-        ) AS chat
-        ON users.${LocalChatUserInfo.userId} = chat.${LocalChatTable.userId} 
-        ORDER BY chat.${LocalChatTable.sentDate} DESC
+          SELECT * FROM ${LocalChatUserInfo.tableName} AS users
+            LEFT JOIN 
+            (
+              SELECT * FROM 
+              (
+                  SELECT * FROM ${LocalChatTable.tableName}
+                  ORDER BY ${LocalChatTable.sentDate} DESC
+              ) GROUP BY ${LocalChatTable.userId}
+            ) AS grouped_chat 
+              ON users.${LocalChatUserInfo.userId} = grouped_chat.${LocalChatTable.userId}
+            LEFT JOIN 
+            (
+              SELECT ${LocalChatTable.userId},
+                COUNT
+                (case ${LocalChatTable.isRead} when 1 then 1 else null end
+                ) AS ${LocalChatUserInfo.unReadCount} 
+              FROM ${LocalChatTable.tableName} GROUP BY ${LocalChatTable.userId}
+            ) as chat_unread_count 
+              on grouped_chat.${LocalChatTable.userId} = chat_unread_count.${LocalChatTable.userId}
+          ORDER BY grouped_chat.${LocalChatTable.sentDate} DESC
     ''');
 
     return UnmodifiableListView(

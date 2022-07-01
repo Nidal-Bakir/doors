@@ -19,7 +19,6 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final _subtitle2TextTheme = Theme.of(context).textTheme.subtitle2;
     return PrimaryColorBackgroundForScaffold(
       colorHeight: 90,
@@ -32,7 +31,7 @@ class UserInfo extends StatelessWidget {
             Hero(
               tag: 'profileImage',
               child: CircularProfileImage(
-                profileImage: visitedUser.profileImage,
+                url: visitedUser.profileImage?.url,
                 height: 150,
                 width: 150,
               ),
