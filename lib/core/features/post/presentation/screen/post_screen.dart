@@ -57,7 +57,8 @@ class _PostScreenState extends State<PostScreen> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _PostTitle(
                     title: widget.post.postTitle,
@@ -262,11 +263,6 @@ class _PopupMenuButton extends StatelessWidget {
     return Align(
       alignment: AlignmentDirectional.topEnd,
       child: PopupMenuButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            15,
-          ),
-        ),
         onSelected: (value) {
           switch (value) {
             case 0:

@@ -28,11 +28,12 @@ class MessageBuilderWidget {
     _textMessageBuilder = TextMessageBuilder(_imageMessageBuilder);
   }
 
-  static MessageBuilderWidget get instance {
-    return _instance ??= MessageBuilderWidget._();
+  static Widget buildMessage(LocalChatMessage message) {
+    _instance ??= MessageBuilderWidget._();
+    return _instance!._build(message);
   }
 
-  Widget build(LocalChatMessage message) {
+  Widget _build(LocalChatMessage message) {
     return _textMessageBuilder.build(message);
   }
 }

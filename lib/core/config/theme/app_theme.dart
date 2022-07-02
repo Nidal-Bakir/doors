@@ -102,6 +102,13 @@ ThemeData defaultLightTheme(String langCode) {
         ),
         enableFeedback: true,
       ),
+      popupMenuTheme: PopupMenuThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            15,
+          ),
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),

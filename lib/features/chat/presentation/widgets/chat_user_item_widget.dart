@@ -125,15 +125,15 @@ class _ChatUserItemWidgetState extends State<ChatUserItemWidget> {
       return context.loc.just_now;
     }
     if (timeDiff.inHours <= 24) {
-      return DateFormat('kk:mm a').format(localizedDateTime);
+      return DateFormat('k:m a').format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 7) {
-      return DateFormat('EEE kk:mm a').format(localizedDateTime);
+      return DateFormat('EEE k:m a').format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 30) {
-      return DateFormat('d kk:mm a').format(localizedDateTime);
+      return DateFormat('d k:m a').format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 365) {
