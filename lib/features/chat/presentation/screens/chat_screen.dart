@@ -3,6 +3,8 @@ import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
+import 'package:doors/features/chat/data/chat_local_data_source/models/media_file.dart';
+import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
 import 'package:doors/features/chat/presentation/managers/send_text_message_bloc/send_text_message_bloc.dart';
 import 'package:doors/features/chat/presentation/widgets/connection_status_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/scroll_to_latest_message_fab.dart';
@@ -23,7 +25,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _chatAnimatedListKey = GlobalKey<AnimatedListState>();
   final _chatScrollController = ScrollController();
-  
+
   @override
   void dispose() {
     _chatScrollController.dispose();
@@ -32,35 +34,39 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final list = [
     LocalChatMessage.receivedMessage(
+        isRead: true,
+        mediaFile: MediaFile(file: null, mediaUrl: null),
+        messageServerCreationDate: DateTime.now(),
+        messageMetaData: ImageMessageMetaData(
+            imageHight: 1080, imageSize: 500, imageWidth: 720),
+        messageType: MessageType.image.name,
+        remoteMessageId: '123',
+        senderId: '1230',
+        sentDate: DateTime.now(),
+        textMessage: null),
+    LocalChatMessage.receivedMessage(
       isRead: true,
-      mediaFile: null,
+      messageMetaData: ImageMessageMetaData(
+          imageHight: 1080, imageSize: 500, imageWidth: 720),
+      mediaFile: MediaFile(file: null, mediaUrl: null),
       messageServerCreationDate: DateTime.now(),
-      messageType: MessageType.text.name,
+      messageType: MessageType.image.name,
       remoteMessageId: '123',
       senderId: '1230',
       sentDate: DateTime.now(),
-      textMessage:
-          'fdsfsa dsfds fdOfficia velit sit eu exercitation do ullamco sunt sunt quis enim duis ea irure non. Exercitation ipsum non in incididunt ea adipisicing ad ipsum officia eiusmod fugiat nisi. Sit labore laboris deserunt veniam ex dolor excepteur est aliquip aute do duis aute. Qui duis ullamco dolor excepteur. Aliqua laboris incididunt veniam commodo fugiat incididunt labore ut quis minim. Nostrud cupidatat commodo culpa quis et. Ullamco minim ad incididunt dolor consectetur ipsum nulla ullamco sint aliquip aliqua do.fas',
+      textMessage: null,
     ),
     LocalChatMessage.receivedMessage(
       isRead: true,
-      mediaFile: null,
+      messageMetaData: ImageMessageMetaData(
+          imageHight: 1080, imageSize: 500, imageWidth: 720),
+      mediaFile: MediaFile(file: null, mediaUrl: null),
       messageServerCreationDate: DateTime.now(),
-      messageType: MessageType.text.name,
+      messageType: MessageType.image.name,
       remoteMessageId: '123',
       senderId: '1230',
       sentDate: DateTime.now(),
-      textMessage: ' dfsaf fasf sa',
-    ),
-    LocalChatMessage.receivedMessage(
-      isRead: true,
-      mediaFile: null,
-      messageServerCreationDate: DateTime.now(),
-      messageType: MessageType.text.name,
-      remoteMessageId: '123',
-      senderId: '1230',
-      sentDate: DateTime.now(),
-      textMessage: 'hi',
+      textMessage: null,
     )
   ];
   @override
@@ -76,6 +82,11 @@ class _ChatScreenState extends State<ChatScreen> {
             list.add(LocalChatMessage.receivedMessage(
               isRead: true,
               mediaFile: null,
+              messageMetaData: ImageMessageMetaData(
+                imageHight: 1080,
+                imageSize: 500,
+                imageWidth: 720,
+              ),
               messageServerCreationDate: DateTime.now(),
               messageType: MessageType.text.name,
               remoteMessageId: '123',
@@ -108,11 +119,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 return SlideTransition(
                   position: _slideTransitionAnimation,
                   child: FadeTransition(
-                      opacity: animation,
-                      key: Key(list[index].localMessageId.toString()),
-                      child: _ReceivedTextMessageWidget(
-                        message: list[index],
-                      )),
+                    opacity: animation,
+                    key: Key(list[index].localMessageId.toString()),
+                    child: _SendedImageMessageBuilderWidget(
+                      message: list[index],
+                    ),
+                  ),
                 );
               },
             ),
@@ -136,65 +148,62 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class _ReceivedTextMessageWidget extends StatelessWidget {
+class _SendedImageMessageBuilderWidget extends StatefulWidget {
   final LocalChatMessage message;
-  const _ReceivedTextMessageWidget({Key? key, required this.message})
-      : super(key: key);
+
+  const _SendedImageMessageBuilderWidget({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  State<_SendedImageMessageBuilderWidget> createState() =>
+      __SendedImageMessageBuilderWidgetState();
+}
+
+class __SendedImageMessageBuilderWidgetState
+    extends State<_SendedImageMessageBuilderWidget> {
+  late LocalChatMessage _message = widget.message;
+  late ImageMessageMetaData _imageMessageMetaData =
+      widget.message.messageMetaData as ImageMessageMetaData;
 
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
     return Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width - 45,
+      alignment: AlignmentDirectional.centerEnd,
+      child: Card(
+        color: _theme.colorScheme.primary,
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: Card(
-          color: _theme.colorScheme.primary,
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 10,
-                  end: 10,
-                  top: 5,
-                  bottom: 20,
-                ),
-                child: Text(
-                  message.textMessage!,
-                  style: _theme.textTheme.subtitle2,
-                ),
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.7,
+                maxHeight: MediaQuery.of(context).size.height * 0.4,
               ),
-              Positioned(
-                bottom: 3,
-                right: 10,
-                child: Text(
-                  getMessageSendTime(message.sentDate),
-                  style: _theme.textTheme.bodyText1,
-                ),
-              ),
-
-              // to make the min width size of the message as small as time widget
-              Opacity(
-                opacity: 0.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    getMessageSendTime(message.sentDate),
-                    style: _theme.textTheme.bodyText1,
-                  ),
-                ),
-              ),
-            ],
-          ),
+              child: AspectRatio(
+                  aspectRatio: _imageAspectRatio(_imageMessageMetaData),
+                  child: Container(
+                    color: Colors.amber,
+                    child: Image.asset(
+                      'assets/images/suspended.png',
+                      // scale: 0.5,
+                    ),
+                  )),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  double _imageAspectRatio(ImageMessageMetaData metaData) {
+    return metaData.imageWidth / metaData.imageHight;
   }
 }

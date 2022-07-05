@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:equatable/equatable.dart';
@@ -17,10 +19,12 @@ class RemoteChatMessage extends ParseObject with EquatableMixin {
   static const keyMessageId = keyVarObjectId;
   static const keyTextMessage = 'textMessage';
   static const keyMedia = 'media';
+  static const keyThumbnail = 'thumbnail';
   static const keyMessageType = 'messageType';
   static const keySentDate = 'sentDate';
   static const keySender = 'sender';
   static const keyReceiver = 'receiver';
+  static const keyMetaData = 'mateData';
   static const keyMessageCreatedAt = keyVarCreatedAt;
 
   String get messageId => get(keyMessageId) as String;
@@ -30,6 +34,8 @@ class RemoteChatMessage extends ParseObject with EquatableMixin {
 
   ParseFile? get media => get(keyMedia) as ParseFile?;
   set media(ParseFile? textMessage) => set(keyMedia, textMessage);
+
+  ParseFile? get thumbnail => get(keyThumbnail) as ParseFile?;
 
   String get receivedMessageType => (get(keyMessageType) as String);
 
@@ -45,6 +51,10 @@ class RemoteChatMessage extends ParseObject with EquatableMixin {
   User get receiver => get(keyReceiver) as User;
   set receiver(User receiver) => set(keyReceiver, receiver);
 
+  Map<String, dynamic> get metaData => jsonDecode(get<String>(keyMetaData)!);
+  set metaData(Map<String, dynamic> metaData) =>
+      set(keyMetaData, jsonEncode(metaData));
+
   DateTime get messageCreationDateOnServer =>
       get(keyMessageCreatedAt) as DateTime;
 
@@ -56,6 +66,7 @@ class RemoteChatMessage extends ParseObject with EquatableMixin {
         receivedMessageType,
         sentDate,
         sender,
+        metaData,
         receiver
       ];
 }

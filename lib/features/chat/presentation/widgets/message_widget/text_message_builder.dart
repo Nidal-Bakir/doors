@@ -3,7 +3,10 @@ import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
 import 'package:doors/features/chat/presentation/managers/send_text_message_bloc/send_text_message_bloc.dart';
+import 'package:doors/features/chat/presentation/widgets/message_error_icon_widget.dart';
+import 'package:doors/features/chat/presentation/widgets/message_send_time_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/message_widget/message_builder.dart';
+import 'package:doors/features/chat/presentation/widgets/messing_send_in_progress_icon_widget.dart';
 import 'package:doors/features/chat/util/util_func_for_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -181,25 +184,17 @@ class _SendedTextMessageWidgetState extends State<_SendedTextMessageWidget> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              getMessageSendTime(_message.sentDate),
-                              style: _theme.textTheme.bodyText1,
+                            MessageSendTimeWidget(
+                              messageSendDateTime: _message.sentDate,
                             ),
                             const SizedBox(width: 4),
                             if (state is SendTextMessageInProgress ||
                                 (state is SendTextMessageSendFailure &&
                                     state.error is NoConnectionException))
-                              const Icon(
-                                Icons.watch_later_outlined,
-                                size: 15,
-                              ),
+                              const MessageSendInProgressIconWidget(),
                             if (state is SendTextMessageSendFailure &&
                                 state.error is! NoConnectionException)
-                              Icon(
-                                Icons.error,
-                                size: 20,
-                                color: _theme.colorScheme.error,
-                              ),
+                              const MessageErrorIconWidget(),
                           ],
                         ),
                       ),
@@ -212,25 +207,17 @@ class _SendedTextMessageWidgetState extends State<_SendedTextMessageWidget> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                getMessageSendTime(_message.sentDate),
-                                style: _theme.textTheme.bodyText1,
+                              MessageSendTimeWidget(
+                                messageSendDateTime: _message.sentDate,
                               ),
                               const SizedBox(width: 4),
                               if (state is SendTextMessageInProgress ||
                                   (state is SendTextMessageSendFailure &&
                                       state.error is NoConnectionException))
-                                const Icon(
-                                  Icons.watch_later_outlined,
-                                  size: 15,
-                                ),
+                                const MessageSendInProgressIconWidget(),
                               if (state is SendTextMessageSendFailure &&
                                   state.error is! NoConnectionException)
-                                Icon(
-                                  Icons.error,
-                                  size: 20,
-                                  color: _theme.colorScheme.error,
-                                ),
+                                const MessageErrorIconWidget(),
                             ],
                           ),
                         ),

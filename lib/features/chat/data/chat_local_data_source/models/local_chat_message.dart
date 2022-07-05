@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/database/database_tables.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/media_file.dart';
+import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
 import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_chat_message.dart';
 import 'package:equatable/equatable.dart';
 
@@ -16,6 +18,7 @@ class LocalChatMessage extends Equatable {
   final MediaFile? mediaFile;
   final String messageType;
   final MessageStatues messageStatues;
+  final MessageMetaData messageMetaData;
   final bool isRead;
   final bool isSendedByCurrentUser;
   final ReceivedMessageDeletionFromServerStatues?
@@ -32,6 +35,7 @@ class LocalChatMessage extends Equatable {
     required this.mediaFile,
     required this.messageType,
     required this.messageStatues,
+    required this.messageMetaData,
     required this.isRead,
     required this.isSendedByCurrentUser,
     required this.userId,
@@ -43,6 +47,10 @@ class LocalChatMessage extends Equatable {
       remoteMessageId: jsonMap[LocalChatTable.remoteMessageId],
       textMessage: jsonMap[LocalChatTable.textMessage],
       mediaFile: _mediaFileFromJson(jsonMap),
+      messageMetaData: MessageMetaData.factory(
+        jsonMap[LocalChatTable.messageType],
+        jsonDecode(jsonMap[LocalChatTable.metaData]),
+      ),
       messageServerCreationDate:
           jsonMap[LocalChatTable.messageServerCreationDate] == null
               ? null
@@ -73,6 +81,10 @@ class LocalChatMessage extends Equatable {
     return MediaFile(
       file: File(jsonMap[LocalChatTable.mediaPath]),
       mediaUrl: jsonMap[LocalChatTable.mediaUrl],
+      thumbnailFile: jsonMap[LocalChatTable.thumbnailPath] == null
+          ? null
+          : File(jsonMap[LocalChatTable.thumbnailPath]),
+      thumbnailUrl: jsonMap[LocalChatTable.thumbnailUrl],
     );
   }
 
@@ -82,6 +94,7 @@ class LocalChatMessage extends Equatable {
     required MediaFile? mediaFile,
     required String messageType,
     required DateTime sentDate,
+    required MessageMetaData messageMetaData,
     required DateTime messageServerCreationDate,
     required bool isRead,
     required String senderId,
@@ -90,6 +103,7 @@ class LocalChatMessage extends Equatable {
       messageServerCreationDate: messageServerCreationDate,
       localMessageId: DateTime.now().microsecondsSinceEpoch,
       sentDate: sentDate,
+      messageMetaData: messageMetaData,
       mediaFile: mediaFile,
       messageStatues: MessageStatues.received,
       messageType: messageType,
@@ -110,6 +124,7 @@ class LocalChatMessage extends Equatable {
     required String? textMessage,
     required MediaFile? mediaFile,
     required MessageType messageType,
+    required MessageMetaData messageMetaData,
     required String receiverId,
   }) {
     final currentDate = DateTime.now();
@@ -120,6 +135,7 @@ class LocalChatMessage extends Equatable {
       mediaFile: mediaFile,
       isRead: true,
       isSendedByCurrentUser: true,
+      messageMetaData: messageMetaData,
       messageStatues: MessageStatues.pending,
       messageType: messageType.name,
       remoteMessageId: null,
@@ -136,8 +152,17 @@ class LocalChatMessage extends Equatable {
         textMessage: remoteMessage.textMessage,
         mediaFile: remoteMessage.receivedMessageType == MessageType.text.name
             ? null
-            : MediaFile(mediaUrl: remoteMessage.media?.url, file: null),
+            : MediaFile(
+                mediaUrl: remoteMessage.media?.url,
+                file: null,
+                thumbnailUrl: remoteMessage.thumbnail?.url,
+                thumbnailFile: null,
+              ),
         messageType: remoteMessage.receivedMessageType,
+        messageMetaData: MessageMetaData.factory(
+          remoteMessage.receivedMessageType,
+          remoteMessage.metaData,
+        ),
         sentDate: remoteMessage.sentDate,
         messageServerCreationDate: remoteMessage.messageCreationDateOnServer,
         isRead: isRead,
@@ -150,7 +175,10 @@ class LocalChatMessage extends Equatable {
         LocalChatTable.textMessage: textMessage,
         LocalChatTable.mediaPath: mediaFile?.file?.path,
         LocalChatTable.mediaUrl: mediaFile?.mediaUrl,
+        LocalChatTable.thumbnailPath: mediaFile?.thumbnailFile?.path,
+        LocalChatTable.thumbnailUrl: mediaFile?.thumbnailUrl,
         LocalChatTable.messageType: messageType,
+        LocalChatTable.metaData: jsonEncode(messageMetaData.toJson()),
         LocalChatTable.messageStatues: messageStatues.name,
         LocalChatTable.userId: userId,
         LocalChatTable.sentDate: sentDate.millisecondsSinceEpoch,
@@ -166,6 +194,7 @@ class LocalChatMessage extends Equatable {
     int? localMessageId,
     DateTime? sentDate,
     String? messageType,
+    MessageMetaData? messageMetaData,
     String? userId,
     bool? isRead,
     bool? isSendedByCurrentUser,
@@ -181,6 +210,7 @@ class LocalChatMessage extends Equatable {
       sentDate: sentDate ?? this.sentDate,
       userId: userId ?? this.userId,
       messageType: messageType ?? this.messageType,
+      messageMetaData: messageMetaData ?? this.messageMetaData,
       isRead: isRead ?? this.isRead,
       isSendedByCurrentUser:
           isSendedByCurrentUser ?? this.isSendedByCurrentUser,
@@ -215,6 +245,7 @@ class LocalChatMessage extends Equatable {
         mediaFile,
         messageType,
         messageStatues,
+        messageMetaData,
         sentDate,
         receivedMessageDeletionFromServerStatues,
         messageServerCreationDate,

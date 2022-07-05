@@ -16,8 +16,10 @@ import 'package:doors/features/chat/data/chat_remote_data_source/data_source/cha
 import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_chat_message.dart';
 import 'package:doors/features/chat/data/process/messaging_process_base.dart';
 import 'package:doors/features/chat/util/chat_typedef.dart';
+import 'package:doors/features/chat/util/util_func_for_chat.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class ChatRepository {
   final ChatRemoteDataSource _chatRemoteDataSource;
@@ -37,6 +39,7 @@ class ChatRepository {
 
   late final _overallUnReadMessagesCountBehaviorSubject =
       BehaviorSubject<int>.seeded(0);
+  var _isInitConnection = true;
 
   ChatRepository(
     this._chatRemoteDataSource,
@@ -46,8 +49,10 @@ class ChatRepository {
     this._sendTextMessageProcessManager,
     this._mediaMessageProcessManager,
   ) {
-    _deleteAllMessagesMarkedAsNeedsToBeDeletedFromServer();
+    _startListingForNewMessages();
     pullUpdatedChatUsersInfoFromRemoteServer();
+
+    _deleteAllMessagesMarkedAsNeedsToBeDeletedFromServer();
 
     _chatLocalDataSource.getCountOfUnreadMessages().then((unreadCount) {
       _overallUnReadMessagesCountBehaviorSubject.add(unreadCount);
@@ -58,13 +63,25 @@ class ChatRepository {
       _connectionStatusBehaviorSubject.add(event);
 
       if (event == LiveQueryClientEvent.CONNECTED) {
-        _pullMissedMessagesFromRemoteServer();
+        if (_isInitConnection) {
+          _isInitConnection = false;
+        } else {
+          _pullMissedMessagesFromRemoteServer().listen((event) {
+            _receivedMessagesSteamController.add(event);
+          });
+        }
       }
     });
   }
 
-  late final _receivedMessagesSteamController =
+  late final _liveReceivedMessagesSteamController =
       StreamController<LocalChatMessage>();
+
+  late final _receivedMessagesSteamController =
+      StreamController<LocalChatMessage>.broadcast();
+
+  Stream<LocalChatMessage> get receivedMessagesSteam =>
+      _receivedMessagesSteamController.stream;
 
   StreamSubscription? _receivedMessagesFromServerStreamSubscription;
 
@@ -134,27 +151,18 @@ class ChatRepository {
         .startOrAttachToRunningProcess(receivedMediaMessage);
   }
 
-  Future<ChatUserInfo> createChatUserIfNotExistsOrUpdate(
-    User remoteChatUser,
+  Future<void> createChatUserIfNotExistsOrUpdate(
+    ChatUserInfo chatUserInfo,
   ) async {
-    final currentUser = (await ParseUser.currentUser()) as User;
-
-    final chatUserInfo = ChatUserInfo.buildFromRemoteUser(
-      remoteChatUser,
-      currentUser.userId,
-    );
-
     await _chatUsersLocalDataSource
         .createChatUserIfNotExistsOrUpdate(chatUserInfo);
-
-    return chatUserInfo;
   }
 
   Future<ChatUserInfo> getChatUserInfo(String userId) {
     return _chatUsersLocalDataSource.getChatUserInfo(userId);
   }
 
-  Stream<LocalChatMessage> startListingForNewMessages() async* {
+  Future<void> _startListingForNewMessages() async {
     final currentUser = (await ParseUser.currentUser()) as User;
 
     final lastReceivedMessageDate =
@@ -169,7 +177,7 @@ class ChatRepository {
       );
 
       if (receivedMessage != null) {
-        _receivedMessagesSteamController.sink.add(receivedMessage);
+        _liveReceivedMessagesSteamController.sink.add(receivedMessage);
 
         if (!_isReceivedMessageFromCurrentlyOpenedUserChat(
           receivedMessage.userId,
@@ -183,7 +191,11 @@ class ChatRepository {
       }
     });
 
-    yield* _receivedMessagesSteamController.stream;
+    _pullMissedMessagesFromRemoteServer()
+        .followedBy(_liveReceivedMessagesSteamController.stream)
+        .listen((event) {
+      _receivedMessagesSteamController.add(event);
+    });
   }
 
   Future<void> pullUpdatedChatUsersInfoFromRemoteServer() async {
@@ -214,6 +226,7 @@ class ChatRepository {
     await _sendTextMessageProcessManager.disposeAllProcesses();
     await _mediaMessageProcessManager.disposeAllProcesses();
 
+    await _liveReceivedMessagesSteamController.close();
     await _receivedMessagesSteamController.close();
     await _connectionStatusBehaviorSubject.close();
     await _overallUnReadMessagesCountBehaviorSubject.close();
@@ -222,7 +235,7 @@ class ChatRepository {
     _connectionStatusStreamSubscription.cancel();
   }
 
-  Future<void> _pullMissedMessagesFromRemoteServer() async {
+  Stream<LocalChatMessage> _pullMissedMessagesFromRemoteServer() async* {
     final currentUser = (await ParseUser.currentUser()) as User;
 
     final lastReceivedMessageDate =
@@ -237,7 +250,7 @@ class ChatRepository {
         currentUser,
       );
       if (receivedMessage != null) {
-        _receivedMessagesSteamController.sink.add(receivedMessage);
+        yield receivedMessage;
       }
     }
   }
@@ -251,10 +264,23 @@ class ChatRepository {
       remoteMessage.sender.userId,
     );
 
-    final receivedMessage = LocalChatMessage.buildFromRemoteReceivedChatMessage(
+    var receivedMessage = LocalChatMessage.buildFromRemoteReceivedChatMessage(
       remoteMessage,
       shouldMarkReceivedMessageAsRead,
     );
+
+    if (receivedMessage.messageType == MessageType.image.name) {
+      if (receivedMessage.mediaFile?.thumbnailUrl != null) {
+        final imageThumbnailFile = await saveThumbnailImage(
+          receivedMessage.mediaFile!.thumbnailUrl!,
+        );
+        receivedMessage = receivedMessage.copyWith(
+          mediaFile: receivedMessage.mediaFile!.copyWith(
+            thumbnailFile: imageThumbnailFile,
+          ),
+        );
+      }
+    }
 
     final senderUserInfo = ChatUserInfo.buildFromRemoteUser(
       remoteMessage.sender,

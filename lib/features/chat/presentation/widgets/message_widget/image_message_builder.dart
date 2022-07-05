@@ -26,6 +26,55 @@ class _ImageMessageBuilderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (message.isSendedByCurrentUser) {
+      return _SendedImageMessageBuilderWidget(message: message);
+    } else {
+      return _ReceivedImageMessageBuilderWidget(message: message);
+    }
+  }
+}
+
+class _ReceivedImageMessageBuilderWidget extends StatefulWidget {
+  final LocalChatMessage message;
+  const _ReceivedImageMessageBuilderWidget({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  State<_ReceivedImageMessageBuilderWidget> createState() =>
+      __ReceivedImageMessageStateBuilderWidget();
+}
+
+class __ReceivedImageMessageStateBuilderWidget
+    extends State<_ReceivedImageMessageBuilderWidget> {
+  late LocalChatMessage _message = widget.message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class _SendedImageMessageBuilderWidget extends StatefulWidget {
+  final LocalChatMessage message;
+
+  const _SendedImageMessageBuilderWidget({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  State<_SendedImageMessageBuilderWidget> createState() =>
+      __SendedImageMessageBuilderWidgetState();
+}
+
+class __SendedImageMessageBuilderWidgetState
+    extends State<_SendedImageMessageBuilderWidget> {
+  late LocalChatMessage _message = widget.message;
+
+  @override
+  Widget build(BuildContext context) {
     return Container();
   }
 }

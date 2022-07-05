@@ -6,9 +6,12 @@ abstract class LocalChatTable {
   static const textMessage = 'textMessage';
   static const mediaPath = 'mediaPath';
   static const mediaUrl = 'mediaUrl';
+  static const thumbnailPath = 'thumbnailPath';
+  static const thumbnailUrl = 'thumbnailUrl';
   static const messageType = 'messageType';
   static const messageStatues = 'messageStatues';
   static const sentDate = 'sentDate';
+  static const metaData = 'metaData';
   static const messageServerCreationDate = 'messageServerCreationDate';
   static const isRead = 'isRead';
   static const isSendedByCurrentUser = 'isSendedByCurrentUser';
@@ -23,6 +26,9 @@ abstract class LocalChatTable {
         ${LocalChatTable.textMessage} TEXT,
         ${LocalChatTable.mediaPath} TEXT,
         ${LocalChatTable.mediaUrl} TEXT,
+        ${LocalChatTable.thumbnailPath} TEXT,
+        ${LocalChatTable.thumbnailUrl} TEXT,
+        ${LocalChatTable.metaData} TEXT NOT NULL,
         ${LocalChatTable.messageType} TEXT NOT NULL,
         ${LocalChatTable.sentDate} INTEGER NOT NULL,
         ${LocalChatTable.messageServerCreationDate} INTEGER,

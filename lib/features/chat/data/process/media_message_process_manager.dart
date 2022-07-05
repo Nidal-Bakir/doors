@@ -15,9 +15,10 @@ import 'package:doors/features/chat/data/chat_remote_data_source/data_source/cha
 import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_chat_message.dart';
 import 'package:doors/features/chat/data/process/messaging_process_base.dart';
 import 'package:doors/features/chat/util/chat_typedef.dart';
+import 'package:doors/features/chat/util/util_func_for_chat.dart';
+
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as path_provider;
 
 class MediaMessageProcessManager extends MessagingProcessBase<
     ValueStreamOfEitherTuple2OrLocalMessage, LocalChatMessage> {
@@ -77,7 +78,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
 
     final File savedFile;
     try {
-      savedFile = await _saveMediaFileToAppDocumentsDirectory(
+      savedFile = await saveMediaFileToAppDocumentsDirectory(
         message.mediaFile!.file!,
       );
     } catch (error) {
@@ -106,6 +107,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
       ..sender = currentUser
       ..receiver = (User(null, null, null)..objectId = message.userId)
       ..sentDate = message.sentDate
+      ..metaData = message.messageMetaData.toJson()
       ..media = ParseFile(message.mediaFile!.file);
 
     final ParseResponse uploadMediaResponse;
@@ -206,7 +208,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
 
     final File savedFile;
     try {
-      savedFile = await _saveMediaFileToAppDocumentsDirectory(
+      savedFile = await saveMediaFileToAppDocumentsDirectory(
         downloadedFile.file!,
       );
     } catch (error) {
@@ -222,7 +224,7 @@ class MediaMessageProcessManager extends MessagingProcessBase<
     }
 
     final downloadedMediaMessage = message.copyWith(
-      mediaFile: MediaFile(mediaUrl: null, file: savedFile),
+      mediaFile: message.mediaFile!.copyWith(file: savedFile, mediaUrl: null),
       messageStatues: MessageStatues.received,
       receivedMessageDeletionFromServerStatues:
           ReceivedMessageDeletionFromServerStatues.needToBeDeletedFromServer,
@@ -286,36 +288,6 @@ class MediaMessageProcessManager extends MessagingProcessBase<
     await _chatLocalDataSource.updateMessageInChat(
       message.copyWith(messageStatues: MessageStatues.error),
     );
-  }
-
-  Future<File> _saveMediaFileToAppDocumentsDirectory(File file) async {
-    var _path = '';
-    _path = (await path_provider.getApplicationDocumentsDirectory()).path;
-    _path += '/chat/media';
-
-    await _createChatFolderWithItsSubFolders(_path);
-
-    _path += '/' + path.basename(file.path);
-
-    var savedFile = await File(_path).writeAsBytes(
-      await file.readAsBytes(),
-    );
-
-    if (!(await savedFile.exists())) {
-      throw const ErrorWhileSavingTheFile(
-          'file dose not exists when saving media message');
-    }
-
-    return savedFile;
-  }
-
-  Future<void> _createChatFolderWithItsSubFolders(String _path) async {
-    try {
-      await Directory.fromUri(Uri.parse(_path)).create(recursive: true);
-    } catch (e) {
-      throw ErrorWhileSavingTheFile(
-          'can not create app directory' '\n Error: ' + e.toString());
-    }
   }
 
   void _restartAllPendingProcesses() {

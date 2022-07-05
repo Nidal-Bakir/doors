@@ -17,9 +17,22 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$MessagingEventTearOff {
   const _$MessagingEventTearOff();
 
-  MessagingNewMessageSended newMessageSended(LocalChatMessage message) {
-    return MessagingNewMessageSended(
-      message,
+  MessagingTextMessageSended textMessageSended(
+      {required String messageText, required ChatUserInfo receiverUser}) {
+    return MessagingTextMessageSended(
+      messageText: messageText,
+      receiverUser: receiverUser,
+    );
+  }
+
+  MessagingMediaMessageSended mediaMessageSended(
+      {required File mediaFile,
+      required MessageType mediaMessageType,
+      required ChatUserInfo receiverUser}) {
+    return MessagingMediaMessageSended(
+      mediaFile: mediaFile,
+      mediaMessageType: mediaMessageType,
+      receiverUser: receiverUser,
     );
   }
 
@@ -35,50 +48,61 @@ const $MessagingEvent = _$MessagingEventTearOff();
 
 /// @nodoc
 mixin _$MessagingEvent {
-  LocalChatMessage get message => throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(LocalChatMessage message) newMessageSended,
+    required TResult Function(String messageText, ChatUserInfo receiverUser)
+        textMessageSended,
+    required TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)
+        mediaMessageSended,
     required TResult Function(LocalChatMessage message) newMessageReceived,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LocalChatMessage message)? newMessageSended,
+    TResult Function(String messageText, ChatUserInfo receiverUser)?
+        textMessageSended,
+    TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)?
+        mediaMessageSended,
     TResult Function(LocalChatMessage message)? newMessageReceived,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(LocalChatMessage message)? newMessageSended,
+    TResult Function(String messageText, ChatUserInfo receiverUser)?
+        textMessageSended,
+    TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)?
+        mediaMessageSended,
     TResult Function(LocalChatMessage message)? newMessageReceived,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(MessagingNewMessageSended value) newMessageSended,
+    required TResult Function(MessagingTextMessageSended value)
+        textMessageSended,
+    required TResult Function(MessagingMediaMessageSended value)
+        mediaMessageSended,
     required TResult Function(MessagingNewMessageReceived value)
         newMessageReceived,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(MessagingNewMessageSended value)? newMessageSended,
+    TResult Function(MessagingTextMessageSended value)? textMessageSended,
+    TResult Function(MessagingMediaMessageSended value)? mediaMessageSended,
     TResult Function(MessagingNewMessageReceived value)? newMessageReceived,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(MessagingNewMessageSended value)? newMessageSended,
+    TResult Function(MessagingTextMessageSended value)? textMessageSended,
+    TResult Function(MessagingMediaMessageSended value)? mediaMessageSended,
     TResult Function(MessagingNewMessageReceived value)? newMessageReceived,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $MessagingEventCopyWith<MessagingEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -87,7 +111,6 @@ abstract class $MessagingEventCopyWith<$Res> {
   factory $MessagingEventCopyWith(
           MessagingEvent value, $Res Function(MessagingEvent) then) =
       _$MessagingEventCopyWithImpl<$Res>;
-  $Res call({LocalChatMessage message});
 }
 
 /// @nodoc
@@ -98,113 +121,125 @@ class _$MessagingEventCopyWithImpl<$Res>
   final MessagingEvent _value;
   // ignore: unused_field
   final $Res Function(MessagingEvent) _then;
-
-  @override
-  $Res call({
-    Object? message = freezed,
-  }) {
-    return _then(_value.copyWith(
-      message: message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as LocalChatMessage,
-    ));
-  }
 }
 
 /// @nodoc
-abstract class $MessagingNewMessageSendedCopyWith<$Res>
-    implements $MessagingEventCopyWith<$Res> {
-  factory $MessagingNewMessageSendedCopyWith(MessagingNewMessageSended value,
-          $Res Function(MessagingNewMessageSended) then) =
-      _$MessagingNewMessageSendedCopyWithImpl<$Res>;
-  @override
-  $Res call({LocalChatMessage message});
+abstract class $MessagingTextMessageSendedCopyWith<$Res> {
+  factory $MessagingTextMessageSendedCopyWith(MessagingTextMessageSended value,
+          $Res Function(MessagingTextMessageSended) then) =
+      _$MessagingTextMessageSendedCopyWithImpl<$Res>;
+  $Res call({String messageText, ChatUserInfo receiverUser});
 }
 
 /// @nodoc
-class _$MessagingNewMessageSendedCopyWithImpl<$Res>
+class _$MessagingTextMessageSendedCopyWithImpl<$Res>
     extends _$MessagingEventCopyWithImpl<$Res>
-    implements $MessagingNewMessageSendedCopyWith<$Res> {
-  _$MessagingNewMessageSendedCopyWithImpl(MessagingNewMessageSended _value,
-      $Res Function(MessagingNewMessageSended) _then)
-      : super(_value, (v) => _then(v as MessagingNewMessageSended));
+    implements $MessagingTextMessageSendedCopyWith<$Res> {
+  _$MessagingTextMessageSendedCopyWithImpl(MessagingTextMessageSended _value,
+      $Res Function(MessagingTextMessageSended) _then)
+      : super(_value, (v) => _then(v as MessagingTextMessageSended));
 
   @override
-  MessagingNewMessageSended get _value =>
-      super._value as MessagingNewMessageSended;
+  MessagingTextMessageSended get _value =>
+      super._value as MessagingTextMessageSended;
 
   @override
   $Res call({
-    Object? message = freezed,
+    Object? messageText = freezed,
+    Object? receiverUser = freezed,
   }) {
-    return _then(MessagingNewMessageSended(
-      message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as LocalChatMessage,
+    return _then(MessagingTextMessageSended(
+      messageText: messageText == freezed
+          ? _value.messageText
+          : messageText // ignore: cast_nullable_to_non_nullable
+              as String,
+      receiverUser: receiverUser == freezed
+          ? _value.receiverUser
+          : receiverUser // ignore: cast_nullable_to_non_nullable
+              as ChatUserInfo,
     ));
   }
 }
 
 /// @nodoc
 
-class _$MessagingNewMessageSended implements MessagingNewMessageSended {
-  const _$MessagingNewMessageSended(this.message);
+class _$MessagingTextMessageSended implements MessagingTextMessageSended {
+  const _$MessagingTextMessageSended(
+      {required this.messageText, required this.receiverUser});
 
   @override
-  final LocalChatMessage message;
+  final String messageText;
+  @override
+  final ChatUserInfo receiverUser;
 
   @override
   String toString() {
-    return 'MessagingEvent.newMessageSended(message: $message)';
+    return 'MessagingEvent.textMessageSended(messageText: $messageText, receiverUser: $receiverUser)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is MessagingNewMessageSended &&
-            const DeepCollectionEquality().equals(other.message, message));
+            other is MessagingTextMessageSended &&
+            const DeepCollectionEquality()
+                .equals(other.messageText, messageText) &&
+            const DeepCollectionEquality()
+                .equals(other.receiverUser, receiverUser));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(messageText),
+      const DeepCollectionEquality().hash(receiverUser));
 
   @JsonKey(ignore: true)
   @override
-  $MessagingNewMessageSendedCopyWith<MessagingNewMessageSended> get copyWith =>
-      _$MessagingNewMessageSendedCopyWithImpl<MessagingNewMessageSended>(
-          this, _$identity);
+  $MessagingTextMessageSendedCopyWith<MessagingTextMessageSended>
+      get copyWith =>
+          _$MessagingTextMessageSendedCopyWithImpl<MessagingTextMessageSended>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(LocalChatMessage message) newMessageSended,
+    required TResult Function(String messageText, ChatUserInfo receiverUser)
+        textMessageSended,
+    required TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)
+        mediaMessageSended,
     required TResult Function(LocalChatMessage message) newMessageReceived,
   }) {
-    return newMessageSended(message);
+    return textMessageSended(messageText, receiverUser);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LocalChatMessage message)? newMessageSended,
+    TResult Function(String messageText, ChatUserInfo receiverUser)?
+        textMessageSended,
+    TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)?
+        mediaMessageSended,
     TResult Function(LocalChatMessage message)? newMessageReceived,
   }) {
-    return newMessageSended?.call(message);
+    return textMessageSended?.call(messageText, receiverUser);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(LocalChatMessage message)? newMessageSended,
+    TResult Function(String messageText, ChatUserInfo receiverUser)?
+        textMessageSended,
+    TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)?
+        mediaMessageSended,
     TResult Function(LocalChatMessage message)? newMessageReceived,
     required TResult orElse(),
   }) {
-    if (newMessageSended != null) {
-      return newMessageSended(message);
+    if (textMessageSended != null) {
+      return textMessageSended(messageText, receiverUser);
     }
     return orElse();
   }
@@ -212,56 +247,246 @@ class _$MessagingNewMessageSended implements MessagingNewMessageSended {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(MessagingNewMessageSended value) newMessageSended,
+    required TResult Function(MessagingTextMessageSended value)
+        textMessageSended,
+    required TResult Function(MessagingMediaMessageSended value)
+        mediaMessageSended,
     required TResult Function(MessagingNewMessageReceived value)
         newMessageReceived,
   }) {
-    return newMessageSended(this);
+    return textMessageSended(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(MessagingNewMessageSended value)? newMessageSended,
+    TResult Function(MessagingTextMessageSended value)? textMessageSended,
+    TResult Function(MessagingMediaMessageSended value)? mediaMessageSended,
     TResult Function(MessagingNewMessageReceived value)? newMessageReceived,
   }) {
-    return newMessageSended?.call(this);
+    return textMessageSended?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(MessagingNewMessageSended value)? newMessageSended,
+    TResult Function(MessagingTextMessageSended value)? textMessageSended,
+    TResult Function(MessagingMediaMessageSended value)? mediaMessageSended,
     TResult Function(MessagingNewMessageReceived value)? newMessageReceived,
     required TResult orElse(),
   }) {
-    if (newMessageSended != null) {
-      return newMessageSended(this);
+    if (textMessageSended != null) {
+      return textMessageSended(this);
     }
     return orElse();
   }
 }
 
-abstract class MessagingNewMessageSended implements MessagingEvent {
-  const factory MessagingNewMessageSended(LocalChatMessage message) =
-      _$MessagingNewMessageSended;
+abstract class MessagingTextMessageSended implements MessagingEvent {
+  const factory MessagingTextMessageSended(
+      {required String messageText,
+      required ChatUserInfo receiverUser}) = _$MessagingTextMessageSended;
 
-  @override
-  LocalChatMessage get message;
-  @override
+  String get messageText;
+  ChatUserInfo get receiverUser;
   @JsonKey(ignore: true)
-  $MessagingNewMessageSendedCopyWith<MessagingNewMessageSended> get copyWith =>
-      throw _privateConstructorUsedError;
+  $MessagingTextMessageSendedCopyWith<MessagingTextMessageSended>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $MessagingNewMessageReceivedCopyWith<$Res>
-    implements $MessagingEventCopyWith<$Res> {
+abstract class $MessagingMediaMessageSendedCopyWith<$Res> {
+  factory $MessagingMediaMessageSendedCopyWith(
+          MessagingMediaMessageSended value,
+          $Res Function(MessagingMediaMessageSended) then) =
+      _$MessagingMediaMessageSendedCopyWithImpl<$Res>;
+  $Res call(
+      {File mediaFile,
+      MessageType mediaMessageType,
+      ChatUserInfo receiverUser});
+}
+
+/// @nodoc
+class _$MessagingMediaMessageSendedCopyWithImpl<$Res>
+    extends _$MessagingEventCopyWithImpl<$Res>
+    implements $MessagingMediaMessageSendedCopyWith<$Res> {
+  _$MessagingMediaMessageSendedCopyWithImpl(MessagingMediaMessageSended _value,
+      $Res Function(MessagingMediaMessageSended) _then)
+      : super(_value, (v) => _then(v as MessagingMediaMessageSended));
+
+  @override
+  MessagingMediaMessageSended get _value =>
+      super._value as MessagingMediaMessageSended;
+
+  @override
+  $Res call({
+    Object? mediaFile = freezed,
+    Object? mediaMessageType = freezed,
+    Object? receiverUser = freezed,
+  }) {
+    return _then(MessagingMediaMessageSended(
+      mediaFile: mediaFile == freezed
+          ? _value.mediaFile
+          : mediaFile // ignore: cast_nullable_to_non_nullable
+              as File,
+      mediaMessageType: mediaMessageType == freezed
+          ? _value.mediaMessageType
+          : mediaMessageType // ignore: cast_nullable_to_non_nullable
+              as MessageType,
+      receiverUser: receiverUser == freezed
+          ? _value.receiverUser
+          : receiverUser // ignore: cast_nullable_to_non_nullable
+              as ChatUserInfo,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$MessagingMediaMessageSended implements MessagingMediaMessageSended {
+  const _$MessagingMediaMessageSended(
+      {required this.mediaFile,
+      required this.mediaMessageType,
+      required this.receiverUser});
+
+  @override
+  final File mediaFile;
+  @override
+  final MessageType mediaMessageType;
+  @override
+  final ChatUserInfo receiverUser;
+
+  @override
+  String toString() {
+    return 'MessagingEvent.mediaMessageSended(mediaFile: $mediaFile, mediaMessageType: $mediaMessageType, receiverUser: $receiverUser)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is MessagingMediaMessageSended &&
+            const DeepCollectionEquality().equals(other.mediaFile, mediaFile) &&
+            const DeepCollectionEquality()
+                .equals(other.mediaMessageType, mediaMessageType) &&
+            const DeepCollectionEquality()
+                .equals(other.receiverUser, receiverUser));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(mediaFile),
+      const DeepCollectionEquality().hash(mediaMessageType),
+      const DeepCollectionEquality().hash(receiverUser));
+
+  @JsonKey(ignore: true)
+  @override
+  $MessagingMediaMessageSendedCopyWith<MessagingMediaMessageSended>
+      get copyWith => _$MessagingMediaMessageSendedCopyWithImpl<
+          MessagingMediaMessageSended>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String messageText, ChatUserInfo receiverUser)
+        textMessageSended,
+    required TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)
+        mediaMessageSended,
+    required TResult Function(LocalChatMessage message) newMessageReceived,
+  }) {
+    return mediaMessageSended(mediaFile, mediaMessageType, receiverUser);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String messageText, ChatUserInfo receiverUser)?
+        textMessageSended,
+    TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)?
+        mediaMessageSended,
+    TResult Function(LocalChatMessage message)? newMessageReceived,
+  }) {
+    return mediaMessageSended?.call(mediaFile, mediaMessageType, receiverUser);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String messageText, ChatUserInfo receiverUser)?
+        textMessageSended,
+    TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)?
+        mediaMessageSended,
+    TResult Function(LocalChatMessage message)? newMessageReceived,
+    required TResult orElse(),
+  }) {
+    if (mediaMessageSended != null) {
+      return mediaMessageSended(mediaFile, mediaMessageType, receiverUser);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(MessagingTextMessageSended value)
+        textMessageSended,
+    required TResult Function(MessagingMediaMessageSended value)
+        mediaMessageSended,
+    required TResult Function(MessagingNewMessageReceived value)
+        newMessageReceived,
+  }) {
+    return mediaMessageSended(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(MessagingTextMessageSended value)? textMessageSended,
+    TResult Function(MessagingMediaMessageSended value)? mediaMessageSended,
+    TResult Function(MessagingNewMessageReceived value)? newMessageReceived,
+  }) {
+    return mediaMessageSended?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(MessagingTextMessageSended value)? textMessageSended,
+    TResult Function(MessagingMediaMessageSended value)? mediaMessageSended,
+    TResult Function(MessagingNewMessageReceived value)? newMessageReceived,
+    required TResult orElse(),
+  }) {
+    if (mediaMessageSended != null) {
+      return mediaMessageSended(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class MessagingMediaMessageSended implements MessagingEvent {
+  const factory MessagingMediaMessageSended(
+      {required File mediaFile,
+      required MessageType mediaMessageType,
+      required ChatUserInfo receiverUser}) = _$MessagingMediaMessageSended;
+
+  File get mediaFile;
+  MessageType get mediaMessageType;
+  ChatUserInfo get receiverUser;
+  @JsonKey(ignore: true)
+  $MessagingMediaMessageSendedCopyWith<MessagingMediaMessageSended>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MessagingNewMessageReceivedCopyWith<$Res> {
   factory $MessagingNewMessageReceivedCopyWith(
           MessagingNewMessageReceived value,
           $Res Function(MessagingNewMessageReceived) then) =
       _$MessagingNewMessageReceivedCopyWithImpl<$Res>;
-  @override
   $Res call({LocalChatMessage message});
 }
 
@@ -324,7 +549,11 @@ class _$MessagingNewMessageReceived implements MessagingNewMessageReceived {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(LocalChatMessage message) newMessageSended,
+    required TResult Function(String messageText, ChatUserInfo receiverUser)
+        textMessageSended,
+    required TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)
+        mediaMessageSended,
     required TResult Function(LocalChatMessage message) newMessageReceived,
   }) {
     return newMessageReceived(message);
@@ -333,7 +562,11 @@ class _$MessagingNewMessageReceived implements MessagingNewMessageReceived {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LocalChatMessage message)? newMessageSended,
+    TResult Function(String messageText, ChatUserInfo receiverUser)?
+        textMessageSended,
+    TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)?
+        mediaMessageSended,
     TResult Function(LocalChatMessage message)? newMessageReceived,
   }) {
     return newMessageReceived?.call(message);
@@ -342,7 +575,11 @@ class _$MessagingNewMessageReceived implements MessagingNewMessageReceived {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(LocalChatMessage message)? newMessageSended,
+    TResult Function(String messageText, ChatUserInfo receiverUser)?
+        textMessageSended,
+    TResult Function(File mediaFile, MessageType mediaMessageType,
+            ChatUserInfo receiverUser)?
+        mediaMessageSended,
     TResult Function(LocalChatMessage message)? newMessageReceived,
     required TResult orElse(),
   }) {
@@ -355,7 +592,10 @@ class _$MessagingNewMessageReceived implements MessagingNewMessageReceived {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(MessagingNewMessageSended value) newMessageSended,
+    required TResult Function(MessagingTextMessageSended value)
+        textMessageSended,
+    required TResult Function(MessagingMediaMessageSended value)
+        mediaMessageSended,
     required TResult Function(MessagingNewMessageReceived value)
         newMessageReceived,
   }) {
@@ -365,7 +605,8 @@ class _$MessagingNewMessageReceived implements MessagingNewMessageReceived {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(MessagingNewMessageSended value)? newMessageSended,
+    TResult Function(MessagingTextMessageSended value)? textMessageSended,
+    TResult Function(MessagingMediaMessageSended value)? mediaMessageSended,
     TResult Function(MessagingNewMessageReceived value)? newMessageReceived,
   }) {
     return newMessageReceived?.call(this);
@@ -374,7 +615,8 @@ class _$MessagingNewMessageReceived implements MessagingNewMessageReceived {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(MessagingNewMessageSended value)? newMessageSended,
+    TResult Function(MessagingTextMessageSended value)? textMessageSended,
+    TResult Function(MessagingMediaMessageSended value)? mediaMessageSended,
     TResult Function(MessagingNewMessageReceived value)? newMessageReceived,
     required TResult orElse(),
   }) {
@@ -389,9 +631,7 @@ abstract class MessagingNewMessageReceived implements MessagingEvent {
   const factory MessagingNewMessageReceived(LocalChatMessage message) =
       _$MessagingNewMessageReceived;
 
-  @override
   LocalChatMessage get message;
-  @override
   @JsonKey(ignore: true)
   $MessagingNewMessageReceivedCopyWith<MessagingNewMessageReceived>
       get copyWith => throw _privateConstructorUsedError;

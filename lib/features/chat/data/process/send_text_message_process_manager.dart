@@ -60,6 +60,7 @@ class SendTextMessageProcessManager extends MessagingProcessBase<
       ..messageType = MessageType.text
       ..receiver = (User(null, null, null)..objectId = message.userId)
       ..sender = currentUser
+      ..metaData = message.messageMetaData.toJson()
       ..sentDate = message.sentDate;
 
     final RemoteChatMessage remoteChatMessageResponse;
