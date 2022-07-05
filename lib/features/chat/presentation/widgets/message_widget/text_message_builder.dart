@@ -38,7 +38,13 @@ class _TextMessageBuilderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (message.isSendedByCurrentUser) {
-      return _SendedTextMessageWidget(message: message);
+      if (message.messageStatues == MessageStatues.sent) {
+        return _SendedTextMessageWidgetWithOutSendTextBloc(
+          message: message,
+        );
+      } else {
+        return _SendedTextMessageWidget(message: message);
+      }
     } else {
       return _ReceivedTextMessageWidget(message: message);
     }
@@ -108,6 +114,77 @@ class _ReceivedTextMessageWidget extends StatelessWidget {
   }
 }
 
+class _SendedTextMessageWidgetWithOutSendTextBloc extends StatelessWidget {
+  final LocalChatMessage message;
+  const _SendedTextMessageWidgetWithOutSendTextBloc(
+      {Key? key, required this.message})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
+    return Align(
+      alignment: AlignmentDirectional.centerEnd,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width - 45,
+        ),
+        child: Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  start: 10,
+                  end: 10,
+                  top: 5,
+                  bottom: 25,
+                ),
+                child: Text(
+                  message.textMessage!,
+                  style: _theme.textTheme.subtitle2,
+                ),
+              ),
+              Positioned(
+                bottom: 3,
+                right: 10,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MessageSendTimeWidget(
+                      messageSendDateTime: message.sentDate,
+                    ),
+                  ],
+                ),
+              ),
+
+              // to make the min width size of the message as small as time widget
+              Opacity(
+                opacity: 0.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      MessageSendTimeWidget(
+                        messageSendDateTime: message.sentDate,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _SendedTextMessageWidget extends StatefulWidget {
   final LocalChatMessage message;
   const _SendedTextMessageWidget({
@@ -128,11 +205,8 @@ class _SendedTextMessageWidgetState extends State<_SendedTextMessageWidget> {
 
     return BlocProvider<SendTextMessageBloc>(
       create: (context) {
-        final bloc = GetIt.I.get<SendTextMessageBloc>(param1: _message);
-        if (_message.messageStatues != MessageStatues.sent) {
-          bloc.add(const SendTextMessageMessageSended());
-        }
-        return bloc;
+        return GetIt.I.get<SendTextMessageBloc>(param1: _message)
+          ..add(const SendTextMessageMessageSended());
       },
       child: Builder(builder: (context) {
         return BlocBuilder<SendTextMessageBloc, SendTextMessageState>(

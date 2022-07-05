@@ -198,10 +198,10 @@ class _$SendMediaMessageStateTearOff {
     return const SendMediaMessageInProgress();
   }
 
-  SendMediaMessageUploadInProgress uploadInProgress(
-      Tuple2<int, int> uploadProgress) {
+  SendMediaMessageUploadInProgress uploadInProgress(int progress, int total) {
     return SendMediaMessageUploadInProgress(
-      uploadProgress,
+      progress,
+      total,
     );
   }
 
@@ -227,7 +227,7 @@ mixin _$SendMediaMessageState {
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> uploadProgress) uploadInProgress,
+    required TResult Function(int progress, int total) uploadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) sendSuccess,
     required TResult Function(ExceptionBase error) sendFailure,
   }) =>
@@ -236,7 +236,7 @@ mixin _$SendMediaMessageState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
   }) =>
@@ -245,7 +245,7 @@ mixin _$SendMediaMessageState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
     required TResult orElse(),
@@ -368,7 +368,7 @@ class _$SendMediaMessageInitial implements SendMediaMessageInitial {
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> uploadProgress) uploadInProgress,
+    required TResult Function(int progress, int total) uploadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) sendSuccess,
     required TResult Function(ExceptionBase error) sendFailure,
   }) {
@@ -380,7 +380,7 @@ class _$SendMediaMessageInitial implements SendMediaMessageInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
   }) {
@@ -392,7 +392,7 @@ class _$SendMediaMessageInitial implements SendMediaMessageInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
     required TResult orElse(),
@@ -500,7 +500,7 @@ class _$SendMediaMessageInProgress implements SendMediaMessageInProgress {
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> uploadProgress) uploadInProgress,
+    required TResult Function(int progress, int total) uploadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) sendSuccess,
     required TResult Function(ExceptionBase error) sendFailure,
   }) {
@@ -512,7 +512,7 @@ class _$SendMediaMessageInProgress implements SendMediaMessageInProgress {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
   }) {
@@ -524,7 +524,7 @@ class _$SendMediaMessageInProgress implements SendMediaMessageInProgress {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
     required TResult orElse(),
@@ -587,7 +587,7 @@ abstract class $SendMediaMessageUploadInProgressCopyWith<$Res> {
           SendMediaMessageUploadInProgress value,
           $Res Function(SendMediaMessageUploadInProgress) then) =
       _$SendMediaMessageUploadInProgressCopyWithImpl<$Res>;
-  $Res call({Tuple2<int, int> uploadProgress});
+  $Res call({int progress, int total});
 }
 
 /// @nodoc
@@ -605,13 +605,18 @@ class _$SendMediaMessageUploadInProgressCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? uploadProgress = freezed,
+    Object? progress = freezed,
+    Object? total = freezed,
   }) {
     return _then(SendMediaMessageUploadInProgress(
-      uploadProgress == freezed
-          ? _value.uploadProgress
-          : uploadProgress // ignore: cast_nullable_to_non_nullable
-              as Tuple2<int, int>,
+      progress == freezed
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as int,
+      total == freezed
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -620,14 +625,16 @@ class _$SendMediaMessageUploadInProgressCopyWithImpl<$Res>
 
 class _$SendMediaMessageUploadInProgress
     implements SendMediaMessageUploadInProgress {
-  const _$SendMediaMessageUploadInProgress(this.uploadProgress);
+  const _$SendMediaMessageUploadInProgress(this.progress, this.total);
 
   @override
-  final Tuple2<int, int> uploadProgress;
+  final int progress;
+  @override
+  final int total;
 
   @override
   String toString() {
-    return 'SendMediaMessageState.uploadInProgress(uploadProgress: $uploadProgress)';
+    return 'SendMediaMessageState.uploadInProgress(progress: $progress, total: $total)';
   }
 
   @override
@@ -635,13 +642,15 @@ class _$SendMediaMessageUploadInProgress
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is SendMediaMessageUploadInProgress &&
-            const DeepCollectionEquality()
-                .equals(other.uploadProgress, uploadProgress));
+            const DeepCollectionEquality().equals(other.progress, progress) &&
+            const DeepCollectionEquality().equals(other.total, total));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(uploadProgress));
+      runtimeType,
+      const DeepCollectionEquality().hash(progress),
+      const DeepCollectionEquality().hash(total));
 
   @JsonKey(ignore: true)
   @override
@@ -654,11 +663,11 @@ class _$SendMediaMessageUploadInProgress
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> uploadProgress) uploadInProgress,
+    required TResult Function(int progress, int total) uploadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) sendSuccess,
     required TResult Function(ExceptionBase error) sendFailure,
   }) {
-    return uploadInProgress(uploadProgress);
+    return uploadInProgress(progress, total);
   }
 
   @override
@@ -666,11 +675,11 @@ class _$SendMediaMessageUploadInProgress
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
   }) {
-    return uploadInProgress?.call(uploadProgress);
+    return uploadInProgress?.call(progress, total);
   }
 
   @override
@@ -678,13 +687,13 @@ class _$SendMediaMessageUploadInProgress
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
     required TResult orElse(),
   }) {
     if (uploadInProgress != null) {
-      return uploadInProgress(uploadProgress);
+      return uploadInProgress(progress, total);
     }
     return orElse();
   }
@@ -733,10 +742,11 @@ class _$SendMediaMessageUploadInProgress
 
 abstract class SendMediaMessageUploadInProgress
     implements SendMediaMessageState {
-  const factory SendMediaMessageUploadInProgress(
-      Tuple2<int, int> uploadProgress) = _$SendMediaMessageUploadInProgress;
+  const factory SendMediaMessageUploadInProgress(int progress, int total) =
+      _$SendMediaMessageUploadInProgress;
 
-  Tuple2<int, int> get uploadProgress;
+  int get progress;
+  int get total;
   @JsonKey(ignore: true)
   $SendMediaMessageUploadInProgressCopyWith<SendMediaMessageUploadInProgress>
       get copyWith => throw _privateConstructorUsedError;
@@ -813,7 +823,7 @@ class _$SendMediaMessageSendSuccess implements SendMediaMessageSendSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> uploadProgress) uploadInProgress,
+    required TResult Function(int progress, int total) uploadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) sendSuccess,
     required TResult Function(ExceptionBase error) sendFailure,
   }) {
@@ -825,7 +835,7 @@ class _$SendMediaMessageSendSuccess implements SendMediaMessageSendSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
   }) {
@@ -837,7 +847,7 @@ class _$SendMediaMessageSendSuccess implements SendMediaMessageSendSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
     required TResult orElse(),
@@ -970,7 +980,7 @@ class _$SendMediaMessageSendFailure implements SendMediaMessageSendFailure {
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> uploadProgress) uploadInProgress,
+    required TResult Function(int progress, int total) uploadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) sendSuccess,
     required TResult Function(ExceptionBase error) sendFailure,
   }) {
@@ -982,7 +992,7 @@ class _$SendMediaMessageSendFailure implements SendMediaMessageSendFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
   }) {
@@ -994,7 +1004,7 @@ class _$SendMediaMessageSendFailure implements SendMediaMessageSendFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> uploadProgress)? uploadInProgress,
+    TResult Function(int progress, int total)? uploadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? sendSuccess,
     TResult Function(ExceptionBase error)? sendFailure,
     required TResult orElse(),

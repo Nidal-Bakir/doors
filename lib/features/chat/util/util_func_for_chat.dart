@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:doors/core/errors/user_error.dart';
+import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
 import 'package:intl/intl.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:path/path.dart' as path;
@@ -25,7 +26,7 @@ Future<File?> saveThumbnailImage(String thumbnailUrl) async {
         error.toString());
     return null;
   }
-  
+
   try {
     return await saveMediaFileToAppDocumentsDirectory(downloadedFile.file!);
   } catch (error) {
@@ -63,4 +64,8 @@ Future<void> _createChatFolderWithItsSubFolders(String _path) async {
     throw ErrorWhileSavingTheFile(
         'can not create app directory' '\n Error: ' + e.toString());
   }
+}
+
+double imageAspectRatio(ImageMessageMetaData metaData) {
+  return metaData.imageWidth / metaData.imageHight;
 }

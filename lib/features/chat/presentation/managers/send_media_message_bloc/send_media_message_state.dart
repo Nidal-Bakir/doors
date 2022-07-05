@@ -8,7 +8,7 @@ class SendMediaMessageState with _$SendMediaMessageState {
   const factory SendMediaMessageState.inProgress() = SendMediaMessageInProgress;
 
   const factory SendMediaMessageState.uploadInProgress(
-      Tuple2<int, int> uploadProgress) = SendMediaMessageUploadInProgress;
+      int progress,int total) = SendMediaMessageUploadInProgress;
 
   const factory SendMediaMessageState.sendSuccess(
       LocalChatMessage mediaMessage) = SendMediaMessageSendSuccess;

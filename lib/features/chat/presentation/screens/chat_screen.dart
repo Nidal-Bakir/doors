@@ -5,8 +5,12 @@ import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/media_file.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
-import 'package:doors/features/chat/presentation/managers/send_text_message_bloc/send_text_message_bloc.dart';
+import 'package:doors/features/chat/presentation/managers/send_media_message_bloc/send_media_message_bloc.dart';
+import 'package:doors/features/chat/presentation/widgets/chat_image_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/connection_status_widget.dart';
+import 'package:doors/features/chat/presentation/widgets/message_error_icon_widget.dart';
+import 'package:doors/features/chat/presentation/widgets/message_send_time_widget.dart';
+import 'package:doors/features/chat/presentation/widgets/messing_send_in_progress_icon_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/scroll_to_latest_message_fab.dart';
 import 'package:doors/features/chat/util/util_func_for_chat.dart';
 import 'package:flutter/material.dart';
@@ -121,9 +125,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: FadeTransition(
                     opacity: animation,
                     key: Key(list[index].localMessageId.toString()),
-                    child: _SendedImageMessageBuilderWidget(
-                      message: list[index],
-                    ),
+                    // child: _SendedImageMessageBuilderWidget(
+                    //   message: list[index],
+                    // ),
                   ),
                 );
               },
@@ -148,62 +152,4 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class _SendedImageMessageBuilderWidget extends StatefulWidget {
-  final LocalChatMessage message;
 
-  const _SendedImageMessageBuilderWidget({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
-
-  @override
-  State<_SendedImageMessageBuilderWidget> createState() =>
-      __SendedImageMessageBuilderWidgetState();
-}
-
-class __SendedImageMessageBuilderWidgetState
-    extends State<_SendedImageMessageBuilderWidget> {
-  late LocalChatMessage _message = widget.message;
-  late ImageMessageMetaData _imageMessageMetaData =
-      widget.message.messageMetaData as ImageMessageMetaData;
-
-  @override
-  Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
-    return Align(
-      alignment: AlignmentDirectional.centerEnd,
-      child: Card(
-        color: _theme.colorScheme.primary,
-        elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.7,
-                maxHeight: MediaQuery.of(context).size.height * 0.4,
-              ),
-              child: AspectRatio(
-                  aspectRatio: _imageAspectRatio(_imageMessageMetaData),
-                  child: Container(
-                    color: Colors.amber,
-                    child: Image.asset(
-                      'assets/images/suspended.png',
-                      // scale: 0.5,
-                    ),
-                  )),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  double _imageAspectRatio(ImageMessageMetaData metaData) {
-    return metaData.imageWidth / metaData.imageHight;
-  }
-}

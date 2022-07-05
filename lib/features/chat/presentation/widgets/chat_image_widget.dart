@@ -54,7 +54,7 @@ class _FileImage extends StatelessWidget {
         return AnimatedOpacity(
           child: child,
           opacity: frame == null ? 0 : 1,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
       },

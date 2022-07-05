@@ -7,7 +7,7 @@ class MessageErrorIconWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       Icons.error,
-      size: 20,
+      size: 25,
       color: Theme.of(context).colorScheme.error,
     );
   }

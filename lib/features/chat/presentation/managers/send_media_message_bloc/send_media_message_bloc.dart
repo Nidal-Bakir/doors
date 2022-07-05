@@ -49,8 +49,12 @@ class SendMediaMessageBloc
         _chatRepository.sendMediaMessage(_mediaMessage).listen(
       (event) {
         event.fold(
-          (uploadProgress) =>
-              emit(SendMediaMessageUploadInProgress(uploadProgress)),
+          (uploadProgress) => emit(
+            SendMediaMessageUploadInProgress(
+              uploadProgress.head,
+              uploadProgress.tail,
+            ),
+          ),
           (sendedMediaMessage) =>
               emit(SendMediaMessageSendSuccess(sendedMediaMessage)),
         );

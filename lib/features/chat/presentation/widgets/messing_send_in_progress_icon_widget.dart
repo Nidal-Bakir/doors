@@ -5,10 +5,9 @@ class MessageSendInProgressIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
+    return const Icon(
       Icons.watch_later_outlined,
       size: 20,
-      color: Theme.of(context).colorScheme.error,
     );
   }
 }
