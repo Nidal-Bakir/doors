@@ -10,8 +10,9 @@ class DownloadReceivedMediaMessageState
       DownloadReceivedMediaMessageInProgress;
 
   const factory DownloadReceivedMediaMessageState.downloadInProgress(
-          Tuple2<int, int> downloadProgress) =
-      DownloadReceivedMediaMessageDownloadInProgress;
+    int progress,
+    int total,
+  ) = DownloadReceivedMediaMessageDownloadInProgress;
 
   const factory DownloadReceivedMediaMessageState.downloadSuccess(
           LocalChatMessage mediaMessage) =

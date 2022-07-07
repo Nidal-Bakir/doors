@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
@@ -5,7 +7,7 @@ import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/media_file.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
-import 'package:doors/features/chat/presentation/managers/send_media_message_bloc/send_media_message_bloc.dart';
+import 'package:doors/features/chat/presentation/managers/download_received_media_message_bloc/download_received_media_message_bloc.dart';
 import 'package:doors/features/chat/presentation/widgets/chat_image_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/connection_status_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/message_error_icon_widget.dart';
@@ -125,8 +127,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: FadeTransition(
                     opacity: animation,
                     key: Key(list[index].localMessageId.toString()),
-                    // child: _SendedImageMessageBuilderWidget(
-                    //   message: list[index],
+                    // child: _ReceivedImageMessageBuilderWidget(
+                      // message: list[index],
                     // ),
                   ),
                 );
@@ -151,5 +153,4 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 }
-
 

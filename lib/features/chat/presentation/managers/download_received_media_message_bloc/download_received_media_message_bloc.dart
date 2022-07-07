@@ -50,7 +50,10 @@ class DownloadReceivedMediaMessageBloc extends Bloc<
       (event) {
         event.fold(
           (downloadProgress) => emit(
-            DownloadReceivedMediaMessageDownloadInProgress(downloadProgress),
+            DownloadReceivedMediaMessageDownloadInProgress(
+              downloadProgress.head,
+              downloadProgress.tail,
+            ),
           ),
           (downloadedMediaMessage) => emit(
             DownloadReceivedMediaMessageDownloadSuccess(downloadedMediaMessage),

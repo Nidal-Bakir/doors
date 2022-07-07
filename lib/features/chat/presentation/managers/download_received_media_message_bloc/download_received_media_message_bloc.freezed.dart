@@ -204,9 +204,10 @@ class _$DownloadReceivedMediaMessageStateTearOff {
   }
 
   DownloadReceivedMediaMessageDownloadInProgress downloadInProgress(
-      Tuple2<int, int> downloadProgress) {
+      int progress, int total) {
     return DownloadReceivedMediaMessageDownloadInProgress(
-      downloadProgress,
+      progress,
+      total,
     );
   }
 
@@ -235,8 +236,7 @@ mixin _$DownloadReceivedMediaMessageState {
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> downloadProgress)
-        downloadInProgress,
+    required TResult Function(int progress, int total) downloadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) downloadSuccess,
     required TResult Function(ExceptionBase error) downloadFailure,
   }) =>
@@ -245,7 +245,7 @@ mixin _$DownloadReceivedMediaMessageState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
   }) =>
@@ -254,7 +254,7 @@ mixin _$DownloadReceivedMediaMessageState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
     required TResult orElse(),
@@ -394,8 +394,7 @@ class _$DownloadReceivedMediaMessageInitial
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> downloadProgress)
-        downloadInProgress,
+    required TResult Function(int progress, int total) downloadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) downloadSuccess,
     required TResult Function(ExceptionBase error) downloadFailure,
   }) {
@@ -407,7 +406,7 @@ class _$DownloadReceivedMediaMessageInitial
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
   }) {
@@ -419,7 +418,7 @@ class _$DownloadReceivedMediaMessageInitial
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
     required TResult orElse(),
@@ -544,8 +543,7 @@ class _$DownloadReceivedMediaMessageInProgress
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> downloadProgress)
-        downloadInProgress,
+    required TResult Function(int progress, int total) downloadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) downloadSuccess,
     required TResult Function(ExceptionBase error) downloadFailure,
   }) {
@@ -557,7 +555,7 @@ class _$DownloadReceivedMediaMessageInProgress
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
   }) {
@@ -569,7 +567,7 @@ class _$DownloadReceivedMediaMessageInProgress
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
     required TResult orElse(),
@@ -645,7 +643,7 @@ abstract class $DownloadReceivedMediaMessageDownloadInProgressCopyWith<$Res> {
           DownloadReceivedMediaMessageDownloadInProgress value,
           $Res Function(DownloadReceivedMediaMessageDownloadInProgress) then) =
       _$DownloadReceivedMediaMessageDownloadInProgressCopyWithImpl<$Res>;
-  $Res call({Tuple2<int, int> downloadProgress});
+  $Res call({int progress, int total});
 }
 
 /// @nodoc
@@ -664,13 +662,18 @@ class _$DownloadReceivedMediaMessageDownloadInProgressCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? downloadProgress = freezed,
+    Object? progress = freezed,
+    Object? total = freezed,
   }) {
     return _then(DownloadReceivedMediaMessageDownloadInProgress(
-      downloadProgress == freezed
-          ? _value.downloadProgress
-          : downloadProgress // ignore: cast_nullable_to_non_nullable
-              as Tuple2<int, int>,
+      progress == freezed
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as int,
+      total == freezed
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -679,14 +682,17 @@ class _$DownloadReceivedMediaMessageDownloadInProgressCopyWithImpl<$Res>
 
 class _$DownloadReceivedMediaMessageDownloadInProgress
     implements DownloadReceivedMediaMessageDownloadInProgress {
-  const _$DownloadReceivedMediaMessageDownloadInProgress(this.downloadProgress);
+  const _$DownloadReceivedMediaMessageDownloadInProgress(
+      this.progress, this.total);
 
   @override
-  final Tuple2<int, int> downloadProgress;
+  final int progress;
+  @override
+  final int total;
 
   @override
   String toString() {
-    return 'DownloadReceivedMediaMessageState.downloadInProgress(downloadProgress: $downloadProgress)';
+    return 'DownloadReceivedMediaMessageState.downloadInProgress(progress: $progress, total: $total)';
   }
 
   @override
@@ -694,13 +700,15 @@ class _$DownloadReceivedMediaMessageDownloadInProgress
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is DownloadReceivedMediaMessageDownloadInProgress &&
-            const DeepCollectionEquality()
-                .equals(other.downloadProgress, downloadProgress));
+            const DeepCollectionEquality().equals(other.progress, progress) &&
+            const DeepCollectionEquality().equals(other.total, total));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(downloadProgress));
+      runtimeType,
+      const DeepCollectionEquality().hash(progress),
+      const DeepCollectionEquality().hash(total));
 
   @JsonKey(ignore: true)
   @override
@@ -715,12 +723,11 @@ class _$DownloadReceivedMediaMessageDownloadInProgress
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> downloadProgress)
-        downloadInProgress,
+    required TResult Function(int progress, int total) downloadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) downloadSuccess,
     required TResult Function(ExceptionBase error) downloadFailure,
   }) {
-    return downloadInProgress(downloadProgress);
+    return downloadInProgress(progress, total);
   }
 
   @override
@@ -728,11 +735,11 @@ class _$DownloadReceivedMediaMessageDownloadInProgress
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
   }) {
-    return downloadInProgress?.call(downloadProgress);
+    return downloadInProgress?.call(progress, total);
   }
 
   @override
@@ -740,13 +747,13 @@ class _$DownloadReceivedMediaMessageDownloadInProgress
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
     required TResult orElse(),
   }) {
     if (downloadInProgress != null) {
-      return downloadInProgress(downloadProgress);
+      return downloadInProgress(progress, total);
     }
     return orElse();
   }
@@ -807,10 +814,11 @@ class _$DownloadReceivedMediaMessageDownloadInProgress
 abstract class DownloadReceivedMediaMessageDownloadInProgress
     implements DownloadReceivedMediaMessageState {
   const factory DownloadReceivedMediaMessageDownloadInProgress(
-          Tuple2<int, int> downloadProgress) =
+          int progress, int total) =
       _$DownloadReceivedMediaMessageDownloadInProgress;
 
-  Tuple2<int, int> get downloadProgress;
+  int get progress;
+  int get total;
   @JsonKey(ignore: true)
   $DownloadReceivedMediaMessageDownloadInProgressCopyWith<
           DownloadReceivedMediaMessageDownloadInProgress>
@@ -892,8 +900,7 @@ class _$DownloadReceivedMediaMessageDownloadSuccess
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> downloadProgress)
-        downloadInProgress,
+    required TResult Function(int progress, int total) downloadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) downloadSuccess,
     required TResult Function(ExceptionBase error) downloadFailure,
   }) {
@@ -905,7 +912,7 @@ class _$DownloadReceivedMediaMessageDownloadSuccess
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
   }) {
@@ -917,7 +924,7 @@ class _$DownloadReceivedMediaMessageDownloadSuccess
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
     required TResult orElse(),
@@ -1068,8 +1075,7 @@ class _$DownloadReceivedMediaMessageDownloadFailure
   TResult when<TResult extends Object?>({
     required TResult Function(LocalChatMessage mediaMessage) initial,
     required TResult Function() inProgress,
-    required TResult Function(Tuple2<int, int> downloadProgress)
-        downloadInProgress,
+    required TResult Function(int progress, int total) downloadInProgress,
     required TResult Function(LocalChatMessage mediaMessage) downloadSuccess,
     required TResult Function(ExceptionBase error) downloadFailure,
   }) {
@@ -1081,7 +1087,7 @@ class _$DownloadReceivedMediaMessageDownloadFailure
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
   }) {
@@ -1093,7 +1099,7 @@ class _$DownloadReceivedMediaMessageDownloadFailure
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LocalChatMessage mediaMessage)? initial,
     TResult Function()? inProgress,
-    TResult Function(Tuple2<int, int> downloadProgress)? downloadInProgress,
+    TResult Function(int progress, int total)? downloadInProgress,
     TResult Function(LocalChatMessage mediaMessage)? downloadSuccess,
     TResult Function(ExceptionBase error)? downloadFailure,
     required TResult orElse(),

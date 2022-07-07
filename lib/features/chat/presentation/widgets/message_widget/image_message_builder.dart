@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
+import 'package:doors/features/chat/presentation/managers/download_received_media_message_bloc/download_received_media_message_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/send_media_message_bloc/send_media_message_bloc.dart';
 import 'package:doors/features/chat/presentation/widgets/chat_image_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/message_error_icon_widget.dart';
@@ -32,6 +35,7 @@ class ImageMessageBuilder extends MessageBuilder {
 
 class _ImageMessageBuilderWidget extends StatelessWidget {
   final LocalChatMessage message;
+
   const _ImageMessageBuilderWidget({Key? key, required this.message})
       : super(key: key);
 
@@ -61,6 +65,67 @@ class _ImageMessageBuilderWidget extends StatelessWidget {
   }
 }
 
+class _ReceivedImageMessageBuilderWidgetWithOutDownloadBloc
+    extends StatelessWidget {
+  final LocalChatMessage message;
+
+  _ReceivedImageMessageBuilderWidgetWithOutDownloadBloc(
+      {Key? key, required this.message})
+      : super(key: key);
+
+  late final _imageMessageMetaData =
+      message.messageMetaData as ImageMessageMetaData;
+
+  @override
+  Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
+    final _screenSize = MediaQuery.of(context).size;
+
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Card(
+        elevation: 1,
+        color: _theme.colorScheme.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: _screenSize.width * 0.7,
+                  maxHeight: _screenSize.height * 0.4,
+                ),
+                child: AspectRatio(
+                  aspectRatio: imageAspectRatio(_imageMessageMetaData),
+                  child: ChatImageWidget(
+                    fileImage: message.mediaFile!.file,
+                    height: _imageMessageMetaData.imageHight.toDouble(),
+                    width: _imageMessageMetaData.imageWidth.toDouble(),
+                    errorBuilderWidget: ChatImageWidget(
+                      fileImage: message.mediaFile!.thumbnailFile,
+                      height: _imageMessageMetaData.imageHight.toDouble(),
+                      width: _imageMessageMetaData.imageWidth.toDouble(),
+                    ),
+                  ),
+                ),
+              ),
+              MessageSendTimeWidget(
+                messageSendDateTime: message.sentDate,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ReceivedImageMessageBuilderWidget extends StatefulWidget {
   final LocalChatMessage message;
   const _ReceivedImageMessageBuilderWidget({
@@ -75,24 +140,243 @@ class _ReceivedImageMessageBuilderWidget extends StatefulWidget {
 
 class __ReceivedImageMessageStateBuilderWidget
     extends State<_ReceivedImageMessageBuilderWidget> {
-  late LocalChatMessage _message = widget.message;
+  late var _message = widget.message;
+  late var _imageMessageMetaData =
+      widget.message.messageMetaData as ImageMessageMetaData;
+  late File? _displayedImage = _message.mediaFile!.thumbnailFile;
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    final _theme = Theme.of(context);
+    final _screenSize = MediaQuery.of(context).size;
+
+    return BlocProvider<DownloadReceivedMediaMessageBloc>(
+      create: (context) => GetIt.I.get<DownloadReceivedMediaMessageBloc>()
+        ..add(
+          const DownloadReceivedMediaMessageDownloaded(),
+        ),
+      child: Builder(builder: (context) {
+        return BlocBuilder<DownloadReceivedMediaMessageBloc,
+            DownloadReceivedMediaMessageState>(
+          buildWhen: (previous, current) =>
+              current is DownloadReceivedMediaMessageDownloadSuccess,
+          builder: (context, state) {
+            if (state is DownloadReceivedMediaMessageDownloadSuccess) {
+              _message = state.mediaMessage;
+              _imageMessageMetaData =
+                  _message.messageMetaData as ImageMessageMetaData;
+              _displayedImage = _message.mediaFile!.file;
+            }
+            return Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Card(
+                elevation: 1,
+                color: _theme.colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: _screenSize.width * 0.7,
+                          maxHeight: _screenSize.height * 0.4,
+                        ),
+                        child: AspectRatio(
+                          aspectRatio: imageAspectRatio(_imageMessageMetaData),
+                          child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: ChatImageWidget(
+                                  fileImage: _displayedImage,
+                                  height: _imageMessageMetaData.imageHight
+                                      .toDouble(),
+                                  width: _imageMessageMetaData.imageWidth
+                                      .toDouble(),
+                                ),
+                              ),
+                              const _ImageDownLoadingProgressIndicator(),
+                              const _RetryDownloadingButton(),
+                              const _DownloadProgressPercent(),
+                            ],
+                          ),
+                        ),
+                      ),
+                      _DownloadingStatusWithSendTime(
+                        sendDate: _message.sentDate,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      }),
+    );
   }
 }
 
-class _ReceivedImageMessageBuilderWidgetWithOutDownloadBloc
-    extends StatelessWidget {
-  final LocalChatMessage message;
-  const _ReceivedImageMessageBuilderWidgetWithOutDownloadBloc(
-      {Key? key, required this.message})
+class _ImageDownLoadingProgressIndicator extends StatelessWidget {
+  const _ImageDownLoadingProgressIndicator({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
+    return BlocBuilder<DownloadReceivedMediaMessageBloc,
+        DownloadReceivedMediaMessageState>(
+      builder: (context, state) {
+        if (state is DownloadReceivedMediaMessageDownloadInProgress) {
+          return Center(
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 0,
+                    color: _theme.colorScheme.secondary.withOpacity(0.5),
+                    spreadRadius: 8,
+                  )
+                ],
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: CircularProgressIndicator(
+                value: state.progress / state.total,
+              ),
+            ),
+          );
+        }
+        if (state is DownloadReceivedMediaMessageInProgress ||
+            (state is DownloadReceivedMediaMessageDownloadFailure &&
+                state.error is NoConnectionException)) {
+          return Center(
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 0,
+                    color: _theme.colorScheme.secondary.withOpacity(0.5),
+                    spreadRadius: 8,
+                  )
+                ],
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: const CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class _RetryDownloadingButton extends StatelessWidget {
+  const _RetryDownloadingButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
+    return BlocBuilder<DownloadReceivedMediaMessageBloc,
+        DownloadReceivedMediaMessageState>(
+      builder: (context, state) {
+        if (state is DownloadReceivedMediaMessageDownloadFailure &&
+            state.error is! NoConnectionException) {
+          return Center(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: _theme.colorScheme.primary.withOpacity(0.9),
+              ),
+              child: TextButton.icon(
+                onPressed: () {
+                  context.read<DownloadReceivedMediaMessageBloc>().add(
+                        const DownloadReceivedMediaMessageDownloaded(),
+                      );
+                },
+                icon: const Icon(Icons.replay_rounded),
+                label: Text(context.loc.retry),
+              ),
+            ),
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class _DownloadProgressPercent extends StatelessWidget {
+  const _DownloadProgressPercent({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
+    return BlocBuilder<DownloadReceivedMediaMessageBloc,
+        DownloadReceivedMediaMessageState>(
+      builder: (context, state) {
+        if (state is DownloadReceivedMediaMessageDownloadInProgress) {
+          return Align(
+            alignment: AlignmentDirectional.bottomEnd,
+            child: Container(
+              margin: const EdgeInsetsDirectional.only(
+                bottom: 4,
+                end: 4,
+              ),
+              decoration: BoxDecoration(
+                color: _theme.colorScheme.secondary,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
+                child: Text(
+                  (state.progress / state.total).toStringAsFixed(0) + '%',
+                  style: _theme.textTheme.bodyText2?.copyWith(
+                    color: _theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class _DownloadingStatusWithSendTime extends StatelessWidget {
+  final DateTime sendDate;
+  const _DownloadingStatusWithSendTime({Key? key, required this.sendDate})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return BlocBuilder<DownloadReceivedMediaMessageBloc,
+        DownloadReceivedMediaMessageState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (state is DownloadReceivedMediaMessageDownloadFailure &&
+                state.error is! NoConnectionException)
+              const MessageErrorIconWidget(),
+            const SizedBox(width: 4),
+            MessageSendTimeWidget(
+              messageSendDateTime: sendDate,
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -129,7 +413,7 @@ class _SendedImageMessageBuilderWidgetWithOutSendBloc extends StatelessWidget {
                 child: AspectRatio(
                   aspectRatio: imageAspectRatio(_imageMessageMetaData),
                   child: ChatImageWidget(
-                    fileImage: message.mediaFile!.file!,
+                    fileImage: message.mediaFile!.file,
                     height: _imageMessageMetaData.imageHight.toDouble(),
                     width: _imageMessageMetaData.imageWidth.toDouble(),
                   ),
@@ -208,7 +492,7 @@ class __SendedImageMessageBuilderWidgetState
                             children: [
                               Positioned.fill(
                                 child: ChatImageWidget(
-                                  fileImage: _message.mediaFile!.file!,
+                                  fileImage: _message.mediaFile!.file,
                                   height: _imageMessageMetaData.imageHight
                                       .toDouble(),
                                   width: _imageMessageMetaData.imageWidth
