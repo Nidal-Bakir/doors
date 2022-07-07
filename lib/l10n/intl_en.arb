@@ -253,5 +253,7 @@
   "connecting": "Connecting",
   "connected": "Connected",
   "no_chats_to_show": "No Chat to show",
+  "type_a_message": "Type a message...",
+  "unsupported_message_type_please_upgrade_your_app_to_latest_version": "Unsupported message type, please upgrade your app to latest version",
   "you_can_chat_with_any_one_about_service_they_provide_or_offer": "You can chat with any one about service they provide or offer"
 }

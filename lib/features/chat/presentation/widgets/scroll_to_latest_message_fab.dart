@@ -18,7 +18,10 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
   );
 
   late final _slideAnimation = Tween<Offset>(
-    begin: const Offset(1.5, 0),
+    begin: Offset(
+      1.5 * (Directionality.of(context) == TextDirection.rtl ? -1 : 1),
+      0,
+    ),
     end: Offset.zero,
   ).animate(
     CurvedAnimation(

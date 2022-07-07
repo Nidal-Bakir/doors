@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:doors/core/widgets/no_image_provided.dart';
 import 'package:flutter/material.dart';
 
 class ChatImageWidget extends StatelessWidget {
@@ -70,7 +69,7 @@ class _FileImage extends StatelessWidget {
       cacheHeight: height.toInt(),
       cacheWidth: width.toInt(),
       errorBuilder: (_, __, ___) =>
-          errorBuilderWidget ?? NoImageProvided(height: height, width: width),
+          errorBuilderWidget ?? _ChatImagePlaceHolder(height: height, width: width),
       fit: BoxFit.cover,
     );
   }

@@ -212,7 +212,7 @@ class ChatScreenSlideTransition extends MaterialPageRoute {
   final ChatUserInfo chatUserInfo;
   ChatScreenSlideTransition(this.chatUserInfo)
       : super(
-          builder: (_) => ChatScreen(chatUserInfo: chatUserInfo),
+          builder: (_) => ChatScreen(chatUser: chatUserInfo),
         );
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,

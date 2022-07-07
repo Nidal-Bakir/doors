@@ -89,9 +89,8 @@ class _ReceivedTextMessageWidget extends StatelessWidget {
               Positioned(
                 bottom: 3,
                 right: 10,
-                child: Text(
-                  getMessageSendTime(message.sentDate),
-                  style: _theme.textTheme.bodyText1,
+                child: MessageSendTimeWidget(
+                  messageSendDateTime: message.sentDate,
                 ),
               ),
 
@@ -100,9 +99,8 @@ class _ReceivedTextMessageWidget extends StatelessWidget {
                 opacity: 0.0,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    getMessageSendTime(message.sentDate),
-                    style: _theme.textTheme.bodyText1,
+                  child: MessageSendTimeWidget(
+                    messageSendDateTime: message.sentDate,
                   ),
                 ),
               ),
