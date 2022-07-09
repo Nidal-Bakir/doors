@@ -30,6 +30,7 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
       curve: Curves.easeInCubic,
     ),
   );
+  
   @override
   void initState() {
     widget.chatScrollController.addListener(_chatScrollControllerListener);
@@ -62,12 +63,6 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
         _animationController.reverse();
       }
     }
-
-    // else {
-    //   if (_animationController.status == AnimationStatus.dismissed) {
-    //     _animationController.forward();
-    //   }
-    // }
   }
 
   @override
@@ -82,13 +77,7 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
             color: _theme.colorScheme.primary,
             elevation: 10,
             child: InkWell(
-              onTap: () {
-                widget.chatScrollController.animateTo(
-                  widget.chatScrollController.position.maxScrollExtent,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInCubic,
-                );
-              },
+              onTap: _scrollToLatestMessage,
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Icon(
@@ -100,5 +89,19 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
         ),
       ),
     );
+  }
+
+  Future<void> _scrollToLatestMessage() async {
+    await Future.delayed(const Duration(milliseconds: 50));
+
+    if (widget.chatScrollController.position.pixels <
+        widget.chatScrollController.position.maxScrollExtent) {
+      await widget.chatScrollController.animateTo(
+        widget.chatScrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInCubic,
+      );
+      await _scrollToLatestMessage();
+    }
   }
 }
