@@ -17,8 +17,10 @@ class UnsupportedMessageTypeBuilder extends MessageBuilder {
 
 class _UnsupportedMessageTypeBuilderWidget extends StatelessWidget {
   final LocalChatMessage message;
-  const _UnsupportedMessageTypeBuilderWidget({Key? key, required this.message})
-      : super(key: key);
+  const _UnsupportedMessageTypeBuilderWidget({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

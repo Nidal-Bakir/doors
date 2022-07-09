@@ -151,10 +151,11 @@ class __ReceivedImageMessageStateBuilderWidget
     final _screenSize = MediaQuery.of(context).size;
 
     return BlocProvider<DownloadReceivedMediaMessageBloc>(
-      create: (context) => GetIt.I.get<DownloadReceivedMediaMessageBloc>()
-        ..add(
-          const DownloadReceivedMediaMessageDownloaded(),
-        ),
+      create: (context) =>
+          GetIt.I.get<DownloadReceivedMediaMessageBloc>(param1: _message)
+            ..add(
+              const DownloadReceivedMediaMessageDownloaded(),
+            ),
       child: Builder(builder: (context) {
         return BlocBuilder<DownloadReceivedMediaMessageBloc,
             DownloadReceivedMediaMessageState>(
@@ -662,6 +663,7 @@ class _SendingStatusWithSendTime extends StatelessWidget {
             MessageSendTimeWidget(
               messageSendDateTime: sendDate,
             ),
+            const SizedBox(width: 4),
             if (state is SendMediaMessageInProgress ||
                 state is SendMediaMessageUploadInProgress ||
                 (state is SendMediaMessageSendFailure &&

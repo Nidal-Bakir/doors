@@ -171,7 +171,8 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   void removeUserFromBlockedList(String userId) =>
       setRemove(keyBlockedUsers, userId);
 
-  List<String> getListOfBlockedUsers() => List<String>.of(get(keyBlockedUsers));
+  List<String> getListOfBlockedUsers() =>
+      List<String>.of(get(keyBlockedUsers)?.cast<String>() ?? []);
 
   static List<String> keysToExcludeFromQueriesRelatedToUser() => const [
         User.keyAccountStatues,

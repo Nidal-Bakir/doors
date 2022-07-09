@@ -6,6 +6,7 @@ import 'package:doors/features/chat/data/chat_local_data_source/models/local_cha
 import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';
 import 'package:doors/features/chat/repository/chat_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 
 part 'chat_event.dart';
 part 'chat_state.dart';
@@ -24,12 +25,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     this._messagingBloc,
     this.userId,
   ) : super(const ChatInProgress()) {
-    on<ChatEvent>((event, emit) async {
-      await event.map(
-        messagesLoaded: (event) async => await _onMessagesLoaded(event, emit),
-        newMessageAdded: (event) async => await _onNewMessageAdded(event, emit),
-      );
-    });
+    on<ChatMessagesLoaded>(
+      _onMessagesLoaded,
+      transformer: bloc_concurrency.droppable(),
+    );
+    
+    on<_ChatNewMessageAdded>(_onNewMessageAdded);
 
     _chatRepository.currentlyOpenedChatUserId = userId;
     _chatRepository.markChatAsRead(userId);

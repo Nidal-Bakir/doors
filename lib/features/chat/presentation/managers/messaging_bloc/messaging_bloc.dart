@@ -42,6 +42,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     Emitter<MessagingState> emit,
   ) async {
     await _chatRepository.createChatUserIfNotExistsOrUpdate(event.receiverUser);
+
     final messageMetaData = await _generateMediaMessageMetaData(
       event.mediaMessageType,
       event.mediaFile,

@@ -853,14 +853,14 @@ packages:
       name: parse_server_sdk
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   parse_server_sdk_flutter:
     dependency: "direct main"
     description:
       name: parse_server_sdk_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.2"
   path:
     dependency: transitive
     description:

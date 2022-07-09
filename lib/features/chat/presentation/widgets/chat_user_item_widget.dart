@@ -7,6 +7,7 @@ import 'package:doors/core/widgets/circular_profile_image.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
 import 'package:doors/features/chat/presentation/managers/chat_users_bloc/chat_users_bloc.dart';
+import 'package:doors/features/chat/presentation/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -38,12 +39,20 @@ class _ChatUserItemWidgetState extends State<ChatUserItemWidget> {
         context.read<ChatUsersBloc>().add(
               ChatUsersUnreadMessagesCountRested(chatUserInfo.userId),
             );
+
+        Navigator.of(context).pushNamed(
+          ChatScreen.routeName,
+          arguments: chatUserInfo,
+        );
       },
       dense: false,
       enableFeedback: true,
-      leading: CircularProfileImage(
-        fileImage: chatUserInfo.profileImage?.file,
-        url: chatUserInfo.profileImage?.mediaUrl,
+      leading: Hero(
+        tag: chatUserInfo.userId,
+        child: CircularProfileImage(
+          fileImage: chatUserInfo.profileImage?.file,
+          url: chatUserInfo.profileImage?.mediaUrl,
+        ),
       ),
       title: Text(
         chatUserInfo.name,
@@ -83,7 +92,9 @@ class _ChatUserItemWidgetState extends State<ChatUserItemWidget> {
 
   Timer? _sendedMessageDateTimeTimer;
   String _extractFormattedDateTimeFromMessageSendDate(
-      DateTime? sendDate, BuildContext context) {
+    DateTime? sendDate,
+    BuildContext context,
+  ) {
     if (sendDate == null) {
       return '';
     }
@@ -91,7 +102,7 @@ class _ChatUserItemWidgetState extends State<ChatUserItemWidget> {
 
     if (formattedDateTime == context.loc.just_now) {
       // So the "just now" will be changed to real time like 10:23 AM
-      _sendedMessageDateTimeTimer = Timer(const Duration(minutes: 2), () {
+      _sendedMessageDateTimeTimer = Timer(const Duration(seconds: 15), () {
         if (mounted) {
           setState(() {});
         }
@@ -119,21 +130,21 @@ class _ChatUserItemWidgetState extends State<ChatUserItemWidget> {
   /// localized time zone for this device.
   String _getFormattedSendDateTime(DateTime dateTime, BuildContext context) {
     final localizedDateTime = dateTime.toLocal();
-    final timeDiff = localizedDateTime.difference(DateTime.now());
+    final timeDiff = DateTime.now().difference(localizedDateTime);
 
-    if (timeDiff.inMinutes <= 2) {
+    if (timeDiff.inSeconds <= 15) {
       return context.loc.just_now;
     }
     if (timeDiff.inHours <= 24) {
-      return DateFormat('k:m a').format(localizedDateTime);
+      return DateFormat('K:m a').format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 7) {
-      return DateFormat('EEE k:m a').format(localizedDateTime);
+      return DateFormat('EEE K:m a').format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 30) {
-      return DateFormat('d k:m a').format(localizedDateTime);
+      return DateFormat('d K:m a').format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 365) {

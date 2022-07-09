@@ -65,8 +65,10 @@ Future<void> chatInit() async {
 
   di.registerFactoryParam<DownloadReceivedMediaMessageBloc, LocalChatMessage,
       void>(
-    (mediaMessage, _) =>
-        DownloadReceivedMediaMessageBloc(di.get(), mediaMessage),
+    (mediaMessage, _) => DownloadReceivedMediaMessageBloc(
+      di.get(),
+      mediaMessage,
+    ),
   );
 
   // repository

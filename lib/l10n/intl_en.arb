@@ -252,6 +252,8 @@
   "just_now": "Just now",
   "connecting": "Connecting",
   "connected": "Connected",
+  "block": "Block",
+  "unblock": "Unblock",
   "no_chats_to_show": "No Chat to show",
   "type_a_message": "Type a message...",
   "unsupported_message_type_please_upgrade_your_app_to_latest_version": "Unsupported message type, please upgrade your app to latest version",

@@ -40,7 +40,7 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
     final _theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsetsDirectional.only(end: 8),
+      padding: const EdgeInsetsDirectional.only(end: 8, top: 16),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -86,25 +86,25 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
                   child: InkWell(
                     onTap: () {
                       if (_selectedImageFile != null) {
-                        _onImageCanceled();
                         context.read<MessagingBloc>().add(
                               MessagingMediaMessageSended(
-                                mediaFile: _selectedImageFile!,
+                                mediaFile: File(_selectedImageFile!.path),
                                 mediaMessageType: MessageType.image,
                                 receiverUser: widget.chatUser,
                               ),
                             );
+                        _onImageCanceled();
                       } else {
-                        setState(() {
-                          _text = '';
-                          _textEditingController.clear();
-                        });
                         context.read<MessagingBloc>().add(
                               MessagingTextMessageSended(
                                 messageText: _text,
                                 receiverUser: widget.chatUser,
                               ),
                             );
+                        setState(() {
+                          _text = '';
+                          _textEditingController.clear();
+                        });
                       }
                     },
                     child: const Padding(

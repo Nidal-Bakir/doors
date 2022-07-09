@@ -27,7 +27,7 @@ abstract class ChatRemoteDataSource {
 class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
   late final _remoteReceivedMessagesSteamController =
       StreamController<RemoteChatMessage>();
-      
+
   late final _messagesLiveQuery = LiveQuery();
 
   @override

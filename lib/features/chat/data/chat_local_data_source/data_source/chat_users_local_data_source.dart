@@ -36,7 +36,7 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
               SELECT * FROM 
               (
                   SELECT * FROM ${LocalChatTable.tableName}
-                  ORDER BY ${LocalChatTable.sentDate} DESC
+                  ORDER BY ${LocalChatTable.sentDate}
               ) GROUP BY ${LocalChatTable.userId}
             ) AS grouped_chat 
               ON users.${LocalChatUserInfo.userId} = grouped_chat.${LocalChatTable.userId}
@@ -44,7 +44,7 @@ class ChatUsersLocalDataSourceImpl extends ChatUsersLocalDataSource {
             (
               SELECT ${LocalChatTable.userId},
                 COUNT
-                (case ${LocalChatTable.isRead} when 1 then 1 else null end
+                (case ${LocalChatTable.isRead} when 0 then 1 else null end
                 ) AS ${LocalChatUserInfo.unReadCount} 
               FROM ${LocalChatTable.tableName} GROUP BY ${LocalChatTable.userId}
             ) as chat_unread_count 

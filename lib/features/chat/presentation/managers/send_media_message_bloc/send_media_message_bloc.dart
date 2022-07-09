@@ -23,9 +23,9 @@ class SendMediaMessageBloc
 
   SendMediaMessageBloc(this._chatRepository, this._mediaMessage)
       : super(SendMediaMessageInitial(_mediaMessage)) {
-    on<SendMediaMessageEvent>((event, emit) {
-      event.map(
-        messageSended: (event) => _onMessageSended(event, emit),
+    on<SendMediaMessageEvent>((event, emit) async{
+     await event.map(
+        messageSended: (event) async => await _onMessageSended(event, emit),
       );
     });
 
@@ -40,11 +40,14 @@ class SendMediaMessageBloc
     });
   }
 
-  void _onMessageSended(
+  Future<void> _onMessageSended(
     SendMediaMessageMessageSended event,
     Emitter<SendMediaMessageState> emit,
-  ) {
+  ) async {
+    Completer streamCompleter = Completer();
+
     emit(const SendMediaMessageInProgress());
+
     _sendingMediaMessageStreamSubscription =
         _chatRepository.sendMediaMessage(_mediaMessage).listen(
       (event) {
@@ -55,15 +58,20 @@ class SendMediaMessageBloc
               uploadProgress.tail,
             ),
           ),
-          (sendedMediaMessage) =>
-              emit(SendMediaMessageSendSuccess(sendedMediaMessage)),
+          (sendedMediaMessage) {
+            emit(SendMediaMessageSendSuccess(sendedMediaMessage));
+            streamCompleter.complete();
+          },
         );
       },
       onError: (error) {
         emit(SendMediaMessageSendFailure(error));
+        streamCompleter.complete();
       },
       cancelOnError: true,
     );
+
+    await streamCompleter.future;
   }
 
   @override

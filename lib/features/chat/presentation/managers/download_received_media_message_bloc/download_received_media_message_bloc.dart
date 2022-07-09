@@ -23,9 +23,9 @@ class DownloadReceivedMediaMessageBloc extends Bloc<
 
   DownloadReceivedMediaMessageBloc(this._chatRepository, this._mediaMessage)
       : super(DownloadReceivedMediaMessageInitial(_mediaMessage)) {
-    on<DownloadReceivedMediaMessageEvent>((event, emit) {
-      event.map(
-        downloaded: (event) => _onMessageDownloaded(event, emit),
+    on<DownloadReceivedMediaMessageEvent>((event, emit) async {
+      await event.map(
+        downloaded: (event) async => await _onMessageDownloaded(event, emit),
       );
     });
 
@@ -39,10 +39,12 @@ class DownloadReceivedMediaMessageBloc extends Bloc<
       }
     });
   }
-  void _onMessageDownloaded(
+
+  Future<void> _onMessageDownloaded(
     DownloadReceivedMediaMessageDownloaded event,
     Emitter<DownloadReceivedMediaMessageState> emit,
-  ) {
+  ) async {
+    Completer streamCompleter = Completer();
     emit(const DownloadReceivedMediaMessageInProgress());
 
     _downloadMediaMessageStreamSubscription =
@@ -55,16 +57,21 @@ class DownloadReceivedMediaMessageBloc extends Bloc<
               downloadProgress.tail,
             ),
           ),
-          (downloadedMediaMessage) => emit(
-            DownloadReceivedMediaMessageDownloadSuccess(downloadedMediaMessage),
-          ),
+          (downloadedMediaMessage) {
+            emit(DownloadReceivedMediaMessageDownloadSuccess(
+                downloadedMediaMessage));
+            streamCompleter.complete();
+          },
         );
       },
       onError: (error) {
         emit(DownloadReceivedMediaMessageDownloadFailure(error));
+        streamCompleter.complete();
       },
       cancelOnError: true,
     );
+
+    await streamCompleter.future;
   }
 
   @override

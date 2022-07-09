@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class ScrollToLatestMessageFAB extends StatefulWidget {
   final ScrollController chatScrollController;
@@ -43,16 +44,30 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
   }
 
   void _chatScrollControllerListener() {
-    if (widget.chatScrollController.position.pixels >=
+    if (widget.chatScrollController.position.pixels <=
         widget.chatScrollController.position.maxScrollExtent - 200) {
-      if (_animationController.isCompleted) {
-        _animationController.reverse();
+      if (widget.chatScrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_animationController.status == AnimationStatus.dismissed) {
+          _animationController.forward();
+        }
+      } else {
+        if (_animationController.status == AnimationStatus.completed) {
+          _animationController.reverse();
+        }
       }
     } else {
-      if (_animationController.status == AnimationStatus.dismissed) {
-        _animationController.forward();
+      if (_animationController.status == AnimationStatus.forward ||
+          _animationController.status == AnimationStatus.completed) {
+        _animationController.reverse();
       }
     }
+
+    // else {
+    //   if (_animationController.status == AnimationStatus.dismissed) {
+    //     _animationController.forward();
+    //   }
+    // }
   }
 
   @override

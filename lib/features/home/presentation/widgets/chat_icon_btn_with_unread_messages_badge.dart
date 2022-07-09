@@ -67,17 +67,8 @@ class _ChatIconBtnWithUnreadMessagesBadgeState
                     ),
                     child: IconButton(
                       onPressed: () {
-                        // Navigator.of(context)
-                        //     .pushNamed(ChatUsersScreen.routeName);
-                        const chatUser = ChatUserInfo(
-                          name: 'nidal bakir',
-                          profileImage: null,
-                          userId: '123',
-                        );
-                        Navigator.of(context).pushNamed(
-                          ChatScreen.routeName,
-                          arguments: chatUser,
-                        );
+                        Navigator.of(context)
+                            .pushNamed(ChatUsersScreen.routeName);
                       },
                       icon: const ImageIcon(
                         AssetImage(

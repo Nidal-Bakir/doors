@@ -68,7 +68,9 @@ class ChatUserInfo extends Equatable {
       return null;
     }
     return MediaFile(
-      file: File(jsonMap[LocalChatUserInfo.profileImagePath]),
+      file: jsonMap[LocalChatUserInfo.profileImagePath] == null
+          ? null
+          : File(jsonMap[LocalChatUserInfo.profileImagePath]),
       mediaUrl: jsonMap[LocalChatUserInfo.profileImageUrl],
     );
   }

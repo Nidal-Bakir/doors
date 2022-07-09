@@ -18,6 +18,8 @@ import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/line_with_text_on_row.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/network_image_from_parse_file.dart';
+import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
+import 'package:doors/features/chat/presentation/screens/chat_screen.dart';
 import 'package:doors/features/job_application/presentation/screens/view_post_job_applications_screen.dart';
 import 'package:doors/features/manage_post/presentation/managers/manage_post_bloc/manage_post_bloc.dart';
 import 'package:doors/features/manage_post/presentation/screens/create_or_edit_job_post.dart';
@@ -1139,7 +1141,12 @@ class _ElevatedButton extends StatelessWidget {
                   }
 
                   if (_isServicePost(currentPost)) {
-                    // TODO : open chat screen
+                    final chatUser = ChatUserInfo.buildFromRemoteUser(
+                        currentPost.author, currentUser.userId);
+                    Navigator.of(context).pushNamed(
+                      ChatScreen.routeName,
+                      arguments: chatUser,
+                    );
                     return;
                   }
 
