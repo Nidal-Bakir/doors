@@ -112,6 +112,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (notification) {
                     if (_canLoadMoreMessages &&
+                        _showChat &&
                         (notification.metrics.pixels <=
                             notification.metrics.minScrollExtent + 200)) {
                       context.read<ChatBloc>().add(const ChatMessagesLoaded());
@@ -255,7 +256,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
       return;
     }
-    
+
     var offsetThreshold = 200.0;
     if (newMessage.messageType == MessageType.image.name) {
       final imageMetaData =
