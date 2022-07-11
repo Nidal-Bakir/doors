@@ -4,6 +4,7 @@ import 'package:doors/core/widgets/circular_profile_image.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
+import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
 import 'package:doors/features/chat/presentation/managers/chat_bloc/chat_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';
 import 'package:doors/features/chat/presentation/widgets/connection_status_widget.dart';
@@ -149,12 +150,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                   await _addNewMessageToListView(
                                     state.newMessage,
                                   );
-
-                                  if (state.newMessage.messageType !=
-                                          MessageType.text.name &&
-                                      state.newMessage.isSendedByCurrentUser) {
-                                    _scrollToEnd();
-                                  }
                                 }
 
                                 if (state is ChatMessagesLoadSuccess &&
@@ -229,23 +224,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Future<void> _scrollToEnd() async {
-    await Future.delayed(const Duration(milliseconds: 50));
-
-    if (_chatScrollController.position.pixels <
-        _chatScrollController.position.maxScrollExtent) {
-      await _chatScrollController.animateTo(
-          _chatScrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 50),
-          curve: Curves.linear);
-      await _scrollToEnd();
-    } else {
-      setState(() {
-        _showChat = true;
-      });
-    }
-  }
-
   void _scrollChatListToOffsetSoftKeyboard(double softKeyboardHeight) {
     if (_chatScrollController.hasClients) {
       _chatScrollController.animateTo(
@@ -262,18 +240,56 @@ class _ChatScreenState extends State<ChatScreen> {
       _chatMessages.length - 1,
       duration: const Duration(milliseconds: 200),
     );
-    await _animateChatListToLatestMessage();
+
+    await _animateChatListToLatestMessage(newMessage);
   }
 
-  Future<void> _animateChatListToLatestMessage() async {
+  Future<void> _animateChatListToLatestMessage(
+    LocalChatMessage newMessage,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 50));
+
+    if (newMessage.messageType != MessageType.text.name &&
+        newMessage.isSendedByCurrentUser) {
+      await _scrollToEnd();
+
+      return;
+    }
+    
+    var offsetThreshold = 200.0;
+    if (newMessage.messageType == MessageType.image.name) {
+      final imageMetaData =
+          (newMessage.messageMetaData as ImageMessageMetaData);
+      final imageAspicRatio =
+          imageMetaData.imageWidth / imageMetaData.imageHight;
+
+      offsetThreshold += (offsetThreshold * imageAspicRatio);
+    }
+
     if (_chatScrollController.position.pixels >=
-        _chatScrollController.position.maxScrollExtent - 200) {
-      _chatScrollController.animateTo(
+        _chatScrollController.position.maxScrollExtent - offsetThreshold) {
+      await _chatScrollController.animateTo(
         _chatScrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 100),
         curve: Curves.linear,
       );
+    }
+  }
+
+  Future<void> _scrollToEnd() async {
+    await Future.delayed(const Duration(milliseconds: 50));
+
+    if (_chatScrollController.position.pixels <
+        _chatScrollController.position.maxScrollExtent) {
+      await _chatScrollController.animateTo(
+          _chatScrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 50),
+          curve: Curves.linear);
+      await _scrollToEnd();
+    } else {
+      setState(() {
+        _showChat = true;
+      });
     }
   }
 }

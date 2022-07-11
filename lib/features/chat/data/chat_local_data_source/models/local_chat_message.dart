@@ -8,6 +8,7 @@ import 'package:doors/features/chat/data/chat_local_data_source/models/media_fil
 import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
 import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_chat_message.dart';
 import 'package:equatable/equatable.dart';
+import 'package:collection/collection.dart';
 
 class LocalChatMessage extends Equatable {
   final int localMessageId;
@@ -61,7 +62,11 @@ class LocalChatMessage extends Equatable {
         (statues) => statues.name == jsonMap[LocalChatTable.messageStatues],
       ),
       receivedMessageDeletionFromServerStatues:
-          jsonMap[LocalChatTable.receivedMessageDeletionFromServerStatues],
+          ReceivedMessageDeletionFromServerStatues.values.firstWhereOrNull(
+        (statues) =>
+            statues.name ==
+            jsonMap[LocalChatTable.receivedMessageDeletionFromServerStatues],
+      ),
       messageType: jsonMap[LocalChatTable.messageType],
       sentDate: DateTime.fromMillisecondsSinceEpoch(
         jsonMap[LocalChatTable.sentDate],
@@ -79,7 +84,9 @@ class LocalChatMessage extends Equatable {
       return null;
     }
     return MediaFile(
-      file: File(jsonMap[LocalChatTable.mediaPath]),
+      file: jsonMap[LocalChatTable.mediaPath] == null
+          ? null
+          : File(jsonMap[LocalChatTable.mediaPath]),
       mediaUrl: jsonMap[LocalChatTable.mediaUrl],
       thumbnailFile: jsonMap[LocalChatTable.thumbnailPath] == null
           ? null

@@ -95,7 +95,7 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
     bool isTextMessage,
   ) async {
     if (isTextMessage) {
-      final textMessageToDelete = RemoteChatMessage()
+      final textMessageToDelete = ParseObject(RemoteChatMessage.keyClassName)
         ..set(RemoteChatMessage.keyMessageId, messageId);
 
       final ParseResponse deleteTextMessageResponse;
@@ -103,7 +103,8 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
         deleteTextMessageResponse = await textMessageToDelete.delete();
       } catch (error) {
         throw NoConnectionException(
-          'can not send new message \n Error: ' + error.toString(),
+          'can not delete text message from server \n Error: ' +
+              error.toString(),
         );
       }
 

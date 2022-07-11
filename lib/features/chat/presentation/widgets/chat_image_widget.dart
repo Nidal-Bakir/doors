@@ -19,7 +19,7 @@ class ChatImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(4),
       child: fileImage == null
           ? _ChatImagePlaceHolder(
               height: height,

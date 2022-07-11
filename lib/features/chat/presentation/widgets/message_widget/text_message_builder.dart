@@ -7,7 +7,6 @@ import 'package:doors/features/chat/presentation/widgets/message_error_icon_widg
 import 'package:doors/features/chat/presentation/widgets/message_send_time_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/message_widget/message_builder.dart';
 import 'package:doors/features/chat/presentation/widgets/messing_send_in_progress_icon_widget.dart';
-import 'package:doors/features/chat/util/util_func_for_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';

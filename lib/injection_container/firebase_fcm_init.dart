@@ -68,9 +68,6 @@ Future<void> _saveParseInstallation(
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // TODO : sync with server; OR update the number of unread messages in sheardPrefrence
-  // TODO : show awsom notification
-
   final senderName = message.data['senderName'];
   final textMessage = message.data['textMessage'];
   final senderId = message.data['senderId'];
@@ -91,6 +88,4 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       actionType: ActionType.Default,
     ),
   );
-
-  print("Handling a background message: ${message.data}");
 }

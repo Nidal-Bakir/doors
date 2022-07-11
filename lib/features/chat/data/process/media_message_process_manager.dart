@@ -118,8 +118,8 @@ class MediaMessageProcessManager extends MessagingProcessBase<
       });
     } catch (error) {
       processBehaviorSubject.sink.addError(
-        ErrorWhileSavingTheFile(
-          'can not save the media file to app documents directory \n Error:' +
+        NoConnectionException(
+          'can not send media message connection error. \n Error:' +
               error.toString(),
         ),
       );
@@ -196,8 +196,8 @@ class MediaMessageProcessManager extends MessagingProcessBase<
       });
     } catch (error) {
       processBehaviorSubject.sink.addError(
-        ErrorWhileSavingTheFile(
-          'can not save the media file to app documents directory \n Error:' +
+        NoConnectionException(
+          'can not download media message connection error. \n Error:' +
               error.toString(),
         ),
       );

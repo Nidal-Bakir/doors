@@ -1,9 +1,7 @@
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:doors/core/models/user.dart';
-import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
 import 'package:doors/features/chat/presentation/managers/unread_messages_counter_bloc/unread_messages_counter_bloc.dart';
-import 'package:doors/features/chat/presentation/screens/chat_screen.dart';
 import 'package:doors/features/chat/presentation/screens/chat_users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
