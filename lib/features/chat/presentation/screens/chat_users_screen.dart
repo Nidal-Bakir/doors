@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
@@ -47,13 +49,16 @@ class _ChatUsersScreenState extends State<ChatUsersScreen> {
                   listenWhen: (previous, current) => current.maybeWhen<bool>(
                     orderUpdateSuccess: (_, __) => true,
                     newChatUserAddedSuccess: (_) => true,
+                    loadSuccess: (_) => true,
                     orElse: () => false,
                   ),
                   listener: (context, state) {
                     state.whenOrNull(
-                      orderUpdateSuccess: _onChatUserOrderUpdate,
-                      newChatUserAddedSuccess: _onNewChatUserAdded,
-                    );
+                        orderUpdateSuccess: _onChatUserOrderUpdate,
+                        newChatUserAddedSuccess: _onNewChatUserAdded,
+                        loadSuccess: (loadedChatUsers) {
+                          _chatUsers = loadedChatUsers.toList();
+                        });
                   },
                   buildWhen: (previous, current) => current.maybeWhen<bool>(
                     inProgress: () => true,
@@ -63,7 +68,6 @@ class _ChatUsersScreenState extends State<ChatUsersScreen> {
                   builder: (context, state) {
                     return state.maybeWhen(
                       loadSuccess: (loadedChatUsers) {
-                        _chatUsers = loadedChatUsers.toList();
                         if (_chatUsers.isEmpty) {
                           return const NoChatToShow();
                         }
@@ -77,11 +81,12 @@ class _ChatUsersScreenState extends State<ChatUsersScreen> {
                             ).animate(animation);
 
                             return SlideTransition(
+                              key: _generateUserChatItemWidgetKey(
+                                _chatUsers[index],
+                              ),
                               position: _slideTransitionAnimation,
                               child: FadeTransition(
                                 opacity: animation,
-                                key: _generateUserChatItemWidgetKey(
-                                    _chatUsers[index]),
                                 child: ChatUserItemWidget(
                                   chatUserInfo: _chatUsers[index],
                                 ),

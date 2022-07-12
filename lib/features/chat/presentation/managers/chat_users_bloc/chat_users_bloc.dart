@@ -58,7 +58,11 @@ class ChatUsersBloc extends Bloc<ChatUsersEvent, ChatUsersState> {
       await _chatRepository.getUsersWithLatestMessageAndUnreadCounts(),
     );
 
-    emit(ChatUsersLoadSuccess(UnmodifiableListView(_currentChatUsers)));
+    emit(
+      ChatUsersLoadSuccess(
+        UnmodifiableListView(_currentChatUsers.toList()),
+      ),
+    );
   }
 
   Future<void> _onNewMessageDispatched(
@@ -80,7 +84,11 @@ class ChatUsersBloc extends Bloc<ChatUsersEvent, ChatUsersState> {
 
       // if it was empty before adding the new chatUser.
       if (_currentChatUsers.length == 1) {
-        emit(ChatUsersLoadSuccess(UnmodifiableListView(_currentChatUsers)));
+        emit(
+          ChatUsersLoadSuccess(
+            UnmodifiableListView(_currentChatUsers.toList()),
+          ),
+        );
       } else {
         emit(ChatUsersNewChatUserAddedSuccess(_currentChatUsers.first));
       }
@@ -127,7 +135,11 @@ class ChatUsersBloc extends Bloc<ChatUsersEvent, ChatUsersState> {
     chatUser = chatUser.copyWith(unReadCount: 0);
     _currentChatUsers[indexOfChatUser] = chatUser;
 
-    emit(ChatUsersLoadSuccess(UnmodifiableListView(_currentChatUsers)));
+    emit(
+      ChatUsersLoadSuccess(
+        UnmodifiableListView(_currentChatUsers.toList()),
+      ),
+    );
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:doors/app/app_observers.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
@@ -7,6 +8,7 @@ import 'package:doors/features/chat/data/chat_local_data_source/models/local_cha
 import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
 import 'package:doors/features/chat/presentation/managers/chat_bloc/chat_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';
+import 'package:doors/features/chat/presentation/screens/chat_users_screen.dart';
 import 'package:doors/features/chat/presentation/widgets/connection_status_widget.dart';
 import 'package:doors/features/chat/presentation/widgets/message_composer_bar.dart';
 import 'package:doors/features/chat/presentation/widgets/message_widget/message_builder.dart';
@@ -47,181 +49,205 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     final _theme = Theme.of(context);
-    return BlocProvider<ChatBloc>(
-      create: (context) => GetIt.I.get<ChatBloc>(
-        param1: context.read<MessagingBloc>(),
-        param2: widget.chatUser.userId,
-      )..add(
-          const ChatMessagesLoaded(),
-        ),
-      child: Builder(builder: (context) {
-        return Scaffold(
-          floatingActionButton: ScrollToLatestMessageFAB(
-            chatScrollController: _chatScrollController,
+    return WillPopScope(
+      onWillPop: () async {
+        final history = NavigationHistoryObserver().history;
+
+        try {
+          if (history[history.length - 2].settings.name !=
+              ChatUsersScreen.routeName) {
+            Navigator.of(context)
+                .pushReplacementNamed(ChatUsersScreen.routeName);
+            return false;
+          }
+        } catch (error) {
+          return true;
+        }
+
+        return true;
+      },
+      child: BlocProvider<ChatBloc>(
+        create: (context) => GetIt.I.get<ChatBloc>(
+          param1: context.read<MessagingBloc>(),
+          param2: widget.chatUser.userId,
+        )..add(
+            const ChatMessagesLoaded(),
           ),
-          appBar: AppBar(
-            centerTitle: false,
-            leadingWidth: 32,
-            title: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Hero(
-                  tag: widget.chatUser.userId,
-                  child: CircularProfileImage(
-                    url: widget.chatUser.profileImage?.mediaUrl,
-                    fileImage: widget.chatUser.profileImage?.file,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  widget.chatUser.name,
-                  style: _theme.textTheme.subtitle2,
-                ),
-              ],
+        child: Builder(builder: (context) {
+          return Scaffold(
+            floatingActionButton: ScrollToLatestMessageFAB(
+              chatScrollController: _chatScrollController,
             ),
-            actions: [
-              PopupMenuButton<int>(
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem<int>(
-                      value: 0,
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.person_off_outlined,
-                            size: 25,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            context.loc.block,
-                            style: _theme.textTheme.subtitle1,
-                          ),
-                        ],
-                      ),
+            appBar: AppBar(
+              centerTitle: false,
+              leadingWidth: 32,
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Hero(
+                    tag: widget.chatUser.userId,
+                    child: CircularProfileImage(
+                      url: widget.chatUser.profileImage?.mediaUrl,
+                      fileImage: widget.chatUser.profileImage?.file,
                     ),
-                  ];
-                },
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.chatUser.name,
+                    style: _theme.textTheme.subtitle2,
+                  ),
+                ],
               ),
-            ],
-          ),
-          body: Column(
-            children: [
-              const ConnectionStatusWidget(),
-              Expanded(
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (notification) {
-                    if (_canLoadMoreMessages &&
-                        _showChat &&
-                        (notification.metrics.pixels <=
-                            notification.metrics.minScrollExtent + 200)) {
-                      context.read<ChatBloc>().add(const ChatMessagesLoaded());
-                    }
-                    return true;
-                  },
-                  child: Stack(
-                    children: [
-                      Opacity(
-                        opacity: _showChat ? 1.0 : 0.0,
-                        child: CustomScrollView(
-                          controller: _chatScrollController,
-                          slivers: [
-                            SliverToBoxAdapter(
-                              child: BlocBuilder<ChatBloc, ChatState>(
-                                builder: (context, state) {
-                                  if (state is ChatMoreMessagesInProgress) {
-                                    return const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 16.0),
-                                      child: Center(
-                                        child: LoadingIndicator(),
-                                      ),
-                                    );
-                                  }
-                                  return const SizedBox.shrink();
-                                },
-                              ),
+              actions: [
+                PopupMenuButton<int>(
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem<int>(
+                        value: 0,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.person_off_outlined,
+                              size: 25,
                             ),
-                            BlocConsumer<ChatBloc, ChatState>(
-                              listenWhen: (previous, current) =>
-                                  current is ChatNewMessageAddedSuccessfully ||
-                                  current is ChatMessagesLoadSuccess,
-                              listener: (context, state) async {
-                                if (state is ChatNewMessageAddedSuccessfully) {
-                                  await _addNewMessageToListView(
-                                    state.newMessage,
-                                  );
-                                }
-
-                                if (state is ChatMessagesLoadSuccess &&
-                                    _chatMessages.isEmpty) {
-                                  _scrollToEnd();
-                                }
-                              },
-                              buildWhen: (prev, current) =>
-                                  current is ChatInProgress ||
-                                  current is ChatMessagesLoadSuccess,
-                              builder: (context, state) {
-                                return state.maybeWhen(
-                                  inProgress: () => const SliverFillRemaining(
-                                    hasScrollBody: false,
-                                    fillOverscroll: true,
-                                    child: Center(
-                                      child: LoadingIndicator(),
-                                    ),
-                                  ),
-                                  messagesLoadSuccess: (messages, canLoadMore) {
-                                    _canLoadMoreMessages = canLoadMore;
-                                    _chatMessages = messages.toList();
-
-                                    return SliverAnimatedList(
-                                      key: _chatAnimatedListKey,
-                                      initialItemCount: _chatMessages.length,
-                                      itemBuilder: (context, index, animation) {
-                                        final _slideTransitionAnimation =
-                                            Tween<Offset>(
-                                          begin: const Offset(0, 1),
-                                          end: Offset.zero,
-                                        ).animate(animation);
-
-                                        return SlideTransition(
-                                          key: Key(
-                                            _chatMessages[index]
-                                                .localMessageId
-                                                .toString(),
-                                          ),
-                                          position: _slideTransitionAnimation,
-                                          child: FadeTransition(
-                                            opacity: animation,
-                                            child: MessageBuilderWidget
-                                                .buildMessage(
-                                              _chatMessages[index],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  orElse: () => const SliverToBoxAdapter(),
-                                );
-                              },
+                            const SizedBox(width: 4),
+                            Text(
+                              context.loc.block,
+                              style: _theme.textTheme.subtitle1,
                             ),
                           ],
                         ),
                       ),
-                      if (!_showChat)
-                        const Center(
-                          child: LoadingIndicator(),
-                        )
-                    ],
+                    ];
+                  },
+                ),
+              ],
+            ),
+            body: Column(
+              children: [
+                const ConnectionStatusWidget(),
+                Expanded(
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (_canLoadMoreMessages &&
+                          _showChat &&
+                          (notification.metrics.pixels <=
+                              notification.metrics.minScrollExtent + 200)) {
+                        context
+                            .read<ChatBloc>()
+                            .add(const ChatMessagesLoaded());
+                      }
+                      return true;
+                    },
+                    child: Stack(
+                      children: [
+                        Opacity(
+                          opacity: _showChat ? 1.0 : 0.0,
+                          child: CustomScrollView(
+                            controller: _chatScrollController,
+                            slivers: [
+                              SliverToBoxAdapter(
+                                child: BlocBuilder<ChatBloc, ChatState>(
+                                  builder: (context, state) {
+                                    if (state is ChatMoreMessagesInProgress) {
+                                      return const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 16.0),
+                                        child: Center(
+                                          child: LoadingIndicator(),
+                                        ),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                ),
+                              ),
+                              BlocConsumer<ChatBloc, ChatState>(
+                                listenWhen: (previous, current) =>
+                                    current
+                                        is ChatNewMessageAddedSuccessfully ||
+                                    current is ChatMessagesLoadSuccess,
+                                listener: (context, state) async {
+                                  if (state
+                                      is ChatNewMessageAddedSuccessfully) {
+                                    await _addNewMessageToListView(
+                                      state.newMessage,
+                                    );
+                                  }
+
+                                  if (state is ChatMessagesLoadSuccess &&
+                                      _chatMessages.isEmpty) {
+                                    _chatMessages = state.chatMessages.toList();
+                                    _scrollToEnd();
+                                  }
+                                },
+                                buildWhen: (prev, current) =>
+                                    current is ChatInProgress ||
+                                    current is ChatMessagesLoadSuccess,
+                                builder: (context, state) {
+                                  return state.maybeWhen(
+                                    inProgress: () => const SliverFillRemaining(
+                                      hasScrollBody: false,
+                                      fillOverscroll: true,
+                                      child: Center(
+                                        child: LoadingIndicator(),
+                                      ),
+                                    ),
+                                    messagesLoadSuccess:
+                                        (messages, canLoadMore) {
+                                      _canLoadMoreMessages = canLoadMore;
+
+                                      return SliverAnimatedList(
+                                        key: _chatAnimatedListKey,
+                                        initialItemCount: _chatMessages.length,
+                                        itemBuilder:
+                                            (context, index, animation) {
+                                          final _slideTransitionAnimation =
+                                              Tween<Offset>(
+                                            begin: const Offset(0, 1),
+                                            end: Offset.zero,
+                                          ).animate(animation);
+
+                                          return SlideTransition(
+                                            key: Key(
+                                              _chatMessages[index]
+                                                  .localMessageId
+                                                  .toString(),
+                                            ),
+                                            position: _slideTransitionAnimation,
+                                            child: FadeTransition(
+                                              opacity: animation,
+                                              child: MessageBuilderWidget
+                                                  .buildMessage(
+                                                _chatMessages[index],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    orElse: () => const SliverToBoxAdapter(),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (!_showChat)
+                          const Center(
+                            child: LoadingIndicator(),
+                          )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              MessageComposerBar(chatUser: widget.chatUser),
-            ],
-          ),
-        );
-      }),
+                MessageComposerBar(chatUser: widget.chatUser),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 

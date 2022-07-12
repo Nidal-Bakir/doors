@@ -38,16 +38,28 @@ import 'package:flutter/material.dart';
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case SuspendedScreen.routeName:
-      return MaterialPageRoute(builder: (_) => const SuspendedScreen());
+      return MaterialPageRoute(
+        builder: (_) => const SuspendedScreen(),
+        settings: settings,
+      );
 
     case HomeScreen.routeName:
-      return MaterialPageRoute(builder: (_) => HomeScreen());
+      return MaterialPageRoute(
+        builder: (_) => const HomeScreen(),
+        settings: settings,
+      );
 
     case SplashScreen.routeName:
-      return MaterialPageRoute(builder: (_) => const SplashScreen());
+      return MaterialPageRoute(
+        builder: (_) => const SplashScreen(),
+        settings: settings,
+      );
 
     case LogInScreen.routeName:
-      return MaterialPageRoute(builder: (_) => const LogInScreen());
+      return MaterialPageRoute(
+        builder: (_) => const LogInScreen(),
+        settings: settings,
+      );
 
     case UserPostsScreen.routeName:
       final args = settings.arguments as Map<String, String>;
@@ -58,6 +70,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           postsClassName: args['postsClassName']!,
           relationFieldName: args['relationFieldName']!,
         ),
+        settings: settings,
       );
 
     case UserProfileScreen.routeName:
@@ -65,6 +78,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => UserProfileScreen(
           visitedUser: settings.arguments as User,
         ),
+        settings: settings,
       );
 
     case EditProfileScreen.routeName:
@@ -72,6 +86,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => EditProfileScreen(
           currentUserProfile: settings.arguments as User,
         ),
+        settings: settings,
       );
 
     case SubscriptionScreen.routeName:
@@ -79,22 +94,33 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => SubscriptionScreen(
           currentUser: settings.arguments as User,
         ),
+        settings: settings,
       );
 
     case ForgatPasswordScreen.routeName:
-      return MaterialPageRoute(builder: (_) => const ForgatPasswordScreen());
+      return MaterialPageRoute(
+        builder: (_) => const ForgatPasswordScreen(),
+        settings: settings,
+      );
 
     case SelectAccountTypeScreen.routeName:
-      return MaterialPageRoute(builder: (_) => const SelectAccountTypeScreen());
+      return MaterialPageRoute(
+        builder: (_) => const SelectAccountTypeScreen(),
+        settings: settings,
+      );
 
     case PostsSearchScreen.routeName:
-      return SearchScreenFadeTransition(settings.arguments as PostsViewFilter);
+      return SearchScreenFadeTransition(
+        settings.arguments as PostsViewFilter,
+        settings,
+      );
 
     case SignUpPartOneScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => SignUpPartOneScreen(
           accountType: settings.arguments as AccountType,
         ),
+        settings: settings,
       );
 
     case SignUpPartTwoScreen.routeName:
@@ -102,7 +128,9 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => SignUpPartTwoScreen(
           user: settings.arguments as User,
         ),
+        settings: settings,
       );
+
     case AddCreditCardScreen.routeName:
       final args = settings.arguments as Map<String, dynamic>;
       return MaterialPageRoute(
@@ -111,6 +139,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
           selectedPlan: args['selectedPlan'],
           userId: args['userId'],
         ),
+        settings: settings,
       );
 
     case PostScreen.routeName:
@@ -118,16 +147,21 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => PostScreen(
           post: settings.arguments as Post,
         ),
+        settings: settings,
       );
 
     case FavoritePostsScreen.routeName:
-      return MaterialPageRoute(builder: (_) => const FavoritePostsScreen());
+      return MaterialPageRoute(
+        builder: (_) => const FavoritePostsScreen(),
+        settings: settings,
+      );
 
     case CreateOrEditPostScreenPartOne.routeName:
       return MaterialPageRoute(
         builder: (_) => CreateOrEditPostScreenPartOne(
           post: settings.arguments as ServicePost?,
         ),
+        settings: settings,
       );
 
     case CreateOrEditJobPost.routeName:
@@ -135,6 +169,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => CreateOrEditJobPost(
           jobPost: settings.arguments as JobPost?,
         ),
+        settings: settings,
       );
 
     case CreateOrEditPostScreenPartTwo.routeName:
@@ -142,6 +177,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => CreateOrEditPostScreenPartTwo(
           post: settings.arguments as ServicePost,
         ),
+        settings: settings,
       );
 
     case SendJobApplicationScreen.routeName:
@@ -149,11 +185,13 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => SendJobApplicationScreen(
           jobPost: settings.arguments as JobPost,
         ),
+        settings: settings,
       );
 
     case CongratulationsScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => const CongratulationsScreen(),
+        settings: settings,
       );
 
     case ViewPostJobApplicationsScreen.routeName:
@@ -161,6 +199,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => ViewPostJobApplicationsScreen(
           jobPost: settings.arguments as JobPost,
         ),
+        settings: settings,
       );
 
     case PdfPreviewScreen.routeName:
@@ -168,25 +207,32 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => PdfPreviewScreen(
           pdfFile: settings.arguments as File,
         ),
+        settings: settings,
       );
 
     case ResumeCreatorScreen.routeName:
       return MaterialPageRoute<File?>(
         builder: (_) => const ResumeCreatorScreen(),
+        settings: settings,
       );
 
     case SettingsScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => const SettingsScreen(),
+        settings: settings,
       );
 
     case ChatUsersScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => const ChatUsersScreen(),
+        settings: settings,
       );
 
     case ChatScreen.routeName:
-      return ChatScreenSlideTransition(settings.arguments as ChatUserInfo);
+      return ChatScreenSlideTransition(
+        settings.arguments as ChatUserInfo,
+        settings,
+      );
   }
 
   assert(false, 'Need to implement ${settings.name}');
@@ -195,11 +241,12 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
 class SearchScreenFadeTransition extends MaterialPageRoute {
   final PostsViewFilter postsTypeToSearch;
-  SearchScreenFadeTransition(this.postsTypeToSearch)
+  SearchScreenFadeTransition(this.postsTypeToSearch, RouteSettings settings)
       : super(
           builder: (_) => PostsSearchScreen(
             postsTypeToSearch: postsTypeToSearch,
           ),
+          settings: settings,
         );
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
@@ -210,9 +257,10 @@ class SearchScreenFadeTransition extends MaterialPageRoute {
 
 class ChatScreenSlideTransition extends MaterialPageRoute {
   final ChatUserInfo chatUserInfo;
-  ChatScreenSlideTransition(this.chatUserInfo)
+  ChatScreenSlideTransition(this.chatUserInfo, RouteSettings settings)
       : super(
           builder: (_) => ChatScreen(chatUser: chatUserInfo),
+          settings: settings,
         );
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,

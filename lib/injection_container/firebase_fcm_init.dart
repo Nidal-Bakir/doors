@@ -1,9 +1,7 @@
 import 'dart:developer';
-import 'dart:math' show Random;
 
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:doors/core/config/constants.dart';
 import 'package:doors/core/models/user.dart';
+import 'package:doors/core/utils/notification_service.dart';
 import 'package:doors/core/utils/permission_checker_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -68,24 +66,7 @@ Future<void> _saveParseInstallation(
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  final senderName = message.data['senderName'];
-  final textMessage = message.data['textMessage'];
-  final senderId = message.data['senderId'];
+  final payload = NotificationServicePayload.fromJson(message.data);
 
-  await AwesomeNotifications().createNotification(
-    content: NotificationContent(
-      channelKey: Constants.chatNotificationChannelKey,
-      id: Random().nextInt(999999),
-      summary: 'Chat',
-      title: senderName,
-      body: textMessage,
-      groupKey: senderId,
-      category: NotificationCategory.Message,
-      displayOnBackground: true,
-      notificationLayout: NotificationLayout.Messaging,
-      displayOnForeground: true,
-      showWhen: true,
-      actionType: ActionType.Default,
-    ),
-  );
+  await NotificationService.instance.showNotification(payload);
 }

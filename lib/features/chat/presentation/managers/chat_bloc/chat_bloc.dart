@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bloc/bloc.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
 import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';
@@ -29,7 +30,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       _onMessagesLoaded,
       transformer: bloc_concurrency.droppable(),
     );
-    
+
     on<_ChatNewMessageAdded>(_onNewMessageAdded);
 
     _chatRepository.currentlyOpenedChatUserId = userId;
@@ -70,7 +71,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     emit(
       ChatMessagesLoadSuccess(
-        UnmodifiableListView(_currentMessages),
+        UnmodifiableListView(_currentMessages.toList()),
         // if the returned list is not empty then we can load more messages form
         // local database.
         messages.isNotEmpty,

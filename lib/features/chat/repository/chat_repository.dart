@@ -7,6 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:doors/core/config/constants.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/models/user.dart';
+import 'package:doors/core/utils/notification_service.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/data_source/chat_local_data_source.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/data_source/chat_users_local_data_source.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
@@ -58,6 +59,10 @@ class ChatRepository {
       _overallUnReadMessagesCountBehaviorSubject.add(unreadCount);
     });
 
+    _overallUnReadMessagesCountBehaviorSubject.listen((unreadCount) {
+      NotificationService.instance.setGlobalBadgeCounter(unreadCount);
+    });
+
     _connectionStatusStreamSubscription =
         _chatRemoteDataSource.liveQueryConnectionStatus().listen((event) async {
       _connectionStatusBehaviorSubject.add(event);
@@ -92,6 +97,8 @@ class ChatRepository {
     if (userId == null) {
       _mediaMessageProcessManager.disposeAllFinishedProcesses();
       _sendTextMessageProcessManager.disposeAllFinishedProcesses();
+    } else {
+      NotificationService.instance.cancelNotificationsByGroupKey(userId);
     }
   }
 
@@ -186,6 +193,7 @@ class ChatRepository {
             receivedMessage,
             remoteMessage.sender.userId,
             remoteMessage.sender.name,
+            remoteMessage.sender.profileImage?.url,
           );
         }
       }
@@ -308,6 +316,7 @@ class ChatRepository {
     LocalChatMessage chatMessage,
     String senderUserId,
     String senderName,
+    String? senderProfileImageUrl,
   ) async {
     var bodyText = '';
     final messageType = chatMessage.messageType;
@@ -325,22 +334,13 @@ class ChatRepository {
       }
     }
 
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        channelKey: Constants.chatNotificationChannelKey,
-        id: Random().nextInt(999999),
-        summary: 'Chat',
-        title: senderName,
-        body: bodyText,
-        groupKey: senderUserId,
-        category: NotificationCategory.Message,
-        displayOnBackground: true,
-        notificationLayout: NotificationLayout.Messaging,
-        displayOnForeground: true,
-        showWhen: true,
-        actionType: ActionType.Default,
-      ),
+    final payload = NotificationServicePayload(
+      senderId: senderUserId,
+      senderName: senderName,
+      textMessage: bodyText,
+      profileImageUrl: senderProfileImageUrl,
     );
+    await NotificationService.instance.showNotification(payload);
   }
 
   Future<void> _deleteAllMessagesMarkedAsNeedsToBeDeletedFromServer() async {

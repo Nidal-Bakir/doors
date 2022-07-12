@@ -1,3 +1,4 @@
+import 'package:doors/app/app_observers.dart';
 import 'package:doors/core/config/routes/app_routes.dart';
 import 'package:doors/core/config/theme/app_theme.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
@@ -23,10 +24,13 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
+    super.initState();
+
     // reassign the navigatorKey when the entire widget tree rebuilds
     // to avoid unexpected behaviors with navigation
     App.navigatorKey = GlobalKey<NavigatorState>();
-    super.initState();
+
+    NavigationHistoryObserver().reset();
   }
 
   @override
@@ -53,6 +57,7 @@ class _AppState extends State<App> {
           builder: (context, state) {
             return state.when(loadSuccess: (appLocale) {
               return MaterialApp(
+                navigatorObservers: [NavigationHistoryObserver()],
                 debugShowCheckedModeBanner: false,
                 navigatorKey: App.navigatorKey,
                 supportedLocales: AppLocalizations.supportedLocales,

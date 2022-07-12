@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:doors/app/app.dart';
-import 'package:doors/app/app_bloc_observer.dart';
+import 'package:doors/app/app_observers.dart';
 import 'package:doors/core/widgets/restart_app.dart';
 import 'package:doors/injection_container/injection_container.dart';
 import 'package:flutter/material.dart';

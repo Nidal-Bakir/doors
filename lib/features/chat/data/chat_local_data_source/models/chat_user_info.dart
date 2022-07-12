@@ -110,9 +110,9 @@ class ChatUserInfo extends Equatable {
   List<Object?> get props => [
         userId,
         name,
+        unReadCount,
         profileImage,
         isCurrentUserBlockedByThisUser,
         latestMessage,
-        unReadCount,
       ];
 }

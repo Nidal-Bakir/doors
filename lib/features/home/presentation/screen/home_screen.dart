@@ -17,13 +17,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:doors/core/utils/notification_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = '/home-screen';
 
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final ZoomDrawerController _drawerController = ZoomDrawerController();
 
-  HomeScreen({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    NotificationService.instance.setListeners();
+  }
 
   @override
   Widget build(BuildContext context) {
