@@ -95,6 +95,9 @@ class _ChatMessagesListWidgetState extends State<ChatMessagesListWidget> {
                   _canLoadMoreMessages = canLoadMore;
 
                   return _SliverListChatMessagesWithDateTimeHeaders(
+                    key: Key(
+                      messages.length.toString(),
+                    ),
                     chatMessages: messages,
                   );
                 },
@@ -192,6 +195,10 @@ class _SliverListChatMessagesWithDateTimeHeadersState
   void initState() {
     super.initState();
 
+    _generateChatListModel();
+  }
+
+  void _generateChatListModel() {
     final grouped = widget.chatMessages.reversed.groupListsBy(
       (message) => DateTime(
         message.sentDate.year,
