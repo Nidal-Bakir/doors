@@ -10,6 +10,7 @@ class UnsupportedMessageTypeBuilder extends MessageBuilder {
   @override
   Widget build(LocalChatMessage message) {
     return _UnsupportedMessageTypeBuilderWidget(
+      key: Key(message.localMessageId.toString()),
       message: message,
     );
   }

@@ -28,6 +28,7 @@ class ImageMessageBuilder extends MessageBuilder {
     }
 
     return _ImageMessageBuilderWidget(
+      key: Key(message.localMessageId.toString()),
       message: message,
     );
   }

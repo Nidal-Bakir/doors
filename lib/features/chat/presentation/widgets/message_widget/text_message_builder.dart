@@ -22,6 +22,7 @@ class TextMessageBuilder extends MessageBuilder {
     }
 
     return _TextMessageBuilderWidget(
+      key: Key(message.localMessageId.toString()),
       message: message,
     );
   }

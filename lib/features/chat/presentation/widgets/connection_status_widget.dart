@@ -128,22 +128,16 @@ class __ConnectingTextWithAnimationState
 
   @override
   Widget build(BuildContext context) {
-    late var _children = [
-      Text(
-        context.loc.connecting,
-      ),
-      Text(
-        _dots,
-      ),
-    ];
-
-    if (Directionality.of(context) == TextDirection.rtl) {
-      _children = _children.reversed.toList();
-    }
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: _children,
+      children: [
+        Text(
+          context.loc.connecting,
+        ),
+        Text(
+          _dots,
+        ),
+      ],
     );
   }
 }

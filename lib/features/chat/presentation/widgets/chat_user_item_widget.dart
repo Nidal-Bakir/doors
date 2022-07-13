@@ -129,6 +129,7 @@ class _ChatUserItemWidgetState extends State<ChatUserItemWidget> {
   /// Will returns Formatted dateTime after converting the [dateTime] param to
   /// localized time zone for this device.
   String _getFormattedSendDateTime(DateTime dateTime, BuildContext context) {
+    final languageTag = Localizations.maybeLocaleOf(context)?.toLanguageTag();
     final localizedDateTime = dateTime.toLocal();
     final timeDiff = DateTime.now().difference(localizedDateTime);
 
@@ -136,22 +137,22 @@ class _ChatUserItemWidgetState extends State<ChatUserItemWidget> {
       return context.loc.just_now;
     }
     if (timeDiff.inHours <= 24) {
-      return DateFormat('K:m a').format(localizedDateTime);
+      return DateFormat('h:m a', languageTag).format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 7) {
-      return DateFormat('EEE K:m a').format(localizedDateTime);
+      return DateFormat('EEE h:m a', languageTag).format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 30) {
-      return DateFormat('d K:m a').format(localizedDateTime);
+      return DateFormat('d h:m a', languageTag).format(localizedDateTime);
     }
 
     if (timeDiff.inDays <= 365) {
-      return DateFormat('MMM d').format(localizedDateTime);
+      return DateFormat('MMM d', languageTag).format(localizedDateTime);
     }
 
-    return DateFormat('yyyy MMM d').format(localizedDateTime);
+    return DateFormat('yyyy MMM d', languageTag).format(localizedDateTime);
   }
 
   @override

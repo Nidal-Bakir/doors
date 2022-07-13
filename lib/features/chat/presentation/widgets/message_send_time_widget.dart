@@ -1,5 +1,5 @@
-import 'package:doors/features/chat/util/util_func_for_chat.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MessageSendTimeWidget extends StatelessWidget {
   final DateTime messageSendDateTime;
@@ -9,8 +9,13 @@ class MessageSendTimeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      getMessageSendTime(messageSendDateTime),
+      _getMessageSendTime(messageSendDateTime, context),
       style: Theme.of(context).textTheme.bodyText1,
     );
+  }
+
+  String _getMessageSendTime(DateTime sendDate, BuildContext context) {
+    final languageTag = Localizations.maybeLocaleOf(context)?.toLanguageTag();
+    return DateFormat('h:m a', languageTag).format(sendDate.toLocal());
   }
 }

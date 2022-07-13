@@ -30,7 +30,7 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
       curve: Curves.easeInCubic,
     ),
   );
-  
+
   @override
   void initState() {
     widget.chatScrollController.addListener(_chatScrollControllerListener);
@@ -45,10 +45,10 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
   }
 
   void _chatScrollControllerListener() {
-    if (widget.chatScrollController.position.pixels <=
-        widget.chatScrollController.position.maxScrollExtent - 200) {
+   
+    if (widget.chatScrollController.position.pixels >= 200) {
       if (widget.chatScrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+          ScrollDirection.forward) {
         if (_animationController.status == AnimationStatus.dismissed) {
           _animationController.forward();
         }
@@ -92,16 +92,10 @@ class _ScrollToLatestMessageFABState extends State<ScrollToLatestMessageFAB>
   }
 
   Future<void> _scrollToLatestMessage() async {
-    await Future.delayed(const Duration(milliseconds: 50));
-
-    if (widget.chatScrollController.position.pixels <
-        widget.chatScrollController.position.maxScrollExtent) {
-      await widget.chatScrollController.animateTo(
-        widget.chatScrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInCubic,
-      );
-      await _scrollToLatestMessage();
-    }
+    await widget.chatScrollController.animateTo(
+      widget.chatScrollController.position.minScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInCubic,
+    );
   }
 }

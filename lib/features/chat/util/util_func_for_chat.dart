@@ -3,14 +3,9 @@ import 'dart:io';
 
 import 'package:doors/core/errors/user_error.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/message_meta_data.dart';
-import 'package:intl/intl.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as path_provider;
-
-String getMessageSendTime(DateTime sendDate) {
-  return DateFormat('K:m a').format(sendDate.toLocal());
-}
 
 Future<File?> saveThumbnailImage(String thumbnailUrl) async {
   final thumbnailImageToDownload = ParseFile(
