@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:doors/features/chat/presentation/screens/image_viewer.dart';
 import 'package:flutter/material.dart';
 
 class ChatImageWidget extends StatelessWidget {
@@ -35,7 +36,7 @@ class ChatImageWidget extends StatelessWidget {
   }
 }
 
-class _FileImage extends StatelessWidget {
+class _FileImage extends StatefulWidget {
   const _FileImage({
     Key? key,
     required this.fileImage,
@@ -50,27 +51,53 @@ class _FileImage extends StatelessWidget {
   final Widget? errorBuilderWidget;
 
   @override
+  State<_FileImage> createState() => _FileImageState();
+}
+
+class _FileImageState extends State<_FileImage> {
+  var _hasError = false;
+  @override
   Widget build(BuildContext context) {
-    return Image.file(
-      fileImage,
-      height: height,
-      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded) {
-          return child;
+    return GestureDetector(
+      onTap: () {
+        if (_hasError) {
+          return;
         }
-        return AnimatedOpacity(
-          child: child,
-          opacity: frame == null ? 0 : 1,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
+        Navigator.of(context).pushNamed(
+          ImageViewer.routeName,
+          arguments: widget.fileImage,
         );
       },
-      width: width,
-      cacheHeight: height.toInt(),
-      cacheWidth: width.toInt(),
-      errorBuilder: (_, __, ___) =>
-          errorBuilderWidget ?? _ChatImagePlaceHolder(height: height, width: width),
-      fit: BoxFit.cover,
+      child: Hero(
+        tag: widget.fileImage.path,
+        child: Image.file(
+          widget.fileImage,
+          height: widget.height,
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) {
+              return child;
+            }
+            return AnimatedOpacity(
+              child: child,
+              opacity: frame == null ? 0 : 1,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          },
+          width: widget.width,
+          cacheHeight: widget.height.toInt(),
+          cacheWidth: widget.width.toInt(),
+          errorBuilder: (_, __, ___) {
+            _hasError = true;
+            return widget.errorBuilderWidget ??
+                _ChatImagePlaceHolder(
+                  height: widget.height,
+                  width: widget.width,
+                );
+          },
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 }

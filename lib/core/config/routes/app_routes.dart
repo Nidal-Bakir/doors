@@ -18,6 +18,7 @@ import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
 import 'package:doors/features/chat/presentation/screens/chat_screen.dart';
 import 'package:doors/features/chat/presentation/screens/chat_users_screen.dart';
+import 'package:doors/features/chat/presentation/screens/image_viewer.dart';
 import 'package:doors/features/favorite_posts/presentation/screens/favorite_posts_screen.dart';
 import 'package:doors/features/home/presentation/screen/home_screen.dart';
 import 'package:doors/features/job_application/presentation/screens/view_post_job_applications_screen.dart';
@@ -232,6 +233,14 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return ChatScreenSlideTransition(
         settings.arguments as ChatUserInfo,
         settings,
+      );
+
+    case ImageViewer.routeName:
+      return MaterialPageRoute(
+        builder: (_) => ImageViewer(
+          imageFile: settings.arguments as File,
+        ),
+        settings: settings,
       );
   }
 
