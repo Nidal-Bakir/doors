@@ -1,6 +1,9 @@
 import 'package:doors/app/app_observers.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
+import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
+import 'package:doors/core/models/user.dart';
 import 'package:doors/core/widgets/circular_profile_image.dart';
+import 'package:doors/features/block/util/block_dialogs.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/chat_user_info.dart';
 import 'package:doors/features/chat/presentation/managers/chat_bloc/chat_bloc.dart';
 import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';
@@ -24,6 +27,13 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   late final _chatScrollController = ScrollController();
+  late User _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentUser = context.read<AuthBloc>().getCurrentUser()!;
+  }
 
   @override
   void dispose() {
@@ -86,26 +96,54 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
                 actions: [
-                  PopupMenuButton<int>(
-                    itemBuilder: (context) {
-                      return [
-                        PopupMenuItem<int>(
-                          value: 0,
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.person_off_outlined,
-                                size: 25,
+                  BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (previous, current) =>
+                        current is AuthCurrentUpdatedUserLoadSuccess,
+                    builder: (context, state) {
+                      if (state is AuthCurrentUpdatedUserLoadSuccess) {
+                        _currentUser = state.user;
+                      }
+                      return PopupMenuButton<int>(
+                        onSelected: (value) async {
+                          if (value == 0) {
+                            if (_isBlocked()) {
+                              await showUnblockDialog(
+                                context,
+                                widget.chatUser.userId,
+                              );
+                            } else {
+                              await showBlockDialog(
+                                context,
+                                widget.chatUser.userId,
+                              );
+                            }
+                          }
+                        },
+                        itemBuilder: (context) {
+                          return [
+                            PopupMenuItem<int>(
+                              value: 0,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    _isBlocked()
+                                        ? Icons.person_outline_rounded
+                                        : Icons.person_off_outlined,
+                                    size: 25,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    _isBlocked()
+                                        ? context.loc.unblock
+                                        : context.loc.block,
+                                    style: _theme.textTheme.subtitle1,
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 4),
-                              Text(
-                                context.loc.block,
-                                style: _theme.textTheme.subtitle1,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ];
+                            ),
+                          ];
+                        },
+                      );
                     },
                   ),
                 ],
@@ -118,7 +156,34 @@ class _ChatScreenState extends State<ChatScreen> {
                       chatScrollController: _chatScrollController,
                     ),
                   ),
-                  MessageComposerBar(chatUser: widget.chatUser),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (previous, current) =>
+                        current is AuthCurrentUpdatedUserLoadSuccess,
+                    builder: (context, state) {
+                      if (state is AuthCurrentUpdatedUserLoadSuccess) {
+                        _currentUser = state.user;
+                      }
+                      return Column(
+                        children: [
+                          if (!_shouldHideMessageComposerBar())
+                            MessageComposerBar(
+                              chatUser: widget.chatUser,
+                            ),
+                          if (_shouldHideMessageComposerBar())
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(16),
+                              color: _theme.colorScheme.primary,
+                              child: Text(
+                                context.loc
+                                    .you_can_not_send_or_receive_messages_from_this_chat,
+                                style: _theme.textTheme.subtitle2,
+                              ),
+                            )
+                        ],
+                      );
+                    },
+                  )
                 ],
               ),
             );
@@ -127,4 +192,11 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
+  bool _shouldHideMessageComposerBar() {
+    return widget.chatUser.isCurrentUserBlockedByThisUser || _isBlocked();
+  }
+
+  bool _isBlocked() =>
+      _currentUser.getListOfBlockedUsers().contains(widget.chatUser.userId);
 }

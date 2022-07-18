@@ -200,7 +200,7 @@ class _SliverListChatMessagesWithDateTimeHeadersState
   }
 
   void _generateChatListModel() {
-    final grouped = widget.chatMessages.reversed.groupListsBy(
+    final grouped = widget.chatMessages.groupListsBy(
       (message) => DateTime(
         message.sentDate.year,
         message.sentDate.month,
@@ -209,7 +209,12 @@ class _SliverListChatMessagesWithDateTimeHeadersState
     );
     for (var group in grouped.keys) {
       _chatMessagesWithDateTimeHeaders.insert(0, group);
-      _chatMessagesWithDateTimeHeaders.insertAll(0, grouped[group]!);
+      _chatMessagesWithDateTimeHeaders.insertAll(
+        0,
+        grouped[group]!.sorted(
+          (a, b) => b.sentDate.compareTo(a.sentDate),
+        ),
+      );
     }
   }
 

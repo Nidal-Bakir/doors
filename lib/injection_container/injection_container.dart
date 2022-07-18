@@ -1,5 +1,6 @@
 import 'package:doors/injection_container/auth_injection.dart';
 import 'package:doors/injection_container/awesome_notifications_init.dart';
+import 'package:doors/injection_container/block_injection.dart';
 import 'package:doors/injection_container/chat_injection.dart';
 import 'package:doors/injection_container/favorite_posts_injection.dart';
 import 'package:doors/injection_container/file_manager.dart';
@@ -63,6 +64,9 @@ Future<void> init({bool forRestart = false}) async {
 
   // init chat
   chatInit();
+
+  // user block init
+  blockInit();
 
   // security error flow
   securityErrorFlowInit();

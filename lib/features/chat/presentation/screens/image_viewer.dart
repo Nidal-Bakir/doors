@@ -18,7 +18,7 @@ class ImageViewer extends StatelessWidget {
       ),
       loadingBuilder: (context, loadingProgress) {
         if (loadingProgress == null) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
         return Center(
           child: CircularProgressIndicator(

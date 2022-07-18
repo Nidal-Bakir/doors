@@ -6,6 +6,7 @@ import 'package:doors/core/models/user.dart';
 import 'package:doors/features/chat/data/chat_remote_data_source/models/remote_chat_message.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:async/async.dart';
 
 abstract class ChatRemoteDataSource {
   Stream<RemoteChatMessage> startListingForNewMessages(
@@ -25,7 +26,8 @@ abstract class ChatRemoteDataSource {
 }
 
 class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
-  late final _remoteReceivedMessagesSteamController =
+  late StreamController<RemoteChatMessage>?
+      _remoteReceivedMessagesSteamController =
       StreamController<RemoteChatMessage>();
 
   late final _messagesLiveQuery = LiveQuery();
@@ -62,11 +64,11 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
     subscription.on(
       LiveQueryEvent.create,
       (newMessage) {
-        _remoteReceivedMessagesSteamController.sink.add(newMessage);
+        _remoteReceivedMessagesSteamController!.sink.add(newMessage);
       },
     );
 
-    yield* _remoteReceivedMessagesSteamController.stream;
+    yield* _remoteReceivedMessagesSteamController!.stream;
   }
 
   @override
@@ -200,7 +202,21 @@ class ChatRemoteDataSourceImpl extends ChatRemoteDataSource {
 
   @override
   Future<void> dispose() async {
-    await _messagesLiveQuery.client.disconnect();
-    await _remoteReceivedMessagesSteamController.close();
+    final cancelableOp = CancelableOperation.fromFuture(
+      _remoteReceivedMessagesSteamController?.close() ?? Future.value(),
+      onCancel: () {
+        _remoteReceivedMessagesSteamController = null;
+      },
+    );
+
+    Future.delayed(const Duration(seconds: 1)).then((_) {
+      if (!cancelableOp.isCompleted) {
+        cancelableOp.cancel();
+      }
+    });
+
+    await cancelableOp.valueOrCancellation();
+
+    await _messagesLiveQuery.client.disconnect(userInitialized: true);
   }
 }

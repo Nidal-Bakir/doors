@@ -52,6 +52,7 @@ Future<void> _saveParseInstallation(
 ) async {
   ParseResponse parseInstallationResponse;
   while (true) {
+    await Future.delayed(const Duration(seconds: 1));
     try {
       parseInstallationResponse = await parseInstallation.create();
       if (parseInstallationResponse.success) {
@@ -61,7 +62,6 @@ Future<void> _saveParseInstallation(
       log('can not send installation config to the server retrying in 1 second... \n Error: ' +
           error.toString());
     }
-    await Future.delayed(const Duration(seconds: 1));
   }
 }
 

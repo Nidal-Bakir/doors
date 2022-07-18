@@ -1,9 +1,7 @@
 import 'dart:io' show File, Platform;
 import 'dart:math';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dartz/dartz.dart';
-import 'package:doors/app/app.dart';
 import 'package:doors/core/config/global_config.dart';
 import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';

@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:math' show Random;
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:collection/collection.dart';
-import 'package:doors/core/config/constants.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/core/utils/notification_service.dart';
@@ -21,6 +18,7 @@ import 'package:doors/features/chat/util/util_func_for_chat.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:async/async.dart';
 
 class ChatRepository {
   final ChatRemoteDataSource _chatRemoteDataSource;
@@ -229,8 +227,6 @@ class ChatRepository {
   }
 
   Future<void> dispose() async {
-    await _chatRemoteDataSource.dispose();
-
     await _sendTextMessageProcessManager.disposeAllProcesses();
     await _mediaMessageProcessManager.disposeAllProcesses();
 
@@ -239,8 +235,23 @@ class ChatRepository {
     await _connectionStatusBehaviorSubject.close();
     await _overallUnReadMessagesCountBehaviorSubject.close();
 
-    _receivedMessagesFromServerStreamSubscription?.cancel();
-    _connectionStatusStreamSubscription.cancel();
+    await _connectionStatusStreamSubscription.cancel();
+
+    final cancelableOp = CancelableOperation.fromFuture(
+      _receivedMessagesFromServerStreamSubscription?.cancel() ?? Future.value(),
+      onCancel: () {
+        _receivedMessagesFromServerStreamSubscription = null;
+      },
+    );
+
+    Future.delayed(const Duration(seconds: 1)).then((_) {
+      if (!cancelableOp.isCompleted) {
+        cancelableOp.cancel();
+      }
+    });
+    await cancelableOp.valueOrCancellation();
+
+    await _chatRemoteDataSource.dispose();
   }
 
   Stream<LocalChatMessage> _pullMissedMessagesFromRemoteServer() async* {

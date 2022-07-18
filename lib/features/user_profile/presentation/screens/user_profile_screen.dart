@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:doors/core/enums/enums.dart';
+import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/user_posts/presentation/managers/user_posts_bloc/user_posts_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:doors/core/features/user_posts/presentation/widgets/user_posts_s
 import 'package:doors/core/models/job_post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
+import 'package:doors/features/block/util/block_dialogs.dart';
 import 'package:doors/features/user_profile/presentation/widgets/current_post_view_with_view_filter.dart';
 import 'package:doors/features/user_profile/presentation/widgets/user_info.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +71,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
+
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
@@ -130,7 +134,66 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       },
                       child: CustomScrollView(
                         slivers: [
-                          const SliverAppBar(),
+                          SliverAppBar(
+                            actions: _isTheCurrentUserProfile
+                                ? null
+                                : [
+                                    BlocBuilder<AuthBloc, AuthState>(
+                                      buildWhen: (previous, current) => current
+                                          is AuthCurrentUpdatedUserLoadSuccess,
+                                      builder: (context, state) {
+                                        if (state
+                                            is AuthCurrentUpdatedUserLoadSuccess) {
+                                          _currentUser = state.user;
+                                        }
+                                        return PopupMenuButton<int>(
+                                          onSelected: (value) async {
+                                            if (value == 0) {
+                                              if (_isBlocked()) {
+                                                await showUnblockDialog(
+                                                  context,
+                                                  _visitedUser.userId,
+                                                );
+                                              } else {
+                                                await showBlockDialog(
+                                                  context,
+                                                  _visitedUser.userId,
+                                                );
+                                              }
+                                            }
+                                          },
+                                          itemBuilder: (context) {
+                                            return [
+                                              PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      _isBlocked()
+                                                          ? Icons
+                                                              .person_outline_rounded
+                                                          : Icons
+                                                              .person_off_outlined,
+                                                      size: 25,
+                                                    ),
+                                                    const SizedBox(width: 4),
+                                                    Text(
+                                                      _isBlocked()
+                                                          ? context.loc.unblock
+                                                          : context.loc.block,
+                                                      style: _theme
+                                                          .textTheme.subtitle1,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ];
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                          ),
                           SliverToBoxAdapter(
                             child: BlocConsumer<AuthBloc, AuthState>(
                                 listenWhen: (previous, current) =>
@@ -202,6 +265,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
   }
+
+  bool _isBlocked() =>
+      _currentUser.getListOfBlockedUsers().contains(_visitedUser.userId);
 
   void _onViewChange(PostsViewFilter currentPostsView) {
     switch (currentPostsView) {

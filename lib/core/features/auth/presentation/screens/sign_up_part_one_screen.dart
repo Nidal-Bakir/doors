@@ -55,8 +55,10 @@ class _SignUpPartOneScreenState extends State<SignUpPartOneScreen> {
                         key: _keyFrom,
                         child: Column(
                           children: [
-                            SignUpHeadLineTextWithIcon(
-                              accountType: widget.accountType,
+                            SizedBox(height: 50,
+                              child: SignUpHeadLineTextWithIcon(
+                                accountType: widget.accountType,
+                              ),
                             ),
                             const SizedBox(
                               height: 60,
