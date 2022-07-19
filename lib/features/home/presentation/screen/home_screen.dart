@@ -231,13 +231,24 @@ class _CurrentOpenedTabName extends StatefulWidget {
 class _CurrentOpenedTabNameState extends State<_CurrentOpenedTabName>
     with SingleTickerProviderStateMixin {
   late final _controller = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 500));
+    vsync: this,
+    duration: const Duration(milliseconds: 500),
+  );
+
   late final _animation = Tween<Offset>(
-          end: Offset.zero, begin: const Offset(0, -3))
-      .animate(CurveTween(curve: Curves.easeInOutCubic).animate(_controller));
+    end: Offset.zero,
+    begin: const Offset(0, -3),
+  ).animate(
+    CurveTween(curve: Curves.easeInOutCubic).animate(_controller),
+  );
+
   late final _animation2 = Tween<Offset>(
-          end: const Offset(0, 3), begin: const Offset(0, 0))
-      .animate(CurveTween(curve: Curves.easeInOutCubic).animate(_controller));
+    end: const Offset(0, 3),
+    begin: const Offset(0, 0),
+  ).animate(
+    CurveTween(curve: Curves.easeInOutCubic).animate(_controller),
+  );
+
   @override
   void didChangeDependencies() {
     Future.delayed(const Duration(seconds: 2), () {
@@ -246,6 +257,12 @@ class _CurrentOpenedTabNameState extends State<_CurrentOpenedTabName>
       }
     });
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override

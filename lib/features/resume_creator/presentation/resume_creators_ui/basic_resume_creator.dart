@@ -317,13 +317,17 @@ class _BasicResumeCreatorMainBodyState
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(
-                onPressed: _onPreviewPressed,
-                child: Text(context.loc.preview),
+              Flexible(
+                child: ElevatedButton(
+                  onPressed: _onPreviewPressed,
+                  child: Text(context.loc.preview),
+                ),
               ),
-              ElevatedButton(
-                onPressed: _onDonePressed,
-                child: Text(context.loc.done),
+              Flexible(
+                child: ElevatedButton(
+                  onPressed: _onDonePressed,
+                  child: Text(context.loc.done),
+                ),
               )
             ],
           ),

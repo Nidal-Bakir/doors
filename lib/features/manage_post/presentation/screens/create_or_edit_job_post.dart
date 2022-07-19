@@ -106,12 +106,15 @@ class _CreateOrEditJobPostState extends State<CreateOrEditJobPost> {
                         initCategory: _category,
                       ),
                       const SizedBox16H(),
-                      JobTypesChipsMultiSelectionWithHeadLine(
-                        headLineLabel: context.loc.job_type,
-                        initJobTypes: _jobTypes,
-                        onJobTypeChange: (jobTypes) {
-                          _jobTypes = jobTypes;
-                        },
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: JobTypesChipsMultiSelectionWithHeadLine(
+                          headLineLabel: context.loc.job_type,
+                          initJobTypes: _jobTypes,
+                          onJobTypeChange: (jobTypes) {
+                            _jobTypes = jobTypes;
+                          },
+                        ),
                       ),
                       const SizedBox16H(),
                       Align(

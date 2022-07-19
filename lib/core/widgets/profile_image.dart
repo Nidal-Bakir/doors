@@ -89,8 +89,10 @@ class _ProfileImageState extends State<ProfileImage> {
               child: _profileImageFile == null
                   ? const Icon(Icons.add_photo_alternate_outlined, size: 50)
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(1),
-                      child: SizedBox(width: double.infinity,
+                      borderRadius: BorderRadius.circular(8),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
                         child: Image.file(
                           File.fromUri(
                             Uri.file(
