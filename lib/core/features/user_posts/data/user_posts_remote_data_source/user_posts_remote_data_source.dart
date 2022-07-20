@@ -4,6 +4,7 @@ import 'package:doors/core/models/user.dart';
 import 'package:doors/core/models/post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:doors/core/extensions/list/list_remove_blocked_posts.dart';
 
 abstract class UserPostsRemoteDataSource {
   /// Get a list of user posts.
@@ -37,6 +38,8 @@ class UserPostsRemoteDataSourceImpl extends UserPostsRemoteDataSource {
     required String postsClassName,
     required String relationFieldName,
   }) async {
+    final _currentUser = (await ParseUser.currentUser()) as User;
+
     final userPostsQuery = QueryBuilder.name(postsClassName)
       ..whereRelatedTo(relationFieldName, User.keyUserClassName, userId)
       ..orderByDescending(Post.keyPostCreationDate)
@@ -57,7 +60,7 @@ class UserPostsRemoteDataSourceImpl extends UserPostsRemoteDataSource {
       return UnmodifiableListView(
         List<Post>.from(
           listOfUserPostsResponse.results!,
-        ),
+        ).removeBlockedUsersPosts(_currentUser),
       );
     } else {
       final error =

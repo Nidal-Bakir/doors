@@ -5,6 +5,7 @@ import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/core/models/job_post.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:doors/core/extensions/list/list_remove_blocked_posts.dart';
 
 abstract class RecentJobPostsRemoteDataSource {
   /// Get recent job posts
@@ -25,6 +26,8 @@ class RecentJobPostsRemoteDataSourceImpl
   Future<UnmodifiableListView<JobPost>> getRecentJobPosts(
     int amountToSkip,
   ) async {
+    final _currentUser = (await ParseUser.currentUser()) as User;
+
     QueryBuilder queryBuilder = QueryBuilder.name(JobPost.keyClassName)
       ..orderByDescending(JobPost.keyJobCreationDate)
       ..includeObject([JobPost.keyAuthor])
@@ -33,10 +36,8 @@ class RecentJobPostsRemoteDataSourceImpl
       ..setLimit(GlobalConfig.amountOfResultPeerRequest);
 
     ParseResponse jopPostsResponse;
-      jopPostsResponse = await queryBuilder.query();
-
     try {
-      // jopPostsResponse = await queryBuilder.query();
+      jopPostsResponse = await queryBuilder.query();
     } catch (e) {
       throw NoConnectionException(
           'con\'t load recent Job post' '\n error:  ' + e.toString());
@@ -49,7 +50,7 @@ class RecentJobPostsRemoteDataSourceImpl
         List<JobPost>.from(
           jopPostsResponse.results!,
           growable: false,
-        ),
+        ).removeBlockedUsersPosts(_currentUser),
       );
     } else {
       final error =

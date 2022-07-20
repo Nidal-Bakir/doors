@@ -9,6 +9,7 @@ import 'package:doors/core/models/post.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:doors/features/search/models/search_filter.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:doors/core/extensions/list/list_remove_blocked_posts.dart';
 
 abstract class PostsSearchRemoteDataSource {
   /// Search through posts.
@@ -37,11 +38,12 @@ class PostsSearchRemoteDataSourceImpl extends PostsSearchRemoteDataSource {
     required PostsViewFilter postsTypeToSearch,
     required int amountToSkip,
   }) async {
+    final _currentUser = (await ParseUser.currentUser()) as User;
+
     QueryBuilder queryBuilder = QueryBuilder.name(postsTypeToSearch.className);
     _applySearchFilterOnPosts(searchFilter, queryBuilder);
 
     queryBuilder
-      // ..orderByDescending(ServicePost.keyPostCreationDate)
       ..includeObject([Post.keyAuthor])
       ..excludeKeys(User.keysToExcludeFromQueriesRelatedToUser())
       ..setAmountToSkip(amountToSkip)
@@ -61,7 +63,7 @@ class PostsSearchRemoteDataSourceImpl extends PostsSearchRemoteDataSource {
         List<Post>.from(
           searchPostsResponse.results!,
           growable: false,
-        ),
+        ).removeBlockedUsersPosts(_currentUser),
       );
     } else {
       final error =

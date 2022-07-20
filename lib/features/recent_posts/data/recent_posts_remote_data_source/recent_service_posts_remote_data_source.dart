@@ -6,6 +6,7 @@ import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/models/user.dart';
 import 'package:doors/core/models/service_post.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:doors/core/extensions/list/list_remove_blocked_posts.dart';
 
 abstract class RecentServicePostsRemoteDataSource {
   /// Get remote recent needed service posts
@@ -45,7 +46,11 @@ class RecentServicePostsRemoteDataSourceImpl
 }
 
 Future<UnmodifiableListView<ServicePost>> _loadServicePosts(
-    int amountToSkip, ServiceType servicePostType) async {
+  int amountToSkip,
+  ServiceType servicePostType,
+) async {
+  final _currentUser = (await ParseUser.currentUser()) as User;
+
   QueryBuilder queryBuilder = QueryBuilder.name(ServicePost.keyClassName)
     ..whereEqualTo(ServicePost.keyPostType, servicePostType.name)
     ..orderByDescending(ServicePost.keyPostCreationDate)
@@ -69,7 +74,7 @@ Future<UnmodifiableListView<ServicePost>> _loadServicePosts(
       List<ServicePost>.from(
         recentNeededServicePostsResponse.results!,
         growable: false,
-      ),
+      ).removeBlockedUsersPosts(_currentUser),
     );
   } else {
     final error = ParseException.extractParseException(

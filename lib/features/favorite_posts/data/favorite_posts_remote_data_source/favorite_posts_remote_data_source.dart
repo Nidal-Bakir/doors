@@ -7,6 +7,7 @@ import 'package:doors/core/models/user.dart';
 import 'package:doors/core/models/post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:doors/core/extensions/list/list_remove_blocked_posts.dart';
 
 abstract class FavoritePostsRemoteDataSource {
   /// Get a list of user favorite posts.
@@ -69,7 +70,7 @@ class FavoritePostsRemoteDataSourceImpl extends FavoritePostsRemoteDataSource {
       return UnmodifiableListView(
         List<Post>.from(
           listOfFavoritePostsResponse.results!,
-        ),
+        ).removeBlockedUsersPosts(_currentUser),
       );
     } else {
       final error = ParseException.extractParseException(
