@@ -266,5 +266,9 @@
   "no_chats_to_show": "No Chat to show",
   "type_a_message": "Type a message...",
   "unsupported_message_type_please_upgrade_your_app_to_latest_version": "Unsupported message type, please upgrade your app to latest version",
-  "you_can_chat_with_any_one_about_service_they_provide_or_offer": "You can chat with any one about service they provide or offer"
+  "you_can_chat_with_any_one_about_service_they_provide_or_offer": "You can chat with any one about service they provide or offer",
+  "not_verified_email_address": "Not verified email",
+  "if_you_do_not_verify_your_email_Your_account_will_be_suspended_shortly_and_then_deleted": "If you don't verify your email, Your account will be suspended shortly and then deleted.",
+  "warning": "Warning",
+  "i_understand": "I understand"
 }

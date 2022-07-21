@@ -35,6 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     NotificationService.instance.setListeners();
+    _showNotVerifiedEmailWarningDialogIfNotVerified();
+  }
+
+  Future<void> _showNotVerifiedEmailWarningDialogIfNotVerified() async {
+    Future.delayed(const Duration(seconds: 2)).then((_) {
+      final currentUser = context.read<AuthBloc>().getCurrentUser();
+      if (currentUser != null) {
+        if (!currentUser.isAnonymousAccount && !currentUser.isEmailVerified!) {
+          showNotVerifiedEmailWarningDialog(context);
+        }
+      }
+    });
   }
 
   @override
@@ -82,8 +94,8 @@ class _MainScreenState extends State<MainScreen>
   var _currentOpenedPageIndex = 1;
   @override
   void initState() {
-    _pageController.addListener(_onPageChanged);
     super.initState();
+    _pageController.addListener(_onPageChanged);
   }
 
   @override

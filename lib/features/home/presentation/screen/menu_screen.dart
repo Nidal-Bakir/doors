@@ -44,6 +44,14 @@ class MenuScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MenuProfileInfo(currentUser: _currentUser),
+                  if (!_currentUser.isAnonymousAccount &&
+                      !_currentUser.isEmailVerified!)
+                    Text(
+                      context.loc.not_verified_email_address,
+                      style: _textTheme.headline6?.copyWith(
+                        color: _theme.colorScheme.error,
+                      ),
+                    ),
                   const SizedBox(
                     height: 20,
                   ),

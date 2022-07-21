@@ -49,6 +49,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
     return BlocProvider<EditProfileBloc>(
       create: (context) => GetIt.I.get<EditProfileBloc>(),
       child: Builder(
@@ -118,6 +119,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ],
                         ),
+                        if (!_currentUserProfile.isEmailVerified!)
+                          Text(
+                            context.loc.not_verified_email_address,
+                            style: _theme.textTheme.subtitle2?.copyWith(
+                              color: _theme.colorScheme.error,
+                            ),
+                          ),
                         const SizedBox16H(),
                         LineWithTextOnRow(
                           text: context.loc.optional_phone_number,

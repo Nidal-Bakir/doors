@@ -65,6 +65,23 @@ Future<void> openSimpleAlertDialog({
   );
 }
 
+Future<void> showNotVerifiedEmailWarningDialog(BuildContext context) {
+  return openSimpleAlertDialog(
+    context: context,
+    title: context.loc.warning + ' ' + context.loc.not_verified_email_address,
+    content: context.loc
+        .if_you_do_not_verify_your_email_Your_account_will_be_suspended_shortly_and_then_deleted,
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(context.loc.i_understand),
+      ),
+    ],
+  );
+}
+
 String extractLangCodeFromPlatformService() {
   // localeName could be (en) or (en_US) or (en_US.UTF-8)
   return Platform.localeName.split('_')[0];
