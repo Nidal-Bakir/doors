@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
@@ -63,6 +65,14 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
   @override
   Future<User> login(User user) async {
+    try {
+      final _currentAnonymousUser = (await ParseUser.currentUser()) as User?;
+      await _currentAnonymousUser?.logout();
+    } catch (error) {
+      log('''con't logout the anonymous user 
+      so the session token will not be removed from server.''');
+    }
+
     ParseResponse userResponse;
     try {
       userResponse =
@@ -87,6 +97,14 @@ class AuthRemoteDataSourceImp extends AuthRemoteDataSource {
 
   @override
   Future<User> signUp(User user) async {
+    final _currentAnonymousUser = (await ParseUser.currentUser()) as User?;
+    try {
+      await _currentAnonymousUser?.logout();
+    } catch (error) {
+      log('''con't logout the anonymous user 
+      so the session token will not be removed from server.''');
+    }
+
     ParseResponse newUserResponse;
     try {
       await user.profileImage?.save();
