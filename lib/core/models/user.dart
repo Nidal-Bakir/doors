@@ -9,7 +9,7 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   static const keyName = 'name';
   static const keyUserClassName = keyClassUser;
   static const keyAccountType = 'accountType';
-  static const keyAccountStatues = 'accountStatue';
+  static const keyAccountStatues = 'accountStatues';
   static const keyPaypalEmail = 'paypalEmail';
   static const keyPhoneNumber = 'phoneNumber';
   static const keyBio = 'bio';
