@@ -66,19 +66,44 @@ Future<void> openSimpleAlertDialog({
 }
 
 Future<void> showNotVerifiedEmailWarningDialog(BuildContext context) {
-  return openSimpleAlertDialog(
+  final _theme = Theme.of(context);
+  return showDialog(
+    barrierDismissible: false,
     context: context,
-    title: context.loc.warning + ' ' + context.loc.not_verified_email_address,
-    content: context.loc
-        .if_you_do_not_verify_your_email_Your_account_will_be_suspended_shortly_and_then_deleted,
-    actions: [
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text(context.loc.i_understand),
+    builder: (context) => AlertDialog(
+      titleTextStyle: _theme.textTheme.headline5,
+      title: Center(
+        child: Text(context.loc.warning),
       ),
-    ],
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Text(
+              context.loc.not_verified_email_address,
+              style: _theme.textTheme.headline6,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+            context.loc
+                .if_you_do_not_verify_your_email_Your_account_will_be_suspended_shortly_and_then_deleted,
+            style: _theme.textTheme.subtitle2,
+          )
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(context.loc.i_understand),
+        ),
+      ],
+    ),
   );
 }
 
