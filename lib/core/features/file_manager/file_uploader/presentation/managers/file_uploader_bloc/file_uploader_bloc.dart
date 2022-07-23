@@ -10,6 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 part 'file_uploader_event.dart';
 part 'file_uploader_state.dart';
@@ -112,12 +113,8 @@ class FileUploaderBloc extends Bloc<FileUploaderEvent, FileUploaderState> {
   /// remove all not valid chars from file name
   ParseFile _getValidParseFileToUpload(File file) {
     final fileExt = path.extension(file.path);
-    final validFileNameWithoutExt = path
-        .basenameWithoutExtension(file.path)
-        .replaceAll(
-            RegExp(
-                r'[$&%!?\*\.#@_\-\/\\\^()=+;\{\}\[\]:"0-9©®™✓°π√•|`~×÷¶∆¥€¢£<>]'),
-            '');
+    final validFileNameWithoutExt =
+        fileExt.replaceFirst('.', '') + '-file-' + const Uuid().v4();
     return ParseFile(file, name: validFileNameWithoutExt + fileExt);
   }
 }
