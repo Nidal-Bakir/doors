@@ -271,6 +271,15 @@ class _PopupMenuButton extends StatelessWidget {
               if (openLogInScreenToNotLoggedInUser(context)) {
                 return;
               }
+
+              if (!currentUser.isEmailVerified!) {
+                showErrorSnackBar(
+                  context,
+                  context.loc.please_verify_your_email_first,
+                );
+                return;
+              }
+
               _openReportDialog(
                   context, currentPost as ServicePost, currentUser);
               return;
@@ -278,6 +287,14 @@ class _PopupMenuButton extends StatelessWidget {
               if (openLogInScreenToNotLoggedInUser(context)) {
                 return;
               }
+              if (!currentUser.isEmailVerified!) {
+                showErrorSnackBar(
+                  context,
+                  context.loc.please_verify_your_email_first,
+                );
+                return;
+              }
+
               if (_isServicePost(currentPost)) {
                 Navigator.of(context).pushNamed(
                   CreateOrEditPostScreenPartOne.routeName,
@@ -295,6 +312,14 @@ class _PopupMenuButton extends StatelessWidget {
               if (openLogInScreenToNotLoggedInUser(context)) {
                 return;
               }
+              if (!currentUser.isEmailVerified!) {
+                showErrorSnackBar(
+                  context,
+                  context.loc.please_verify_your_email_first,
+                );
+                return;
+              }
+
               _openConfirmationDialog(context, currentPost);
               return;
             case 3:
@@ -1029,48 +1054,27 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
                 if (state is FavoritePostLoadSuccess) {
                   _isFavorite = state.isFavorite;
                 }
-                return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary,
+                
+                return IgnorePointer(
+                  ignoring: !widget.currentUser.isAnonymousAccount &&
+                      state is FavoritePostInProgress,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      _isFavorite
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_border_rounded,
-                      size: 30,
-                      color: _isFavorite ? Colors.red : null,
+                    child: IconButton(
+                      icon: Icon(
+                        _isFavorite
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        size: 30,
+                        color: _isFavorite ? Colors.red : null,
+                      ),
+                      onPressed: () => _onFavoritePressed(state, context),
                     ),
-                    onPressed: state is FavoritePostInProgress
-                        ? (widget.currentUser.isAnonymousAccount
-                            ? () {
-                                openLogInScreenToNotLoggedInUser(context);
-                              }
-                            : null)
-                        : () {
-                            if (openLogInScreenToNotLoggedInUser(context)) {
-                              return;
-                            }
-                            if (_isFavorite) {
-                              context.read<FavoritePostBloc>().add(
-                                    FavoritePostRemovePostFromFavoriteList(
-                                      widget.currentPost,
-                                    ),
-                                  );
-                            } else {
-                              context.read<FavoritePostBloc>().add(
-                                    FavoritePostAddPostToFavoriteList(
-                                      widget.currentPost,
-                                    ),
-                                  );
-                            }
-                            setState(() {
-                              _isFavorite = !_isFavorite;
-                            });
-                          },
                   ),
                 );
               },
@@ -1081,12 +1085,42 @@ class _FavoriteAndChatButtonsState extends State<_FavoriteAndChatButtons> {
           width: 16,
         ),
         Expanded(
-            child: _ElevatedButton(
-          currentPost: widget.currentPost,
-          currentUser: widget.currentUser,
-        ))
+          child: _ElevatedButton(
+            currentPost: widget.currentPost,
+            currentUser: widget.currentUser,
+          ),
+        )
       ],
     );
+  }
+
+  void _onFavoritePressed(FavoritePostState state, BuildContext context) {
+    if (widget.currentUser.isAnonymousAccount) {
+      openLogInScreenToNotLoggedInUser(context);
+      return;
+    }
+
+    if (!widget.currentUser.isEmailVerified!) {
+      showErrorSnackBar(context, context.loc.please_verify_your_email_first);
+      return;
+    }
+
+    if (_isFavorite) {
+      context.read<FavoritePostBloc>().add(
+            FavoritePostRemovePostFromFavoriteList(
+              widget.currentPost,
+            ),
+          );
+    } else {
+      context.read<FavoritePostBloc>().add(
+            FavoritePostAddPostToFavoriteList(
+              widget.currentPost,
+            ),
+          );
+    }
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
   }
 }
 
@@ -1137,6 +1171,14 @@ class _ElevatedButton extends StatelessWidget {
               ? null
               : () {
                   if (openLogInScreenToNotLoggedInUser(context)) {
+                    return;
+                  }
+
+                  if (!currentUser.isEmailVerified!) {
+                    showErrorSnackBar(
+                      context,
+                      context.loc.please_verify_your_email_first,
+                    );
                     return;
                   }
 

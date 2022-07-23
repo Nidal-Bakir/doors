@@ -89,6 +89,14 @@ class MenuScreen extends StatelessWidget {
                       if (openLogInScreenToNotLoggedInUser(context)) {
                         return;
                       }
+                      if (!_currentUser.isEmailVerified!) {
+                        showErrorSnackBar(
+                          context,
+                          context.loc.please_verify_your_email_first,
+                        );
+                        return;
+                      }
+
                       Navigator.of(context)
                           .pushNamed(CreateOrEditPostScreenPartOne.routeName);
                     },
@@ -114,6 +122,15 @@ class MenuScreen extends StatelessWidget {
                         if (openLogInScreenToNotLoggedInUser(context)) {
                           return;
                         }
+
+                        if (!_currentUser.isEmailVerified!) {
+                          showErrorSnackBar(
+                            context,
+                            context.loc.please_verify_your_email_first,
+                          );
+                          return;
+                        }
+                        
                         if (_currentUser.isCompanyAccount &&
                             !_currentUser.isSubscribed) {
                           Navigator.of(context).pushNamed(

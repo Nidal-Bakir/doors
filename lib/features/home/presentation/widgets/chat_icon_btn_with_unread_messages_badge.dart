@@ -1,6 +1,8 @@
+import 'package:doors/core/extensions/build_context/loc.dart';
 import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/features/auth/presentation/screens/login_screen.dart';
 import 'package:doors/core/models/user.dart';
+import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/features/chat/presentation/managers/unread_messages_counter_bloc/unread_messages_counter_bloc.dart';
 import 'package:doors/features/chat/presentation/screens/chat_users_screen.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +67,21 @@ class _ChatIconBtnWithUnreadMessagesBadgeState
                     ),
                     child: IconButton(
                       onPressed: () {
+                        final currentUser =
+                            context.read<AuthBloc>().getCurrentUser();
+                        if (currentUser == null ||
+                            currentUser.isAnonymousAccount) {
+                          return;
+                        }
+
+                        if (!currentUser.isEmailVerified!) {
+                          showErrorSnackBar(
+                            context,
+                            context.loc.please_verify_your_email_first,
+                          );
+                          return;
+                        }
+
                         Navigator.of(context)
                             .pushNamed(ChatUsersScreen.routeName);
                       },

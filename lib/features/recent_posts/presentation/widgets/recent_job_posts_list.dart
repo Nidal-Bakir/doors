@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:doors/core/features/auth/presentation/managers/auth_bloc/auth_bloc.dart';
 import 'package:doors/core/utils/global_functions/global_functions.dart';
 import 'package:doors/core/widgets/loading_indicator.dart';
 import 'package:doors/core/widgets/no_internet_connection.dart';
@@ -60,6 +61,10 @@ class _RecentJobPostsListState extends State<RecentJobPostsList> {
                   }),
               child: RefreshIndicator(
                 onRefresh: () {
+                  context.read<AuthBloc>().add(
+                        const AuthGetUpdatedUserDataRequested(),
+                      );
+
                   _refreshIndicatorCompleter = Completer<void>();
                   context
                       .read<RecentJobPostsBloc>()
@@ -94,7 +99,8 @@ class _RecentJobPostsListState extends State<RecentJobPostsList> {
                           fillOverscroll: false,
                           hasScrollBody: false,
                           child: Padding(
-                            padding: const EdgeInsetsDirectional.only(bottom: 20),
+                            padding:
+                                const EdgeInsetsDirectional.only(bottom: 20),
                             child: state.when(
                               inProgress: () => const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 16.0),

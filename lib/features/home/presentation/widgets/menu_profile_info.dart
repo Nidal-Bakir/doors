@@ -96,7 +96,9 @@ class MenuProfileInfo extends StatelessWidget {
                       color: Colors.transparent,
                     ),
                   ),
-                if (!currentUser.isSubscribed && currentUser.isCompanyAccount)
+                if (!currentUser.isAnonymousAccount &&
+                    !currentUser.isSubscribed &&
+                    currentUser.isCompanyAccount)
                   ElevatedButton(
                     onPressed: () {
                       ZoomDrawer.of(context)?.close();

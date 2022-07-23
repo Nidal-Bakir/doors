@@ -270,5 +270,6 @@
   "not_verified_email_address": "Not verified email",
   "if_you_do_not_verify_your_email_Your_account_will_be_suspended_shortly_and_then_deleted": "If you don't verify your email, Your account will be suspended shortly and then deleted.",
   "warning": "Warning",
+  "please_verify_your_email_first": "Please verify your email first",
   "i_understand": "I understand"
 }
