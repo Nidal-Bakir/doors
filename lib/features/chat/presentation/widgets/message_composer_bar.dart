@@ -250,6 +250,7 @@ class _ImageToSend extends StatelessWidget {
               fileImage: imageFile,
               height: 200,
               width: 200,
+              boxFit: BoxFit.contain,
             ),
           ),
           Align(

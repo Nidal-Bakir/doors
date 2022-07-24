@@ -20,6 +20,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   late final StreamSubscription _messagingBlocStateStreamSubscription;
   final Queue<LocalChatMessage> _currentMessages = Queue();
+  final Queue<LocalChatMessage> _newMessages = Queue();
 
   ChatBloc(
     this._chatRepository,
@@ -62,7 +63,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     final messages = await _chatRepository.getChatMessages(
       userId,
-      _currentMessages.length,
+      _currentMessages.length + _newMessages.length,
     );
 
     for (var message in messages) {
@@ -81,7 +82,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future<void> _onNewMessageAdded(
       _ChatNewMessageAdded event, Emitter<ChatState> emit) async {
-    _currentMessages.addLast(event.newMessage);
+    _newMessages.addLast(event.newMessage);
 
     emit(ChatNewMessageAddedSuccessfully(event.newMessage));
   }
@@ -91,6 +92,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _messagingBlocStateStreamSubscription.cancel();
     _chatRepository.currentlyOpenedChatUserId = null;
     _currentMessages.clear();
+    _newMessages.clear();
     return super.close();
   }
 }

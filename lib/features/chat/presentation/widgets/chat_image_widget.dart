@@ -8,6 +8,7 @@ class ChatImageWidget extends StatelessWidget {
   final double width;
   final File? fileImage;
   final Widget? errorBuilderWidget;
+  final BoxFit boxFit;
 
   const ChatImageWidget({
     Key? key,
@@ -15,6 +16,7 @@ class ChatImageWidget extends StatelessWidget {
     required this.height,
     required this.width,
     this.errorBuilderWidget,
+    this.boxFit = BoxFit.cover,
   }) : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class ChatImageWidget extends StatelessWidget {
               fileImage: fileImage!,
               height: height,
               width: width,
+              boxFit: boxFit,
               errorBuilderWidget: errorBuilderWidget,
             ),
     );
@@ -42,6 +45,7 @@ class _FileImage extends StatefulWidget {
     required this.fileImage,
     required this.height,
     required this.width,
+    required this.boxFit,
     this.errorBuilderWidget,
   }) : super(key: key);
 
@@ -49,6 +53,7 @@ class _FileImage extends StatefulWidget {
   final double height;
   final double width;
   final Widget? errorBuilderWidget;
+  final BoxFit boxFit;
 
   @override
   State<_FileImage> createState() => _FileImageState();
@@ -95,7 +100,7 @@ class _FileImageState extends State<_FileImage> {
                   width: widget.width,
                 );
           },
-          fit: BoxFit.cover,
+          fit: widget.boxFit,
         ),
       ),
     );
