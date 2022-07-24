@@ -26,13 +26,6 @@ Future<void> firebaseFCMInit() async {
 
   final parseInstallation = await ParseInstallation.currentInstallation();
 
-  final deviceToken = await FirebaseMessaging.instance.getToken();
-
-  if (parseInstallation.deviceToken != deviceToken) {
-    parseInstallation.deviceToken = deviceToken;
-    _saveParseInstallation(parseInstallation);
-  }
-
   FirebaseMessaging.instance.onTokenRefresh.listen((token) {
     parseInstallation.deviceToken = token;
     _saveParseInstallation(parseInstallation);
