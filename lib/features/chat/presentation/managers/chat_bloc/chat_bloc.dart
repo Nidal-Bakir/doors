@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bloc/bloc.dart';
 import 'package:doors/features/chat/data/chat_local_data_source/models/local_chat_message.dart';
 import 'package:doors/features/chat/presentation/managers/messaging_bloc/messaging_bloc.dart';

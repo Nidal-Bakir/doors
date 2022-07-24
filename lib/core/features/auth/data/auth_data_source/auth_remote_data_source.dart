@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:doors/core/enums/enums.dart';
 import 'package:doors/core/errors/server_error.dart';
 import 'package:doors/core/models/user.dart';
